@@ -1,0 +1,154 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/parentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.example.windows10gamer.connsql.Main_Order">
+
+        <!--<android.support.design.widget.AppBarLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--android:background="?attr/colorPrimary"/>-->
+
+        <!--</android.support.design.widget.AppBarLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_orange_dark"
+            android:padding="10dp"
+            android:text="Danh sách đơn hàng"
+            android:textColor="#fff"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="Lọc đơn hàng bằng cách nhập vào ngày bắt đầu, ngày kết thúc và ca làm:"
+            android:textAlignment="center"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/edBeginOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                android:ems="10"
+                android:hint="Kết thúc"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColor="@color/zxing_custom_viewfinder_laser"
+                android:textColorLink="@android:color/holo_orange_dark" />
+
+            <EditText
+                android:id="@+id/edEndOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                android:ems="10"
+                android:hint="Kết thúc"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColor="@color/zxing_custom_viewfinder_laser"
+                android:textColorLink="@android:color/holo_orange_dark" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:weightSum="10">
+
+            <CheckBox
+                android:id="@+id/cbCasangOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Ca sáng"
+                android:textColorLink="@android:color/holo_orange_dark" />
+
+            <CheckBox
+                android:id="@+id/cbCachieuOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Ca chiều"
+                android:textColorLink="@android:color/holo_orange_dark" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDateOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_blog_url"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="0dp"
+                    android:background="@android:color/holo_orange_light"
+                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:onClick="scanSanpham"
+                    android:padding="5dp"
+                    android:text="Search"
+                    android:textColor="#fff"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/list_border"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </LinearLayout>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@android:drawable/stat_sys_download"-->
+        <!--app:backgroundTint="@android:color/holo_orange_dark" />-->
+
+    </android.support.design.widget.CoordinatorLayout>

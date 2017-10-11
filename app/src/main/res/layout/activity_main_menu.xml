@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.windows10gamer.connsql.Main_Menu">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnScanQR"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="Kiểm kho"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/btnDanhsachsanpham"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="List sản phẩm"
+                android:textColor="#fff" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnSales"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="Tạo đơn hàng"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/btnDanhsachkiemkho"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="List kiểm kho"
+                android:textColor="#fff" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/ssss"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="NONE"
+                android:textColor="#fff" />
+            <Button
+                android:id="@+id/btnListOrder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:text="List đơn hàng"
+                android:textColor="#fff" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+</LinearLayout>
