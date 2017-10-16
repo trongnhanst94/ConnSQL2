@@ -16,7 +16,7 @@
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_orange_dark"
+            android:background="@color/cam"
             android:padding="10dp"
             android:text="Đối chiếu kho"
             android:textColor="#fff"
@@ -31,7 +31,7 @@
             android:textAlignment="center"
             android:textColor="@color/zxing_custom_viewfinder_laser"
             android:textSize="16dp"
-            tools:text="Chon 2 nhân viên kiểm kho để đối chiếu" />
+            tools:text="Chọn 2 nhân viên kiểm kho để đối chiếu" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,17 +62,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <Button
-                android:id="@+id/btnSubmitKQKK"
-                android:layout_width="wrap_content"
-                android:layout_height="33dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/holo_orange_dark"
-                android:text="Đói chiếu"
-                android:textColor="#fff" />
+            <LinearLayout
+                android:id="@+id/li"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSubmitKQKK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/cam"
+                    android:text="Đối chiếu"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnReportKQKK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/holo_red_light"
+                    android:text="Báo cáo"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <ListView
@@ -103,6 +132,31 @@
                 android:layout_weight="1"
                 android:background="@drawable/list_border" />
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvKetquaKhac"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/lvKetquaGiong"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:weightSum="2">
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -111,6 +165,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/stat_sys_download"
-        app:backgroundTint="@android:color/holo_orange_dark" />
+        android:src="@android:drawable/ic_popup_sync"
+        app:backgroundTint="@color/cam" />
 </android.support.design.widget.CoordinatorLayout>

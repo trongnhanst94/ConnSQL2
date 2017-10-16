@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -66,7 +67,7 @@ public class MainLogin extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Connect_Internet.checkConnection(getApplicationContext())) {
+                if (Connect_Internet.checkConnection(getApplicationContext()) && userArrayList.size()!= 0) {
                     User = edUser.getText().toString().trim();
                     Pass = edPass.getText().toString().trim();
                     if (isEmpty(User) && isEmpty(Pass)){
@@ -101,6 +102,7 @@ public class MainLogin extends AppCompatActivity {
                             new CustomToast().Show_Toast(MainLogin.this, view, "Không đúng tài khoản.");
                             login_layout.startAnimation(animation);
                         }
+
                     }
                 } else {
                     Snackbar.make(view, "Không có Internet", Snackbar.LENGTH_LONG).show();
@@ -129,6 +131,7 @@ public class MainLogin extends AppCompatActivity {
     public static String checkLogin(ArrayList<User> userArrayList, String User, String Pass) {
         String pos = null;
         for (int i = 0; i < userArrayList.size(); i++){
+            Log.d("ttt", userArrayList.get(i).getUsername()+" - "+userArrayList.get(i).getPassword()+" : "+User+" - "+Pass);
             if ((userArrayList.get(i).getUsername().equals(User)) && (userArrayList.get(i).getPassword().equals(md5(Pass)))){
                 pos = i+"";
                 break;
@@ -162,7 +165,7 @@ public class MainLogin extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(MainLogin.this, error+"", Toast.LENGTH_SHORT).show();
+                  //      Toast.makeText(MainLogin.this, error+"", Toast.LENGTH_SHORT).show();
                     }
                 }
         );

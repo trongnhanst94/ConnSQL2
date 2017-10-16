@@ -1,8 +1,10 @@
 package com.example.windows10gamer.connsql;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,11 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,7 +31,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Ketqua_Kiemkho;
-import com.example.windows10gamer.connsql.Adapter.Adapter_kho;
 import com.example.windows10gamer.connsql.Object.CountSanpham;
 import com.example.windows10gamer.connsql.Object.Kiemkho;
 import com.example.windows10gamer.connsql.Object.User;
@@ -47,15 +51,16 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
     String session_username, session_ma;
     String url = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHKIEMKHO;
     Adapter_Ketqua_Kiemkho adapter, adapter2, adapterPerson;
-    Adapter_kho adapter_kho;
     ListView lvScan, lvScan2, lvPerson;
     Spinner snA, snB;
-    Button btnSubmit;
+    Button btnSubmit, btnReport, btnDsLechKho;
     String urlUser = Keys.LOGIN;
     ArrayList<String> UserName;
     ArrayAdapter<String> adapterA;
     ArrayAdapter<String> adapterB;
-    String snUserA, snUserB;
+    String snUserA, snUserB, nameUserA, nameUserB;
+    LinearLayout linearLayout;
+    TextView tvga, tvgb, tvgiong, tvkhac, tvslga, tvslgb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +72,12 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
         dem = new ArrayList<>();
         demA = new ArrayList<>();
         demB = new ArrayList<>();
-        // anh xa
+        linearLayout = (LinearLayout) findViewById(R.id.li);
         lvScan = (ListView) findViewById(R.id.lvKetquakiemkho);
         lvScan2 = (ListView) findViewById(R.id.lvKetquakiemkho2);
         lvPerson = (ListView) findViewById(R.id.lvPerson);
         btnSubmit = (Button) findViewById(R.id.btnSubmitKQKK);
+        btnReport = (Button) findViewById(R.id.btnReportKQKK);
         snA = (Spinner) findViewById(R.id.snKQKKA);
         snB = (Spinner) findViewById(R.id.snKQKKB);
 
@@ -110,12 +116,17 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View view) {
-
                 if (Connect_Internet.checkConnection(getApplicationContext())) {
-                    dem.clear();
-                    demA.clear();
-                    demB.clear();
-                    new GetDataKho().execute();
+                    if (Build.VERSION.SDK_INT >= 11) {
+                        recreate();
+                    } else {
+                        Intent intent = getIntent();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                    }
                 } else {
                     Snackbar.make(view, "Không có Internet", Snackbar.LENGTH_LONG).show();
                 }
@@ -146,40 +157,35 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
                 snA.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
-                    public void onItemSelected(AdapterView<?> adapter, View v,
-                                               int position, long id) {
+                    public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                         String rs = adapter.getItemAtPosition(position).toString();
                         for (int i = 0; i < result.size(); i++){
                             if (rs.equals(result.get(i).getTen())){
                                 snUserA = result.get(i).getMa();
+                                nameUserA = result.get(i).getTen();
                             }
                         }
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-
-                    }
+                    public void onNothingSelected(AdapterView<?> arg0) {}
                 });
-                //
+
                 snB.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
-                    public void onItemSelected(AdapterView<?> adapter, View v,
-                                               int position, long id) {
+                    public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                         String rs = adapter.getItemAtPosition(position).toString();
                         for (int i = 0; i < result.size(); i++){
                             if (rs.equals(result.get(i).getTen())){
                                 snUserB = result.get(i).getMa();
+                                nameUserB = result.get(i).getTen();
                             }
                         }
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-
-                    }
+                    public void onNothingSelected(AdapterView<?> arg0) {}
                 });
             }
         });
@@ -211,19 +217,63 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
                 demB.add(dem.get(i));
             }
         }
-//        for (int i = 0; i < demA.size(); i++) {
-//            boolean found = false;
-//            for (int j = 0; j < demB.size(); j++) {
-//                if (demA.get(i).getMasanpham().equals(demB.get(j).getMasanpham()) && demA.get(i).getSoluong() == demB.get(j).getSoluong()) {
-//                    found = true;
-//                    j = -1;
-//                    break;
-//                }
-//            }
-//            if (!found) {
-//                results_Person.add(demA.get(i));
-//            }
-//        }
+        final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
+                all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
+        ga.addAll(demA); gb.addAll(demB);
+        for (int i = 0; i < ga.size(); i++){
+            for (int j = 0; j < gb.size(); j++){
+                if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
+                    giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
+                }
+            }
+        }
+
+        all.addAll(ga);all.addAll(gb);
+        for (int i = 0; i < all.size(); i++){
+           int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
+            if (result == -1){
+                khac.add(all.get(i));
+            }
+        }
+
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(Main_Ketqua_Kiemkho.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_report);
+                dialog.show();
+                btnDsLechKho = (Button) dialog.findViewById(R.id.btnDsLechkho);
+                tvga = (TextView) dialog.findViewById(R.id.tvga);
+                tvgb = (TextView) dialog.findViewById(R.id.tvgb);
+                tvgiong = (TextView) dialog.findViewById(R.id.tvgiong);
+                tvkhac = (TextView) dialog.findViewById(R.id.tvkhac);
+                tvslga = (TextView) dialog.findViewById(R.id.tvslga);
+                tvslgb = (TextView) dialog.findViewById(R.id.tvslgb);
+                tvga.setText(nameUserA);tvgb.setText(nameUserB);
+                tvslga.setText(Keys.getFormatedAmount(ga.size())+"");
+                tvslgb.setText(Keys.getFormatedAmount(gb.size())+"");
+                tvgiong.setText(Keys.getFormatedAmount(giong.size())+"");
+                tvkhac.setText(Keys.getFormatedAmount(khac.size())+"");
+                btnDsLechKho.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Main_Ketqua_Kiemkho.this, Main_List_Lechkho.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("giong", giong);
+                        bundle.putParcelableArrayList("khac", khac);
+                        bundle.putParcelableArrayList("ga", ga);
+                        bundle.putParcelableArrayList("gb", gb);
+                        bundle.putString("nameUserA", nameUserA);
+                        bundle.putString("nameUserB", nameUserB);
+                        intent.putExtra("LechkhoBundle", bundle);
+                        startActivity(intent);
+                    }
+                });
+                Window window = dialog.getWindow();
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            }
+        });
     }
 
     class GetDataKho extends AsyncTask<Void, Void, Void> {
@@ -314,8 +364,22 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
             } else {
                 Toast.makeText(Main_Ketqua_Kiemkho.this, "Không có dữ liệu được tìm thấy", Toast.LENGTH_SHORT).show();
             }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+            linearLayout.setLayoutParams(params);
             setList(dem);
         }
+    }
+
+    private int sosanh(ArrayList<CountSanpham> dem_h, String masanpham, int soluong) {
+        int result = -1;
+        if (dem_h.size() != 0){
+            for (int i = 0; i < dem_h.size(); i++){
+                if (dem_h.get(i).getMasanpham().equals(masanpham) && (soluong == dem_h.get(i).getSoluong())){
+                    result = i;
+                }
+            }
+        }
+        return result;
     }
 
     private int sosanhMA(ArrayList<CountSanpham> dem_h, String masanpham, String nhanvien) {

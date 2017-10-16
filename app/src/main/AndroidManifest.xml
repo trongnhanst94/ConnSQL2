@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
@@ -36,8 +38,10 @@
         <activity android:name=".Main_List_Kiemkho" />
         <activity android:name=".Main_Ketqua_Kiemkho" />
         <activity android:name=".Main_Order" />
-        <activity android:name=".Main_Information_Order">
-        </activity>
+        <activity android:name=".Main_Information_Order" />
+        <activity android:name=".Main_Tabhost_Sales" />
+        <activity android:name=".Main_Report_Sales" />
+        <activity android:name=".Main_List_Lechkho"></activity>
     </application>
 
 </manifest>

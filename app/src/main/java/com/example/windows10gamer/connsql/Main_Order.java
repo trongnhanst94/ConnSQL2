@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,10 +41,12 @@ public class Main_Order extends AppCompatActivity {
     EditText edBenginOrder;
     EditText edEndOrder;
     Button btnSearchOrder;
+    FloatingActionButton fabReportOrder;
     CheckBox cbCasang, cbCachieu;
-    private ArrayList<Order> contactList;
+    private ArrayList<Order> contactList, reportList;
     private Adapter_Order adapter;
     ArrayList<Order> temp;
+    View view;
     String dateBegin, dateEnd, dateCasang, dateCachieu;
 
 
@@ -52,17 +55,19 @@ public class Main_Order extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_order);
-        edBenginOrder = (EditText) findViewById(R.id.edBeginOrder);
-        edEndOrder = (EditText) findViewById(R.id.edEndOrder);
+        edBenginOrder  = (EditText) findViewById(R.id.edBeginOrder);
+        edEndOrder     = (EditText) findViewById(R.id.edEndOrder);
         btnSearchOrder = (Button) findViewById(R.id.btnDateOrder);
-        cbCasang = (CheckBox) findViewById(R.id.cbCasangOrder);
-        cbCachieu = (CheckBox) findViewById(R.id.cbCachieuOrder);
+        fabReportOrder = (FloatingActionButton) findViewById(R.id.fabReportOrder);
+        cbCasang       = (CheckBox) findViewById(R.id.cbCasangOrder);
+        cbCachieu      = (CheckBox) findViewById(R.id.cbCachieuOrder);
         cbCasang.setChecked(true);
         cbCachieu.setChecked(true);
         edBenginOrder.setText(Keys.getDateNow());
         edEndOrder.setText(Keys.getDateNow());
         contactList = new ArrayList<>();
         temp = new ArrayList<>();
+        fabReportOrder.setVisibility(view.INVISIBLE);
         listView = (ListView) findViewById(R.id.listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,6 +131,20 @@ public class Main_Order extends AppCompatActivity {
             }
         });
 
+        fabReportOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("ReportList", contactList);
+                intent.putExtra("ReportBundle", bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void getList(ArrayList<Order> List){
+        this.reportList = List;
     }
 
     public void LoadJson(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu, final View v) {
@@ -153,7 +172,7 @@ public class Main_Order extends AppCompatActivity {
                         Date hom = null; Date loadBegin1 = null; Date loadEnd1 = null;
                         try {
                             loadBegin1 = (Date) simpleDateFormat.parse(loadBegin);
-                            loadEnd1 = (Date) simpleDateFormat.parse(loadEnd);
+                            loadEnd1   = (Date) simpleDateFormat.parse(loadEnd);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -177,13 +196,14 @@ public class Main_Order extends AppCompatActivity {
                                 temp.add(contactList.get(j));
                             }
                         }
+                        getList(contactList);
                         if (temp.size() == 0){
                             new CustomToast().Show_Toast(Main_Order.this, v, "Không có đơn hàng!");
                         }
                         adapter = new Adapter_Order(Main_Order.this, temp);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-
+                        fabReportOrder.setVisibility(view.VISIBLE);
                     } else {
                         new CustomToast().Show_Toast(Main_Order.this, v, "Không có response!");
                     }

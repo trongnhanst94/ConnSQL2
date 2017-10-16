@@ -57,7 +57,7 @@ public class Excel_Adapter extends BaseAdapter implements Filterable{
 
         Sanpham item = getItem(position);
         vh.textViewma.setText("MSP: " + item.getMa());
-        vh.textViewten.setText("Tên sản phẩm: " + item.getTen());
+        vh.textViewten.setText("  " + item.getTen());
         vh.textViewnguon.setText("Nguồn: " + item.getNguon());
         vh.textViewbaohanh.setText("Bảo hành: " + item.getBaohanh());
         if (item.getGiaban().equals("")){

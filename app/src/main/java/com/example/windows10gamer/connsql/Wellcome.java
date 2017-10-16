@@ -27,6 +27,4 @@ public class Wellcome extends AppCompatActivity {
         };
         thread.start();
     }
-
-
 }

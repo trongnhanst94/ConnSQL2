@@ -22,8 +22,6 @@ import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +43,10 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import me.sudar.zxingorient.Barcode;
+import me.sudar.zxingorient.ZxingOrient;
+import me.sudar.zxingorient.ZxingOrientResult;
 
 
 public class Main_Kiemkho extends AppCompatActivity {
@@ -101,21 +103,24 @@ public class Main_Kiemkho extends AppCompatActivity {
 
     // Function Scanner
     private void StartScan(Activity activity ) {
+        ZxingOrient intentIntegrator = new ZxingOrient(Main_Kiemkho.this);
+        intentIntegrator.setIcon(R.drawable.ic_launcher)   // Sets the custom icon
+                .setToolbarColor("#AA3F51B5")       // Sets Tool bar Color
+                .setInfoBoxColor("#AA3F51B5")       // Sets Info box color
+                .setInfo("Scan a QR code Image.")   // Sets info message in the info box
+                .initiateScan(Barcode.QR_CODE);
 
-        IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        intentIntegrator.setPrompt("Scan");
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setCameraId(0);
-        intentIntegrator.setOrientationLocked(false);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+        new ZxingOrient(Main_Kiemkho.this)
+                .showInfoBox(false) // Doesn't display the info box
+                .setBeep(true)  // Doesn't play beep sound
+                .setVibration(true)  // Enables the vibration
+                .initiateScan();
     }
 
     // xác nhận dữ liệu trả về
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        ZxingOrientResult result = ZxingOrient.parseActivityResult(requestCode, resultCode, data);
         if(result!=null) {
             scannedData = result.getContents();
             if (scannedData != null) {
@@ -131,7 +136,6 @@ public class Main_Kiemkho extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 }
                 new SendRequest().execute();
-            }else {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -139,8 +143,6 @@ public class Main_Kiemkho extends AppCompatActivity {
 
     // Lấy dữ liệu từ internet
     public class SendRequest extends AsyncTask<String, Void, String> {
-
-
         protected void onPreExecute(){}
 
         protected String doInBackground(String... arg0) {
@@ -215,10 +217,7 @@ public class Main_Kiemkho extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // Toast lên dữ liệu được trả về
-
             Toast.makeText(getApplicationContext(), result,Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -273,12 +272,12 @@ public class Main_Kiemkho extends AppCompatActivity {
              * Progress Dialog for User Interaction
              */
 
-            x=arrayList.size();
+            x = arrayList.size();
 
-            if(x==0)
-                jIndex=0;
+            if(x == 0)
+                jIndex = 0;
             else
-                jIndex=x;
+                jIndex = x;
 
             dialog = new ProgressDialog(Main_Kiemkho.this);
             dialog.setTitle("Hãy chờ...");

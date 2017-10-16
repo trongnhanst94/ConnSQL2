@@ -1,10 +1,13 @@
 package com.example.windows10gamer.connsql.Object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by EVRESTnhan on 10/4/2017.
  */
 
-public class CountSanpham {
+public class CountSanpham implements Parcelable {
     String nhanvien;
     String masanpham;
     int soluong;
@@ -14,6 +17,36 @@ public class CountSanpham {
         this.soluong = soluong;
         this.nhanvien = nhanvien;
     }
+
+    protected CountSanpham(Parcel in) {
+        nhanvien = in.readString();
+        masanpham = in.readString();
+        soluong = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nhanvien);
+        dest.writeString(masanpham);
+        dest.writeInt(soluong);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<CountSanpham> CREATOR = new Creator<CountSanpham>() {
+        @Override
+        public CountSanpham createFromParcel(Parcel in) {
+            return new CountSanpham(in);
+        }
+
+        @Override
+        public CountSanpham[] newArray(int size) {
+            return new CountSanpham[size];
+        }
+    };
 
     public String getNhanvien() {
         return nhanvien;
@@ -38,4 +71,5 @@ public class CountSanpham {
     public void setSoluong(int soluong) {
         this.soluong = soluong;
     }
+
 }

@@ -71,7 +71,7 @@
         android:layout_marginLeft="84dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="40dp"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/cam"
         android:text="Thêm"
         android:textColor="@color/white"
         app:layout_constraintHorizontal_bias="0.0"

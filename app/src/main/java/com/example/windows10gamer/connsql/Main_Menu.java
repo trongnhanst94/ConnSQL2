@@ -63,7 +63,6 @@ public class Main_Menu extends AppCompatActivity {
                 Intent intentput = new Intent(Main_Menu.this, Main_Ketqua_Kiemkho.class);
                 intentput.putExtra("session_username", session_username);
                 intentput.putExtra("session_ma", session_ma);
-
                 startActivity(intentput);
             }
         });

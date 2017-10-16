@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Object.Order;
-import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class Adapter_Order extends ArrayAdapter<Order> {
 
         vh.tvSttOrder.setText(position + 1 + "");
         vh.tvMaOrder.setText(item.getMaOrder());
-        vh.tvTennvOrder.setText(Keys.setDate(item.getDateOrder()));
+        vh.tvTennvOrder.setText(item.getTenNVOrder());
 
         return vh.rootView;
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 
@@ -72,7 +73,7 @@ public class Adapter_kho extends BaseAdapter implements Serializable{
         holder.tvAdapterSalesMa.setText("MSP: " + sanpham.getMa());
         holder.tvAdapterSalesTen.setText("Tên sản phẩm: " + sanpham.getTen());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());
-        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: " + sanpham.getNgaynhap());
+        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: " + Keys.setDate(sanpham.getNgaynhap()));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
         if (sanpham.getGiaban().equals("")){
             holder.tvAdapterSalesGia.setText("Giá bán: không có.");

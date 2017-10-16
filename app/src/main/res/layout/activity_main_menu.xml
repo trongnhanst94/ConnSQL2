@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="Kiểm kho"
                 android:textColor="#fff" />
 
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="List sản phẩm"
                 android:textColor="#fff" />
         </TableRow>
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="Tạo đơn hàng"
                 android:textColor="#fff" />
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="List kiểm kho"
                 android:textColor="#fff" />
         </TableRow>
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="NONE"
                 android:textColor="#fff" />
             <Button
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@android:color/holo_orange_dark"
+                android:background="@color/cam"
                 android:text="List đơn hàng"
                 android:textColor="#fff" />
 

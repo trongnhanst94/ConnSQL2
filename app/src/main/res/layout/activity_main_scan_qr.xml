@@ -16,7 +16,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/cam"
         android:padding="10dp"
         android:text="Kiểm kho"
         android:textColor="#fff"
@@ -152,7 +152,7 @@
         android:text="Danh sách sản phẩm"
         android:textAlignment="center"
 
-        android:textColor="@android:color/holo_orange_dark"
+        android:textColor="@color/cam"
         android:textSize="20dp" />
 
     <ListView
@@ -171,5 +171,5 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/stat_sys_download"
-        app:backgroundTint="@android:color/holo_orange_dark" />
+        app:backgroundTint="@color/cam" />
 </android.support.design.widget.CoordinatorLayout>

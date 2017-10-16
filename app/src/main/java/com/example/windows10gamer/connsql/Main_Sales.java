@@ -31,8 +31,6 @@ import com.example.windows10gamer.connsql.Other.NoScanResultException;
 import com.example.windows10gamer.connsql.Other.ScanFragment;
 import com.example.windows10gamer.connsql.Other.ScanResultReceiver;
 import com.example.windows10gamer.connsql.Other.Validation;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONObject;
 
@@ -56,6 +54,10 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import me.sudar.zxingorient.Barcode;
+import me.sudar.zxingorient.ZxingOrient;
+import me.sudar.zxingorient.ZxingOrientResult;
 
 public class Main_Sales extends ActionBarActivity implements ScanResultReceiver {
     TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime;
@@ -168,16 +170,13 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
 
     private boolean checkValidation() {
         boolean ret = true;
-
         if (!Validation.hasText(edKhachhang)) ret = false;
         if (!Validation.hasText(edSodienthoai)) ret = false;
-
         return ret;
     }
 
     @Override
     public void scanResultData(String codeFormat, String codeContent){
-
 
         try {
             if (codeContent != null && codeFormat != null){
@@ -211,33 +210,43 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
 
     public void scanNhanvien(View view){
 
-        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        intentIntegrator.setPrompt("Scanning Nhân viên");
-        intentIntegrator.setBeepEnabled(true);
-        intentIntegrator.setCameraId(0);
-        intentIntegrator.setOrientationLocked(false);
-        intentIntegrator.setBarcodeImageEnabled(true);
-        intentIntegrator.initiateScan();
+        ZxingOrient intentIntegrator = new ZxingOrient(Main_Sales.this);
+        intentIntegrator.setIcon(R.drawable.icon)
+                .setToolbarColor("#AA3F51B5")
+                .setInfoBoxColor("#AA3F51B5")
+                .setInfo("Scan a QR code Image.")
+                .initiateScan(Barcode.QR_CODE);
+
+        new ZxingOrient(Main_Sales.this)
+                .showInfoBox(false)
+                .setBeep(true)
+                .setVibration(true)
+                .initiateScan();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        ZxingOrientResult result = ZxingOrient.parseActivityResult(requestCode, resultCode, data);
         if(result!=null) {
             String scannedData = result.getContents();
             if (scannedData != null) {
                 try{
                     StringTokenizer st = new StringTokenizer(scannedData, ";");
-                    String maNV = st.nextToken();
-                    String tenNV = st.nextToken();
-                    tvManhanvien.setText("Mã số: " + maNV);
-                    tvTennhanvien.setText("Tên nhân viên: " + tenNV);
+                    ma = st.nextToken();
+                    ten = st.nextToken();
+                    baohanh = st.nextToken();
+                    nguon = st.nextToken();
+                    ngaynhap = st.nextToken();
+                    gia = st.nextToken();
+                    arrayList.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, gia));
+                    total = total + Integer.parseInt(gia);
+                    tvTongdonhang.setText(getFormatedAmount(total) + " đ");
                 }   catch (NoSuchElementException nse) {
                     Toast.makeText(Main_Sales.this, "Lỗi định dạng nhãn", Toast.LENGTH_SHORT).show();
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+        adapter.notifyDataSetChanged();
     }
 
     public void DeleteSP(String msp){
@@ -370,8 +379,6 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
             os.close();
 
             int responseCode = conn.getResponseCode();
-
-            // Nếu kết nối được
             if (responseCode == HttpsURLConnection.HTTP_OK) {
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -383,9 +390,7 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
                     sb.append(line);
                     break;
                 }
-                //
                 in.close();
-                // Trả dữ liệu cho về để ghi lên Excel
                 return sb.toString();
             } else {
                 return new String("false : " + responseCode);
