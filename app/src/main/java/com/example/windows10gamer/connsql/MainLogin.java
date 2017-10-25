@@ -3,7 +3,6 @@ package com.example.windows10gamer.connsql;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
@@ -105,7 +104,7 @@ public class MainLogin extends AppCompatActivity {
 
                     }
                 } else {
-                    Snackbar.make(view, "Không có Internet", Snackbar.LENGTH_LONG).show();
+                    new CustomToast().Show_Toast(MainLogin.this, view, "Không có Internet");
                 }
             }
 
@@ -160,7 +159,9 @@ public class MainLogin extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        //Toast.makeText(MainLogin.this, "Xong load", Toast.LENGTH_SHORT).show();
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override

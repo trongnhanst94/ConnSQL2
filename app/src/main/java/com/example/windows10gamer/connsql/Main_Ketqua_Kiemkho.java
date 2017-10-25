@@ -2,6 +2,7 @@ package com.example.windows10gamer.connsql;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +63,9 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
     String snUserA, snUserB, nameUserA, nameUserB;
     LinearLayout linearLayout;
     TextView tvga, tvgb, tvgiong, tvkhac, tvslga, tvslgb;
+    ArrayList<String> position;
+    String url2 = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHCUAHANG;
+    String vitriKK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,8 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
         btnReport = (Button) findViewById(R.id.btnReportKQKK);
         snA = (Spinner) findViewById(R.id.snKQKKA);
         snB = (Spinner) findViewById(R.id.snKQKKB);
-
+        position = new ArrayList<>();
+        new Getvitri().execute();
         // Intent
         Intent intent = getIntent();
         session_username = intent.getStringExtra("session_username");
@@ -251,10 +257,10 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
                 tvslga = (TextView) dialog.findViewById(R.id.tvslga);
                 tvslgb = (TextView) dialog.findViewById(R.id.tvslgb);
                 tvga.setText(nameUserA);tvgb.setText(nameUserB);
-                tvslga.setText(Keys.getFormatedAmount(ga.size())+"");
-                tvslgb.setText(Keys.getFormatedAmount(gb.size())+"");
-                tvgiong.setText(Keys.getFormatedAmount(giong.size())+"");
-                tvkhac.setText(Keys.getFormatedAmount(khac.size())+"");
+                tvslga.setText((ga.size())+"");
+                tvslgb.setText((gb.size())+"");
+                tvgiong.setText((giong.size())+"");
+                tvkhac.setText((khac.size())+"");
                 btnDsLechKho.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -264,6 +270,7 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
                         bundle.putParcelableArrayList("khac", khac);
                         bundle.putParcelableArrayList("ga", ga);
                         bundle.putParcelableArrayList("gb", gb);
+                        bundle.putParcelableArrayList("donhang", arrayList);
                         bundle.putString("nameUserA", nameUserA);
                         bundle.putString("nameUserB", nameUserB);
                         intent.putExtra("LechkhoBundle", bundle);
@@ -274,6 +281,88 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
                 window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             }
         });
+    }
+
+    class Getvitri extends AsyncTask<Void, Void, Void> {
+        int jIndex;
+        int x;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            x = arrayList.size();
+
+            if(x == 0)
+                jIndex = 0;
+            else
+                jIndex = x;
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(url2);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.DANHSACHCUAHANG);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    position.add(
+                                            object.getString("cuahang")
+                                    );
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setLisst(position);
+        }
+    }
+
+    private void setLisst(ArrayList<String> position) {
+        this.position = position;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Ketqua_Kiemkho.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
+        dialog.setTitle("Chọn cửa hàng cần báo cáo");
+        dialog.setCancelable(false);
+        final Spinner spinner = (Spinner) mView.findViewById(R.id.spinnerKM);
+        ArrayAdapter mAdapter = new ArrayAdapter<>(Main_Ketqua_Kiemkho.this, android.R.layout.simple_spinner_item, position);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(mAdapter);
+        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                vitriKK = String.valueOf(spinner.getSelectedItem());
+                Log.d("qqq", vitriKK);
+            }
+        });
+        dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(mView);
+        AlertDialog al = dialog.create();
+        al.show();
     }
 
     class GetDataKho extends AsyncTask<Void, Void, Void> {
@@ -293,6 +382,7 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
             dialog = new ProgressDialog(Main_Ketqua_Kiemkho.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
             dialog.show();
         }
 
@@ -310,18 +400,21 @@ public class Main_Ketqua_Kiemkho extends AppCompatActivity {
 
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
-                                    arrayList.add(0, new Kiemkho(
-                                            object.getString("ngay"),
-                                            object.getString("gio"),
-                                            object.getString("manhanvien"),
-                                            object.getString("tennhanvien"),
-                                            object.getString("ma"),
-                                            object.getString("ten"),
-                                            object.getString("baohanh"),
-                                            object.getString("nguon"),
-                                            object.getString("ngaynhap"),
-                                            object.getString("gia")
-                                    ));
+                                    if (vitriKK == object.getString("vitri")){
+                                        arrayList.add(0, new Kiemkho(
+                                                object.getString("ngay"),
+                                                object.getString("gio"),
+                                                object.getString("manhanvien"),
+                                                object.getString("tennhanvien"),
+                                                object.getString("ma"),
+                                                object.getString("ten"),
+                                                object.getString("baohanh"),
+                                                object.getString("nguon"),
+                                                object.getString("ngaynhap"),
+                                                object.getString("von"),
+                                                object.getString("gia")
+                                        ));
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

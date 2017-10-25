@@ -75,6 +75,7 @@ public class Main_Information_Order extends AppCompatActivity {
                     item.get(j).getBaohanhOrder(),
                     item.get(j).getNguonOrder(),
                     item.get(j).getNgaynhapOrder(),
+                    item.get(j).getVonOrder(),
                     item.get(j).getGiaOrder()));
             total+=Integer.parseInt(item.get(j).getGiaOrder());
         }
@@ -87,8 +88,8 @@ public class Main_Information_Order extends AppCompatActivity {
         tvifTenKH.setText("Tên khách hàng: "+item.get(0).getTenKH());
         tvifSdtKH.setText("SĐT khách hàng: "+item.get(0).getSdtKH());
         tvifGhichuKH.setText("Ghi chú khách hàng: "+item.get(0).getGhichuKH());
-        tvifTotalOrder.setText("Tổng: "+Keys.getFormatedAmount(total)+"đ");
-        tvifDoanhthutrensanpham.setText("Chỉ số KPI: "+ Keys.getFormatedAmount(total/item.size())+"đ/SP");
+        tvifTotalOrder.setText("Tổng: "+Keys.getFormatedAmount(total));
+        tvifDoanhthutrensanpham.setText("Chỉ số KPI: "+ Keys.getFormatedAmount(total/item.size())+"/SP");
 
         adapter = new Adapter_Info_Order(Main_Information_Order.this, sanphamOrder);
         lvInfoOrder.setAdapter(adapter);

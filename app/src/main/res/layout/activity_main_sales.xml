@@ -108,7 +108,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/zxing_custom_viewfinder_mask" />
+                android:background="@color/cam" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +150,7 @@
                         android:background="@android:color/holo_orange_light"
                         android:drawableLeft="@drawable/ic_search_black_24dp"
                         android:gravity="center_vertical"
-                        android:onClick="scanNhanvien"
+                        android:onClick="scanSanpham"
                         android:padding="5dp"
                         android:text="Scan"
                         android:textColor="#fff"
@@ -162,17 +162,143 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="246dp"
+                android:layout_height="158dp"
                 android:layout_margin="10dp"
-                android:layout_weight="0.30"
                 android:background="@drawable/list_border"
                 android:orientation="vertical">
 
                 <ListView
                     android:id="@+id/lvSanpham"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.84"
+                    android:gravity="center_vertical"
+                    android:text="Khuyến mãi:"
+                    android:textColor="@color/cam" />
+
+                <RadioGroup
+                    android:id="@+id/rgKhuyenmai"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbGiamgia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Giảm giá" />
+
+                    <RadioButton
+                        android:id="@+id/rbTangqua"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Quà tặng" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lnTangqua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/sas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Danh sách quà tặng:"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/lvKhuyenmai"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/list_border" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+
+                <EditText
+                    android:id="@+id/edGiamgia"
+                    style="@android:style/Widget.Holo.EditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="7"
+                    android:drawableEnd="@drawable/ic_attach_money_black_24dp"
+                    android:ems="10"
+                    android:hint="Nhập vào số tiền"
+                    android:inputType="number"
+                    android:textColor="@color/RED" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@color/cam" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -194,7 +320,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tổng giá trị đơn hàng:"
                         android:textColor="@color/cam"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -246,7 +372,7 @@
                             android:layout_height="wrap_content"
                             android:text="Ghi chú:"
                             android:textColor="@color/cam"
-                            android:textSize="18sp" />
+                            android:textSize="14dp" />
 
                     </LinearLayout>
 
@@ -258,7 +384,7 @@
 
                         <EditText
                             android:id="@+id/edGhichudonhang"
-                            android:layout_width="247dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:textColorLink="@color/cam"
@@ -275,60 +401,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="10dp"
-                android:background="@color/zxing_custom_viewfinder_mask" />
+                android:background="@color/cam" />
 
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:gravity="right"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:weightSum="10">-->
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="287dp"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="2"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/sas"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="Quét mã nhân viên: "-->
-                        <!--android:textSize="18sp" />-->
-
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:layout_weight="8"-->
-                    <!--android:gravity="right"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<Button-->
-                        <!--android:id="@+id/btnScanNhanvien"-->
-                        <!--android:layout_width="65dp"-->
-                        <!--android:layout_height="37dp"-->
-                        <!--android:layout_below="@+id/tv_blog_url"-->
-                        <!--android:layout_centerHorizontal="true"-->
-                        <!--android:layout_margin="0dp"-->
-                        <!--android:background="@android:color/holo_orange_light"-->
-                        <!--android:drawableLeft="@drawable/ic_search_black_24dp"-->
-                        <!--android:gravity="center_vertical"-->
-                        <!--android:onClick="scanNhanvien"-->
-                        <!--android:padding="5dp"-->
-                        <!--android:text="Scan"-->
-                        <!--android:textColor="#fff"-->
-                        <!--android:textSize="10sp" />-->
-
-                <!--</LinearLayout>-->
-
-            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -395,8 +471,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="10dp"
-                android:background="@color/zxing_custom_viewfinder_mask" />
-
+                android:background="@color/cam" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -407,9 +482,9 @@
                 android:weightSum="10">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="7"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -419,26 +494,24 @@
                         android:layout_height="wrap_content"
                         android:text="@string/kh_ch_h_ng"
                         android:textColor="@color/cam"
-                        android:textSize="18sp" />
+                        android:textSize="14dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:focusableInTouchMode="true"
+                    android:layout_weight="7"
                     android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/edKhachhang"
-                        android:layout_width="247dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Tên khách hàng"
                         android:inputType="textPersonName"
                         android:textColorLink="@color/cam"
-                        android:textStyle="italic"
-                        android:windowSoftInputMode="stateHidden" />
+                        android:textStyle="italic" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -452,9 +525,9 @@
                 android:weightSum="10">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="7"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -463,19 +536,19 @@
                         android:layout_height="wrap_content"
                         android:text="Điện thoại:"
                         android:textColor="@color/cam"
-                        android:textSize="18sp" />
+                        android:textSize="14dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="7"
                     android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/edSodienthoai"
-                        android:layout_width="247dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Số điện thoại"
                         android:inputType="phone"
@@ -489,53 +562,45 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:weightSum="10">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="10">
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="7"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Ghi chú:"
-                            android:textColor="@color/cam"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:orientation="horizontal">
+                        android:text="Ghi chú:"
+                        android:textColor="@color/cam"
+                        android:textSize="14dp" />
 
-                        <EditText
-                            android:id="@+id/edGhichukhachhang"
-                            android:layout_width="247dp"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textColorLink="@color/cam"
-                            android:textStyle="italic" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
 
+                    <EditText
+                        android:id="@+id/edGhichukhachhang"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textColorLink="@color/cam"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

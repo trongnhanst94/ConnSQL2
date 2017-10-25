@@ -1,15 +1,16 @@
 package com.example.windows10gamer.connsql.Object;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by EVRESTnhan on 10/3/2017.
  */
 
-public class Kiemkho implements Serializable {
-    private String ngay,gio,maNhanvien,tenNhanvien,ma,ten,baohanh,nguon,ngaynhap,gia;
+public class Kiemkho implements Parcelable {
+    private String ngay,gio,maNhanvien,tenNhanvien,ma,ten,baohanh,nguon,ngaynhap,von,gia;
 
-    public Kiemkho(String ngay, String gio, String maNhanvien, String tenNhanvien, String ma, String ten, String baohanh, String nguon, String ngaynhap, String gia) {
+    public Kiemkho(String ngay, String gio, String maNhanvien, String tenNhanvien, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia) {
         this.ngay = ngay;
         this.gio = gio;
         this.maNhanvien = maNhanvien;
@@ -18,9 +19,36 @@ public class Kiemkho implements Serializable {
         this.ten = ten;
         this.baohanh = baohanh;
         this.nguon = nguon;
+        this.von = von;
         this.gia = gia;
         this.ngaynhap = ngaynhap;
     }
+
+    protected Kiemkho(Parcel in) {
+        ngay = in.readString();
+        gio = in.readString();
+        maNhanvien = in.readString();
+        tenNhanvien = in.readString();
+        ma = in.readString();
+        ten = in.readString();
+        baohanh = in.readString();
+        nguon = in.readString();
+        ngaynhap = in.readString();
+        von = in.readString();
+        gia = in.readString();
+    }
+
+    public static final Creator<Kiemkho> CREATOR = new Creator<Kiemkho>() {
+        @Override
+        public Kiemkho createFromParcel(Parcel in) {
+            return new Kiemkho(in);
+        }
+
+        @Override
+        public Kiemkho[] newArray(int size) {
+            return new Kiemkho[size];
+        }
+    };
 
     public String getNgaynhap() {
         return ngaynhap;
@@ -100,5 +128,33 @@ public class Kiemkho implements Serializable {
 
     public void setGia(String gia) {
         this.gia = gia;
+    }
+
+    public String getVon() {
+        return von;
+    }
+
+    public void setVon(String von) {
+        this.von = von;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ngay);
+        dest.writeString(gio);
+        dest.writeString(maNhanvien);
+        dest.writeString(tenNhanvien);
+        dest.writeString(ma);
+        dest.writeString(ten);
+        dest.writeString(baohanh);
+        dest.writeString(nguon);
+        dest.writeString(ngaynhap);
+        dest.writeString(von);
+        dest.writeString(gia);
     }
 }

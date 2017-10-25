@@ -1,28 +1,30 @@
 package com.example.windows10gamer.connsql.Object;
 
-import java.io.Serializable;
+/**
+ * Created by EVRESTnhan on 10/23/2017.
+ */
 
-public class Sanpham implements Serializable{
-    private String ma;
-    private String ten;
-    private String baohanh;
-    private String nguon;
-    private String ngaynhap;
-    private String von;
-    private String giaban;
+public class Quatang {
+    String ma;
+    String ten;
+    String baohanh;
+    String nguon;
+    String ngaynhap;
+    int von;
+    int gia;
+    int toPrice;
+    int fromPrice;
 
-    public Sanpham(String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String giaban) {
+    public Quatang(String ma, String ten, String baohanh, String nguon, String ngaynhap, int von, int gia, int toPrice, int fromPrice) {
         this.ma = ma;
         this.ten = ten;
         this.baohanh = baohanh;
         this.nguon = nguon;
         this.ngaynhap = ngaynhap;
         this.von = von;
-        this.giaban = giaban;
-    }
-
-    public Sanpham() {
-
+        this.gia = gia;
+        this.toPrice = toPrice;
+        this.fromPrice = fromPrice;
     }
 
     public String getMa() {
@@ -65,19 +67,35 @@ public class Sanpham implements Serializable{
         this.ngaynhap = ngaynhap;
     }
 
-    public String getVon() {
+    public int getVon() {
         return von;
     }
 
-    public void setVon(String von) {
+    public void setVon(int von) {
         this.von = von;
     }
 
-    public String getGiaban() {
-        return giaban;
+    public int getGia() {
+        return gia;
     }
 
-    public void setGiaban(String giaban) {
-        this.giaban = giaban;
+    public void setGia(int gia) {
+        this.gia = gia;
+    }
+
+    public int getToPrice() {
+        return toPrice;
+    }
+
+    public void setToPrice(int toPrice) {
+        this.toPrice = toPrice;
+    }
+
+    public int getFromPrice() {
+        return fromPrice;
+    }
+
+    public void setFromPrice(int fromPrice) {
+        this.fromPrice = fromPrice;
     }
 }

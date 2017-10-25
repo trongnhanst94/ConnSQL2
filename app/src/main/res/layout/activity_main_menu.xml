@@ -7,9 +7,46 @@
     android:orientation="vertical"
     tools:context="com.example.windows10gamer.connsql.Main_Menu">
 
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cam"
+        android:padding="10dp"
+        android:text="Menu chức năng"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="24sp" />
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnBaocaoDoanhthu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:text="BC cuối ca"
+                android:textColor="@color/cam" />
+
+            <Button
+                android:id="@+id/btnDanhsachsanpham"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:textColor="@color/cam"
+                android:text="List sản phẩm"
+                android:background="#fff" />
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
@@ -22,19 +59,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@color/cam"
+                android:textColor="@color/cam"
                 android:text="Kiểm kho"
-                android:textColor="#fff" />
+                android:background="#fff" />
 
             <Button
-                android:id="@+id/btnDanhsachsanpham"
+                android:id="@+id/btnDanhsachkiemkho"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@color/cam"
-                android:text="List sản phẩm"
-                android:textColor="#fff" />
+                android:textColor="@color/cam"
+                android:text="List kiểm kho"
+                android:background="#fff" />
         </TableRow>
 
         <TableRow
@@ -48,44 +85,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@color/cam"
-                android:text="Tạo đơn hàng"
-                android:textColor="#fff" />
+                android:textColor="@color/cam"
+                android:text="Bán hàng"
+                android:background="#fff" />
 
-            <Button
-                android:id="@+id/btnDanhsachkiemkho"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="@color/cam"
-                android:text="List kiểm kho"
-                android:textColor="#fff" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="2">
-
-            <Button
-                android:id="@+id/ssss"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="@color/cam"
-                android:text="NONE"
-                android:textColor="#fff" />
             <Button
                 android:id="@+id/btnListOrder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="@color/cam"
+                android:textColor="@color/cam"
                 android:text="List đơn hàng"
-                android:textColor="#fff" />
+                android:background="#fff" />
 
 
         </TableRow>

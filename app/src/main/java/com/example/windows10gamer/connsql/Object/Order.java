@@ -42,6 +42,9 @@ public class Order implements Parcelable {
     @SerializedName("ngaynhapSanpham")
     @Expose
     private  String ngaynhapOrder;
+    @SerializedName("vonSanpham")
+    @Expose
+    private  String vonOrder;
     @SerializedName("giaSanpham")
     @Expose
     private  String giaOrder;
@@ -63,7 +66,7 @@ public class Order implements Parcelable {
 //            nguonOrder, ngaynhapOrder, giaOrder, ghichuOrder, tenKH, sdtKH, ghichuKH;
 
     public Order(String maOrder, String dateOrder, String timeOrder, String maNVOrder, String tenNVOrder, String maspOrder, String tenOrder, String baohanhOrder, String nguonOrder,
-                 String ngaynhapOrder, String giaOrder, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH) {
+                 String ngaynhapOrder, String vonOrder, String giaOrder, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH) {
         this.maOrder = maOrder;
         this.dateOrder = dateOrder;
         this.timeOrder = timeOrder;
@@ -74,6 +77,7 @@ public class Order implements Parcelable {
         this.baohanhOrder = baohanhOrder;
         this.nguonOrder = nguonOrder;
         this.ngaynhapOrder = ngaynhapOrder;
+        this.vonOrder = vonOrder;
         this.giaOrder = giaOrder;
         this.ghichuOrder = ghichuOrder;
         this.tenKH = tenKH;
@@ -92,6 +96,7 @@ public class Order implements Parcelable {
         baohanhOrder = in.readString();
         nguonOrder = in.readString();
         ngaynhapOrder = in.readString();
+        vonOrder = in.readString();
         giaOrder = in.readString();
         ghichuOrder = in.readString();
         tenKH = in.readString();
@@ -110,6 +115,18 @@ public class Order implements Parcelable {
             return new Order[size];
         }
     };
+
+    public String getVonOrder() {
+        return vonOrder;
+    }
+
+    public void setVonOrder(String vonOrder) {
+        this.vonOrder = vonOrder;
+    }
+
+    public static Creator<Order> getCREATOR() {
+        return CREATOR;
+    }
 
     public String getMaOrder() {
         return maOrder;
@@ -248,6 +265,7 @@ public class Order implements Parcelable {
         dest.writeString(baohanhOrder);
         dest.writeString(nguonOrder);
         dest.writeString(ngaynhapOrder);
+        dest.writeString(vonOrder);
         dest.writeString(giaOrder);
         dest.writeString(ghichuOrder);
         dest.writeString(tenKH);

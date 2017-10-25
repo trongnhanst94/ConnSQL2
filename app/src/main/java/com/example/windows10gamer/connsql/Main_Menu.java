@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class Main_Menu extends AppCompatActivity {
-    Button btnDanhsach, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder;
+    Button btnDanhsach, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnBaocaoDoanhthu;
     String session_username, session_ma;
 
     @Override
@@ -19,6 +19,7 @@ public class Main_Menu extends AppCompatActivity {
         btnSales           = (Button) findViewById(R.id.btnSales);
         btnListOrder       = (Button) findViewById(R.id.btnListOrder);
         btnDanhsachkiemkho = (Button) findViewById(R.id.btnDanhsachkiemkho);
+        btnBaocaoDoanhthu  = (Button) findViewById(R.id.btnBaocaoDoanhthu);
         btnDanhsach.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -27,6 +28,17 @@ public class Main_Menu extends AppCompatActivity {
             Intent intentput = new Intent(Main_Menu.this, Main_List_Excel.class);
             intentput.putExtra("session_username", session_username);
             startActivity(intentput);
+            }
+        });
+
+        btnBaocaoDoanhthu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentget = getIntent();
+                session_username = intentget.getStringExtra("session_username");
+                Intent intentput = new Intent(Main_Menu.this, Main_Baocao_Doanhthu.class);
+                intentput.putExtra("session_username", session_username);
+                startActivity(intentput);
             }
         });
 

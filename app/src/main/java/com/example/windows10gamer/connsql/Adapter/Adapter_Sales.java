@@ -73,7 +73,7 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
 
         holder.tvAdapterSalesTen.setText(sanpham.getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
-        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGiaban())) +" đ");
+        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGiaban())));
 
         holder.ivSalesDelete.setOnClickListener(new View.OnClickListener() {
             @Override

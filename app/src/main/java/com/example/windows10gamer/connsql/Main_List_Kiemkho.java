@@ -36,8 +36,6 @@ public class Main_List_Kiemkho extends AppCompatActivity {
         new GetDataKho().execute();
         adapter = new Adapter_List_Kho(Main_List_Kiemkho.this, R.layout.adapter_kiemkho, arrayList);
         listView.setAdapter(adapter);
-
-
     }
 
     class GetDataKho extends AsyncTask<Void, Void, Void> {
@@ -63,6 +61,7 @@ public class Main_List_Kiemkho extends AppCompatActivity {
             dialog = new ProgressDialog(Main_List_Kiemkho.this);
             dialog.setTitle("Hãy chờ..."+ jIndex);
             dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
             dialog.show();
         }
 
@@ -110,6 +109,7 @@ public class Main_List_Kiemkho extends AppCompatActivity {
                                             object.getString("baohanh"),
                                             object.getString("nguon"),
                                             object.getString("ngaynhap"),
+                                            object.getString("von"),
                                             object.getString("gia")
                                     ));
                                 } catch (JSONException e) {

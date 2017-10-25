@@ -1,13 +1,12 @@
 package com.example.windows10gamer.connsql;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -16,148 +15,183 @@ import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Other.OrderList;
+import com.example.windows10gamer.connsql.Other.RetrofitClient;
+import com.example.windows10gamer.connsql.service.APIService_Sales;
 
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class Main_Report_Sales extends AppCompatActivity {
-    @BindView(R.id.tvNhanvienReport)
-    TextView tvNhanvienReport;
-    @BindView(R.id.tvnotiReport)
+public class Main_Baocao_Doanhthu extends AppCompatActivity {
+    @BindView(R.id.tvNhanvienBCDT)
+    TextView tvNhanvienBCDT;
+    @BindView(R.id.tvnotiBCDT)
     TextView tvnoti;
-    @BindView(R.id.tvdoanhthu)
-    TextView tvdoanhthu;
-    @BindView(R.id.tvsokhachhangmua)
-    TextView tvsokhachhangmua;
-    @BindView(R.id.tvsosanphamban)
-    TextView tvsosanphamban;
-    @BindView(R.id.tvdoanhthutrensanpham)
-    TextView tvdoanhthutrensanpham;
-    @BindView(R.id.tvdoanhthutrenkhachhang)
-    TextView tvdoanhthutrenkhachhang;
-    static ArrayList<Order> reportList;
-    String dateBegin, dateEnd, dateCasang, dateCachieu;
-    int doanhthuTotal;
-    ArrayList<ReportSales> reportSalesList = new ArrayList<>();
+    @BindView(R.id.tvdoanhthuBCDT)
+    TextView tvdoanhthuBCDT;
+    @BindView(R.id.tvsokhachhangmuaBCDT)
+    TextView tvsokhachhangmuaBCDT;
+    @BindView(R.id.tvsosanphambanBCDT)
+    TextView tvsosanphambanBCDT;
+    @BindView(R.id.tvdoanhthutrensanphamBCDT)
+    TextView tvdoanhthutrensanphamBCDT;
+    @BindView(R.id.tvdoanhthutrenkhachhangBCDT)
+    TextView tvdoanhthutrenkhachhangBCDT;
+    ArrayList<Order> contactList, temp;
+    private View parentView;
     String ma, ten;
+    ArrayList<ReportSales> reportSalesList = new ArrayList<>();
     int doanhthu = 0, soKhachhang = 0, soSanpham = 0, dttkh = 0, dttsp = 0;
-    RadioGroup rgSort;
-    RadioButton rbDoanhthu, rbSoKH, rbSoSP, rbDttkh, rbDttsp;
-    TableLayout stk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_report_sales);
+        setContentView(R.layout.activity_main_baocao_doanhthu);
         ButterKnife.bind(this);
-        rgSort = (RadioGroup) findViewById(R.id.rgSort);
-        rbDoanhthu = (RadioButton) findViewById(R.id.rbDoanhthu);
-        rbSoKH = (RadioButton) findViewById(R.id.rbSoKH);
-        rbSoSP = (RadioButton) findViewById(R.id.rbSoSP);
-        rbDttkh = (RadioButton) findViewById(R.id.rbDttkh);
-        rbDttsp = (RadioButton) findViewById(R.id.rbDttsp);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("ReportBundle");
-        reportList = bundle.getParcelableArrayList("ReportList");
-        dateBegin = bundle.getString("dateBegin");
-        dateEnd = bundle.getString("dateEnd");
-        dateCasang = bundle.getString("dateCasang");
-        dateCachieu = bundle.getString("dateCachieu");
-        doanhthuTotal = 0;
-        for (int i = 0; i < reportList.size(); i++){
-            doanhthuTotal = doanhthuTotal + Integer.parseInt(reportList.get(i).getGiaOrder());
-        }
-        if (dateCasang.equals("FALSE")){
-            if (dateCachieu.equals("FALSE")){
+        contactList = new ArrayList<>();
+        temp = new ArrayList<>();
 
-            } else {
-                tvnoti.setText("Thời gian: "+dateCachieu+" từ "+dateBegin+" đến "+dateEnd);
-            }
+        LoadJson(getDate(), getTime());
+    }
+
+    private String getTime() {
+        String ca;
+        int hours = new Time(System.currentTimeMillis()).getHours();
+        if (hours < 15 ){
+            ca = "Ca sáng";
         } else {
-            if (dateCachieu.equals("FALSE")){
-                tvnoti.setText("Thời gian: "+dateCasang+" từ "+dateBegin+" đến "+dateEnd);
-            } else {
-                tvnoti.setText("Thời gian: "+dateCasang+" và "+dateCachieu+" từ "+dateBegin+" đến "+dateEnd);
-            }
+            ca = "Ca chiều";
         }
-        tvdoanhthu.setText( Keys.getFormatedAmount(doanhthuTotal));
+        return ca;
+    }
+
+    private String getDate() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String date = dateFormat.format(new Date());
+        return date;
+    }
+
+    public void LoadJson(final String date, final String time) {
+        if (Connect_Internet.checkConnection(getApplicationContext())) {
+            final ProgressDialog dialog;
+            dialog = new ProgressDialog(Main_Baocao_Doanhthu.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+            APIService_Sales api = RetrofitClient.getApiService();
+            Call<OrderList> call = api.getAllProduct();
+            call.enqueue(new Callback<OrderList>() {
+                @Override
+                public void onResponse(Call<OrderList> call, Response<OrderList> response) {
+                    dialog.dismiss();
+                    ArrayList<Order> orignal = new ArrayList<Order>();
+                    if(response.isSuccessful()) {
+                        orignal = response.body().getContacts();
+                        contactList.clear();
+                        temp.clear();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        Date hom = null; Date date1 = null; Date loadEnd1 = null;
+                        try {
+                            date1 = (Date) simpleDateFormat.parse(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i < orignal.size(); i++) {
+                            try {
+                                hom = (Date) simpleDateFormat.parse(Keys.setDate(orignal.get(i).getDateOrder()));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            if(hom.compareTo(date1) == 0) {
+                                if (time.equals(orignal.get(i).getTimeOrder())) {
+                                    contactList.add(orignal.get(i));
+                                }
+                            }
+                        }
+                        setList(contactList);
+                    } else {
+                        //new CustomToast().Show_Toast(Main_Baocao_Doanhthu.this, parentView, "Không có response!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OrderList> call, Throwable t) {
+                    dialog.dismiss();
+                }
+            });
+
+        } else {
+            //new CustomToast().Show_Toast(Main_Baocao_Doanhthu.this,parentView, "Không có Internet!");
+        }
+    }
+
+    private void setList(ArrayList<Order> temp) {
+        this.contactList = temp;
+        int doanhthuTotal = 0;
+        for (int i = 0; i < contactList.size(); i++){
+            doanhthuTotal = doanhthuTotal + Integer.parseInt(contactList.get(i).getGiaOrder());
+        }
+        tvdoanhthuBCDT.setText( Keys.getFormatedAmount(doanhthuTotal));
         ArrayList<Customer> khachhang = new ArrayList<>();
-        for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhCustomer(khachhang, reportList.get(i).getTenKH(), reportList.get(i).getMaOrder());
+        for (int i = 0; i < contactList.size(); i++){
+            int result = sosanhCustomer(khachhang, contactList.get(i).getTenKH(), contactList.get(i).getMaOrder());
             if (result == -1){
-                khachhang.add(new Customer( reportList.get(i).getMaOrder()+"KH", reportList.get(i).getTenKH(), reportList.get(i).getSdtKH(), reportList.get(i).getGhichuKH(), reportList.get(i).getMaOrder(), reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder()));
+                khachhang.add(new Customer( contactList.get(i).getMaOrder()+"KH", contactList.get(i).getTenKH(), contactList.get(i).getSdtKH(), contactList.get(i).getGhichuKH(), contactList.get(i).getMaOrder(), contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder()));
             }
         }
-        tvsokhachhangmua.setText(khachhang.size()+"");
-        tvsosanphamban.setText(reportList.size()+"");
-        tvdoanhthutrensanpham.setText(Keys.getFormatedAmount(doanhthuTotal/reportList.size()));
-        tvdoanhthutrenkhachhang.setText(Keys.getFormatedAmount(doanhthuTotal/khachhang.size()));
-        tvNhanvienReport.setText("Danh sách nhân viên bán hàng: ");
+        tvsokhachhangmuaBCDT.setText(khachhang.size()+"");
+        tvsosanphambanBCDT.setText(contactList.size()+"");
+        tvdoanhthutrensanphamBCDT.setText(Keys.getFormatedAmount(doanhthuTotal/contactList.size()));
+        tvdoanhthutrenkhachhangBCDT.setText(Keys.getFormatedAmount(doanhthuTotal/khachhang.size()));
+        tvNhanvienBCDT.setText("Danh sách nhân viên bán hàng: ");
         ArrayList<User> nhanVienList = new ArrayList<>();
-        for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhUser(nhanVienList, reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder());
+        for (int i = 0; i < contactList.size(); i++){
+            int result = sosanhUser(nhanVienList, contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder());
             if (result == -1){
-                nhanVienList.add(new User(reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder()));
-                tvNhanvienReport.append(reportList.get(i).getTenNVOrder()+". ");
+                nhanVienList.add(new User(contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder()));
+                tvNhanvienBCDT.append(contactList.get(i).getTenNVOrder()+". ");
             }
         }
 
         for (int i = 0; i < nhanVienList.size(); i++){
             ma = nhanVienList.get(i).getMa();
             ten = nhanVienList.get(i).getTen();
-            doanhthu    = DoanhthuCount(reportList, nhanVienList.get(i).getMa());
+            doanhthu    = DoanhthuCount(contactList, nhanVienList.get(i).getMa());
             soKhachhang = SoKhachhang(khachhang, nhanVienList.get(i).getMa());
-            soSanpham   = SoSanpham(reportList, nhanVienList.get(i).getMa());
+            soSanpham   = SoSanpham(contactList, nhanVienList.get(i).getMa());
             dttkh       = doanhthu/soKhachhang;
             dttsp       = doanhthu/soSanpham;
             reportSalesList.add(new ReportSales(
-                    ma,
-                    ten,
-                    doanhthu,
-                    soKhachhang,
-                    soSanpham,
-                    dttkh,
-                    dttsp
+                            ma,
+                            ten,
+                            doanhthu,
+                            soKhachhang,
+                            soSanpham,
+                            dttkh,
+                            dttsp
                     )
             );
         }
         init(reportSalesList);
-        rgSort.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                doOnDifficultyLevelChanged(group, checkedId);
-            }
-        });
-    }
-
-    private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
-        int checkedRadioId = group.getCheckedRadioButtonId();
-        stk.removeAllViews();
-        if(checkedRadioId== R.id.rbDoanhthu) {
-            sortDoanhthu(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbSoKH ) {
-            sortSoKH(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbSoSP) {
-            sortSoSP(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbDttkh ) {
-            sortDttkh(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbDttsp) {
-            sortDttsp(reportSalesList);
-            init(reportSalesList);
-        }
     }
 
     public void init(ArrayList<ReportSales> list) {
-        stk = (TableLayout) findViewById(R.id.tbReport);
+        TableLayout stk = (TableLayout) findViewById(R.id.tbBCDT);
         TableRow tbrow0 = new TableRow(this);
         TextView tv = new TextView(this);
         tv.setText(" # ");

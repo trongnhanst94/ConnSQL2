@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,11 +13,21 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_kho;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
@@ -39,7 +50,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -53,11 +67,14 @@ public class Main_Kiemkho extends AppCompatActivity {
     String scannedData;
     ListView lvScan;
     ArrayList<Sanpham> arrayList;
+    ArrayList<String> position = new ArrayList<>();
+    ArrayAdapter<String> mAdapter;
     Adapter_kho adapter;
     String session_username, session_ma, ngay, gio;
-    private String ma, ten, nguon, baohanh, gia, ngaynhap;
+    private String ma, ten, nguon, baohanh, gia, ngaynhap, von, vitri;
     TextView tvScanManhanvien, tvScanTennhanvien;
-    String url = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHKIEMKHO;
+    String url  = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHKIEMKHO;
+    String url2 = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHCUAHANG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +95,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         ngay = getDate();
         gio = getTime();
         new GetDataKho().execute();
+        new Getvitri().execute();
         adapter = new Adapter_kho(Main_Kiemkho.this, R.layout.adapter_list_excel, arrayList);
         lvScan.setAdapter(adapter);
         btnScan.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +111,7 @@ public class Main_Kiemkho extends AppCompatActivity {
             public void onClick(@NonNull View view) {
 
                 if (Connect_Internet.checkConnection(getApplicationContext())) {
-                    new GetDataKho().execute();
+                    ResetActivity();
                 } else {
                     Snackbar.make(view, "Không có Internet", Snackbar.LENGTH_LONG).show();
                 }
@@ -104,14 +122,14 @@ public class Main_Kiemkho extends AppCompatActivity {
     // Function Scanner
     private void StartScan(Activity activity ) {
         ZxingOrient intentIntegrator = new ZxingOrient(Main_Kiemkho.this);
-        intentIntegrator.setIcon(R.drawable.ic_launcher)   // Sets the custom icon
+        intentIntegrator.setIcon(R.drawable.icon)   // Sets the custom icon
                 .setToolbarColor("#AA3F51B5")       // Sets Tool bar Color
                 .setInfoBoxColor("#AA3F51B5")       // Sets Info box color
                 .setInfo("Scan a QR code Image.")   // Sets info message in the info box
                 .initiateScan(Barcode.QR_CODE);
 
         new ZxingOrient(Main_Kiemkho.this)
-                .showInfoBox(false) // Doesn't display the info box
+                .showInfoBox(true) // Doesn't display the info box
                 .setBeep(true)  // Doesn't play beep sound
                 .setVibration(true)  // Enables the vibration
                 .initiateScan();
@@ -124,18 +142,24 @@ public class Main_Kiemkho extends AppCompatActivity {
         if(result!=null) {
             scannedData = result.getContents();
             if (scannedData != null) {
+                try {
                 StringTokenizer st = new StringTokenizer(scannedData, ";");
                 ma = st.nextToken();
                 ten = st.nextToken();
                 baohanh = st.nextToken();
                 nguon = st.nextToken();
                 ngaynhap = st.nextToken();
+                von = st.nextToken();
                 gia = st.nextToken();
-                arrayList.add(0, new Sanpham(ma, ten, baohanh, nguon, ngaynhap, gia));
+                arrayList.add(0, new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
                 if(arrayList.size() > 0) {
                     adapter.notifyDataSetChanged();
                 }
                 new SendRequest().execute();
+                addKiemkhoWeb();
+                }   catch (NoSuchElementException nse) {
+                    Toast.makeText(Main_Kiemkho.this, "Lỗi định dạng nhãn", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,6 +181,7 @@ public class Main_Kiemkho extends AppCompatActivity {
 
                 postDataParams.put("salesNgay", ngay);
                 postDataParams.put("salesGio", gio);
+                postDataParams.put("salesVitri", vitri);
                 postDataParams.put("SalesTennhanvien", session_username);
                 postDataParams.put("salesManhanvien", session_ma);
                 postDataParams.put("salesMasanpham", ma);
@@ -164,6 +189,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                 postDataParams.put("salesBaohanhsanpham", baohanh);
                 postDataParams.put("salesNguonsanpham", nguon);
                 postDataParams.put("salesNgaynhap", ngaynhap);
+                postDataParams.put("salesVonsanpham", von);
                 postDataParams.put("salesGiasanpham", gia);
 
 
@@ -219,6 +245,82 @@ public class Main_Kiemkho extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(getApplicationContext(), result,Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Lấy dữ liệu từ internet
+    class Getvitri extends AsyncTask<Void, Void, Void> {
+        int jIndex;
+        int x;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            x = arrayList.size();
+
+            if(x == 0)
+                jIndex = 0;
+            else
+                jIndex = x;
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(url2);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.DANHSACHCUAHANG);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                        position.add(
+                                                object.getString("cuahang")
+                                        );
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setLisst(position);
+        }
+    }
+
+    private void setLisst(ArrayList<String> position) {
+        this.position = position;
+        final Spinner spinnerKiemkho = (Spinner) findViewById(R.id.spinnerKiemkho);
+        mAdapter = new ArrayAdapter<>(Main_Kiemkho.this, android.R.layout.simple_spinner_item, position);
+        Log.d("qqq", position.size()+" 0");
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Log.d("qqq", position.size()+" 1");
+        spinnerKiemkho.setAdapter(mAdapter);
+        Log.d("qqq", position.size()+" 2");
+        spinnerKiemkho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                vitri = spinnerKiemkho.getSelectedItem().toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
 
@@ -282,6 +384,7 @@ public class Main_Kiemkho extends AppCompatActivity {
             dialog = new ProgressDialog(Main_Kiemkho.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
             dialog.show();
         }
 
@@ -306,6 +409,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                                                 object.getString("baohanh"),
                                                 object.getString("nguon"),
                                                 object.getString("ngaynhap"),
+                                                object.getString("von"),
                                                 object.getString("gia")
                                         ));
                                     }
@@ -334,5 +438,58 @@ public class Main_Kiemkho extends AppCompatActivity {
                 Toast.makeText(Main_Kiemkho.this, "Không có dữ liệu được tìm thấy", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void ResetActivity(){
+        if (Build.VERSION.SDK_INT >= 11) {
+            recreate();
+        } else {
+            Intent intent = getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        }
+    }
+
+    public void addKiemkhoWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            Toast.makeText(Main_Kiemkho.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Main_Kiemkho.this, "Lỗi "+error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_KIEMKHO_WEB);
+                params.put("ngay", ngay);
+                params.put("calam", gio);
+                params.put("maNhanvien", session_username);
+                params.put("tenNhanvien", session_ma);
+                params.put("maSanpham", ma);
+                params.put("tenSanpham", ten);
+                params.put("baohanhSanpham", baohanh);
+                params.put("nguonSanpham", nguon);
+                params.put("ngaynhapSanpham", ngaynhap);
+                params.put("vonSanpham", von);
+                params.put("giaSanpham", gia);
+                params.put("vitri", vitri);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 }

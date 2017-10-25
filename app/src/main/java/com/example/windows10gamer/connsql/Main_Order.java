@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -81,6 +83,7 @@ public class Main_Order extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        edBenginOrder.setInputType(InputType.TYPE_NULL);
         edBenginOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +102,7 @@ public class Main_Order extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
+        edEndOrder.setInputType(InputType.TYPE_NULL);
         edEndOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +126,6 @@ public class Main_Order extends AppCompatActivity {
             public void onClick(View v) {
                 dateBegin = String.valueOf(edBenginOrder.getText());
                 dateEnd   = String.valueOf(edEndOrder.getText());
-//                edBenginOrder.setEnabled(false);
-//                edEndOrder.setEnabled(false);
                 if (cbCasang.isChecked())  dateCasang  = "Ca sáng"; else dateCasang = "FALSE";
                 if (cbCachieu.isChecked()) dateCachieu = "Ca chiều"; else dateCachieu = "FALSE";
                 LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu, v);
@@ -134,11 +135,35 @@ public class Main_Order extends AppCompatActivity {
         fabReportOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dateBegin = String.valueOf(edBenginOrder.getText());
+                dateEnd   = String.valueOf(edEndOrder.getText());
+                if (cbCasang.isChecked())  dateCasang  = "Ca sáng"; else dateCasang = "FALSE";
+                if (cbCachieu.isChecked()) dateCachieu = "Ca chiều"; else dateCachieu = "FALSE";
                 Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("ReportList", contactList);
+                bundle.putString("dateBegin", dateBegin);
+                bundle.putString("dateEnd", dateEnd);
+                bundle.putString("dateCasang", dateCasang);
+                bundle.putString("dateCachieu",dateCachieu);
                 intent.putExtra("ReportBundle", bundle);
                 startActivity(intent);
+            }
+        });
+        cbCasang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!cbCachieu.isChecked() && isChecked == false){
+                    cbCachieu.setChecked(true);
+                }
+            }
+        });
+        cbCachieu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!cbCasang.isChecked() && isChecked == false){
+                    cbCasang.setChecked(true);
+                }
             }
         });
     }
@@ -153,6 +178,7 @@ public class Main_Order extends AppCompatActivity {
             dialog = new ProgressDialog(Main_Order.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
             dialog.show();
 
             APIService_Sales api = RetrofitClient.getApiService();

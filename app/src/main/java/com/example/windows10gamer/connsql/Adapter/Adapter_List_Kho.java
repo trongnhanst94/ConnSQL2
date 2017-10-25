@@ -79,7 +79,7 @@ public class Adapter_List_Kho extends BaseAdapter implements Serializable{
         if (kiemkho.getGia().equals("")){
             holder.tvKhoGia.setText("Giá bán: không có.");
         } else {
-            holder.tvKhoGia.setText("Giá bán: "+ getFormatedAmount(Integer.parseInt(kiemkho.getGia())) +" đ");
+            holder.tvKhoGia.setText("Giá bán: "+ getFormatedAmount(Integer.parseInt(kiemkho.getGia())));
         }
 
         return view;
@@ -88,7 +88,7 @@ public class Adapter_List_Kho extends BaseAdapter implements Serializable{
     private String getFormatedAmount(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
-        return formatnumber;
+        return formatnumber+"đ";
     }
 
 }

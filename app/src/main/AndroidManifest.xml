@@ -41,7 +41,8 @@
         <activity android:name=".Main_Information_Order" />
         <activity android:name=".Main_Tabhost_Sales" />
         <activity android:name=".Main_Report_Sales" />
-        <activity android:name=".Main_List_Lechkho"></activity>
+        <activity android:name=".Main_List_Lechkho" />
+        <activity android:name=".Main_Baocao_Doanhthu"></activity>
     </application>
 
 </manifest>

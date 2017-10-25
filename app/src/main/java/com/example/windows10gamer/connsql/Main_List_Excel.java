@@ -54,13 +54,11 @@ public class Main_List_Excel extends Activity {
         listView.setTextFilterEnabled(true);
         searchView = (EditText) findViewById(R.id.svSearchItem);
 
-        // Capture Text in EditText
         searchView.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable arg0) {
                 String text = searchView.getText().toString().toLowerCase(Locale.getDefault());
-                Log.d("sss", text);
                 adapter.getFilter().filter(text);
             }
 
@@ -110,6 +108,7 @@ public class Main_List_Excel extends Activity {
             dialog = new ProgressDialog(Main_List_Excel.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
             dialog.show();
         }
 
@@ -131,6 +130,7 @@ public class Main_List_Excel extends Activity {
                                             object.getString("ten"),
                                             object.getString("baohanh"),
                                             object.getString("nguon"),null,
+                                            object.getString("von"),
                                             object.getString("giaban")
                                     ));
                                 } catch (JSONException e) {
