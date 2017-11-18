@@ -71,9 +71,9 @@ public class Adapter_kho extends BaseAdapter implements Serializable{
         final Sanpham sanpham = sanphams.get(i);
 
         holder.tvAdapterSalesMa.setText("MSP: " + sanpham.getMa());
-        holder.tvAdapterSalesTen.setText("Tên sản phẩm: " + sanpham.getTen());
+        holder.tvAdapterSalesTen.setText("SP: " + sanpham.getTen());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());
-        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: " + Keys.setDate(sanpham.getNgaynhap()));
+        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: " + Keys.setNN(sanpham.getNgaynhap()));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
         if (sanpham.getGiaban().equals("")){
             holder.tvAdapterSalesGia.setText("Giá bán: không có.");

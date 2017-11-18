@@ -34,7 +34,7 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
     }
 
     private class ViewHolder{
-        TextView tvAdapterSalesMa, tvAdapterSalesTen, tvAdapterSalesGia;
+        TextView tvAdapterSalesMa, tvAdapterSalesTen, tvAdapterSalesGia, tvAdapterSalesNguon, tvAdapterSalesBaohanh, tvAdapterSalesNgaynhap;
         ImageView ivSalesDelete;
     }
 
@@ -61,6 +61,9 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
             holder.tvAdapterSalesMa = (TextView) view.findViewById(R.id.tvAdapterSalesMa);
+            holder.tvAdapterSalesNguon = (TextView) view.findViewById(R.id.tvAdapterSalesNguon);
+            holder.tvAdapterSalesBaohanh = (TextView) view.findViewById(R.id.tvAdapterSalesBaohanh);
+            holder.tvAdapterSalesNgaynhap = (TextView) view.findViewById(R.id.tvAdapterSalesNgaynhap);
             holder.tvAdapterSalesTen = (TextView) view.findViewById(R.id.tvAdapterSalesTen);
             holder.tvAdapterSalesGia = (TextView) view.findViewById(R.id.tvAdapterSalesGia);
             holder.ivSalesDelete = (ImageView) view.findViewById(R.id.ivSalesDelete);
@@ -71,9 +74,12 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
 
         final Sanpham sanpham = sanphams.get(i);
 
-        holder.tvAdapterSalesTen.setText(sanpham.getTen());
+        holder.tvAdapterSalesTen.setText("SP: "+sanpham.getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
         holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGiaban())));
+        holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
+        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: "+ Keys.setNN(sanpham.getNgaynhap()));
+        holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());
 
         holder.ivSalesDelete.setOnClickListener(new View.OnClickListener() {
             @Override

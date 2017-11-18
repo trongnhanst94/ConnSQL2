@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.List;
@@ -44,32 +45,43 @@ public class Adapter_Order extends ArrayAdapter<Order> {
         }
 
         Order item = getItem(position);
-
-        vh.tvSttOrder.setText(position + 1 + "");
-        vh.tvMaOrder.setText(item.getMaOrder());
-        vh.tvTennvOrder.setText(item.getTenNVOrder());
+        vh.tvMaOrder.setText("Mã: "+item.getMaOrder());
+        vh.tvTennvOrder.setText("| NV: "+item.getTenNVOrder());
+        vh.tvTenkhOrder.setText("KH: "+item.getTenKH());
+        vh.tvSdtkhOrder.setText("| Sđt: "+item.getSdtKH());
+        vh.tvDateOrder.setText("| Ngày: "+Keys.setDate(item.getDateOrder()));
+        vh.tvTimeOrder.setText(item.getTimeOrder());
 
         return vh.rootView;
     }
 
     private static class ViewHolder {
         public final LinearLayout rootView;
-        public final TextView tvSttOrder;
+        public final TextView tvTenkhOrder;
         public final TextView tvMaOrder;
         public final TextView tvTennvOrder;
+        public final TextView tvSdtkhOrder;
+        public final TextView tvDateOrder;
+        public final TextView tvTimeOrder;
 
-        private ViewHolder(LinearLayout rootView, TextView tvSttOrder, TextView tvMaOrder, TextView tvTennvOrder) {
-            this.rootView     = rootView;
-            this.tvSttOrder   = tvSttOrder;
-            this.tvMaOrder    = tvMaOrder;
+        public ViewHolder(LinearLayout rootView, TextView tvMaOrder, TextView tvTennvOrder, TextView tvTenkhOrder, TextView tvSdtkhOrder, TextView tvDateOrder, TextView tvTimeOrder) {
+            this.rootView = rootView;
+            this.tvTenkhOrder = tvTenkhOrder;
+            this.tvMaOrder = tvMaOrder;
             this.tvTennvOrder = tvTennvOrder;
+            this.tvSdtkhOrder = tvSdtkhOrder;
+            this.tvDateOrder = tvDateOrder;
+            this.tvTimeOrder = tvTimeOrder;
         }
 
         public static ViewHolder create(LinearLayout rootView) {
-            TextView tvSttOrder = (TextView) rootView.findViewById(R.id.tvSttOrder);
+            TextView tvTenkhOrder = (TextView) rootView.findViewById(R.id.tvTenkhOrder);
+            TextView tvSdtkhOrder = (TextView) rootView.findViewById(R.id.tvSdtkhOrder);
+            TextView tvDateOrder = (TextView) rootView.findViewById(R.id.tvDateOrder);
+            TextView tvTimeOrder = (TextView) rootView.findViewById(R.id.tvTimeOrder);
             TextView tvMaOrder = (TextView) rootView.findViewById(R.id.tvMaOrder);
             TextView tvTennvOrder = (TextView) rootView.findViewById(R.id.tvTennvOrder);
-            return new ViewHolder(rootView, tvSttOrder, tvMaOrder, tvTennvOrder);
+            return new ViewHolder(rootView, tvMaOrder, tvTennvOrder, tvTenkhOrder,tvSdtkhOrder,tvDateOrder,tvTimeOrder);
         }
     }
 }

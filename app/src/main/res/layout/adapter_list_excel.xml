@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,10 +29,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:drawableLeft="@android:drawable/btn_star_big_on"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 tools:text="TextView" />
         </LinearLayout>
 
@@ -55,7 +54,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 tools:text="TextView" />
 
             <TextView
@@ -65,7 +64,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 tools:text="TextView" />
 
             <TextView
@@ -76,7 +75,7 @@
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 tools:text="TextView" />
         </LinearLayout>
 
@@ -86,6 +85,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.70"
             android:orientation="horizontal"
+            android:paddingBottom="3dp"
             android:weightSum="2">
 
             <TextView
@@ -97,7 +97,7 @@
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -111,9 +111,9 @@
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="18sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 tools:text="TextView" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

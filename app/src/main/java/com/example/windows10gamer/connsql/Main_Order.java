@@ -51,8 +51,6 @@ public class Main_Order extends AppCompatActivity {
     View view;
     String dateBegin, dateEnd, dateCasang, dateCachieu;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +93,7 @@ public class Main_Order extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         edBenginOrder.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 },year, month, day);
@@ -114,7 +112,7 @@ public class Main_Order extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         edEndOrder.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 },year, month, day);
@@ -194,7 +192,7 @@ public class Main_Order extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         contactList.clear();
                         temp.clear();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         Date hom = null; Date loadBegin1 = null; Date loadEnd1 = null;
                         try {
                             loadBegin1 = (Date) simpleDateFormat.parse(loadBegin);
@@ -208,6 +206,7 @@ public class Main_Order extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+
                             if(hom.compareTo(loadBegin1) >= 0  && hom.compareTo(loadEnd1) <= 0) {
                                 if (loadCasang.equals(orignal.get(i).getTimeOrder())) {
                                     contactList.add(orignal.get(i));
@@ -218,8 +217,10 @@ public class Main_Order extends AppCompatActivity {
                             }
                         }
                         for (int j = 0; j < contactList.size(); j++) {
-                            if (sosanhOrder(temp, contactList.get(j).getMaOrder()) == -1){
-                                temp.add(contactList.get(j));
+                            if (contactList.get(j).getChinhanhOrder().equals(Main_Menu.chinhanh)){
+                                if (sosanhOrder(temp, contactList.get(j).getMaOrder()) == -1){
+                                    temp.add(contactList.get(j));
+                                }
                             }
                         }
                         getList(contactList);

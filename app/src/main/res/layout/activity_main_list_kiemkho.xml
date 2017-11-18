@@ -8,14 +8,14 @@
     tools:context="com.example.windows10gamer.connsql.Main_List_Kiemkho">
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cam"
+        android:textAlignment="center"
         android:padding="10dp"
         android:text="Danh sách kiểm kho"
         android:textColor="#fff"
-        android:textSize="24sp"
+        android:textSize="18sp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 

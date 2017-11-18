@@ -13,14 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,10 +43,9 @@ import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
-import com.example.windows10gamer.connsql.Other.NoScanResultException;
-import com.example.windows10gamer.connsql.Other.ScanFragment;
-import com.example.windows10gamer.connsql.Other.ScanResultReceiver;
-import com.example.windows10gamer.connsql.Other.Validation;
+import com.example.windows10gamer.connsql.Other.Mylistview;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,23 +74,15 @@ import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import me.sudar.zxingorient.Barcode;
-import me.sudar.zxingorient.ZxingOrient;
-import me.sudar.zxingorient.ZxingOrientResult;
-
-public class Main_Sales extends ActionBarActivity implements ScanResultReceiver {
+public class Main_Sales extends AppCompatActivity {
     EditText edGiamgia;
-    @BindView(R.id.rgKhuyenmai)
     RadioGroup rgKhuyenmai;
-    @BindView(R.id.rbGiamgia)
     RadioButton rbGiamgia;
-    @BindView(R.id.rbTangqua)
     RadioButton rbTangqua;
-    TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime;
+    TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime, tvChinhanhSales;
     EditText edKhachhang, edSodienthoai, edGhichudonhang, edGhichukhachhang;
-    ListView listView, listKhuyenmai;
+    ListView  listKhuyenmai;
+    Mylistview listView;
     ArrayList<Sanpham> arrayList, khuyenmaiList;
     ArrayList<Quatang> quatang;
     Adapter_Sales adapter;
@@ -107,36 +95,42 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
     final ArrayList<String> itemKM = new ArrayList<>();
     LinearLayout lnTangqua;
     ProgressDialog dialog;
-    Button btnXacnhan, btnCancel;
+    Button btnXacnhan, btnCancel, btn_scan_now;
     String session_username, session_ma;
     String url = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHQUATANG;
-    String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, von, tenkhachhang, sodienthoaikhachhang, ghichukhachhang, ghichusanpham, madonhang;
+    String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, chinhanh, von, tenkhachhang, sodienthoaikhachhang, ghichukhachhang, ghichusanpham, madonhang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_sales);
-        ButterKnife.bind(this);
         tvTongdonhang     = (TextView) findViewById(R.id.tvTongdonhang);
         tvManhanvien      = (TextView) findViewById(R.id.tvManhanvien);
         tvTennhanvien     = (TextView) findViewById(R.id.tvTennhanvien);
+        rgKhuyenmai       = (RadioGroup) findViewById(R.id.rgKhuyenmai);
+        rbGiamgia         = (RadioButton) findViewById(R.id.rbGiamgia);
+        rbTangqua         = (RadioButton) findViewById(R.id.rbTangqua);
         tvSalesDate       = (TextView) findViewById(R.id.tvSalesDate);
         tvSalesTime       = (TextView) findViewById(R.id.tvSalesTime);
+        tvChinhanhSales   = (TextView) findViewById(R.id.tvChinhanhSales);
         edKhachhang       = (EditText) findViewById(R.id.edKhachhang);
         edSodienthoai     = (EditText) findViewById(R.id.edSodienthoai);
         edGhichudonhang   = (EditText) findViewById(R.id.edGhichudonhang);
         edGhichukhachhang = (EditText) findViewById(R.id.edGhichukhachhang);
+        btn_scan_now        = (Button)   findViewById(R.id.btn_scan_now) ;
         btnXacnhan        = (Button)   findViewById(R.id.submitSanpham) ;
         btnCancel         = (Button)   findViewById(R.id.cancelSanpham) ;
-        listView          = (ListView) findViewById(R.id.lvSanpham);
+        listView          = (Mylistview) findViewById(R.id.lvSanpham);
         listKhuyenmai     = (ListView) findViewById(R.id.lvKhuyenmai);
         lnTangqua         = (LinearLayout) findViewById(R.id.lnTangqua);
-        edGiamgia = (EditText) findViewById(R.id.edGiamgia) ;
+        edGiamgia         = (EditText) findViewById(R.id.edGiamgia) ;
         edGiamgia.setVisibility(View.GONE);
         lnTangqua.setVisibility(View.GONE);
+        tvChinhanhSales.setText(Main_Menu.chinhanh);
         ngay = getDate();
         gio = getTime();
-        madonhang = MaDonhang();
+        chinhanh = Main_Menu.chinhanh;
+        madonhang = Keys.MaDonhang();
         tvSalesDate.setText(ngay);
         tvSalesTime.setText(gio);
         Intent intentput  = getIntent();
@@ -152,48 +146,23 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
         rbGiamgia.setEnabled(false);
         adapter       = new Adapter_Sales(Main_Sales.this, R.layout.adapter_sales, arrayList);
         listView.setAdapter(adapter);
-        listView.setOnTouchListener(new ListView.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
-                }
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
         new GetDataQuaTang().execute();
-        edKhachhang.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                Validation.hasText(edKhachhang);
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-            public void onTextChanged(CharSequence s, int start, int before, int count){}
-        });
-        edSodienthoai.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                Validation.hasText(edSodienthoai);
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-            public void onTextChanged(CharSequence s, int start, int before, int count){}
-        });
         rgKhuyenmai.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 doOnDifficultyLevelChanged(group, checkedId);
             }
         });
+        btn_scan_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanSanpham();
+            }
+        });
         btnXacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkValidation()){
+                if (!(edKhachhang.getText().toString().equals("") && edSodienthoai.getText().toString().equals(""))){
                     tenkhachhang = edKhachhang.getText().toString();
                     sodienthoaikhachhang = edSodienthoai.getText().toString();
                     ghichukhachhang = edGhichukhachhang.getText().toString();
@@ -205,7 +174,6 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
                     }
                     new SendRequest().execute();
                     ResetActivity();
-
                 }
                 else Snackbar.make(view, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
 
@@ -237,13 +205,41 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
-
         btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ResetActivity();
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Sales.this);
+                    builder.setMessage("Bạn muốn hủy đơn hàng??");
+                    builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();                        }
+                    });
+                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Main_Sales.this.finish();
+                        }
+                    });
+                    builder.show();
+                }
+            });
+    }
+
+    private void scanSanpham() {
+//        ZxingOrient intentIntegrator = new ZxingOrient(Main_Sales.this);
+//        intentIntegrator.setIcon(R.drawable.icon)   // Sets the custom icon
+//                .setToolbarColor("#AA3F51B5")       // Sets Tool bar Color
+//                .setInfoBoxColor("#AA3F51B5")       // Sets Info box color
+//                .setInfo("Scan a QR code Image.")   // Sets info message in the info box
+//                .setCaptureActivity(ToolbarCaptureActivity.class).initiateScan(Barcode.QR_CODE);
+//
+//        new ZxingOrient(Main_Sales.this)
+//                .showInfoBox(true) // Doesn't display the info box
+//                .setBeep(true)  // Doesn't play beep sound
+//                .setVibration(true)  // Enables the vibration
+//                .setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
+        IntentIntegrator integrator = new IntentIntegrator(this);        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);        integrator.setPrompt("Quét mã code");        integrator.setOrientationLocked(false);        integrator.setBeepEnabled(false);        integrator.initiateScan();
     }
 
     private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
@@ -257,91 +253,15 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
         }
     }
 
-    public void scanSanphamFM(View view){
-        ten = null; ma = null; nguon = null; ngaynhap = null; baohanh = null;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ScanFragment scanFragment = new ScanFragment();
-        fragmentTransaction.add(R.id.scan_fragment, scanFragment);
-        fragmentTransaction.commit();
-    }
-
-    private boolean checkValidation() {
-        boolean ret = true;
-        if (!Validation.hasText(edKhachhang)) ret = false;
-        if (!Validation.hasText(edSodienthoai)) ret = false;
-        return ret;
-    }
-
-    @Override
-    public void scanResultData(String codeFormat, String codeContent){
-
-        try {
-            if (codeContent != null && codeFormat != null){
-                StringTokenizer st = new StringTokenizer(codeContent, ";");
-                ma = st.nextToken();
-                ten = st.nextToken();
-                baohanh = st.nextToken();
-                nguon = st.nextToken();
-                ngaynhap = st.nextToken();
-                von = st.nextToken();
-                gia = st.nextToken();
-                arrayList.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
-                total = total + Integer.parseInt(gia);
-                tvTongdonhang.setText(getFormatedAmount(total));
-            }
-        }
-        catch (NoSuchElementException nse) {
-        }
-            adapter.notifyDataSetChanged();
-    }
-
     private String getFormatedAmount(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
         return formatnumber+"đ";
     }
 
-    @Override
-    public void scanResultData(NoScanResultException noScanData) {
-        Toast toast = Toast.makeText(this,noScanData.getMessage(), Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    public void scanSanpham(View view){
-
-        ZxingOrient intentIntegrator = new ZxingOrient(Main_Sales.this);
-        intentIntegrator.setIcon(R.drawable.icon);
-        intentIntegrator.setToolbarColor("#AA3F51B5");
-        intentIntegrator.setInfoBoxColor("#AA3F51B5");
-        intentIntegrator.setInfo("Scan a QR code Image.");
-        intentIntegrator.initiateScan(Barcode.QR_CODE);
-
-        new ZxingOrient(Main_Sales.this)
-                .showInfoBox(false)
-                .setBeep(true)
-                .setVibration(true)
-                .initiateScan();
-    }
-
-    public void scanKhuyenmai(View view){
-
-        ZxingOrient intentIntegrator = new ZxingOrient(Main_Sales.this);
-        intentIntegrator.setIcon(R.drawable.icon);
-        intentIntegrator.setToolbarColor("#AA3F51B5");
-        intentIntegrator.setInfoBoxColor("#AA3F51B5");
-        intentIntegrator.setInfo("Scan a QR code Image.");
-        intentIntegrator.initiateScan(Barcode.QR_CODE);
-
-        new ZxingOrient(Main_Sales.this)
-                .showInfoBox(false)
-                .setBeep(true)
-                .setVibration(true)
-                .initiateScan();
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ZxingOrientResult result = ZxingOrient.parseActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result!=null) {
             String scannedData = result.getContents();
             if (scannedData != null) {
@@ -371,6 +291,7 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
                     rbTangqua.setChecked(false);
                     listKhuyenmai.setAdapter(null);
                     adapter.notifyDataSetChanged();
+                    scanSanpham();
                 }   catch (NoSuchElementException nse) {
                     Toast.makeText(Main_Sales.this, "Lỗi định dạng nhãn", Toast.LENGTH_SHORT).show();
                 }
@@ -378,7 +299,7 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
         }
     }
 
-    public void DeleteSP(String msp){
+    public void DeleteSP(final String msp){
         for (int i =  0; i <= arrayList.size(); i++){
             if (arrayList.get(i).getMa() == msp) {
                 total = total - Integer.parseInt(arrayList.get(i).getGiaban());
@@ -401,16 +322,11 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
         rbTangqua.setChecked(false);
         listKhuyenmai.setAdapter(null);
         adapter.notifyDataSetChanged();
-    }
 
-    private String MaDonhang() {
-        DateFormat dateFormat = new SimpleDateFormat("HHmmssddMMyyyy");
-        String date = dateFormat.format(new Date());
-        return date;
     }
 
     private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String date = dateFormat.format(new Date());
         return date;
     }
@@ -498,9 +414,10 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
 
-            postDataParams.put("salesMadonhang", madonhang);
+            postDataParams.put("salesMadonhang", "SA_"+madonhang);
             postDataParams.put("salesNgay", ngay);
             postDataParams.put("salesCa", gio);
+            postDataParams.put("salesChinhanh", chinhanh);
             postDataParams.put("SalesTennhanvien", session_username);
             postDataParams.put("salesManhanvien", session_ma);
             postDataParams.put("salesMasanpham", arrayList.get(j).getMa());
@@ -653,23 +570,6 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
                         }
                         adapter2 = new Adapter_Quatang(Main_Sales.this, R.layout.adapter_quatang, a);
                         listKhuyenmai.setAdapter(adapter2);
-                        listKhuyenmai.setOnTouchListener(new ListView.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View v, MotionEvent event) {
-                                int action = event.getAction();
-                                switch (action) {
-                                    case MotionEvent.ACTION_DOWN:
-                                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                                        break;
-
-                                    case MotionEvent.ACTION_UP:
-                                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                                        break;
-                                }
-                                v.onTouchEvent(event);
-                                return true;
-                            }
-                        });
                         itemKM.clear();
                     }
                 });
@@ -698,9 +598,10 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
             // Load Json object
             JSONObject postDataParamsKM = new JSONObject();
 
-            postDataParamsKM.put("salesMadonhang", madonhang);
+            postDataParamsKM.put("salesMadonhang", "KM_"+madonhang);
             postDataParamsKM.put("salesNgay", ngay);
             postDataParamsKM.put("salesCa", gio);
+            postDataParamsKM.put("salesChinhanh", chinhanh);
             postDataParamsKM.put("salesTennhanvien", session_username);
             postDataParamsKM.put("salesManhanvien", session_ma);
             postDataParamsKM.put("salesGiamgia", giamgia);
@@ -708,7 +609,7 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
             postDataParamsKM.put("salesTensanpham", a.get(j).getTen());
             postDataParamsKM.put("salesBaohanhsanpham", a.get(j).getBaohanh());
             postDataParamsKM.put("salesNguonsanpham", a.get(j).getNguon());
-            postDataParamsKM.put("salesNgaynhap", a.get(j).getNgaynhap());
+            postDataParamsKM.put("salesNgaynhap", Keys.setNN(a.get(j).getNgaynhap()));
             postDataParamsKM.put("salesVonsanpham", a.get(j).getVon());
             postDataParamsKM.put("salesGiasanpham", a.get(j).getGiaban());
             postDataParamsKM.put("salesGhichusanpham", ghichusanpham);
@@ -795,9 +696,10 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_SALES_WEB);
-                params.put("maDonhang", madonhang);
+                params.put("maDonhang", "SA_"+madonhang);
                 params.put("ngay", ngay);
                 params.put("calam", gio);
+                params.put("chinhanh", chinhanh);
                 params.put("maNhanvien", session_username);
                 params.put("tenNhanvien", session_ma);
                 params.put("maSanpham", arrayList.get(j).getMa());
@@ -818,8 +720,8 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
     }
 
     public void addKMWeb(final int j){
-        RequestQueue requestQueue1 = Volley.newRequestQueue(this);
-        StringRequest stringRequest1 = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -837,29 +739,30 @@ public class Main_Sales extends ActionBarActivity implements ScanResultReceiver 
         ){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params1 = new HashMap<>();
-                params1.put("tacvu", Keys.ADD_KM_WEB);
-                params1.put("maDonhang", madonhang);
-                params1.put("ngay", ngay);
-                params1.put("calam", gio);
-                params1.put("maNhanvien", session_username);
-                params1.put("tenNhanvien", session_ma);
-                params1.put("giamgia", giamgia+"");
-                params1.put("maSanpham", a.get(j).getMa());
-                params1.put("tenSanpham", a.get(j).getTen());
-                params1.put("baohanhSanpham", a.get(j).getBaohanh());
-                params1.put("nguonSanpham", a.get(j).getNguon());
-                params1.put("ngaynhapSanpham", a.get(j).getNgaynhap());
-                params1.put("vonSanpham", a.get(j).getVon());
-                params1.put("giaSanpham", a.get(j).getGiaban());
-                params1.put("ghichuSanpham", ghichusanpham);
-                params1.put("tenKhachhang", tenkhachhang);
-                params1.put("sodienthoaiKhachhang", sodienthoaikhachhang);
-                params1.put("ghichuKhachhang", ghichukhachhang);
-                return params1;
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_KM_WEB);
+                params.put("maDonhang", "KM_"+madonhang);
+                params.put("ngay", ngay);
+                params.put("calam", gio);
+                params.put("chinhanh", chinhanh);
+                params.put("maNhanvien", session_username);
+                params.put("tenNhanvien", session_ma);
+                params.put("giamgia", giamgia+"");
+                params.put("maSanpham", a.get(j).getMa());
+                params.put("tenSanpham", a.get(j).getTen());
+                params.put("baohanhSanpham", a.get(j).getBaohanh());
+                params.put("nguonSanpham", a.get(j).getNguon());
+                params.put("ngaynhapSanpham", Keys.setNN(a.get(j).getNgaynhap()));
+                params.put("vonSanpham", a.get(j).getVon());
+                params.put("giaSanpham", a.get(j).getGiaban());
+                params.put("ghichuSanpham", ghichusanpham);
+                params.put("tenKhachhang", tenkhachhang);
+                params.put("sodienthoaiKhachhang", sodienthoaikhachhang);
+                params.put("ghichuKhachhang", ghichukhachhang);
+                return params;
             }
         };
-        requestQueue1.add(stringRequest1);
+        requestQueue.add(stringRequest);
     }
 }
 

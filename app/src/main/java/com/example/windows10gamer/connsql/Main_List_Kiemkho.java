@@ -96,7 +96,6 @@ public class Main_List_Kiemkho extends AppCompatActivity {
                         int lenArray = array.length();
                         if(lenArray > 0) {
                             for( ; jIndex < lenArray; jIndex++) {
-
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     arrayList.add(new Kiemkho(

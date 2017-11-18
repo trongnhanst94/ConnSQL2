@@ -1,8 +1,9 @@
 package com.example.windows10gamer.connsql.Object;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Sanpham implements Serializable{
+public class Sanpham implements Parcelable {
     private String ma;
     private String ten;
     private String baohanh;
@@ -24,6 +25,28 @@ public class Sanpham implements Serializable{
     public Sanpham() {
 
     }
+
+    protected Sanpham(Parcel in) {
+        ma = in.readString();
+        ten = in.readString();
+        baohanh = in.readString();
+        nguon = in.readString();
+        ngaynhap = in.readString();
+        von = in.readString();
+        giaban = in.readString();
+    }
+
+    public static final Creator<Sanpham> CREATOR = new Creator<Sanpham>() {
+        @Override
+        public Sanpham createFromParcel(Parcel in) {
+            return new Sanpham(in);
+        }
+
+        @Override
+        public Sanpham[] newArray(int size) {
+            return new Sanpham[size];
+        }
+    };
 
     public String getMa() {
         return ma;
@@ -79,5 +102,21 @@ public class Sanpham implements Serializable{
 
     public void setGiaban(String giaban) {
         this.giaban = giaban;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ma);
+        dest.writeString(ten);
+        dest.writeString(baohanh);
+        dest.writeString(nguon);
+        dest.writeString(ngaynhap);
+        dest.writeString(von);
+        dest.writeString(giaban);
     }
 }

@@ -6,11 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
@@ -19,30 +14,38 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@drawable/icon"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyMaterialTheme">
         <activity android:name=".Wellcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MainLogin" />
-        <activity android:name=".Main_AddProduct" />
-        <activity android:name=".Main_Menu" />
-        <activity android:name=".Main_Kiemkho" />
-        <activity android:name=".Main_List_Excel" />
-        <activity android:name=".Main_Sales" />
-        <activity android:name=".Main_List_Kiemkho" />
-        <activity android:name=".Main_Ketqua_Kiemkho" />
-        <activity android:name=".Main_Order" />
-        <activity android:name=".Main_Information_Order" />
-        <activity android:name=".Main_Tabhost_Sales" />
-        <activity android:name=".Main_Report_Sales" />
-        <activity android:name=".Main_List_Lechkho" />
-        <activity android:name=".Main_Baocao_Doanhthu"></activity>
+        <activity android:name=".Main_Menu" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Kiemkho" android:screenOrientation="portrait" />
+        <activity android:name=".Main_List_Excel" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Sales" android:screenOrientation="portrait" />
+        <activity android:name=".Main_List_Kiemkho" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Ketqua_Kiemkho" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Order" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Information_Order" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Report_Sales" android:screenOrientation="portrait" />
+        <activity android:name=".Main_List_Lechkho" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Baocao_Doanhthu" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_Baohanh" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_Hoantien" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_1doi1" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_Doilaykhac" android:screenOrientation="portrait" />
+        <activity android:name=".Main_Login" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_Report_BH" android:screenOrientation="portrait" />
+        <activity android:name=".Bao_Hanh.Main_Info_BH1D1" android:screenOrientation="portrait"  />
+        <activity android:name=".Bao_Hanh.Main_Info_BHHT" android:screenOrientation="portrait"  />
+        <activity android:name=".Bao_Hanh.Main_Info_BHDLK" android:screenOrientation="portrait"  />
+        <activity android:name=".Bao_Hanh.Main_ScanBH" android:screenOrientation="portrait"  />
+        <activity android:name=".MainActivitydebhht" android:screenOrientation="portrait"  />
+        <activity android:name=".Main" android:label="Trang chủ" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

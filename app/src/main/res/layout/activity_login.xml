@@ -83,8 +83,7 @@
                 android:text="@string/show_pwd"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
-                android:textSize="14sp"
-                app:buttonTint="@color/white" />
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/cbShowpass"
@@ -94,19 +93,8 @@
                 android:text="@string/showpass"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
-                android:textSize="14sp"
-                app:buttonTint="@color/white" />
+                android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/forgot_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:padding="5dp"
-                android:text="@string/forgot"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
         </LinearLayout>
 
         <Button
@@ -120,18 +108,17 @@
             android:textSize="17sp"
             android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/createAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="@string/newUser"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Hỗ trợ kỹ thuật - 01675322273"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 </LinearLayout>
 
 </RelativeLayout>

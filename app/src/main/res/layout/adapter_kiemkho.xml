@@ -28,8 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:drawableLeft="@android:drawable/presence_video_away"
-            android:text="Trần trọng nhân"
-            android:textColor="@color/zxing_custom_possible_result_points" />
+            android:text="Trần trọng nhân"/>
     </LinearLayout>
 
     <TextView
@@ -72,7 +71,7 @@
             android:layout_weight="2"
             android:padding="5dp"
             android:text="Chị Sa"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -83,13 +82,12 @@
         android:weightSum="2">
 
         <TextView
-            android:id="@+id/tvKhoNgaynhap"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="20-01-2017"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView

@@ -36,7 +36,6 @@ tools:context="com.example.windows10gamer.connsql.Main_List_Excel">
             android:textColorHint="#fff" />
 
         <TextView
-            android:id="@+id/textView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -51,6 +50,7 @@ tools:context="com.example.windows10gamer.connsql.Main_List_Excel">
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </android.support.v7.widget.LinearLayoutCompat>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

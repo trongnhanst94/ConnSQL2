@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff4081</color>
-    <color name="background_color">#009688</color>
     <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
-    <color name="white_greyish">#EEEEEE</color>
+    <color name="white_greyish">#eeeeee</color>
     <color name="button_selectorcolor">#9e9e9e</color>
     <color name="âs">#fafafa</color>
-    <color name="sadasd">#f7f7f7</color>
     <color name="aaaaa">#bbbaba</color>
     <color name="toast">#e23f3f3f</color>
-    <color name="cam">#33b5e5</color>
+    <color name="cam">#125688</color>
     <color name="RED">#ff4545</color>
-    <color name="GREEN">#2fa35c</color>
-
+    <color name="background">#FFFFFF </color>
+    <color name="colorPrimary">#125688</color>
+    <color name="colorPrimaryDark">#125688</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#f96466</color>
 </resources>

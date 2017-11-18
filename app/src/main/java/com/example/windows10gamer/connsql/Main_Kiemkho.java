@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,8 @@ import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,10 +63,6 @@ import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import me.sudar.zxingorient.Barcode;
-import me.sudar.zxingorient.ZxingOrient;
-import me.sudar.zxingorient.ZxingOrientResult;
-
 
 public class Main_Kiemkho extends AppCompatActivity {
     String scannedData;
@@ -73,14 +74,17 @@ public class Main_Kiemkho extends AppCompatActivity {
     String session_username, session_ma, ngay, gio;
     private String ma, ten, nguon, baohanh, gia, ngaynhap, von, vitri;
     TextView tvScanManhanvien, tvScanTennhanvien;
-    String url  = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHKIEMKHO;
-    String url2 = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHCUAHANG;
+    RadioGroup rgkho;
+    RadioButton rbkhomoi;
+    RadioButton rbkholoi;
+    String kho = "Kho mới";
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // khai báo
-        setContentView(R.layout.activity_main_scan_qr);
+        setContentView(R.layout.activity_main_kiem_kho);
         Button btnScan =(Button) findViewById(R.id.btnScan);
         lvScan = (ListView) findViewById(R.id.lvScan);
         arrayList = new ArrayList<>();
@@ -90,6 +94,10 @@ public class Main_Kiemkho extends AppCompatActivity {
         session_ma        = intent.getStringExtra("session_ma");
         tvScanManhanvien  = (TextView) findViewById(R.id.tvScanManhanvien);
         tvScanTennhanvien = (TextView) findViewById(R.id.tvScanTennhanvien);
+        rgkho             = (RadioGroup) findViewById(R.id.rgkho);
+        rbkhomoi          = (RadioButton) findViewById(R.id.rbkhomoi);
+        rbkholoi          = (RadioButton) findViewById(R.id.rbkholoi);
+        rbkhomoi.setChecked(true);
         tvScanManhanvien.setText("Mã số: " + session_ma);
         tvScanTennhanvien.setText("Tên nhân viên: " + session_username);
         ngay = getDate();
@@ -101,8 +109,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // chạy function Scaner
-                StartScan(activity);
+                StartScan();
             }
         });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabKiemkho);
@@ -117,28 +124,45 @@ public class Main_Kiemkho extends AppCompatActivity {
                 }
             }
         });
+        rbkholoi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!rbkhomoi.isChecked() && isChecked == false){
+                    rbkhomoi.setChecked(true);
+                }
+            }
+        });
+        rbkhomoi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!rbkholoi.isChecked() && isChecked == false){
+                    rbkholoi.setChecked(true);
+                }
+            }
+        });
+        rgkho.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                doOnDifficultyLevelChanged(group, checkedId);
+            }
+        });
     }
 
-    // Function Scanner
-    private void StartScan(Activity activity ) {
-        ZxingOrient intentIntegrator = new ZxingOrient(Main_Kiemkho.this);
-        intentIntegrator.setIcon(R.drawable.icon)   // Sets the custom icon
-                .setToolbarColor("#AA3F51B5")       // Sets Tool bar Color
-                .setInfoBoxColor("#AA3F51B5")       // Sets Info box color
-                .setInfo("Scan a QR code Image.")   // Sets info message in the info box
-                .initiateScan(Barcode.QR_CODE);
-
-        new ZxingOrient(Main_Kiemkho.this)
-                .showInfoBox(true) // Doesn't display the info box
-                .setBeep(true)  // Doesn't play beep sound
-                .setVibration(true)  // Enables the vibration
-                .initiateScan();
+    private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
+        int checkedRadioId = group.getCheckedRadioButtonId();
+        if(checkedRadioId== R.id.rbkhomoi) {
+            kho = "Kho mới";
+        } else if(checkedRadioId== R.id.rbkholoi ) {
+            kho = "Kho lỗi";
+        }
     }
 
-    // xác nhận dữ liệu trả về
+    private void StartScan() {
+        IntentIntegrator integrator = new IntentIntegrator(this);        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);        integrator.setPrompt("Quét mã code");        integrator.setOrientationLocked(false);        integrator.setBeepEnabled(false);        integrator.initiateScan();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ZxingOrientResult result = ZxingOrient.parseActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result!=null) {
             scannedData = result.getContents();
             if (scannedData != null) {
@@ -157,6 +181,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                 }
                 new SendRequest().execute();
                 addKiemkhoWeb();
+                StartScan();
                 }   catch (NoSuchElementException nse) {
                     Toast.makeText(Main_Kiemkho.this, "Lỗi định dạng nhãn", Toast.LENGTH_SHORT).show();
                 }
@@ -182,6 +207,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                 postDataParams.put("salesNgay", ngay);
                 postDataParams.put("salesGio", gio);
                 postDataParams.put("salesVitri", vitri);
+                postDataParams.put("salesKho", kho);
                 postDataParams.put("SalesTennhanvien", session_username);
                 postDataParams.put("salesManhanvien", session_ma);
                 postDataParams.put("salesMasanpham", ma);
@@ -266,7 +292,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         @Nullable
         @Override
         protected Void doInBackground(Void... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(url2);
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KIEMKHO_URL2);
             try {
                 if (jsonObject != null) {
                     if(jsonObject.length() > 0) {
@@ -306,11 +332,8 @@ public class Main_Kiemkho extends AppCompatActivity {
         this.position = position;
         final Spinner spinnerKiemkho = (Spinner) findViewById(R.id.spinnerKiemkho);
         mAdapter = new ArrayAdapter<>(Main_Kiemkho.this, android.R.layout.simple_spinner_item, position);
-        Log.d("qqq", position.size()+" 0");
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Log.d("qqq", position.size()+" 1");
         spinnerKiemkho.setAdapter(mAdapter);
-        Log.d("qqq", position.size()+" 2");
         spinnerKiemkho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -321,6 +344,7 @@ public class Main_Kiemkho extends AppCompatActivity {
 
             }
         });
+        dialog.dismiss();
     }
 
 
@@ -350,7 +374,7 @@ public class Main_Kiemkho extends AppCompatActivity {
     }
 
     private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String date = dateFormat.format(new Date());
         return date;
     }
@@ -362,8 +386,6 @@ public class Main_Kiemkho extends AppCompatActivity {
     }
 
     class GetDataKho extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog dialog;
         int jIndex;
         int x;
 
@@ -391,7 +413,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         @Nullable
         @Override
         protected Void doInBackground(Void... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(url);
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KIEMKHO_URL);
             try {
                 if (jsonObject != null) {
                     if(jsonObject.length() > 0) {
@@ -431,7 +453,6 @@ public class Main_Kiemkho extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
             if(arrayList.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
@@ -487,6 +508,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                 params.put("vonSanpham", von);
                 params.put("giaSanpham", gia);
                 params.put("vitri", vitri);
+                params.put("kho", kho);
                 return params;
             }
         };

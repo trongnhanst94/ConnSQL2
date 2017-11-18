@@ -10,20 +10,22 @@ public class User implements Serializable{
     int id;
     String ma;
     String ten;
+    String shortName;
     String username;
     String password;
 
-    public User(int id, String ma, String ten, String username, String password) {
+    public User(int id, String ma, String ten, String shortName, String username, String password) {
         this.id = id;
         this.ma = ma;
         this.ten = ten;
+        this.shortName = shortName;
         this.username = username;
         this.password = password;
     }
 
-    public User(String ma, String ten) {
+    public User(String ma, String shortName) {
         this.ma = ma;
-        this.ten = ten;
+        this.shortName = shortName;
     }
 
     public int getId() {
@@ -48,6 +50,14 @@ public class User implements Serializable{
 
     public void setTen(String ten) {
         this.ten = ten;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getUsername() {

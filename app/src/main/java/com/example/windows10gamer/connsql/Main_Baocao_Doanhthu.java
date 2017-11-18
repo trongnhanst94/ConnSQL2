@@ -30,26 +30,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Main_Baocao_Doanhthu extends AppCompatActivity {
-    @BindView(R.id.tvNhanvienBCDT)
     TextView tvNhanvienBCDT;
-    @BindView(R.id.tvnotiBCDT)
     TextView tvnoti;
-    @BindView(R.id.tvdoanhthuBCDT)
     TextView tvdoanhthuBCDT;
-    @BindView(R.id.tvsokhachhangmuaBCDT)
     TextView tvsokhachhangmuaBCDT;
-    @BindView(R.id.tvsosanphambanBCDT)
     TextView tvsosanphambanBCDT;
-    @BindView(R.id.tvdoanhthutrensanphamBCDT)
     TextView tvdoanhthutrensanphamBCDT;
-    @BindView(R.id.tvdoanhthutrenkhachhangBCDT)
     TextView tvdoanhthutrenkhachhangBCDT;
     ArrayList<Order> contactList, temp;
     private View parentView;
@@ -61,7 +52,13 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_baocao_doanhthu);
-        ButterKnife.bind(this);
+        tvNhanvienBCDT = (TextView) findViewById(R.id.tvNhanvienBCDT);
+        tvnoti = (TextView) findViewById(R.id.tvnotiBCDT);
+        tvdoanhthuBCDT = (TextView) findViewById(R.id.tvdoanhthuBCDT);
+        tvsokhachhangmuaBCDT = (TextView) findViewById(R.id.tvsokhachhangmuaBCDT);
+        tvsosanphambanBCDT = (TextView) findViewById(R.id.tvsosanphambanBCDT);
+        tvdoanhthutrensanphamBCDT = (TextView) findViewById(R.id.tvdoanhthutrensanphamBCDT);
+        tvdoanhthutrenkhachhangBCDT = (TextView) findViewById(R.id.tvdoanhthutrenkhachhangBCDT);
         contactList = new ArrayList<>();
         temp = new ArrayList<>();
 
@@ -80,7 +77,7 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
     }
 
     private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String date = dateFormat.format(new Date());
         return date;
     }
@@ -104,7 +101,7 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         contactList.clear();
                         temp.clear();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         Date hom = null; Date date1 = null; Date loadEnd1 = null;
                         try {
                             date1 = (Date) simpleDateFormat.parse(date);
@@ -112,14 +109,16 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         for (int i = 0; i < orignal.size(); i++) {
-                            try {
-                                hom = (Date) simpleDateFormat.parse(Keys.setDate(orignal.get(i).getDateOrder()));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            if(hom.compareTo(date1) == 0) {
-                                if (time.equals(orignal.get(i).getTimeOrder())) {
-                                    contactList.add(orignal.get(i));
+                            if (orignal.get(i).getChinhanhOrder().equals(Main_Menu.chinhanh)) {
+                                try {
+                                    hom = (Date) simpleDateFormat.parse(Keys.setDate(orignal.get(i).getDateOrder()));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (hom.compareTo(date1) == 0) {
+                                    if (time.equals(orignal.get(i).getTimeOrder())) {
+                                        contactList.add(orignal.get(i));
+                                    }
                                 }
                             }
                         }

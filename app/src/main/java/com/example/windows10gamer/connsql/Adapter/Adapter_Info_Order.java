@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Object.Sanpham;
@@ -51,7 +51,7 @@ public class Adapter_Info_Order extends BaseAdapter{
         LayoutInflater inflater=(LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
             View view = inflater.inflate(R.layout.adapter_list_excel, parent, false);
-            vh = ViewHolder.create((RelativeLayout) view);
+            vh = ViewHolder.create((LinearLayout) view);
             view.setTag(vh);
         } else {
             vh = (ViewHolder) convertView.getTag();
@@ -59,7 +59,7 @@ public class Adapter_Info_Order extends BaseAdapter{
 
         Sanpham item = getItem(position);
         vh.textViewma.setText("MSP: " + item.getMa());
-        vh.textViewten.setText("Tên sản phẩm: " + item.getTen());
+        vh.textViewten.setText("SP: " + item.getTen());
         vh.textViewnguon.setText("Nguồn: " + item.getNguon());
         vh.textViewbaohanh.setText("Bảo hành: " + item.getBaohanh());
         vh.textViewngaynhap.setText("Ngày nhập: " + Keys.setDate(item.getNgaynhap()));
@@ -79,7 +79,7 @@ public class Adapter_Info_Order extends BaseAdapter{
     }
 
     private static class ViewHolder {
-        public final RelativeLayout rootView;
+        public final LinearLayout rootView;
 
         public final TextView textViewten;
         public final TextView textViewma;
@@ -88,7 +88,7 @@ public class Adapter_Info_Order extends BaseAdapter{
         public final TextView textViewngaynhap;
         public final TextView textViewgiaban;
 
-        private ViewHolder(RelativeLayout rootView, TextView textViewma, TextView textViewten,
+        private ViewHolder(LinearLayout rootView, TextView textViewma, TextView textViewten,
                            TextView textViewbaohanh, TextView textViewnguon, TextView textViewngaynhap,  TextView textViewgiaban) {
             this.rootView = rootView;
             this.textViewten = textViewten;
@@ -99,7 +99,7 @@ public class Adapter_Info_Order extends BaseAdapter{
             this.textViewgiaban = textViewgiaban;
         }
 
-        public static ViewHolder create(RelativeLayout rootView) {
+        public static ViewHolder create(LinearLayout rootView) {
             TextView textViewma = (TextView) rootView.findViewById(R.id.textViewma);
             TextView textViewten = (TextView) rootView.findViewById(R.id.textViewten);
             TextView textViewngaynhap = (TextView) rootView.findViewById(R.id.textViewngaynhap);

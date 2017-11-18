@@ -21,6 +21,9 @@ public class Order implements Parcelable {
     @SerializedName("calam")
     @Expose
     private  String timeOrder;
+    @SerializedName("chinhanh")
+    @Expose
+    private  String chinhanhOrder;
     @SerializedName("maNhanvien")
     @Expose
     private  String maNVOrder;
@@ -65,11 +68,12 @@ public class Order implements Parcelable {
 //    private String maOrder, dateOrder,timeOrder,maNVOrder,tenNVOrder, maspOrder, tenOrder, baohanhOrder,
 //            nguonOrder, ngaynhapOrder, giaOrder, ghichuOrder, tenKH, sdtKH, ghichuKH;
 
-    public Order(String maOrder, String dateOrder, String timeOrder, String maNVOrder, String tenNVOrder, String maspOrder, String tenOrder, String baohanhOrder, String nguonOrder,
+    public Order(String maOrder, String dateOrder, String timeOrder, String chinhanhOrder, String maNVOrder, String tenNVOrder, String maspOrder, String tenOrder, String baohanhOrder, String nguonOrder,
                  String ngaynhapOrder, String vonOrder, String giaOrder, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH) {
         this.maOrder = maOrder;
         this.dateOrder = dateOrder;
         this.timeOrder = timeOrder;
+        this.chinhanhOrder = chinhanhOrder;
         this.maNVOrder = maNVOrder;
         this.tenNVOrder = tenNVOrder;
         this.maspOrder = maspOrder;
@@ -89,6 +93,7 @@ public class Order implements Parcelable {
         maOrder = in.readString();
         dateOrder = in.readString();
         timeOrder = in.readString();
+        chinhanhOrder = in.readString();
         maNVOrder = in.readString();
         tenNVOrder = in.readString();
         maspOrder = in.readString();
@@ -248,6 +253,14 @@ public class Order implements Parcelable {
         this.ghichuKH = ghichuKH;
     }
 
+    public String getChinhanhOrder() {
+        return chinhanhOrder;
+    }
+
+    public void setChinhanhOrder(String chinhanhOrder) {
+        this.chinhanhOrder = chinhanhOrder;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -258,6 +271,7 @@ public class Order implements Parcelable {
         dest.writeString(maOrder);
         dest.writeString(dateOrder);
         dest.writeString(timeOrder);
+        dest.writeString(chinhanhOrder);
         dest.writeString(maNVOrder);
         dest.writeString(tenNVOrder);
         dest.writeString(maspOrder);

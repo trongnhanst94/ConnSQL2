@@ -15,7 +15,6 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/cam" />
@@ -37,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Người kiểm kho"
-                android:textSize="16dp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,7 +45,7 @@
                 android:layout_weight="1"
                 android:text="Số lượng"
                 android:textAlignment="textEnd"
-                android:textSize="16dp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -162,7 +161,7 @@
             android:padding="10dp"
             android:text="Chuyển đến danh sách lệch kho"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -22,45 +25,44 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class Main_Report_Sales extends AppCompatActivity {
-    @BindView(R.id.tvNhanvienReport)
     TextView tvNhanvienReport;
-    @BindView(R.id.tvnotiReport)
     TextView tvnoti;
-    @BindView(R.id.tvdoanhthu)
     TextView tvdoanhthu;
-    @BindView(R.id.tvsokhachhangmua)
     TextView tvsokhachhangmua;
-    @BindView(R.id.tvsosanphamban)
     TextView tvsosanphamban;
-    @BindView(R.id.tvdoanhthutrensanpham)
     TextView tvdoanhthutrensanpham;
-    @BindView(R.id.tvdoanhthutrenkhachhang)
     TextView tvdoanhthutrenkhachhang;
+
+
     static ArrayList<Order> reportList;
     String dateBegin, dateEnd, dateCasang, dateCachieu;
     int doanhthuTotal;
     ArrayList<ReportSales> reportSalesList = new ArrayList<>();
     String ma, ten;
     int doanhthu = 0, soKhachhang = 0, soSanpham = 0, dttkh = 0, dttsp = 0;
-    RadioGroup rgSort;
-    RadioButton rbDoanhthu, rbSoKH, rbSoSP, rbDttkh, rbDttsp;
     TableLayout stk;
+    ArrayList<String> arraySpiner = new ArrayList<>();
+    ArrayAdapter<String> adapterSpiner;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_report_sales);
-        ButterKnife.bind(this);
-        rgSort = (RadioGroup) findViewById(R.id.rgSort);
-        rbDoanhthu = (RadioButton) findViewById(R.id.rbDoanhthu);
-        rbSoKH = (RadioButton) findViewById(R.id.rbSoKH);
-        rbSoSP = (RadioButton) findViewById(R.id.rbSoSP);
-        rbDttkh = (RadioButton) findViewById(R.id.rbDttkh);
-        rbDttsp = (RadioButton) findViewById(R.id.rbDttsp);
+        arraySpiner.add("Doanh thu");
+        arraySpiner.add("Số khách hàng");
+        arraySpiner.add("Số sản phẩm");
+        arraySpiner.add("Doanh thu/ KH");
+        arraySpiner.add("Doanh thu/ SP");
+        spinner = (Spinner) findViewById(R.id.spinRS);
+        tvNhanvienReport  = (TextView) findViewById(R.id.tvNhanvienReport);
+        tvnoti    = (TextView) findViewById(R.id.tvnotiReport);
+        tvdoanhthu = (TextView) findViewById(R.id.tvdoanhthu);
+        tvsokhachhangmua = (TextView) findViewById(R.id.tvsokhachhangmua);
+        tvsosanphamban       = (TextView) findViewById(R.id.tvsosanphamban);
+        tvdoanhthutrensanpham      = (TextView) findViewById(R.id.tvdoanhthutrensanpham);
+        tvdoanhthutrenkhachhang      = (TextView) findViewById(R.id.tvdoanhthutrenkhachhang);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("ReportBundle");
         reportList = bundle.getParcelableArrayList("ReportList");
@@ -109,7 +111,7 @@ public class Main_Report_Sales extends AppCompatActivity {
 
         for (int i = 0; i < nhanVienList.size(); i++){
             ma = nhanVienList.get(i).getMa();
-            ten = nhanVienList.get(i).getTen();
+            ten = nhanVienList.get(i).getShortName();
             doanhthu    = DoanhthuCount(reportList, nhanVienList.get(i).getMa());
             soKhachhang = SoKhachhang(khachhang, nhanVienList.get(i).getMa());
             soSanpham   = SoSanpham(reportList, nhanVienList.get(i).getMa());
@@ -127,33 +129,36 @@ public class Main_Report_Sales extends AppCompatActivity {
             );
         }
         init(reportSalesList);
-        rgSort.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                doOnDifficultyLevelChanged(group, checkedId);
-            }
-        });
-    }
 
-    private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
-        int checkedRadioId = group.getCheckedRadioButtonId();
-        stk.removeAllViews();
-        if(checkedRadioId== R.id.rbDoanhthu) {
-            sortDoanhthu(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbSoKH ) {
-            sortSoKH(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbSoSP) {
-            sortSoSP(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbDttkh ) {
-            sortDttkh(reportSalesList);
-            init(reportSalesList);
-        } else if(checkedRadioId== R.id.rbDttsp) {
-            sortDttsp(reportSalesList);
-            init(reportSalesList);
-        }
+        adapterSpiner = new ArrayAdapter<String>( Main_Report_Sales.this, android.R.layout.simple_spinner_item, arraySpiner);
+        adapterSpiner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterSpiner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+                stk.removeAllViews();
+                if(position == 0) {
+                    sortDoanhthu(reportSalesList);
+                    init(reportSalesList);
+                } else if(position == 1 ) {
+                    sortSoKH(reportSalesList);
+                    init(reportSalesList);
+                } else if(position == 2) {
+                    sortSoSP(reportSalesList);
+                    init(reportSalesList);
+                } else if(position == 3) {
+                    sortDttkh(reportSalesList);
+                    init(reportSalesList);
+                } else if(position == 4) {
+                    sortDttsp(reportSalesList);
+                    init(reportSalesList);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {}
+        });
     }
 
     public void init(ArrayList<ReportSales> list) {
@@ -286,7 +291,8 @@ public class Main_Report_Sales extends AppCompatActivity {
         int result = -1;
         if (user.size() != 0){
             for (int i = 0; i < user.size(); i++){
-                if (user.get(i).getMa().equals(ma) && user.get(i).getTen().equals(ten)){
+                Log.d("qqq", user.get(i).getMa()+" - "+(ma)+" - "+user.get(i).getShortName()+" - "+(ten));
+                if (user.get(i).getMa().equals(ma) && user.get(i).getShortName().equals(ten)){
                     result = i;
                 }
             }
