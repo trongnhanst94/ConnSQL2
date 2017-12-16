@@ -14,99 +14,109 @@ public class Order implements Parcelable {
 
     @SerializedName("maDonhang")
     @Expose
-    private  String maOrder;
+    private String maDonhang;
     @SerializedName("ngay")
     @Expose
-    private  String dateOrder;
+    private String ngay;
     @SerializedName("calam")
     @Expose
-    private  String timeOrder;
+    private String calam;
+    @SerializedName("gio")
+    @Expose
+    private String gio;
     @SerializedName("chinhanh")
     @Expose
-    private  String chinhanhOrder;
+    private String chinhanh;
     @SerializedName("maNhanvien")
     @Expose
-    private  String maNVOrder;
+    private String maNhanvien;
     @SerializedName("tenNhanvien")
     @Expose
-    private  String tenNVOrder;
+    private String tenNhanvien;
     @SerializedName("maSanpham")
     @Expose
-    private  String maspOrder;
+    private String maSanpham;
     @SerializedName("tenSanpham")
     @Expose
-    private  String tenOrder;
+    private String tenSanpham;
     @SerializedName("baohanhSanpham")
     @Expose
-    private  String baohanhOrder;
+    private String baohanhSanpham;
     @SerializedName("nguonSanpham")
     @Expose
-    private  String nguonOrder;
+    private String nguonSanpham;
     @SerializedName("ngaynhapSanpham")
     @Expose
-    private  String ngaynhapOrder;
+    private String ngaynhapSanpham;
     @SerializedName("vonSanpham")
     @Expose
-    private  String vonOrder;
+    private String vonSanpham;
     @SerializedName("giaSanpham")
     @Expose
-    private  String giaOrder;
+    private String giaSanpham;
+    @SerializedName("giamgia")
+    @Expose
+    private String giamgia;
     @SerializedName("ghichuSanpham")
     @Expose
-    private  String ghichuOrder;
+    private String ghichuSanpham;
     @SerializedName("tenKhachhang")
     @Expose
-    private  String tenKH;
+    private String tenKhachhang;
     @SerializedName("sodienthoaiKhachhang")
     @Expose
-    private  String sdtKH;
+    private String sodienthoaiKhachhang;
     @SerializedName("ghichuKhachhang")
     @Expose
-    private  String ghichuKH;
+    private String ghichuKhachhang;
+    @SerializedName("hinhthuc")
+    @Expose
+    private String hinhthuc;
 
-
-//    private String maOrder, dateOrder,timeOrder,maNVOrder,tenNVOrder, maspOrder, tenOrder, baohanhOrder,
-//            nguonOrder, ngaynhapOrder, giaOrder, ghichuOrder, tenKH, sdtKH, ghichuKH;
-
-    public Order(String maOrder, String dateOrder, String timeOrder, String chinhanhOrder, String maNVOrder, String tenNVOrder, String maspOrder, String tenOrder, String baohanhOrder, String nguonOrder,
-                 String ngaynhapOrder, String vonOrder, String giaOrder, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH) {
-        this.maOrder = maOrder;
-        this.dateOrder = dateOrder;
-        this.timeOrder = timeOrder;
-        this.chinhanhOrder = chinhanhOrder;
-        this.maNVOrder = maNVOrder;
-        this.tenNVOrder = tenNVOrder;
-        this.maspOrder = maspOrder;
-        this.tenOrder = tenOrder;
-        this.baohanhOrder = baohanhOrder;
-        this.nguonOrder = nguonOrder;
-        this.ngaynhapOrder = ngaynhapOrder;
-        this.vonOrder = vonOrder;
-        this.giaOrder = giaOrder;
-        this.ghichuOrder = ghichuOrder;
-        this.tenKH = tenKH;
-        this.sdtKH = sdtKH;
-        this.ghichuKH = ghichuKH;
+    public Order(String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String hinhthuc) {
+        this.maDonhang = maDonhang;
+        this.ngay = ngay;
+        this.calam = calam;
+        this.gio = gio;
+        this.chinhanh = chinhanh;
+        this.maNhanvien = maNhanvien;
+        this.tenNhanvien = tenNhanvien;
+        this.maSanpham = maSanpham;
+        this.tenSanpham = tenSanpham;
+        this.baohanhSanpham = baohanhSanpham;
+        this.nguonSanpham = nguonSanpham;
+        this.ngaynhapSanpham = ngaynhapSanpham;
+        this.vonSanpham = vonSanpham;
+        this.giaSanpham = giaSanpham;
+        this.giamgia = giamgia;
+        this.ghichuSanpham = ghichuSanpham;
+        this.tenKhachhang = tenKhachhang;
+        this.sodienthoaiKhachhang = sodienthoaiKhachhang;
+        this.ghichuKhachhang = ghichuKhachhang;
+        this.hinhthuc = hinhthuc;
     }
 
     protected Order(Parcel in) {
-        maOrder = in.readString();
-        dateOrder = in.readString();
-        timeOrder = in.readString();
-        chinhanhOrder = in.readString();
-        maNVOrder = in.readString();
-        tenNVOrder = in.readString();
-        maspOrder = in.readString();
-        tenOrder = in.readString();
-        baohanhOrder = in.readString();
-        nguonOrder = in.readString();
-        ngaynhapOrder = in.readString();
-        vonOrder = in.readString();
-        giaOrder = in.readString();
-        ghichuOrder = in.readString();
-        tenKH = in.readString();
-        sdtKH = in.readString();
-        ghichuKH = in.readString();
+        maDonhang = in.readString();
+        ngay = in.readString();
+        calam = in.readString();
+        gio = in.readString();
+        chinhanh = in.readString();
+        maNhanvien = in.readString();
+        tenNhanvien = in.readString();
+        maSanpham = in.readString();
+        tenSanpham = in.readString();
+        baohanhSanpham = in.readString();
+        nguonSanpham = in.readString();
+        ngaynhapSanpham = in.readString();
+        vonSanpham = in.readString();
+        giaSanpham = in.readString();
+        giamgia = in.readString();
+        ghichuSanpham = in.readString();
+        tenKhachhang = in.readString();
+        sodienthoaiKhachhang = in.readString();
+        ghichuKhachhang = in.readString();
+        hinhthuc = in.readString();
     }
 
     public static final Creator<Order> CREATOR = new Creator<Order>() {
@@ -121,144 +131,164 @@ public class Order implements Parcelable {
         }
     };
 
-    public String getVonOrder() {
-        return vonOrder;
+    public String getMaDonhang() {
+        return maDonhang;
     }
 
-    public void setVonOrder(String vonOrder) {
-        this.vonOrder = vonOrder;
+    public void setMaDonhang(String maDonhang) {
+        this.maDonhang = maDonhang;
     }
 
-    public static Creator<Order> getCREATOR() {
-        return CREATOR;
+    public String getNgay() {
+        return ngay;
     }
 
-    public String getMaOrder() {
-        return maOrder;
+    public void setNgay(String ngay) {
+        this.ngay = ngay;
     }
 
-    public void setMaOrder(String maOrder) {
-        this.maOrder = maOrder;
+    public String getCalam() {
+        return calam;
     }
 
-    public String getDateOrder() {
-        return dateOrder;
+    public void setCalam(String calam) {
+        this.calam = calam;
     }
 
-    public void setDateOrder(String dateOrder) {
-        this.dateOrder = dateOrder;
+    public String getGio() {
+        return gio;
     }
 
-    public String getTimeOrder() {
-        return timeOrder;
+    public void setGio(String gio) {
+        this.gio = gio;
     }
 
-    public void setTimeOrder(String timeOrder) {
-        this.timeOrder = timeOrder;
+    public String getChinhanh() {
+        return chinhanh;
     }
 
-    public String getMaNVOrder() {
-        return maNVOrder;
+    public void setChinhanh(String chinhanh) {
+        this.chinhanh = chinhanh;
     }
 
-    public void setMaNVOrder(String maNVOrder) {
-        this.maNVOrder = maNVOrder;
+    public String getMaNhanvien() {
+        return maNhanvien;
     }
 
-    public String getTenNVOrder() {
-        return tenNVOrder;
+    public void setMaNhanvien(String maNhanvien) {
+        this.maNhanvien = maNhanvien;
     }
 
-    public void setTenNVOrder(String tenNVOrder) {
-        this.tenNVOrder = tenNVOrder;
+    public String getTenNhanvien() {
+        return tenNhanvien;
     }
 
-    public String getMaspOrder() {
-        return maspOrder;
+    public void setTenNhanvien(String tenNhanvien) {
+        this.tenNhanvien = tenNhanvien;
     }
 
-    public void setMaspOrder(String maspOrder) {
-        this.maspOrder = maspOrder;
+    public String getMaSanpham() {
+        return maSanpham;
     }
 
-    public String getTenOrder() {
-        return tenOrder;
+    public void setMaSanpham(String maSanpham) {
+        this.maSanpham = maSanpham;
     }
 
-    public void setTenOrder(String tenOrder) {
-        this.tenOrder = tenOrder;
+    public String getTenSanpham() {
+        return tenSanpham;
     }
 
-    public String getBaohanhOrder() {
-        return baohanhOrder;
+    public void setTenSanpham(String tenSanpham) {
+        this.tenSanpham = tenSanpham;
     }
 
-    public void setBaohanhOrder(String baohanhOrder) {
-        this.baohanhOrder = baohanhOrder;
+    public String getBaohanhSanpham() {
+        return baohanhSanpham;
     }
 
-    public String getNguonOrder() {
-        return nguonOrder;
+    public void setBaohanhSanpham(String baohanhSanpham) {
+        this.baohanhSanpham = baohanhSanpham;
     }
 
-    public void setNguonOrder(String nguonOrder) {
-        this.nguonOrder = nguonOrder;
+    public String getNguonSanpham() {
+        return nguonSanpham;
     }
 
-    public String getNgaynhapOrder() {
-        return ngaynhapOrder;
+    public void setNguonSanpham(String nguonSanpham) {
+        this.nguonSanpham = nguonSanpham;
     }
 
-    public void setNgaynhapOrder(String ngaynhapOrder) {
-        this.ngaynhapOrder = ngaynhapOrder;
+    public String getNgaynhapSanpham() {
+        return ngaynhapSanpham;
     }
 
-    public String getGiaOrder() {
-        return giaOrder;
+    public void setNgaynhapSanpham(String ngaynhapSanpham) {
+        this.ngaynhapSanpham = ngaynhapSanpham;
     }
 
-    public void setGiaOrder(String giaOrder) {
-        this.giaOrder = giaOrder;
+    public String getVonSanpham() {
+        return vonSanpham;
     }
 
-    public String getGhichuOrder() {
-        return ghichuOrder;
+    public void setVonSanpham(String vonSanpham) {
+        this.vonSanpham = vonSanpham;
     }
 
-    public void setGhichuOrder(String ghichuOrder) {
-        this.ghichuOrder = ghichuOrder;
+    public String getGiaSanpham() {
+        return giaSanpham;
     }
 
-    public String getTenKH() {
-        return tenKH;
+    public void setGiaSanpham(String giaSanpham) {
+        this.giaSanpham = giaSanpham;
     }
 
-    public void setTenKH(String tenKH) {
-        this.tenKH = tenKH;
+    public String getGiamgia() {
+        return giamgia;
     }
 
-    public String getSdtKH() {
-        return sdtKH;
+    public void setGiamgia(String giamgia) {
+        this.giamgia = giamgia;
     }
 
-    public void setSdtKH(String sdtKH) {
-        this.sdtKH = sdtKH;
+    public String getGhichuSanpham() {
+        return ghichuSanpham;
     }
 
-    public String getGhichuKH() {
-        return ghichuKH;
+    public void setGhichuSanpham(String ghichuSanpham) {
+        this.ghichuSanpham = ghichuSanpham;
     }
 
-    public void setGhichuKH(String ghichuKH) {
-        this.ghichuKH = ghichuKH;
+    public String getTenKhachhang() {
+        return tenKhachhang;
     }
 
-    public String getChinhanhOrder() {
-        return chinhanhOrder;
+    public void setTenKhachhang(String tenKhachhang) {
+        this.tenKhachhang = tenKhachhang;
     }
 
-    public void setChinhanhOrder(String chinhanhOrder) {
-        this.chinhanhOrder = chinhanhOrder;
+    public String getSodienthoaiKhachhang() {
+        return sodienthoaiKhachhang;
+    }
+
+    public void setSodienthoaiKhachhang(String sodienthoaiKhachhang) {
+        this.sodienthoaiKhachhang = sodienthoaiKhachhang;
+    }
+
+    public String getGhichuKhachhang() {
+        return ghichuKhachhang;
+    }
+
+    public void setGhichuKhachhang(String ghichuKhachhang) {
+        this.ghichuKhachhang = ghichuKhachhang;
+    }
+
+    public String getHinhthuc() {
+        return hinhthuc;
+    }
+
+    public void setHinhthuc(String hinhthuc) {
+        this.hinhthuc = hinhthuc;
     }
 
     @Override
@@ -268,22 +298,25 @@ public class Order implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(maOrder);
-        dest.writeString(dateOrder);
-        dest.writeString(timeOrder);
-        dest.writeString(chinhanhOrder);
-        dest.writeString(maNVOrder);
-        dest.writeString(tenNVOrder);
-        dest.writeString(maspOrder);
-        dest.writeString(tenOrder);
-        dest.writeString(baohanhOrder);
-        dest.writeString(nguonOrder);
-        dest.writeString(ngaynhapOrder);
-        dest.writeString(vonOrder);
-        dest.writeString(giaOrder);
-        dest.writeString(ghichuOrder);
-        dest.writeString(tenKH);
-        dest.writeString(sdtKH);
-        dest.writeString(ghichuKH);
+        dest.writeString(maDonhang);
+        dest.writeString(ngay);
+        dest.writeString(calam);
+        dest.writeString(gio);
+        dest.writeString(chinhanh);
+        dest.writeString(maNhanvien);
+        dest.writeString(tenNhanvien);
+        dest.writeString(maSanpham);
+        dest.writeString(tenSanpham);
+        dest.writeString(baohanhSanpham);
+        dest.writeString(nguonSanpham);
+        dest.writeString(ngaynhapSanpham);
+        dest.writeString(vonSanpham);
+        dest.writeString(giaSanpham);
+        dest.writeString(giamgia);
+        dest.writeString(ghichuSanpham);
+        dest.writeString(tenKhachhang);
+        dest.writeString(sodienthoaiKhachhang);
+        dest.writeString(ghichuKhachhang);
+        dest.writeString(hinhthuc);
     }
 }

@@ -8,8 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.windows10gamer.connsql.Object.Sanpham;
-import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.R;
 
 import java.text.NumberFormat;
@@ -22,9 +21,9 @@ import java.util.Locale;
 
 public class Adapter_Info_Order extends BaseAdapter{
     Context c;
-    ArrayList<Sanpham> modelList;
-    ArrayList<Sanpham> filterList;
-    public Adapter_Info_Order(Context ctx,ArrayList<Sanpham> players) {
+    ArrayList<Sanpham_gio> modelList;
+    ArrayList<Sanpham_gio> filterList;
+    public Adapter_Info_Order(Context ctx,ArrayList<Sanpham_gio> players) {
         this.c=ctx;
         this.modelList=players;
         this.filterList=players;
@@ -36,7 +35,7 @@ public class Adapter_Info_Order extends BaseAdapter{
     }
 
     @Override
-    public Sanpham getItem(int position) {
+    public Sanpham_gio getItem(int position) {
         return modelList.get(position);
     }
 
@@ -57,12 +56,12 @@ public class Adapter_Info_Order extends BaseAdapter{
             vh = (ViewHolder) convertView.getTag();
         }
 
-        Sanpham item = getItem(position);
+        Sanpham_gio item = getItem(position);
         vh.textViewma.setText("MSP: " + item.getMa());
         vh.textViewten.setText("SP: " + item.getTen());
         vh.textViewnguon.setText("Nguồn: " + item.getNguon());
         vh.textViewbaohanh.setText("Bảo hành: " + item.getBaohanh());
-        vh.textViewngaynhap.setText("Ngày nhập: " + Keys.setDate(item.getNgaynhap()));
+        vh.textViewngaynhap.setText("Quét lúc: " + item.getGio());
         if (item.getGiaban().equals("")){
             vh.textViewgiaban.setText("Giá bán: không có.");
         } else {

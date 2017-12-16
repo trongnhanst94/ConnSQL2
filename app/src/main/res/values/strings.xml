@@ -6,20 +6,16 @@
     <string name="login">ĐĂNG NHẬP</string>
     <string name="show_pwd">Nhớ tài khoản</string>
     <string name="hide_pwd">Ẩn mật khẩu</string>
-    <string name="forgot">Quên?</string>
-    <string name="newUser">Not a Member yet? Sign Up here.</string>
     <string name="showpass">Hiện mật khẩu</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="kh_ch_h_ng">Khách hàng:</string>
-    <string name="title_activity_main__report__bh">Main_Report_BH</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
-    <string name="title_activity_main">Main</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_main__xuathang">Xuất hàng</string>
 
-    <string name="action_settings">Cài đặt</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.windows10gamer.connsql;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,10 +20,8 @@ import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
-import com.example.windows10gamer.connsql.service.APIService_Sales;
+import com.example.windows10gamer.connsql.Other.APIService_Sales;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +44,8 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
     ArrayList<Order> contactList, temp;
     private View parentView;
     String ma, ten;
+    SharedPreferences shared;
+    String chinhanh;
     ArrayList<ReportSales> reportSalesList = new ArrayList<>();
     int doanhthu = 0, soKhachhang = 0, soSanpham = 0, dttkh = 0, dttsp = 0;
 
@@ -61,25 +62,9 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
         tvdoanhthutrenkhachhangBCDT = (TextView) findViewById(R.id.tvdoanhthutrenkhachhangBCDT);
         contactList = new ArrayList<>();
         temp = new ArrayList<>();
-
-        LoadJson(getDate(), getTime());
-    }
-
-    private String getTime() {
-        String ca;
-        int hours = new Time(System.currentTimeMillis()).getHours();
-        if (hours < 15 ){
-            ca = "Ca sáng";
-        } else {
-            ca = "Ca chiều";
-        }
-        return ca;
-    }
-
-    private String getDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        String date = dateFormat.format(new Date());
-        return date;
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
+        LoadJson(Keys.getDateNow(), Keys.getCalam(chinhanh));
     }
 
     public void LoadJson(final String date, final String time) {
@@ -109,14 +94,14 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         for (int i = 0; i < orignal.size(); i++) {
-                            if (orignal.get(i).getChinhanhOrder().equals(Main_Menu.chinhanh)) {
+                            if (orignal.get(i).getChinhanh().equals(chinhanh)) {
                                 try {
-                                    hom = (Date) simpleDateFormat.parse(Keys.setDate(orignal.get(i).getDateOrder()));
+                                    hom = (Date) simpleDateFormat.parse(orignal.get(i).getNgay());
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                                 if (hom.compareTo(date1) == 0) {
-                                    if (time.equals(orignal.get(i).getTimeOrder())) {
+                                    if (time.equals(orignal.get(i).getCalam())) {
                                         contactList.add(orignal.get(i));
                                     }
                                 }
@@ -143,14 +128,14 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
         this.contactList = temp;
         int doanhthuTotal = 0;
         for (int i = 0; i < contactList.size(); i++){
-            doanhthuTotal = doanhthuTotal + Integer.parseInt(contactList.get(i).getGiaOrder());
+            doanhthuTotal = doanhthuTotal + Integer.parseInt(contactList.get(i).getGiaSanpham());
         }
         tvdoanhthuBCDT.setText( Keys.getFormatedAmount(doanhthuTotal));
         ArrayList<Customer> khachhang = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++){
-            int result = sosanhCustomer(khachhang, contactList.get(i).getTenKH(), contactList.get(i).getMaOrder());
+            int result = sosanhCustomer(khachhang, contactList.get(i).getTenKhachhang(), contactList.get(i).getMaDonhang());
             if (result == -1){
-                khachhang.add(new Customer( contactList.get(i).getMaOrder()+"KH", contactList.get(i).getTenKH(), contactList.get(i).getSdtKH(), contactList.get(i).getGhichuKH(), contactList.get(i).getMaOrder(), contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder()));
+                khachhang.add(new Customer( contactList.get(i).getMaDonhang()+"KH", contactList.get(i).getTenKhachhang(), contactList.get(i).getSodienthoaiKhachhang(), contactList.get(i).getGhichuKhachhang(), contactList.get(i).getMaDonhang(), contactList.get(i).getMaNhanvien(), contactList.get(i).getTenNhanvien()));
             }
         }
         tvsokhachhangmuaBCDT.setText(khachhang.size()+"");
@@ -160,10 +145,10 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
         tvNhanvienBCDT.setText("Danh sách nhân viên bán hàng: ");
         ArrayList<User> nhanVienList = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++){
-            int result = sosanhUser(nhanVienList, contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder());
+            int result = sosanhUser(nhanVienList, contactList.get(i).getMaNhanvien(), contactList.get(i).getTenNhanvien());
             if (result == -1){
-                nhanVienList.add(new User(contactList.get(i).getMaNVOrder(), contactList.get(i).getTenNVOrder()));
-                tvNhanvienBCDT.append(contactList.get(i).getTenNVOrder()+". ");
+                nhanVienList.add(new User(contactList.get(i).getMaNhanvien(), contactList.get(i).getTenNhanvien()));
+                tvNhanvienBCDT.append(contactList.get(i).getTenNhanvien()+". ");
             }
         }
 
@@ -288,7 +273,7 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
     private int SoSanpham(ArrayList<Order> reportList, String ma) {
         int tong = 0;
         for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNVOrder().equals(ma)){
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
                 tong++;
             }
         }
@@ -308,8 +293,8 @@ public class Main_Baocao_Doanhthu extends AppCompatActivity {
     private int DoanhthuCount(ArrayList<Order> reportList, String ma) {
         int tong = 0;
         for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNVOrder().equals(ma)){
-                tong += Integer.valueOf(reportList.get(i).getGiaOrder());
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                tong += Integer.valueOf(reportList.get(i).getGiaSanpham());
             }
         }
         return tong;

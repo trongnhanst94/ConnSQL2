@@ -42,7 +42,7 @@
             android:paddingTop="5dp"
             android:text="Lọc đơn hàng bằng cách nhập vào ngày bắt đầu, ngày kết thúc và ca làm:"
             android:textAlignment="center"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="italic" />
 
         <TextView
@@ -68,7 +68,7 @@
                 android:backgroundTint="@android:color/transparent"
                 android:drawableLeft="@android:drawable/ic_menu_my_calendar"
                 android:ems="10"
-                android:hint="Kết thúc"
+                android:hint="Bắt đầu"
                 android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textColorLink="@color/cam"

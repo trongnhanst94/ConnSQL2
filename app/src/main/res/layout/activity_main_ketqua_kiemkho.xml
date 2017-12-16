@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="2"
-    tools:context="com.example.windows10gamer.connsql.Main_Ketqua_Kiemkho">
+    tools:context="com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,95 +22,138 @@
             android:textColor="#fff"
             android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Chọn hai nhân viên đã kiểm kho để Đối chiếu kết quả"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            tools:text="Chọn 2 nhân viên đã kiểm kho để đối chiếu" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/snKQKKA"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1" />
+                android:padding="10dp"
+                android:text="Chọn hai nhân viên đã kiểm kho để Đối chiếu kết quả"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                tools:text="Chọn 2 nhân viên đã kiểm kho để đối chiếu" />
 
-            <Spinner
-                android:id="@+id/snKQKKB"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:weightSum="2">
+                <Spinner
+                    android:id="@+id/snKQKKA"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/snKQKKB"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/li"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:weightSum="2">
 
-                <Button
-                    android:id="@+id/btnSubmitKQKK"
-                    android:layout_width="wrap_content"
-                    android:layout_height="33dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/cam"
-                    android:text="Đối chiếu"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnSubmitKQKK"
+                        android:layout_width="wrap_content"
+                        android:layout_height="33dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/holo_orange_light"
+                        android:text="Đối chiếu"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnReportKQKK"
-                    android:layout_width="wrap_content"
-                    android:layout_height="33dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/holo_red_light"
-                    android:text="Báo cáo"
-                    android:textColor="#fff" />
-            </LinearLayout>
-
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lvPerson"
+        <LinearLayout
+            android:id="@+id/lnXemchitiet"
             android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/tvxemA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="@color/RED"
+                        android:padding="10dp"
+                        android:text="Xem chi tiết"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/tvxemB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="@color/RED"
+                        android:padding="10dp"
+                        android:text="Xem chi tiết"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:weightSum="2">
 
             <ListView

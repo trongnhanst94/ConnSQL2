@@ -11,8 +11,8 @@
     <color name="background">#FFFFFF </color>
     <color name="colorPrimary">#125688</color>
     <color name="colorPrimaryDark">#125688</color>
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#f96466</color>
+    <color name="aaaa">#cb000000</color>
+    <color name="aapet">#5b000000</color>
+    <color name="jaja">#65ffffff</color>
 </resources>

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Main_Sales;
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -24,10 +24,10 @@ import java.util.List;
 
 public class Adapter_Sales extends BaseAdapter implements Serializable{
     private Main_Sales context;
-    private List<Sanpham> sanphams;
+    private List<Sanpham_gio> sanphams;
     private int layout;
 
-    public Adapter_Sales(Main_Sales context, int layout, List<Sanpham> sanphams) {
+    public Adapter_Sales(Main_Sales context, int layout, List<Sanpham_gio> sanphams) {
         this.context = context;
         this.sanphams = sanphams;
         this.layout = layout;
@@ -72,13 +72,13 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
             holder = (ViewHolder) view.getTag();
         }
 
-        final Sanpham sanpham = sanphams.get(i);
+        final Sanpham_gio sanpham = sanphams.get(i);
 
         holder.tvAdapterSalesTen.setText("SP: "+sanpham.getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
         holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGiaban())));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
-        holder.tvAdapterSalesNgaynhap.setText("Ngày nhập: "+ Keys.setNN(sanpham.getNgaynhap()));
+        holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+sanpham.getGio());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());
 
         holder.ivSalesDelete.setOnClickListener(new View.OnClickListener() {

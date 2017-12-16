@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -20,32 +22,110 @@
         <activity android:name=".Wellcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main_Menu" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Kiemkho" android:screenOrientation="portrait" />
-        <activity android:name=".Main_List_Excel" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Sales" android:screenOrientation="portrait" />
-        <activity android:name=".Main_List_Kiemkho" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Ketqua_Kiemkho" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Order" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Information_Order" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Report_Sales" android:screenOrientation="portrait" />
-        <activity android:name=".Main_List_Lechkho" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Baocao_Doanhthu" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_Baohanh" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_Hoantien" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_1doi1" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_Doilaykhac" android:screenOrientation="portrait" />
-        <activity android:name=".Main_Login" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_Report_BH" android:screenOrientation="portrait" />
-        <activity android:name=".Bao_Hanh.Main_Info_BH1D1" android:screenOrientation="portrait"  />
-        <activity android:name=".Bao_Hanh.Main_Info_BHHT" android:screenOrientation="portrait"  />
-        <activity android:name=".Bao_Hanh.Main_Info_BHDLK" android:screenOrientation="portrait"  />
-        <activity android:name=".Bao_Hanh.Main_ScanBH" android:screenOrientation="portrait"  />
-        <activity android:name=".MainActivitydebhht" android:screenOrientation="portrait"  />
-        <activity android:name=".Main" android:label="Trang chủ" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Kiem_Kho.Main_Kiemkho"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_List_Excel"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Sales"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kiem_Kho.Main_List_Kiemkho"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kiem_Kho.Main_Ketqua_Kiemkho"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Order"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Information_Order"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Report_Sales"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kiem_Kho.Main_List_Lechkho"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Baocao_Doanhthu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Baohanh"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Hoantien"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_1doi1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Doilaykhac"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Report_BH"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Info_BH1D1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Info_BHHT"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Info_BHDLK"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Info_BHCXL"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_ScanBH"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivitydebhht"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main"
+            android:label="Trang chủ"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kiem_Kho.Main_Kiemkho_XemA"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kiem_Kho.Main_Kiemkho_XemB"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Ma_GiamGia"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Realtime_Order"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Choxuly"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_Website"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Doidungthu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Bao_Hanh.Main_Info_BHDDT"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_Xuathang"
+            android:label="@string/title_activity_main__xuathang"
+            android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".Xuat_Nhap.Main_XuatNhap" />
+        <activity android:name=".Xuat_Nhap.Main_Taoxuat"></activity>
     </application>
 
 </manifest>

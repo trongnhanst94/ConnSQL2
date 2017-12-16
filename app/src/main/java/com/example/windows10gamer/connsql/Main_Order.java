@@ -3,6 +3,7 @@ package com.example.windows10gamer.connsql;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -16,19 +17,22 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.windows10gamer.connsql.Adapter.Adapter_Order;
+import com.example.windows10gamer.connsql.Adapter.Adapter_Order_Plus;
 import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Object.Order_Plus;
+import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
-import com.example.windows10gamer.connsql.service.APIService_Sales;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -46,10 +50,12 @@ public class Main_Order extends AppCompatActivity {
     FloatingActionButton fabReportOrder;
     CheckBox cbCasang, cbCachieu;
     private ArrayList<Order> contactList, reportList;
-    private Adapter_Order adapter;
-    ArrayList<Order> temp;
+    private Adapter_Order_Plus adapter;
+    ArrayList<Order_Plus> temp;
     View view;
     String dateBegin, dateEnd, dateCasang, dateCachieu;
+    SharedPreferences shared ;
+    String chinhanh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +75,15 @@ public class Main_Order extends AppCompatActivity {
         temp = new ArrayList<>();
         fabReportOrder.setVisibility(view.INVISIBLE);
         listView = (ListView) findViewById(R.id.listView);
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Main_Order.this, Main_Information_Order.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
-                bundle.putString("keyMaOrder", temp.get(position).getMaOrder());
+                bundle.putString("keyMaOrder", temp.get(position).getMaDonhang());
                 bundle.putParcelableArrayList("arrayOrder", contactList);
                 intent.putExtra("DataOrder", bundle);
                 startActivity(intent);
@@ -166,6 +174,14 @@ public class Main_Order extends AppCompatActivity {
         });
     }
 
+    private void sortList(ArrayList<Order_Plus> list) {
+        Collections.sort(list, new Comparator<Order_Plus>() {
+            @Override
+            public int compare(Order_Plus lhs, Order_Plus rhs) {
+                return rhs.getMaDonhang().compareTo(lhs.getMaDonhang());
+            }
+        });
+    }
     public void getList(ArrayList<Order> List){
         this.reportList = List;
     }
@@ -202,24 +218,70 @@ public class Main_Order extends AppCompatActivity {
                         }
                         for (int i = 0; i < orignal.size(); i++) {
                             try {
-                                hom = (Date) simpleDateFormat.parse(Keys.setDate(orignal.get(i).getDateOrder()));
+                                hom = (Date) simpleDateFormat.parse(orignal.get(i).getNgay());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-                            if(hom.compareTo(loadBegin1) >= 0  && hom.compareTo(loadEnd1) <= 0) {
-                                if (loadCasang.equals(orignal.get(i).getTimeOrder())) {
+                            if(hom.compareTo(loadBegin1) >= 0  && hom.compareTo(loadEnd1) <= 0 && orignal.get(i).getChinhanh().equals(chinhanh)) {
+                                if (loadCasang.equals(orignal.get(i).getCalam())) {
                                     contactList.add(orignal.get(i));
                                 }
-                                if (loadCachieu.equals(orignal.get(i).getTimeOrder())) {
+                                if (loadCachieu.equals(orignal.get(i).getCalam())) {
                                     contactList.add(orignal.get(i));
                                 }
                             }
                         }
                         for (int j = 0; j < contactList.size(); j++) {
-                            if (contactList.get(j).getChinhanhOrder().equals(Main_Menu.chinhanh)){
-                                if (sosanhOrder(temp, contactList.get(j).getMaOrder()) == -1){
-                                    temp.add(contactList.get(j));
+                            if (contactList.get(j).getChinhanh().equals(chinhanh)){
+                                int result = sosanhOrder(temp, contactList.get(j).getMaDonhang());
+                                if ( result == -1){
+                                    temp.add( new Order_Plus(
+                                            contactList.get(j).getMaDonhang(),
+                                            contactList.get(j).getNgay(),
+                                            contactList.get(j).getCalam(),
+                                            contactList.get(j).getGio(),
+                                            contactList.get(j).getChinhanh(),
+                                            contactList.get(j).getMaNhanvien(),
+                                            contactList.get(j).getTenNhanvien(),
+                                            contactList.get(j).getMaSanpham(),
+                                            contactList.get(j).getTenSanpham(),
+                                            contactList.get(j).getBaohanhSanpham(),
+                                            contactList.get(j).getNguonSanpham(),
+                                            contactList.get(j).getNgaynhapSanpham(),
+                                            contactList.get(j).getVonSanpham(),
+                                            contactList.get(j).getGiaSanpham(),
+                                            contactList.get(j).getGiamgia(),
+                                            contactList.get(j).getGhichuSanpham(),
+                                            contactList.get(j).getTenKhachhang(),
+                                            contactList.get(j).getSodienthoaiKhachhang(),
+                                            contactList.get(j).getGhichuKhachhang(),
+                                            contactList.get(j).getHinhthuc(),
+                                            1
+                                    ));
+                                } else {
+                                    temp.set(result, new Order_Plus(
+                                            temp.get(result).getMaDonhang(),
+                                            temp.get(result).getNgay(),
+                                            temp.get(result).getCalam(),
+                                            temp.get(result).getGio(),
+                                            temp.get(result).getChinhanh(),
+                                            temp.get(result).getMaNhanvien(),
+                                            temp.get(result).getTenNhanvien(),
+                                            temp.get(result).getMaSanpham(),
+                                            temp.get(result).getTenSanpham(),
+                                            temp.get(result).getBaohanhSanpham(),
+                                            temp.get(result).getNguonSanpham(),
+                                            temp.get(result).getNgaynhapSanpham(),
+                                            temp.get(result).getVonSanpham(),
+                                            temp.get(result).getGiaSanpham(),
+                                            temp.get(result).getGiamgia(),
+                                            temp.get(result).getGhichuSanpham(),
+                                            temp.get(result).getTenKhachhang(),
+                                            temp.get(result).getSodienthoaiKhachhang(),
+                                            temp.get(result).getGhichuKhachhang(),
+                                            temp.get(result).getHinhthuc(),
+                                            temp.get(result).getSoluong()+1
+                                    ));
                                 }
                             }
                         }
@@ -227,7 +289,8 @@ public class Main_Order extends AppCompatActivity {
                         if (temp.size() == 0){
                             new CustomToast().Show_Toast(Main_Order.this, v, "Không có đơn hàng!");
                         }
-                        adapter = new Adapter_Order(Main_Order.this, temp);
+                        sortList(temp);
+                        adapter = new Adapter_Order_Plus(Main_Order.this, temp);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         fabReportOrder.setVisibility(view.VISIBLE);
@@ -247,11 +310,11 @@ public class Main_Order extends AppCompatActivity {
         }
     }
 
-    private int sosanhOrder(ArrayList<Order> order_h, String orderName) {
+    private int sosanhOrder(ArrayList<Order_Plus> order_h, String orderName) {
         int result = -1;
         if (order_h.size() != 0){
             for (int i = 0; i < order_h.size(); i++){
-                if (order_h.get(i).getMaOrder().equals(orderName)){
+                if (order_h.get(i).getMaDonhang().equals(orderName)){
                     result = i;
                 }
             }

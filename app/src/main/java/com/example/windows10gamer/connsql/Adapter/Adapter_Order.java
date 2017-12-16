@@ -45,43 +45,31 @@ public class Adapter_Order extends ArrayAdapter<Order> {
         }
 
         Order item = getItem(position);
-        vh.tvMaOrder.setText("Mã: "+item.getMaOrder());
-        vh.tvTennvOrder.setText("| NV: "+item.getTenNVOrder());
-        vh.tvTenkhOrder.setText("KH: "+item.getTenKH());
-        vh.tvSdtkhOrder.setText("| Sđt: "+item.getSdtKH());
-        vh.tvDateOrder.setText("| Ngày: "+Keys.setDate(item.getDateOrder()));
-        vh.tvTimeOrder.setText(item.getTimeOrder());
+        vh.tvMaOrder.setText(Keys.trimText(item.getTenSanpham(), 30));
+        vh.tvTennvOrder.setText(item.getTenNhanvien());
+        vh.tvTimeOrder.setText(" "+item.getCalam()+ " "+Keys.setDate(item.getNgay()));
 
         return vh.rootView;
     }
 
     private static class ViewHolder {
         public final LinearLayout rootView;
-        public final TextView tvTenkhOrder;
         public final TextView tvMaOrder;
         public final TextView tvTennvOrder;
-        public final TextView tvSdtkhOrder;
-        public final TextView tvDateOrder;
         public final TextView tvTimeOrder;
 
-        public ViewHolder(LinearLayout rootView, TextView tvMaOrder, TextView tvTennvOrder, TextView tvTenkhOrder, TextView tvSdtkhOrder, TextView tvDateOrder, TextView tvTimeOrder) {
+        public ViewHolder(LinearLayout rootView, TextView tvMaOrder, TextView tvTennvOrder, TextView tvTimeOrder) {
             this.rootView = rootView;
-            this.tvTenkhOrder = tvTenkhOrder;
             this.tvMaOrder = tvMaOrder;
             this.tvTennvOrder = tvTennvOrder;
-            this.tvSdtkhOrder = tvSdtkhOrder;
-            this.tvDateOrder = tvDateOrder;
             this.tvTimeOrder = tvTimeOrder;
         }
 
         public static ViewHolder create(LinearLayout rootView) {
-            TextView tvTenkhOrder = (TextView) rootView.findViewById(R.id.tvTenkhOrder);
-            TextView tvSdtkhOrder = (TextView) rootView.findViewById(R.id.tvSdtkhOrder);
-            TextView tvDateOrder = (TextView) rootView.findViewById(R.id.tvDateOrder);
             TextView tvTimeOrder = (TextView) rootView.findViewById(R.id.tvTimeOrder);
             TextView tvMaOrder = (TextView) rootView.findViewById(R.id.tvMaOrder);
             TextView tvTennvOrder = (TextView) rootView.findViewById(R.id.tvTennvOrder);
-            return new ViewHolder(rootView, tvMaOrder, tvTennvOrder, tvTenkhOrder,tvSdtkhOrder,tvDateOrder,tvTimeOrder);
+            return new ViewHolder(rootView, tvMaOrder, tvTennvOrder,tvTimeOrder);
         }
     }
 }

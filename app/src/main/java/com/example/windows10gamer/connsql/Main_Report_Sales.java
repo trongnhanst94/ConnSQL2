@@ -72,7 +72,7 @@ public class Main_Report_Sales extends AppCompatActivity {
         dateCachieu = bundle.getString("dateCachieu");
         doanhthuTotal = 0;
         for (int i = 0; i < reportList.size(); i++){
-            doanhthuTotal = doanhthuTotal + Integer.parseInt(reportList.get(i).getGiaOrder());
+            doanhthuTotal = doanhthuTotal + Integer.parseInt(reportList.get(i).getGiaSanpham());
         }
         if (dateCasang.equals("FALSE")){
             if (dateCachieu.equals("FALSE")){
@@ -90,9 +90,9 @@ public class Main_Report_Sales extends AppCompatActivity {
         tvdoanhthu.setText( Keys.getFormatedAmount(doanhthuTotal));
         ArrayList<Customer> khachhang = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhCustomer(khachhang, reportList.get(i).getTenKH(), reportList.get(i).getMaOrder());
+            int result = sosanhCustomer(khachhang, reportList.get(i).getTenKhachhang(), reportList.get(i).getMaDonhang());
             if (result == -1){
-                khachhang.add(new Customer( reportList.get(i).getMaOrder()+"KH", reportList.get(i).getTenKH(), reportList.get(i).getSdtKH(), reportList.get(i).getGhichuKH(), reportList.get(i).getMaOrder(), reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder()));
+                khachhang.add(new Customer( reportList.get(i).getMaDonhang()+"KH", reportList.get(i).getTenKhachhang(), reportList.get(i).getSodienthoaiKhachhang(), reportList.get(i).getGhichuKhachhang(), reportList.get(i).getMaDonhang(), reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien()));
             }
         }
         tvsokhachhangmua.setText(khachhang.size()+"");
@@ -102,10 +102,10 @@ public class Main_Report_Sales extends AppCompatActivity {
         tvNhanvienReport.setText("Danh sách nhân viên bán hàng: ");
         ArrayList<User> nhanVienList = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhUser(nhanVienList, reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder());
+            int result = sosanhUser(nhanVienList, reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien());
             if (result == -1){
-                nhanVienList.add(new User(reportList.get(i).getMaNVOrder(), reportList.get(i).getTenNVOrder()));
-                tvNhanvienReport.append(reportList.get(i).getTenNVOrder()+". ");
+                nhanVienList.add(new User(reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien()));
+                tvNhanvienReport.append(reportList.get(i).getTenNhanvien()+". ");
             }
         }
 
@@ -260,7 +260,7 @@ public class Main_Report_Sales extends AppCompatActivity {
     private int SoSanpham(ArrayList<Order> reportList, String ma) {
         int tong = 0;
         for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNVOrder().equals(ma)){
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
                 tong++;
             }
         }
@@ -280,8 +280,8 @@ public class Main_Report_Sales extends AppCompatActivity {
     private int DoanhthuCount(ArrayList<Order> reportList, String ma) {
         int tong = 0;
         for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNVOrder().equals(ma)){
-                tong += Integer.valueOf(reportList.get(i).getGiaOrder());
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                tong += Integer.valueOf(reportList.get(i).getGiaSanpham());
             }
         }
         return tong;

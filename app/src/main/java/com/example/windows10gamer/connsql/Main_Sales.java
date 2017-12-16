@@ -8,39 +8,46 @@ package com.example.windows10gamer.connsql;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Quatang;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Sales;
+import com.example.windows10gamer.connsql.Adapter.Adapter_Spinner_NV;
+import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
@@ -59,7 +66,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -76,29 +82,34 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Sales extends AppCompatActivity {
     EditText edGiamgia;
-    RadioGroup rgKhuyenmai;
-    RadioButton rbGiamgia;
-    RadioButton rbTangqua;
-    TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime, tvChinhanhSales;
+    CheckBox rbGiamgia;
+    CheckBox rbTangqua;
+    TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime, tvChinhanhSales, tvgiatriMagiam, tvphaithu;
     EditText edKhachhang, edSodienthoai, edGhichudonhang, edGhichukhachhang;
     ListView  listKhuyenmai;
+    ImageView ivDoinv;
     Mylistview listView;
-    ArrayList<Sanpham> arrayList, khuyenmaiList;
+    ArrayList<Sanpham_gio> arrayList, khuyenmaiList;
     ArrayList<Quatang> quatang;
+    ArrayAdapter<String> adapterA;
     Adapter_Sales adapter;
     ArrayList<Sanpham> a = new ArrayList<Sanpham>();
     Adapter_Quatang adapter2;
     ArrayAdapter<String> mAdapter;
     int total = 0, giamgia = 0;
     View view;
+    Switch switchChangeNV;
     boolean[] checkedItem;
     final ArrayList<String> itemKM = new ArrayList<>();
-    LinearLayout lnTangqua;
-    ProgressDialog dialog;
-    Button btnXacnhan, btnCancel, btn_scan_now;
-    String session_username, session_ma;
-    String url = Keys.SCRIPT_DANHSACH +"?id="+ Keys.TABLE +"&sheet="+ Keys.DANHSACHQUATANG;
-    String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, chinhanh, von, tenkhachhang, sodienthoaikhachhang, ghichukhachhang, ghichusanpham, madonhang;
+    ArrayList<String> realtime = new ArrayList<>();
+    LinearLayout lnTangqua, lnGiamgia, ln1, ln2, lnNVDefault, lnNVChange;
+    ProgressDialog pDialog;
+    SharedPreferences shared;
+    Button btnXacnhan, btnCancel, btn_scan_now, btnkiemtraMGG;
+    String session_username, session_ma, session_username1, session_ma1, hinhthuc = "None";
+    String maGiamgia, giatriMagiamgia = "";
+    String ten, ma, nguon, ca, ngaynhap, baohanh, gia, ngay, gio, chinhanh, von, tenkhachhang, sodienthoaikhachhang, ghichukhachhang, ghichusanpham, madonhang;
+    Spinner snA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +118,8 @@ public class Main_Sales extends AppCompatActivity {
         tvTongdonhang     = (TextView) findViewById(R.id.tvTongdonhang);
         tvManhanvien      = (TextView) findViewById(R.id.tvManhanvien);
         tvTennhanvien     = (TextView) findViewById(R.id.tvTennhanvien);
-        rgKhuyenmai       = (RadioGroup) findViewById(R.id.rgKhuyenmai);
-        rbGiamgia         = (RadioButton) findViewById(R.id.rbGiamgia);
-        rbTangqua         = (RadioButton) findViewById(R.id.rbTangqua);
+        rbGiamgia         = (CheckBox) findViewById(R.id.rbGiamgia);
+        rbTangqua         = (CheckBox) findViewById(R.id.rbTangqua);
         tvSalesDate       = (TextView) findViewById(R.id.tvSalesDate);
         tvSalesTime       = (TextView) findViewById(R.id.tvSalesTime);
         tvChinhanhSales   = (TextView) findViewById(R.id.tvChinhanhSales);
@@ -117,69 +127,83 @@ public class Main_Sales extends AppCompatActivity {
         edSodienthoai     = (EditText) findViewById(R.id.edSodienthoai);
         edGhichudonhang   = (EditText) findViewById(R.id.edGhichudonhang);
         edGhichukhachhang = (EditText) findViewById(R.id.edGhichukhachhang);
-        btn_scan_now        = (Button)   findViewById(R.id.btn_scan_now) ;
+        btn_scan_now      = (Button)   findViewById(R.id.btn_scan_now) ;
         btnXacnhan        = (Button)   findViewById(R.id.submitSanpham) ;
+        btnkiemtraMGG     = (Button)   findViewById(R.id.btnkiemtraMGG) ;
         btnCancel         = (Button)   findViewById(R.id.cancelSanpham) ;
         listView          = (Mylistview) findViewById(R.id.lvSanpham);
         listKhuyenmai     = (ListView) findViewById(R.id.lvKhuyenmai);
         lnTangqua         = (LinearLayout) findViewById(R.id.lnTangqua);
+        lnGiamgia         = (LinearLayout) findViewById(R.id.lngiamgia);
         edGiamgia         = (EditText) findViewById(R.id.edGiamgia) ;
-        edGiamgia.setVisibility(View.GONE);
+        tvgiatriMagiam    = (TextView) findViewById(R.id.tvgiatriMagiam);
+        tvphaithu         = (TextView) findViewById(R.id.tvphaithu);
+        ln1               = (LinearLayout) findViewById(R.id.ln1);
+        ln2               = (LinearLayout) findViewById(R.id.ln2);
+        ivDoinv           = (ImageView) findViewById(R.id.ivDoinv);
+        snA               = (Spinner) findViewById(R.id.spChange);
+        lnNVDefault       = (LinearLayout) findViewById(R.id.lnNVDefault);
+        lnNVChange        = (LinearLayout) findViewById(R.id.lnNVChange);
+        switchChangeNV    = (Switch) findViewById(R.id.switchChangeNV);
+        lnGiamgia.setVisibility(View.GONE);
         lnTangqua.setVisibility(View.GONE);
-        tvChinhanhSales.setText(Main_Menu.chinhanh);
+        ln1.setVisibility(View.GONE);
+        ln2.setVisibility(View.GONE);
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
         ngay = getDate();
-        gio = getTime();
-        chinhanh = Main_Menu.chinhanh;
+        ca = Keys.getCalam(chinhanh);
         madonhang = Keys.MaDonhang();
         tvSalesDate.setText(ngay);
-        tvSalesTime.setText(gio);
+        tvSalesTime.setText(ca);
         Intent intentput  = getIntent();
-        session_username  = intentput.getStringExtra("session_username");
-        session_ma        = intentput.getStringExtra("session_ma");
-        tvManhanvien.setText("Mã số: " + session_ma);
-        tvTennhanvien.setText("Tên nhân viên: " + session_username);
+        session_username1  = intentput.getStringExtra("session_username");
+        session_ma1        = intentput.getStringExtra("session_ma");
+        tvManhanvien.setText("Mã số: " + session_ma1);
+        tvTennhanvien.setText("Tên nhân viên: " + session_username1);
+        tvChinhanhSales.setText(chinhanh);
         edGhichudonhang.setSelected(false);
         arrayList     = new ArrayList<>();
         khuyenmaiList = new ArrayList<>();
         quatang = new ArrayList<>();
+        rbTangqua.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    rbGiamgia.setChecked(false);
+                    lnGiamgia.setVisibility(View.GONE);
+                    lnTangqua.setVisibility(View.VISIBLE);
+                } else {
+                    lnTangqua.setVisibility(View.GONE);
+                }
+            }
+        });
+        rbGiamgia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    rbTangqua.setChecked(false);
+                    lnGiamgia.setVisibility(View.VISIBLE);
+                    lnTangqua.setVisibility(View.GONE);
+                } else {
+                    lnGiamgia.setVisibility(View.GONE);
+                    ln1.setVisibility(View.GONE);
+                    ln2.setVisibility(View.GONE);
+                    giatriMagiamgia = "0";
+                    maGiamgia = "";
+                }
+            }
+        });
         rbTangqua.setEnabled(false);
-        rbGiamgia.setEnabled(false);
         adapter       = new Adapter_Sales(Main_Sales.this, R.layout.adapter_sales, arrayList);
         listView.setAdapter(adapter);
         new GetDataQuaTang().execute();
-        rgKhuyenmai.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                doOnDifficultyLevelChanged(group, checkedId);
-            }
-        });
         btn_scan_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 scanSanpham();
             }
         });
-        btnXacnhan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!(edKhachhang.getText().toString().equals("") && edSodienthoai.getText().toString().equals(""))){
-                    tenkhachhang = edKhachhang.getText().toString();
-                    sodienthoaikhachhang = edSodienthoai.getText().toString();
-                    ghichukhachhang = edGhichukhachhang.getText().toString();
-                    ghichusanpham = edGhichudonhang.getText().toString();
-                    if (rbGiamgia.isChecked() && !edGiamgia.getText().equals(null)){
-                        giamgia = Integer.parseInt(edGiamgia.getText().toString());
-                    } else {
-                        giamgia = 0;
-                    }
-                    new SendRequest().execute();
-                    ResetActivity();
-                }
-                else Snackbar.make(view, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
-
-            }
-        });
-
         edGiamgia.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -188,7 +212,6 @@ public class Main_Sales extends AppCompatActivity {
                     giamgia = 0;
                     tvTongdonhang.setText(getFormatedAmount(total));
                 } else {
-                    giamgia = Integer.parseInt(edGiamgia.getText().toString());
                     totalTam = totalTam - giamgia;
                     tvTongdonhang.setText(getFormatedAmount(totalTam));
                     if (totalTam < 0 ){
@@ -224,33 +247,147 @@ public class Main_Sales extends AppCompatActivity {
                     builder.show();
                 }
             });
+        btnkiemtraMGG.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!edGiamgia.getText().toString().trim().equals("")){
+                    maGiamgia = edGiamgia.getText().toString().trim();
+                    giatriMagiamgia = "0";
+                    new GetDataGiamGia().execute();
+                } else {
+                    giatriMagiamgia = "0";
+                    maGiamgia = "";
+                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                }
+            }
+        });
+        session_ma = session_ma1;
+        session_username = session_username1;
+        switchChangeNV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    lnNVDefault.setVisibility(View.GONE);
+                    lnNVChange.setVisibility(View.VISIBLE);
+                    GetUser(Keys.DANHSACHLOGIN, new Main_Ketqua_Kiemkho.VolleyCallback(){
+                        @Override
+                        public void onSuccess(final ArrayList<User> result) {
+                            final ArrayList<String> resultName, resultMa;
+                            resultName = new ArrayList<String>();
+                            resultMa = new ArrayList<String>();
+                            for (int i = 0; i < result.size(); i++){
+                                resultName.add(result.get(i).getShortName());
+                                resultMa.add(result.get(i).getMa());
+                            }
+
+                            Adapter_Spinner_NV customAdapter=new Adapter_Spinner_NV(getApplicationContext(),resultMa,resultName);
+                            snA.setAdapter(customAdapter);
+
+                            snA.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+                                    session_ma = result.get(position).getMa();
+                                    session_username = result.get(position).getShortName();
+                                    hinhthuc = "Bán hộ bởi "+session_username1;
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> arg0) {}
+                            });
+
+                            btnXacnhan.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (arrayList.size() != 0){
+                                        tenkhachhang = edKhachhang.getText().toString();
+                                        sodienthoaikhachhang = edSodienthoai.getText().toString();
+                                        ghichukhachhang = edGhichukhachhang.getText().toString();
+                                        ghichusanpham = edGhichudonhang.getText().toString();
+                                        new SendRequest().execute();
+                                        ResetActivity();
+                                    }
+                                    else new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    lnNVDefault.setVisibility(View.VISIBLE);
+                    lnNVChange.setVisibility(View.GONE);
+                    session_ma = session_ma1;
+                    session_username = session_username1;
+                    hinhthuc = "None";
+                }
+            }
+        });
+        btnXacnhan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (arrayList.size() != 0){
+                    tenkhachhang = edKhachhang.getText().toString();
+                    sodienthoaikhachhang = edSodienthoai.getText().toString();
+                    ghichukhachhang = edGhichukhachhang.getText().toString();
+                    ghichusanpham = edGhichudonhang.getText().toString();
+                    new SendRequest().execute();
+                    ResetActivity();
+                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!");
+                }
+                else new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+            }
+        });
+    }
+
+    public ArrayList<User> GetUser(String urlUser, final Main_Ketqua_Kiemkho.VolleyCallback callback) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlUser, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                if (object.getInt("level") == Keys.LEVEL_BH){
+                                    usernames.add(new User(
+                                            object.getInt("id"),
+                                            object.getString("ma_user"),
+                                            object.getString("ten"),
+                                            object.getString("shortName"),
+                                            object.getString("username"),
+                                            object.getString("password")
+                                    ));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onSuccess(usernames);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onSuccess(usernames);
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        return usernames;
+    }
+
+    public interface VolleyCallback{
+        void onSuccess(ArrayList<User> result);
     }
 
     private void scanSanpham() {
-//        ZxingOrient intentIntegrator = new ZxingOrient(Main_Sales.this);
-//        intentIntegrator.setIcon(R.drawable.icon)   // Sets the custom icon
-//                .setToolbarColor("#AA3F51B5")       // Sets Tool bar Color
-//                .setInfoBoxColor("#AA3F51B5")       // Sets Info box color
-//                .setInfo("Scan a QR code Image.")   // Sets info message in the info box
-//                .setCaptureActivity(ToolbarCaptureActivity.class).initiateScan(Barcode.QR_CODE);
-//
-//        new ZxingOrient(Main_Sales.this)
-//                .showInfoBox(true) // Doesn't display the info box
-//                .setBeep(true)  // Doesn't play beep sound
-//                .setVibration(true)  // Enables the vibration
-//                .setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
-        IntentIntegrator integrator = new IntentIntegrator(this);        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);        integrator.setPrompt("Quét mã code");        integrator.setOrientationLocked(false);        integrator.setBeepEnabled(false);        integrator.initiateScan();
-    }
-
-    private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
-        int checkedRadioId = group.getCheckedRadioButtonId();
-        if(checkedRadioId== R.id.rbGiamgia) {
-            edGiamgia.setVisibility(View.VISIBLE);
-            lnTangqua.setVisibility(View.GONE);
-        } else if(checkedRadioId== R.id.rbTangqua ) {
-            edGiamgia.setVisibility(View.GONE);
-            lnTangqua.setVisibility(View.VISIBLE);
-        }
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Quét mã code");
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(true);
+        integrator.initiateScan();
     }
 
     private String getFormatedAmount(int amount){
@@ -266,15 +403,17 @@ public class Main_Sales extends AppCompatActivity {
             String scannedData = result.getContents();
             if (scannedData != null) {
                 try{
+                    realtime.add(Keys.getTimeNow());
                     StringTokenizer st = new StringTokenizer(scannedData, ";");
                     ma = st.nextToken();
                     ten = st.nextToken();
+                    gio = Keys.getTimeNow();
                     baohanh = st.nextToken();
                     nguon = st.nextToken();
                     ngaynhap = st.nextToken();
                     von = st.nextToken();
                     gia = st.nextToken();
-                    arrayList.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
+                    arrayList.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
                     total = total + Integer.parseInt(gia);
                     tvTongdonhang.setText(getFormatedAmount(total));
                     itemKM.clear();
@@ -291,9 +430,15 @@ public class Main_Sales extends AppCompatActivity {
                     rbTangqua.setChecked(false);
                     listKhuyenmai.setAdapter(null);
                     adapter.notifyDataSetChanged();
-                    scanSanpham();
+                    rbGiamgia.setChecked(false);
+                    lnGiamgia.setVisibility(View.GONE);
+                    ln1.setVisibility(View.GONE);
+                    ln2.setVisibility(View.GONE);
+                    giatriMagiamgia = "0";
+                    maGiamgia = "";
+                    edGiamgia.setText("");
                 }   catch (NoSuchElementException nse) {
-                    Toast.makeText(Main_Sales.this, "Lỗi định dạng nhãn", Toast.LENGTH_SHORT).show();
+                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không đúng mã!");
                 }
             }
         }
@@ -305,6 +450,7 @@ public class Main_Sales extends AppCompatActivity {
                 total = total - Integer.parseInt(arrayList.get(i).getGiaban());
                 tvTongdonhang.setText(getFormatedAmount(total));
                 arrayList.remove(i);
+                realtime.remove(i);
                 break;
             }
         }
@@ -331,26 +477,11 @@ public class Main_Sales extends AppCompatActivity {
         return date;
     }
 
-    private String getTime() {
-        String ca;
-        int hours = new Time(System.currentTimeMillis()).getHours();
-        if (hours < 15 ){
-            ca = "Ca sáng";
-        } else {
-            ca = "Ca chiều";
-        }
-        return ca;
-    }
-
     public class SendRequest extends AsyncTask<String, Void, String> {
 
 
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Main_Sales.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Đơn hàng đang được xử lý");
-            dialog.setCancelable(false);
-            dialog.show();
+            showProgressDialog();
         }
 
         protected String doInBackground(String... arg0) {
@@ -371,12 +502,16 @@ public class Main_Sales extends AppCompatActivity {
                     i++;
                 }
             }
+            if (!maGiamgia.equals("")){
+                new DeleteMGG().execute();
+                deleteMagiamgiaWeb();
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            dialog.dismiss();
+            dismissProgressDialog();
         }
     }
 
@@ -416,7 +551,8 @@ public class Main_Sales extends AppCompatActivity {
 
             postDataParams.put("salesMadonhang", "SA_"+madonhang);
             postDataParams.put("salesNgay", ngay);
-            postDataParams.put("salesCa", gio);
+            postDataParams.put("salesCa", ca);
+            postDataParams.put("salesGio", arrayList.get(j).getGio());
             postDataParams.put("salesChinhanh", chinhanh);
             postDataParams.put("SalesTennhanvien", session_username);
             postDataParams.put("salesManhanvien", session_ma);
@@ -427,10 +563,12 @@ public class Main_Sales extends AppCompatActivity {
             postDataParams.put("salesNgaynhap", arrayList.get(j).getNgaynhap());
             postDataParams.put("salesVonsanpham", arrayList.get(j).getVon());
             postDataParams.put("salesGiasanpham", arrayList.get(j).getGiaban());
+            postDataParams.put("salesGiamgia", giatriMagiamgia);
             postDataParams.put("salesGhichusanpham", ghichusanpham);
             postDataParams.put("salesTenkhachhang", tenkhachhang);
             postDataParams.put("salesSodienthoaikhachhang", sodienthoaikhachhang);
             postDataParams.put("salesGhichukhachhang", ghichukhachhang);
+            postDataParams.put("salesHinhthuc", hinhthuc);
             j++;
 
             Log.e("params", postDataParams.toString());
@@ -466,31 +604,26 @@ public class Main_Sales extends AppCompatActivity {
                 in.close();
                 return sb.toString();
             } else {
-                return new String("false : " + responseCode);
+                return new String("");
             }
         } catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return new String("");
         }
     }
 //***************************************************************************************************************************
     class GetDataQuaTang extends AsyncTask<Void, Void, Void> {
         int jIndex;
-        int x;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(Main_Sales.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được tải xuống!");
-            dialog.setCancelable(false);
-            dialog.show();
+
         }
 
         @Nullable
         @Override
         protected Void doInBackground(Void... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(url);
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.urlQT);
             try {
                 if (jsonObject != null) {
                     if(jsonObject.length() > 0) {
@@ -528,12 +661,66 @@ public class Main_Sales extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
             if(quatang.size() > 0) {
                 setList(quatang);
-            } else {
-                Toast.makeText(Main_Sales.this, "Không có dữ liệu được tìm thấy", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+//***************************************************************************************************************************
+
+    class GetDataGiamGia extends AsyncTask<Void, Void, Void> {
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            showProgressDialog();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.urlGG);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.MAGIAMGIA);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    if (maGiamgia.equals(object.getString("maGiamgia")) && (object.getString("trangThai").equals("On"))){
+                                        giatriMagiamgia = object.getString("giaTri");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(giatriMagiamgia.equals("") || giatriMagiamgia.equals("0")) {
+                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Mã không hợp lệ!");
+                edGiamgia.setText("");
+                giatriMagiamgia = "0";
+                maGiamgia = "";
+            } else {
+                ln1.setVisibility(View.VISIBLE);
+                ln2.setVisibility(View.VISIBLE);
+            }
+            tvgiatriMagiam.setText(Keys.getFormatedAmount(Integer.parseInt(giatriMagiamgia)));
+            tvphaithu.setText(Keys.getFormatedAmount(total - Integer.parseInt(giatriMagiamgia)));
+            dismissProgressDialog();
         }
     }
 
@@ -558,11 +745,11 @@ public class Main_Sales extends AppCompatActivity {
                         for (int i = 0; i<quatang.size(); i++){
                             if (spinner.getSelectedItem().equals(quatang.get(i).getTen())){
                                 a.add(new Sanpham(
-                                        quatang.get(i).getMa(),
-                                        quatang.get(i).getTen(),
-                                        quatang.get(i).getBaohanh(),
-                                        quatang.get(i).getNguon(),
-                                        quatang.get(i).getNgaynhap(),
+                                        quatang.get(i).getMa()+"",
+                                        quatang.get(i).getTen()+"",
+                                        quatang.get(i).getBaohanh()+"",
+                                        quatang.get(i).getNguon()+"",
+                                        quatang.get(i).getNgaynhap()+"",
                                         quatang.get(i).getVon()+"",
                                         quatang.get(i).getGia()+""
                                 ));
@@ -600,7 +787,7 @@ public class Main_Sales extends AppCompatActivity {
 
             postDataParamsKM.put("salesMadonhang", "KM_"+madonhang);
             postDataParamsKM.put("salesNgay", ngay);
-            postDataParamsKM.put("salesCa", gio);
+            postDataParamsKM.put("salesCa", ca);
             postDataParamsKM.put("salesChinhanh", chinhanh);
             postDataParamsKM.put("salesTennhanvien", session_username);
             postDataParamsKM.put("salesManhanvien", session_ma);
@@ -609,7 +796,7 @@ public class Main_Sales extends AppCompatActivity {
             postDataParamsKM.put("salesTensanpham", a.get(j).getTen());
             postDataParamsKM.put("salesBaohanhsanpham", a.get(j).getBaohanh());
             postDataParamsKM.put("salesNguonsanpham", a.get(j).getNguon());
-            postDataParamsKM.put("salesNgaynhap", Keys.setNN(a.get(j).getNgaynhap()));
+            postDataParamsKM.put("salesNgaynhap", a.get(j).getNgaynhap());
             postDataParamsKM.put("salesVonsanpham", a.get(j).getVon());
             postDataParamsKM.put("salesGiasanpham", a.get(j).getGiaban());
             postDataParamsKM.put("salesGhichusanpham", ghichusanpham);
@@ -647,31 +834,21 @@ public class Main_Sales extends AppCompatActivity {
                 in2.close();
                 return sb2.toString();
             } else {
-                return new String("false : " + responseCode2);
+                return new String("");
             }
         } catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return new String("");
         }
     }
 
 
 
     public void ResetActivity(){
-        if (Build.VERSION.SDK_INT >= 11) {
-            recreate();
-        } else {
-            Intent intent = getIntent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            finish();
-            overridePendingTransition(0, 0);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        }
-        edKhachhang.setText("");
-        edSodienthoai.setText("");
-        edGhichudonhang.setText("");
-        edGhichukhachhang.setText("");
-        edGiamgia.setText("");
+        Intent intentput = new Intent(Main_Sales.this, Main_Sales.class);
+        intentput.putExtra("session_username", session_username1);
+        intentput.putExtra("session_ma", session_ma1);
+        startActivity(intentput);
+        finish();
     }
 
     public void addOrderWeb(final int j){
@@ -681,14 +858,14 @@ public class Main_Sales extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            Toast.makeText(Main_Sales.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Main_Sales.this, "Lỗi "+error, Toast.LENGTH_SHORT).show();
+                       // new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -698,10 +875,11 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("tacvu", Keys.ADD_SALES_WEB);
                 params.put("maDonhang", "SA_"+madonhang);
                 params.put("ngay", ngay);
-                params.put("calam", gio);
+                params.put("calam", ca);
+                params.put("gio", arrayList.get(j).getGio());
                 params.put("chinhanh", chinhanh);
-                params.put("maNhanvien", session_username);
-                params.put("tenNhanvien", session_ma);
+                params.put("maNhanvien", session_ma);
+                params.put("tenNhanvien", session_username);
                 params.put("maSanpham", arrayList.get(j).getMa());
                 params.put("tenSanpham", arrayList.get(j).getTen());
                 params.put("baohanhSanpham", arrayList.get(j).getBaohanh());
@@ -709,10 +887,12 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("ngaynhapSanpham", arrayList.get(j).getNgaynhap());
                 params.put("vonSanpham", arrayList.get(j).getVon());
                 params.put("giaSanpham", arrayList.get(j).getGiaban());
+                params.put("giatriMagiamgia", giatriMagiamgia);
                 params.put("ghichuSanpham", ghichusanpham);
                 params.put("tenKhachhang", tenkhachhang);
                 params.put("sodienthoaiKhachhang", sodienthoaikhachhang);
                 params.put("ghichuKhachhang", ghichukhachhang);
+                params.put("hinhthuc", hinhthuc);
                 return params;
             }
         };
@@ -726,14 +906,14 @@ public class Main_Sales extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            Toast.makeText(Main_Sales.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Main_Sales.this, "Lỗi "+error, Toast.LENGTH_SHORT).show();
+                      //  new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -745,14 +925,14 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("ngay", ngay);
                 params.put("calam", gio);
                 params.put("chinhanh", chinhanh);
-                params.put("maNhanvien", session_username);
-                params.put("tenNhanvien", session_ma);
+                params.put("maNhanvien", session_ma);
+                params.put("tenNhanvien", session_username);
                 params.put("giamgia", giamgia+"");
                 params.put("maSanpham", a.get(j).getMa());
                 params.put("tenSanpham", a.get(j).getTen());
                 params.put("baohanhSanpham", a.get(j).getBaohanh());
                 params.put("nguonSanpham", a.get(j).getNguon());
-                params.put("ngaynhapSanpham", Keys.setNN(a.get(j).getNgaynhap()));
+                params.put("ngaynhapSanpham", a.get(j).getNgaynhap());
                 params.put("vonSanpham", a.get(j).getVon());
                 params.put("giaSanpham", a.get(j).getGiaban());
                 params.put("ghichuSanpham", ghichusanpham);
@@ -764,5 +944,127 @@ public class Main_Sales extends AppCompatActivity {
         };
         requestQueue.add(stringRequest);
     }
+
+    private void showProgressDialog() {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(Main_Sales.this);
+            pDialog.setTitle("Hãy chờ...");
+            pDialog.setMessage("Dữ liệu đang được xử lý.");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+        }
+        pDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
+    }
+
+    public class DeleteMGG extends AsyncTask<String, Void, String> {
+        protected void onPreExecute(){
+        }
+
+        protected String doInBackground(String... params) {
+            try{
+                // Link Script
+                URL url = new URL(Keys.SCRIPT_DE_MAGIAMGIA);
+
+                // Load Json object
+                JSONObject postDataParams = new JSONObject();
+
+                postDataParams.put("maGiamgia", maGiamgia);
+
+                Log.e("params",postDataParams.toString());
+
+                // Kết nối HTTP
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode=conn.getResponseCode();
+
+                // Nếu kết nối được
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuffer sb = new StringBuffer("");
+                    String line="";
+
+                    while((line = in.readLine()) != null) {
+
+                        sb.append(line);
+                        break;
+                    }
+                    //
+                    in.close();
+                    // Trả dữ liệu cho về để ghi lên Excel
+                    return sb.toString();
+
+                }
+                else {
+                    return new String("false : "+responseCode);
+                }
+            }
+            catch(Exception e){
+                return new String("Exception: " + e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+    }
+
+    public void deleteMagiamgiaWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_MAGIAMGIA_WEB);
+                params.put("maGiamgia", maGiamgia);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
 }
+
+
+
 
