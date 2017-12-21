@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lnmain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_greyish"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.windows10gamer.connsql.Main"
@@ -13,62 +13,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:gravity="right"
         android:orientation="horizontal"
         android:weightSum="10">
 
         <LinearLayout
-            android:layout_width="287dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvchinhanh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
                 android:drawableLeft="@drawable/ic_action_name"
                 android:gravity="center_vertical"
+                android:padding="5dp"
                 android:text="Quét mã sản phẩm: "
-                android:textSize="12sp"
+                android:textColor="@color/RED"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:gravity="right"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_chinhanh"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_below="@+id/tv_blog_url"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/holo_orange_light"
-                android:drawableLeft="@drawable/ic_search_black_24dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="Thay đổi"
-                android:textColor="#fff"
-                android:textSize="8sp" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/cam" />
+        android:layout_height="20dp" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -80,50 +54,26 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/btnBaocaoDoanhthu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="#fff"
-                android:text="BC cuối ca"
-                android:textColor="@color/cam" />
-
-            <Button
-                android:id="@+id/btnDanhsachsanpham"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="#fff"
-                android:text="List sản phẩm"
-                android:textColor="@color/cam" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="2">
-
-            <Button
                 android:id="@+id/btnScanQR"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="Kiểm kho"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_warehouse"
+                android:paddingLeft="20dp"
+                android:text="Kiểm kho"/>
 
             <Button
                 android:id="@+id/btnDanhsachkiemkho"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="List kiểm kho"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_list2"
+                android:paddingLeft="20dp"
+                android:text="List kiểm kho" />
         </TableRow>
 
         <TableRow
@@ -135,21 +85,24 @@
                 android:id="@+id/btnSales"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="Bán hàng"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_sale"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingLeft="20dp"
+                android:text="Bán hàng" />
 
             <Button
                 android:id="@+id/btnListOrder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="List đơn hàng"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_list3"
+                android:paddingLeft="20dp"
+                android:text="List đơn hàng" />
 
 
         </TableRow>
@@ -162,21 +115,75 @@
                 android:id="@+id/btnBaohanh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="BẢO HÀNH"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_engineer"
+                android:paddingLeft="20dp"
+                android:text="BẢO HÀNH" />
 
             <Button
                 android:id="@+id/btnReportBaohanh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:background="#fff"
-                android:text="List bảo hành"
-                android:textColor="@color/cam" />
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_list1"
+                android:paddingLeft="20dp"
+                android:text="List bảo hành" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnRealtime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_time"
+                android:paddingLeft="20dp"
+                android:text="Real-time"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btnXuatnhap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_reverse"
+                android:paddingLeft="20dp"
+                android:text="Xuất - Nhập"
+                android:textSize="11sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnWeb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:paddingLeft="20dp"
+                android:text="WEBSITE" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:background="@drawable/bg125"
+                android:paddingLeft="20dp"
+                android:text="None" />
         </TableRow>
 
     </TableLayout>

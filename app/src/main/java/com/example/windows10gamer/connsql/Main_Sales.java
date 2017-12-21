@@ -47,6 +47,7 @@ import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -201,7 +202,11 @@ public class Main_Sales extends AppCompatActivity {
         btn_scan_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scanSanpham();
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    scanSanpham();
+                }
             }
         });
         edGiamgia.addTextChangedListener(new TextWatcher() {
@@ -231,33 +236,42 @@ public class Main_Sales extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Sales.this);
-                    builder.setMessage("Bạn muốn hủy đơn hàng??");
-                    builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();                        }
-                    });
-                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Main_Sales.this.finish();
-                        }
-                    });
-                    builder.show();
+                    if(!Connect_Internet.checkConnection(getApplicationContext()))
+                        Connect_Internet.buildDialog(Main_Sales.this).show();
+                    else {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Sales.this);
+                        builder.setMessage("Bạn muốn hủy đơn hàng??");
+                        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Main_Sales.this.finish();
+                            }
+                        });
+                        builder.show();
+                    }
                 }
             });
         btnkiemtraMGG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!edGiamgia.getText().toString().trim().equals("")){
-                    maGiamgia = edGiamgia.getText().toString().trim();
-                    giatriMagiamgia = "0";
-                    new GetDataGiamGia().execute();
-                } else {
-                    giatriMagiamgia = "0";
-                    maGiamgia = "";
-                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    if (!edGiamgia.getText().toString().trim().equals("")) {
+                        maGiamgia = edGiamgia.getText().toString().trim();
+                        giatriMagiamgia = "0";
+                        new GetDataGiamGia().execute();
+                    } else {
+                        giatriMagiamgia = "0";
+                        maGiamgia = "";
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                    }
                 }
             }
         });
@@ -266,75 +280,82 @@ public class Main_Sales extends AppCompatActivity {
         switchChangeNV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    lnNVDefault.setVisibility(View.GONE);
-                    lnNVChange.setVisibility(View.VISIBLE);
-                    GetUser(Keys.DANHSACHLOGIN, new Main_Ketqua_Kiemkho.VolleyCallback(){
-                        @Override
-                        public void onSuccess(final ArrayList<User> result) {
-                            final ArrayList<String> resultName, resultMa;
-                            resultName = new ArrayList<String>();
-                            resultMa = new ArrayList<String>();
-                            for (int i = 0; i < result.size(); i++){
-                                resultName.add(result.get(i).getShortName());
-                                resultMa.add(result.get(i).getMa());
-                            }
-
-                            Adapter_Spinner_NV customAdapter=new Adapter_Spinner_NV(getApplicationContext(),resultMa,resultName);
-                            snA.setAdapter(customAdapter);
-
-                            snA.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                                @Override
-                                public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
-                                    session_ma = result.get(position).getMa();
-                                    session_username = result.get(position).getShortName();
-                                    hinhthuc = "Bán hộ bởi "+session_username1;
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    if (isChecked) {
+                        lnNVDefault.setVisibility(View.GONE);
+                        lnNVChange.setVisibility(View.VISIBLE);
+                        GetUser(Keys.DANHSACHLOGIN, new Main_Ketqua_Kiemkho.VolleyCallback() {
+                            @Override
+                            public void onSuccess(final ArrayList<User> result) {
+                                final ArrayList<String> resultName, resultMa;
+                                resultName = new ArrayList<String>();
+                                resultMa = new ArrayList<String>();
+                                for (int i = 0; i < result.size(); i++) {
+                                    resultName.add(result.get(i).getShortName());
+                                    resultMa.add(result.get(i).getMa());
                                 }
 
-                                @Override
-                                public void onNothingSelected(AdapterView<?> arg0) {}
-                            });
+                                Adapter_Spinner_NV customAdapter = new Adapter_Spinner_NV(getApplicationContext(), resultMa, resultName);
+                                snA.setAdapter(customAdapter);
 
-                            btnXacnhan.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (arrayList.size() != 0){
-                                        tenkhachhang = edKhachhang.getText().toString();
-                                        sodienthoaikhachhang = edSodienthoai.getText().toString();
-                                        ghichukhachhang = edGhichukhachhang.getText().toString();
-                                        ghichusanpham = edGhichudonhang.getText().toString();
-                                        new SendRequest().execute();
-                                        ResetActivity();
+                                snA.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
+                                        session_ma = result.get(position).getMa();
+                                        session_username = result.get(position).getShortName();
+                                        hinhthuc = "Bán hộ bởi " + session_username1;
                                     }
-                                    else new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
 
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    lnNVDefault.setVisibility(View.VISIBLE);
-                    lnNVChange.setVisibility(View.GONE);
-                    session_ma = session_ma1;
-                    session_username = session_username1;
-                    hinhthuc = "None";
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> arg0) {
+                                    }
+                                });
+
+                                btnXacnhan.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (arrayList.size() != 0) {
+                                            tenkhachhang = edKhachhang.getText().toString();
+                                            sodienthoaikhachhang = edSodienthoai.getText().toString();
+                                            ghichukhachhang = edGhichukhachhang.getText().toString();
+                                            ghichusanpham = edGhichudonhang.getText().toString();
+                                            new SendRequest().execute();
+                                            ResetActivity();
+                                        } else
+                                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        lnNVDefault.setVisibility(View.VISIBLE);
+                        lnNVChange.setVisibility(View.GONE);
+                        session_ma = session_ma1;
+                        session_username = session_username1;
+                        hinhthuc = "None";
+                    }
                 }
             }
         });
         btnXacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (arrayList.size() != 0){
-                    tenkhachhang = edKhachhang.getText().toString();
-                    sodienthoaikhachhang = edSodienthoai.getText().toString();
-                    ghichukhachhang = edGhichukhachhang.getText().toString();
-                    ghichusanpham = edGhichudonhang.getText().toString();
-                    new SendRequest().execute();
-                    ResetActivity();
-                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!");
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    if (arrayList.size() != 0) {
+                        tenkhachhang = edKhachhang.getText().toString();
+                        sodienthoaikhachhang = edSodienthoai.getText().toString();
+                        ghichukhachhang = edGhichukhachhang.getText().toString();
+                        ghichusanpham = edGhichudonhang.getText().toString();
+                        new SendRequest().execute();
+                    } else
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
                 }
-                else new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
             }
         });
     }
@@ -506,6 +527,7 @@ public class Main_Sales extends AppCompatActivity {
                 new DeleteMGG().execute();
                 deleteMagiamgiaWeb();
             }
+            ResetActivity();
             return null;
         }
 
@@ -858,14 +880,16 @@ public class Main_Sales extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
+                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                        } else if (response.trim().equals("success")){
+                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!!");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                       // new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
+                       new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -1042,14 +1066,32 @@ public class Main_Sales extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Sales.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Sales.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
                     }
                 }
         ){

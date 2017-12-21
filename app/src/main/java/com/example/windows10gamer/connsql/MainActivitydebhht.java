@@ -4,8 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 
 import org.json.JSONObject;
@@ -100,7 +100,7 @@ public class MainActivitydebhht extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext(), result,Toast.LENGTH_SHORT).show();
+            new CustomToast().Show_Toast(getApplicationContext(), findViewById(android.R.id.content), result);
         }
     }
 

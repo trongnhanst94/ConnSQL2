@@ -27,13 +27,11 @@ import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -130,30 +128,42 @@ public class Main_Order extends AppCompatActivity {
         btnSearchOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateBegin = String.valueOf(edBenginOrder.getText());
-                dateEnd   = String.valueOf(edEndOrder.getText());
-                if (cbCasang.isChecked())  dateCasang  = "Ca sáng"; else dateCasang = "FALSE";
-                if (cbCachieu.isChecked()) dateCachieu = "Ca chiều"; else dateCachieu = "FALSE";
-                LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu, v);
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Order.this).show();
+                else {
+                    dateBegin = String.valueOf(edBenginOrder.getText());
+                    dateEnd = String.valueOf(edEndOrder.getText());
+                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                    else dateCasang = "FALSE";
+                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                    else dateCachieu = "FALSE";
+                    LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu, v);
+                }
             }
         });
 
         fabReportOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dateBegin = String.valueOf(edBenginOrder.getText());
-                dateEnd   = String.valueOf(edEndOrder.getText());
-                if (cbCasang.isChecked())  dateCasang  = "Ca sáng"; else dateCasang = "FALSE";
-                if (cbCachieu.isChecked()) dateCachieu = "Ca chiều"; else dateCachieu = "FALSE";
-                Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("ReportList", contactList);
-                bundle.putString("dateBegin", dateBegin);
-                bundle.putString("dateEnd", dateEnd);
-                bundle.putString("dateCasang", dateCasang);
-                bundle.putString("dateCachieu",dateCachieu);
-                intent.putExtra("ReportBundle", bundle);
-                startActivity(intent);
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Order.this).show();
+                else {
+                    dateBegin = String.valueOf(edBenginOrder.getText());
+                    dateEnd = String.valueOf(edEndOrder.getText());
+                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                    else dateCasang = "FALSE";
+                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                    else dateCachieu = "FALSE";
+                    Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("ReportList", contactList);
+                    bundle.putString("dateBegin", dateBegin);
+                    bundle.putString("dateEnd", dateEnd);
+                    bundle.putString("dateCasang", dateCasang);
+                    bundle.putString("dateCachieu", dateCachieu);
+                    intent.putExtra("ReportBundle", bundle);
+                    startActivity(intent);
+                }
             }
         });
         cbCasang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -197,7 +207,7 @@ public class Main_Order extends AppCompatActivity {
 
             APIService_Sales api = RetrofitClient.getApiService();
 
-            Call<OrderList> call = api.getAllProduct();
+            Call<OrderList> call = api.getOrder(loadBegin, loadEnd);
 
             call.enqueue(new Callback<OrderList>() {
                 @Override
@@ -208,21 +218,8 @@ public class Main_Order extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         contactList.clear();
                         temp.clear();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                        Date hom = null; Date loadBegin1 = null; Date loadEnd1 = null;
-                        try {
-                            loadBegin1 = (Date) simpleDateFormat.parse(loadBegin);
-                            loadEnd1   = (Date) simpleDateFormat.parse(loadEnd);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
                         for (int i = 0; i < orignal.size(); i++) {
-                            try {
-                                hom = (Date) simpleDateFormat.parse(orignal.get(i).getNgay());
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            if(hom.compareTo(loadBegin1) >= 0  && hom.compareTo(loadEnd1) <= 0 && orignal.get(i).getChinhanh().equals(chinhanh)) {
+                            if(orignal.get(i).getChinhanh().equals(chinhanh)) {
                                 if (loadCasang.equals(orignal.get(i).getCalam())) {
                                     contactList.add(orignal.get(i));
                                 }

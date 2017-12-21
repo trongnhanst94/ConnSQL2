@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
-                    android:text="Thông tin Đơn hàng:"
+                    android:text="Thông tin Sản phẩm bảo hành:"
                     android:textColor="@color/cam"
                     android:textSize="16sp" />
 
@@ -342,6 +342,26 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/list_border" />
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Phí bảo hành:" />
+
+                    <EditText
+                        android:id="@+id/edpbhBHD1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:inputType="number" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -7,7 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,6 +84,11 @@ public class Keys {
     public static final String SCRIPT_BH_DDT       = "https://script.google.com/macros/s/AKfycbzCaKmPPe41LQmz5WxCokyc6otAjLKIxmLRngMz3NtMTYre5Nle/exec";
     public static final String MAIN_BH_BHDDT       = "http://dealtichtac.com/android/danhsach_bhddt.php";
     public static final String BHDDT_SHEET         = "BHDDT_SHEET";
+    public static final String ADD_XUATHANG_WEB    = "ADD_XUATHANG_WEB";
+    public static final String LINK_WEB_XUATNHAP   = "http://dealtichtac.com/android/addXuatnhap.php";
+    public static final String SCRIPT_XUATHANG     = "https://script.google.com/macros/s/AKfycbxvWoPMt1SdiuIXzSZEM8j4aaHoH9lLGUc0M64vBSrNK60O-wM/exec";
+    public static final String MAIN_XUATNHAP       = "http://dealtichtac.com/android/danhsach_xuatnhap.php";
+    public static final String XUATNHAP            = "XUATNHAP";
 
 
     public static final String getFormatedAmount(int amount){
@@ -143,21 +147,6 @@ public class Keys {
         return "";
     }
 
-    public static final String setDate(String strCurrentDate) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T17:00:00.000Z'");
-            Calendar c = Calendar.getInstance();
-            try {
-                c.setTime(format.parse(strCurrentDate));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            c.add(Calendar.DATE, 0);
-            format = new SimpleDateFormat("dd-MM-yyyy");
-            Date resultdate = new Date(c.getTimeInMillis());
-            strCurrentDate = format.format(resultdate);
-            return strCurrentDate;
-    }
-
     public static final String getCalam(String chinhanh) {
         String ca; int gio = 0;
         if (chinhanh.equals("Chi nhánh SOL")){
@@ -189,6 +178,11 @@ public class Keys {
         return s;
     }
 
-
+    public static final String trimChinhanh(String s){
+        if(!TextUtils.isEmpty(s)){
+            return s.substring(10);
+        }
+        return s;
+    }
 
 }

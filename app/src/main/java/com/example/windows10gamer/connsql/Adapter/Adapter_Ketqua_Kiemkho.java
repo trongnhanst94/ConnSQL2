@@ -43,7 +43,7 @@ public class Adapter_Ketqua_Kiemkho extends BaseAdapter{
     }
 
     private class ViewHolder{
-        TextView tvKQKKma, tvKQKKsoluong, tvKQKKnhanvien;
+        TextView tvKQKKma, tvKQKKsoluong;
     }
 
     @Override
@@ -53,7 +53,6 @@ public class Adapter_Ketqua_Kiemkho extends BaseAdapter{
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
-            holder.tvKQKKnhanvien      = (TextView) view.findViewById(R.id.tvKQKKnhanvien);
             holder.tvKQKKma      = (TextView) view.findViewById(R.id.tvKQKKma);
             holder.tvKQKKsoluong = (TextView) view.findViewById(R.id.tvKQKKsoluong);
             view.setTag(holder);
@@ -62,8 +61,7 @@ public class Adapter_Ketqua_Kiemkho extends BaseAdapter{
         }
         CountSanpham countSanpham = arrayList.get(i);
 
-        holder.tvKQKKnhanvien.setText(countSanpham.getNhanvien());
-        holder.tvKQKKma.setText(countSanpham.getMasanpham());
+        holder.tvKQKKma.setText("Mã: "+countSanpham.getMasanpham());
         holder.tvKQKKsoluong.setText(countSanpham.getSoluong()+"");
         return view;
     }

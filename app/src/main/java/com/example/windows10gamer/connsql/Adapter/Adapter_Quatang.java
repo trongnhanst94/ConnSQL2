@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.windows10gamer.connsql.Main_Sales;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.R;
 
@@ -19,11 +18,11 @@ import java.util.List;
  */
 
 public class Adapter_Quatang extends BaseAdapter implements Serializable {
-    private Main_Sales context;
+    private Context context;
     private List<Sanpham> sanphams;
     private int layout;
 
-    public Adapter_Quatang(Main_Sales context, int layout, List<Sanpham> sanphams) {
+    public Adapter_Quatang(Context context, int layout, List<Sanpham> sanphams) {
         this.context = context;
         this.sanphams = sanphams;
         this.layout = layout;

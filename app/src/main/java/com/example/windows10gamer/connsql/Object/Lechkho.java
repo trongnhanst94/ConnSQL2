@@ -5,12 +5,17 @@ package com.example.windows10gamer.connsql.Object;
  */
 
 public class Lechkho {
-    String STT, masp, tensp, nvA, nvB;
+    String STT, masp, tensp, baohanhsp, nguonsp, ngaynhapsp, vonsp, giasp, nvA, nvB;
 
-    public Lechkho(String STT, String masp, String tensp, String nvA, String nvB) {
+    public Lechkho(String STT, String masp, String tensp, String baohanhsp, String nguonsp, String ngaynhapsp, String vonsp, String giasp, String nvA, String nvB) {
         this.STT = STT;
         this.masp = masp;
         this.tensp = tensp;
+        this.baohanhsp = baohanhsp;
+        this.nguonsp = nguonsp;
+        this.ngaynhapsp = ngaynhapsp;
+        this.vonsp = vonsp;
+        this.giasp = giasp;
         this.nvA = nvA;
         this.nvB = nvB;
     }
@@ -37,6 +42,46 @@ public class Lechkho {
 
     public void setTensp(String tensp) {
         this.tensp = tensp;
+    }
+
+    public String getBaohanhsp() {
+        return baohanhsp;
+    }
+
+    public void setBaohanhsp(String baohanhsp) {
+        this.baohanhsp = baohanhsp;
+    }
+
+    public String getNguonsp() {
+        return nguonsp;
+    }
+
+    public void setNguonsp(String nguonsp) {
+        this.nguonsp = nguonsp;
+    }
+
+    public String getNgaynhapsp() {
+        return ngaynhapsp;
+    }
+
+    public void setNgaynhapsp(String ngaynhapsp) {
+        this.ngaynhapsp = ngaynhapsp;
+    }
+
+    public String getVonsp() {
+        return vonsp;
+    }
+
+    public void setVonsp(String vonsp) {
+        this.vonsp = vonsp;
+    }
+
+    public String getGiasp() {
+        return giasp;
+    }
+
+    public void setGiasp(String giasp) {
+        this.giasp = giasp;
     }
 
     public String getNvA() {

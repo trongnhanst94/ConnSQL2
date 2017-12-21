@@ -9,19 +9,19 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.BHHT;
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 
 public class Main_Info_BHHT extends AppCompatActivity {
-    String maBH, dateToday, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, gtConlai, lydo;
-    TextView tvHtMaOrder,tvHtDate,tvHtTime,tvHtMaNV,tvHtTenNV,tvHtGhichuOrder,tvHtTenKH,tvgtConlai,tvlydoHT,
+    String maBH, dateToday, gio, phitrahang, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, gtConlai, lydo;
+    TextView tvHtMaOrder,tvHtDate,tvHtTime,tvHtMaNV,tvHtTenNV,tvHtGhichuOrder,tvHtTenKH,tvgtConlai,tvlydoHT,tvphitrahang,
             tvHtSdtKH,tvHtGhichuKH,tvHtTenNVNhan,tvHtMaNVNhan,tvHtDatetoday,tvHtTimetoday,tvChinhanhHT,tvChinhanhHTOrder, tvHtMaBH ;
     ArrayList<BHHT> BHHT = new ArrayList<>();
     ListView lv;
-    ArrayList<Sanpham> list = new ArrayList<>();
+    ArrayList<Sanpham_gio> list = new ArrayList<>();
     Adapter_Info_Order adapter;
 
     @Override
@@ -47,6 +47,7 @@ public class Main_Info_BHHT extends AppCompatActivity {
         maNV = BHHT.get(0).getMaNV();
         ten = BHHT.get(0).getTen();
         ma = BHHT.get(0).getMa();
+        gio = BHHT.get(0).getGio();
         baohanh = BHHT.get(0).getBaohanh();
         nguon = BHHT.get(0).getNguon();
         ngaynhap = BHHT.get(0).getNgaynhap();
@@ -58,20 +59,21 @@ public class Main_Info_BHHT extends AppCompatActivity {
         sdtKH = BHHT.get(0).getSdtKH();
         ghichuKH = BHHT.get(0).getGhichuKH();
         gtConlai = BHHT.get(0).getGtConlai();
+        phitrahang = BHHT.get(0).getPhitrahang();
         lydo = BHHT.get(0).getLydo();
         tvHtMaBH.setText("Mã BH: "+maBH);
-        tvHtDatetoday.setText(Keys.setDate(dateToday));
+        tvHtDatetoday.setText(dateToday);
         tvHtTimetoday.setText(timeToday);
         tvChinhanhHT.setText(chinhanhToday);
         tvHtTenNVNhan.setText("Mã NV bảo hành: "+ maNVToday);
         tvHtMaNVNhan.setText("Tên NV bảo hành: " + tenNVToday);
         tvHtMaOrder.setText("Mã đơn hàng: " + maOrder);
-        tvHtDate.setText(Keys.setDate(date));
+        tvHtDate.setText(date);
         tvHtTime.setText(time);
         tvChinhanhHTOrder.setText(chinhanh);
         tvHtMaNV.setText("Mã NV: " + maNV);
         tvHtTenNV.setText("Tên NV: " + tenNV);
-        list.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
+        list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter = new Adapter_Info_Order(Main_Info_BHHT.this, list);
         lv.setAdapter(adapter);
         if (ghichuKH.equals("")) {
@@ -87,11 +89,13 @@ public class Main_Info_BHHT extends AppCompatActivity {
         tvHtTenKH.setText("Tên KH: " + tenKH);
         tvHtSdtKH.setText("SĐT KH: " + sdtKH);
         tvlydoHT.setText("Lý do: " + lydo);
+        tvphitrahang.setText(Keys.getFormatedAmount(Integer.parseInt(phitrahang)));
         tvgtConlai.setText(Keys.getFormatedAmount(Integer.parseInt(gtConlai)));
     }
 
     private void Anhxa() {
         tvgtConlai = (TextView) findViewById(R.id.tvgtConlai);
+        tvphitrahang = (TextView) findViewById(R.id.tvphitrahang);
         tvlydoHT = (TextView) findViewById(R.id.tvlydoBHHT);
         tvHtMaOrder = (TextView) findViewById(R.id.tvHtMaOrder);
         tvHtDate = (TextView) findViewById(R.id.tvHtDate);

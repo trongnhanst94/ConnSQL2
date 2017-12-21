@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.windows10gamer.connsql.Fragment.Fragment_1D1;
+import com.example.windows10gamer.connsql.Fragment.Fragment_CXL;
+import com.example.windows10gamer.connsql.Fragment.Fragment_DDT;
 import com.example.windows10gamer.connsql.Fragment.Fragment_DLK;
 import com.example.windows10gamer.connsql.Fragment.Fragment_HT;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.SectionsPageAdapter;
 import com.example.windows10gamer.connsql.R;
 
@@ -33,7 +36,11 @@ public class Main_Report_BH extends AppCompatActivity {
         fabReportBH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Main_Report_BH.this, Main_ScanBH.class));
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Report_BH.this).show();
+                else {
+                    startActivity(new Intent(Main_Report_BH.this, Main_ScanBH.class));
+                }
             }
         });
     }
@@ -45,7 +52,9 @@ public class Main_Report_BH extends AppCompatActivity {
         adapter.addFragment(new Fragment_HT(), "Hoàn tiền");
         adapter.addFragment(new Fragment_DLK(), "Đổi lấy khác");
         adapter.addFragment(new Fragment_1D1(), "1 đổi 1");
-        viewPager.setOffscreenPageLimit(2);
+        adapter.addFragment(new Fragment_CXL(), "Chờ xử lý");
+        adapter.addFragment(new Fragment_DDT(), "Đổi dùng thử");
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(adapter);
     }
 }

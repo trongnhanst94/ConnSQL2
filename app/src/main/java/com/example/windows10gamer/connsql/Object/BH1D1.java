@@ -8,12 +8,13 @@ import android.os.Parcelable;
  */
 
 public class BH1D1 implements Parcelable {
-    String maBH, dateToday, timeToday, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo;
+    String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, gio_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, phibaohanh, lydo;
 
-    public BH1D1(String maBH, String dateToday, String timeToday, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String ma_moi, String ten_moi,  String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String lydo) {
+    public BH1D1(String maBH, String dateToday, String timeToday,String gio,  String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String gio_moi, String ma_moi, String ten_moi,  String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String phibaohanh, String lydo) {
         this.maBH = maBH;
         this.dateToday = dateToday;
         this.timeToday = timeToday;
+        this.gio = gio;
         this.chinhanhToday = chinhanhToday;
         this.maNVToday = maNVToday;
         this.tenNVToday = tenNVToday;
@@ -34,6 +35,7 @@ public class BH1D1 implements Parcelable {
         this.tenKH = tenKH;
         this.sdtKH = sdtKH;
         this.ghichuKH = ghichuKH;
+        this.gio_moi = gio_moi;
         this.ten_moi = ten_moi;
         this.ma_moi = ma_moi;
         this.baohanh_moi = baohanh_moi;
@@ -41,6 +43,7 @@ public class BH1D1 implements Parcelable {
         this.ngaynhap_moi = ngaynhap_moi;
         this.von_moi = von_moi;
         this.gia_moi = gia_moi;
+        this.phibaohanh = phibaohanh;
         this.lydo = lydo;
     }
 
@@ -48,6 +51,7 @@ public class BH1D1 implements Parcelable {
         maBH = in.readString();
         dateToday = in.readString();
         timeToday = in.readString();
+        gio = in.readString();
         chinhanhToday = in.readString();
         maNVToday = in.readString();
         tenNVToday = in.readString();
@@ -69,12 +73,14 @@ public class BH1D1 implements Parcelable {
         sdtKH = in.readString();
         ghichuKH = in.readString();
         ten_moi = in.readString();
+        gio_moi = in.readString();
         ma_moi = in.readString();
         baohanh_moi = in.readString();
         nguon_moi = in.readString();
         ngaynhap_moi = in.readString();
         von_moi = in.readString();
         gia_moi = in.readString();
+        phibaohanh = in.readString();
         lydo = in.readString();
     }
 
@@ -112,6 +118,14 @@ public class BH1D1 implements Parcelable {
 
     public void setTimeToday(String timeToday) {
         this.timeToday = timeToday;
+    }
+
+    public String getGio() {
+        return gio;
+    }
+
+    public void setGio(String gio) {
+        this.gio = gio;
     }
 
     public String getChinhanhToday() {
@@ -282,6 +296,14 @@ public class BH1D1 implements Parcelable {
         this.ten_moi = ten_moi;
     }
 
+    public String getGio_moi() {
+        return gio_moi;
+    }
+
+    public void setGio_moi(String gio_moi) {
+        this.gio_moi = gio_moi;
+    }
+
     public String getMa_moi() {
         return ma_moi;
     }
@@ -330,6 +352,14 @@ public class BH1D1 implements Parcelable {
         this.gia_moi = gia_moi;
     }
 
+    public String getPhibaohanh() {
+        return phibaohanh;
+    }
+
+    public void setPhibaohanh(String phibaohanh) {
+        this.phibaohanh = phibaohanh;
+    }
+
     public String getLydo() {
         return lydo;
     }
@@ -348,6 +378,7 @@ public class BH1D1 implements Parcelable {
         dest.writeString(maBH);
         dest.writeString(dateToday);
         dest.writeString(timeToday);
+        dest.writeString(gio);
         dest.writeString(chinhanhToday);
         dest.writeString(maNVToday);
         dest.writeString(tenNVToday);
@@ -369,12 +400,14 @@ public class BH1D1 implements Parcelable {
         dest.writeString(sdtKH);
         dest.writeString(ghichuKH);
         dest.writeString(ten_moi);
+        dest.writeString(gio_moi);
         dest.writeString(ma_moi);
         dest.writeString(baohanh_moi);
         dest.writeString(nguon_moi);
         dest.writeString(ngaynhap_moi);
         dest.writeString(von_moi);
         dest.writeString(gia_moi);
+        dest.writeString(phibaohanh);
         dest.writeString(lydo);
     }
 }

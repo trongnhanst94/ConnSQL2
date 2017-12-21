@@ -8,12 +8,13 @@ import android.os.Parcelable;
  */
 
 public class BHDLK implements Parcelable {
-    String maBH, dateToday, timeToday, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo, chechlech;
+    String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, gio_moi,ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo, chechlech;
 
-    public BHDLK(String maBH, String dateToday, String timeToday, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH,  String ma_moi, String ten_moi, String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi,String phidoiSP, String chechlech, String lydo) {
+    public BHDLK(String maBH, String dateToday, String timeToday, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH,  String gio_moi, String ma_moi, String ten_moi, String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi,String phidoiSP, String chechlech, String lydo) {
         this.maBH = maBH;
         this.dateToday = dateToday;
         this.timeToday = timeToday;
+        this.gio = gio;
         this.chinhanhToday = chinhanhToday;
         this.maNVToday = maNVToday;
         this.tenNVToday = tenNVToday;
@@ -35,6 +36,7 @@ public class BHDLK implements Parcelable {
         this.sdtKH = sdtKH;
         this.ghichuKH = ghichuKH;
         this.phidoiSP = phidoiSP;
+        this.gio_moi = gio_moi;
         this.ten_moi = ten_moi;
         this.ma_moi = ma_moi;
         this.baohanh_moi = baohanh_moi;
@@ -50,6 +52,7 @@ public class BHDLK implements Parcelable {
         maBH = in.readString();
         dateToday = in.readString();
         timeToday = in.readString();
+        gio = in.readString();
         chinhanhToday = in.readString();
         maNVToday = in.readString();
         tenNVToday = in.readString();
@@ -71,6 +74,7 @@ public class BHDLK implements Parcelable {
         sdtKH = in.readString();
         ghichuKH = in.readString();
         phidoiSP = in.readString();
+        gio_moi = in.readString();
         ten_moi = in.readString();
         ma_moi = in.readString();
         baohanh_moi = in.readString();
@@ -116,6 +120,14 @@ public class BHDLK implements Parcelable {
 
     public void setTimeToday(String timeToday) {
         this.timeToday = timeToday;
+    }
+
+    public String getGio() {
+        return gio;
+    }
+
+    public void setGio(String gio) {
+        this.gio = gio;
     }
 
     public String getChinhanhToday() {
@@ -286,6 +298,14 @@ public class BHDLK implements Parcelable {
         this.phidoiSP = phidoiSP;
     }
 
+    public String getGio_moi() {
+        return gio_moi;
+    }
+
+    public void setGio_moi(String gio_moi) {
+        this.gio_moi = gio_moi;
+    }
+
     public String getTen_moi() {
         return ten_moi;
     }
@@ -368,6 +388,7 @@ public class BHDLK implements Parcelable {
         dest.writeString(maBH);
         dest.writeString(dateToday);
         dest.writeString(timeToday);
+        dest.writeString(gio);
         dest.writeString(chinhanhToday);
         dest.writeString(maNVToday);
         dest.writeString(tenNVToday);
@@ -389,6 +410,7 @@ public class BHDLK implements Parcelable {
         dest.writeString(sdtKH);
         dest.writeString(ghichuKH);
         dest.writeString(phidoiSP);
+        dest.writeString(gio_moi);
         dest.writeString(ten_moi);
         dest.writeString(ma_moi);
         dest.writeString(baohanh_moi);

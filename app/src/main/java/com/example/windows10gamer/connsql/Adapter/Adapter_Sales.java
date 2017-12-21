@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Main_Sales;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -94,20 +95,24 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
     }
 
     private void xacNhanXoa(String ten, final String msp) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        dialog.setMessage("Bạn có muốn xóa sản phẩm" + ten + " ?");
-        dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                context.DeleteSP(msp);
-            }
-        });
-        dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        dialog.show();
+        if(!Connect_Internet.checkConnection(context))
+            Connect_Internet.buildDialog(context).show();
+        else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setMessage("Bạn có muốn xóa sản phẩm" + ten + " ?");
+            dialog.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    context.DeleteSP(msp);
+                }
+            });
+            dialog.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            dialog.show();
+        }
     }
 
 }

@@ -1,7 +1,5 @@
 package com.example.windows10gamer.connsql.Other;
 
-import com.example.windows10gamer.connsql.service.APIService_Sales;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

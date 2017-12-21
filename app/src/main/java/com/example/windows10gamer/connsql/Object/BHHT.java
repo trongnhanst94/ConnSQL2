@@ -9,12 +9,13 @@ import android.os.Parcelable;
 
 public class BHHT implements Parcelable {
 
-    String maBH, dateToday, timeToday, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, gtConlai, lydo;
+    String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, gtConlai, phitrahang, lydo;
 
-    public BHHT(String maBH, String dateToday, String timeToday, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma,String ten,  String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String gtConlai, String lydo) {
+    public BHHT(String maBH, String dateToday, String timeToday, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma,String ten,  String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String gtConlai,String phitrahang, String lydo) {
         this.maBH = maBH;
         this.dateToday = dateToday;
         this.timeToday = timeToday;
+        this.gio = gio;
         this.chinhanhToday = chinhanhToday;
         this.maNVToday = maNVToday;
         this.tenNVToday = tenNVToday;
@@ -36,13 +37,16 @@ public class BHHT implements Parcelable {
         this.sdtKH = sdtKH;
         this.ghichuKH = ghichuKH;
         this.gtConlai = gtConlai;
+        this.phitrahang = phitrahang;
         this.lydo = lydo;
     }
+
 
     protected BHHT(Parcel in) {
         maBH = in.readString();
         dateToday = in.readString();
         timeToday = in.readString();
+        gio = in.readString();
         chinhanhToday = in.readString();
         maNVToday = in.readString();
         tenNVToday = in.readString();
@@ -64,6 +68,7 @@ public class BHHT implements Parcelable {
         sdtKH = in.readString();
         ghichuKH = in.readString();
         gtConlai = in.readString();
+        phitrahang = in.readString();
         lydo = in.readString();
     }
 
@@ -78,6 +83,42 @@ public class BHHT implements Parcelable {
             return new BHHT[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(maBH);
+        dest.writeString(dateToday);
+        dest.writeString(timeToday);
+        dest.writeString(gio);
+        dest.writeString(chinhanhToday);
+        dest.writeString(maNVToday);
+        dest.writeString(tenNVToday);
+        dest.writeString(maOrder);
+        dest.writeString(date);
+        dest.writeString(time);
+        dest.writeString(chinhanh);
+        dest.writeString(tenNV);
+        dest.writeString(maNV);
+        dest.writeString(ten);
+        dest.writeString(ma);
+        dest.writeString(baohanh);
+        dest.writeString(nguon);
+        dest.writeString(ngaynhap);
+        dest.writeString(von);
+        dest.writeString(gia);
+        dest.writeString(ghichuOrder);
+        dest.writeString(tenKH);
+        dest.writeString(sdtKH);
+        dest.writeString(ghichuKH);
+        dest.writeString(gtConlai);
+        dest.writeString(phitrahang);
+        dest.writeString(lydo);
+    }
 
     public String getMaBH() {
         return maBH;
@@ -101,6 +142,14 @@ public class BHHT implements Parcelable {
 
     public void setTimeToday(String timeToday) {
         this.timeToday = timeToday;
+    }
+
+    public String getGio() {
+        return gio;
+    }
+
+    public void setGio(String gio) {
+        this.gio = gio;
     }
 
     public String getChinhanhToday() {
@@ -271,6 +320,14 @@ public class BHHT implements Parcelable {
         this.gtConlai = gtConlai;
     }
 
+    public String getPhitrahang() {
+        return phitrahang;
+    }
+
+    public void setPhitrahang(String phitrahang) {
+        this.phitrahang = phitrahang;
+    }
+
     public String getLydo() {
         return lydo;
     }
@@ -279,38 +336,7 @@ public class BHHT implements Parcelable {
         this.lydo = lydo;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(maBH);
-        dest.writeString(dateToday);
-        dest.writeString(timeToday);
-        dest.writeString(chinhanhToday);
-        dest.writeString(maNVToday);
-        dest.writeString(tenNVToday);
-        dest.writeString(maOrder);
-        dest.writeString(date);
-        dest.writeString(time);
-        dest.writeString(chinhanh);
-        dest.writeString(tenNV);
-        dest.writeString(maNV);
-        dest.writeString(ten);
-        dest.writeString(ma);
-        dest.writeString(baohanh);
-        dest.writeString(nguon);
-        dest.writeString(ngaynhap);
-        dest.writeString(von);
-        dest.writeString(gia);
-        dest.writeString(ghichuOrder);
-        dest.writeString(tenKH);
-        dest.writeString(sdtKH);
-        dest.writeString(ghichuKH);
-        dest.writeString(gtConlai);
-        dest.writeString(lydo);
+    public static Creator<BHHT> getCREATOR() {
+        return CREATOR;
     }
 }

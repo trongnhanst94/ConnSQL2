@@ -5,32 +5,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_giamgia"
+            android:icon="@drawable/ic_coupon"
+            android:title="Tạo mã giảm giá" />
     </group>
 
     <item android:title="Tài khoản">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_pass"
+                android:icon="@drawable/ic_password"
                 android:title="Đổi mật khẩu" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@android:drawable/ic_lock_power_off"
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
                 android:title="Đăng xuất" />
         </menu>
     </item>

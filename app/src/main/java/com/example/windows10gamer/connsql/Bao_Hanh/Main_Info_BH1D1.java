@@ -9,19 +9,19 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.BH1D1;
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 
 public class Main_Info_BH1D1 extends AppCompatActivity {
-    String maBH, dateToday, timeToday, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo;
+    String maBH, dateToday, timeToday, gio, gio_moi, chinhanhToday,phibaohanh, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo;
     ArrayList<BH1D1> BH1D1 = new ArrayList<>();
-    TextView tvd1MaOrder,tvmaBH1D1, tvd1Date, tvd1Time, tvd1MaNV, tvd1TenNV, tvd1GhichuOrder, tvd1TenKH,tvlydod1,
+    TextView tvd1MaOrder,tvmaBH1D1, tvd1Date, tvd1Time, tvd1MaNV, tvd1TenNV, tvd1GhichuOrder, tvd1TenKH,tvlydod1, tvphibaohanh,
             tvd1SdtKH, tvd1GhichuKH, tvd1TenNVToday, tvd1MaNVToday, tvd1Datetoday, tvd1Timetoday, tvChinhanh1D1, tvChinhanh1D1Order;
     ListView lvBH1D1_moi, lvBH1D1;
-    ArrayList<Sanpham> list, list_moi;
+    ArrayList<Sanpham_gio> list, list_moi;
     Adapter_Info_Order adapter, adapter_moi;
 
 
@@ -49,6 +49,7 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         maNV = BH1D1.get(0).getMaNV();
         ten = BH1D1.get(0).getTen();
         ma = BH1D1.get(0).getMa();
+        gio = BH1D1.get(0).getGio();
         baohanh = BH1D1.get(0).getBaohanh();
         nguon = BH1D1.get(0).getNguon();
         ngaynhap = BH1D1.get(0).getNgaynhap();
@@ -66,20 +67,21 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         von_moi = BH1D1.get(0).getVon_moi();
         gia_moi = BH1D1.get(0).getGia_moi();
         lydo = BH1D1.get(0).getLydo();
-        //Log.d("qqq", maBH+", "+dateToday+", "+timeToday+", "+chinhanhToday+", "+maNVToday+", "+tenNVToday+", "+maOrder+", "+date+", "+time+", "+chinhanh+", "+tenNV+", "+maNV+", "+ten+", "+ma+", "+baohanh+", "+nguon+", "+ngaynhap+", "+von+", "+gia+", "+ghichuOrder+", "+tenKH+", "+sdtKH+", "+ghichuKH+", "+ten_moi+", "+ma_moi+", "+baohanh_moi+", "+nguon_moi+", "+ngaynhap_moi+", "+von_moi+", "+gia_moi+", "+lydo);
+        gio_moi = BH1D1.get(0).getGio_moi();
+        phibaohanh = BH1D1.get(0).getPhibaohanh();
         tvmaBH1D1.setText("Mã BH: "+maBH);
-        tvd1Datetoday.setText(Keys.setDate(dateToday));
+        tvd1Datetoday.setText(dateToday);
         tvd1Timetoday.setText(timeToday);
         tvChinhanh1D1.setText(chinhanhToday);
         tvd1TenNVToday.setText("Mã NV bảo hành: "+ maNVToday);
         tvd1MaNVToday.setText("Tên NV bảo hành: " + tenNVToday);
         tvd1MaOrder.setText("Mã đơn hàng: " + maOrder);
-        tvd1Date.setText(Keys.setDate(date));
+        tvd1Date.setText(date);
         tvd1Time.setText(time);
         tvChinhanh1D1Order.setText(chinhanh);
         tvd1MaNV.setText("Mã NV: " + maNV);
         tvd1TenNV.setText("Tên NV: " + tenNV);
-        list.add(new Sanpham(ma, ten, baohanh, nguon, Keys.setNN(ngaynhap), von, gia));
+        list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter = new Adapter_Info_Order(Main_Info_BH1D1.this, list);
         lvBH1D1.setAdapter(adapter);
         if (ghichuKH.equals("")) {
@@ -94,10 +96,11 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         }
         tvd1TenKH.setText("Tên KH: " + tenKH);
         tvd1SdtKH.setText("SĐT KH: " + sdtKH);
-        list_moi.add(new Sanpham(ma_moi, ten_moi, baohanh_moi, nguon_moi, Keys.setNN(ngaynhap_moi), von_moi, gia_moi));
+        list_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
         adapter_moi = new Adapter_Info_Order(Main_Info_BH1D1.this, list_moi);
         lvBH1D1_moi.setAdapter(adapter_moi);
         tvlydod1.setText("Lý do: " + lydo);
+        tvphibaohanh.setText(Keys.getFormatedAmount(Integer.parseInt(phibaohanh)));
     }
 
     private void Anhxa() {
@@ -120,6 +123,7 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         tvd1GhichuKH = (TextView) findViewById(R.id.tvd1GhichuKH);
         tvd1TenNVToday = (TextView) findViewById(R.id.tvd1TenNVNhan);
         tvd1MaNVToday = (TextView) findViewById(R.id.tvd1MaNVNhan);
+        tvphibaohanh = (TextView) findViewById(R.id.tvphibaohanh);
     }
 
 }

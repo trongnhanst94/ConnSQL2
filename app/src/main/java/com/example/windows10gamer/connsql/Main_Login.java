@@ -10,6 +10,8 @@ import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -17,7 +19,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -51,12 +52,16 @@ public class Main_Login extends AppCompatActivity {
     SharedPreferences shared;
     LinearLayout login_layout;
     Animation animation;
+    ProgressDialog progress;
     ArrayList<com.example.windows10gamer.connsql.Object.User> userArrayList;
     ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         anhxa();
         shared = getSharedPreferences("login", MODE_PRIVATE);
@@ -64,11 +69,10 @@ public class Main_Login extends AppCompatActivity {
             User = shared.getString("tk", "");
             Pass = shared.getString("mk", "");
             cbRemember.setChecked(shared.getBoolean("checked", FALSE));
-            getUserWeb(User, Pass);
+            edUser.setText(shared.getString("tk", ""));
+            edPass.setText(shared.getString("mk", ""));
+            new SendRequest().execute();
         }
-        edUser.setText(shared.getString("tk", ""));
-        edPass.setText(shared.getString("mk", ""));
-        cbRemember.setChecked(shared.getBoolean("checked", FALSE));
         userArrayList = new ArrayList();
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +109,8 @@ public class Main_Login extends AppCompatActivity {
 
 
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Main_Login.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Đơn hàng đang được xử lý");
-            dialog.setCancelable(false);
-            dialog.show();
+            progress = ProgressDialog.show(Main_Login.this, "Loading", "PleaseWait", true);
+            super.onPreExecute();
         }
 
         protected String doInBackground(String... arg0) {
@@ -119,7 +120,8 @@ public class Main_Login extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            dialog.dismiss();
+            progress.dismiss();
+            super.onPostExecute(result);
         }
     }
 
@@ -136,7 +138,39 @@ public class Main_Login extends AppCompatActivity {
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
-                            setres(newT, pass);
+                            StringTokenizer st = new StringTokenizer(newT, ";");
+                            while(st.hasMoreTokens())
+                            {
+                                ma_user = st.nextToken();
+                                ten = st.nextToken();
+                                shortName = st.nextToken();
+                                username = st.nextToken();
+                                password = st.nextToken();
+                                level = st.nextToken();
+                                chucdanh = st.nextToken();
+                                created = st.nextToken();
+                            }
+                            SharedPreferences.Editor editor = shared.edit();
+                            editor.putString("tk", username);
+                            editor.putString("mk", pass);
+                            editor.putString("ma", ma_user);
+                            editor.putString("ten", ten);
+                            editor.putString("shortName", shortName);
+                            editor.putBoolean("checked", TRUE);
+                            if (cbRemember.isChecked()) {
+                                editor.putBoolean("isLogged", TRUE);
+                                editor.commit();
+                            } else {
+                                editor.putBoolean("isLogged", FALSE);
+                                editor.commit();
+                            }
+                            new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Xin chào " + shortName);
+                            Intent intent = new Intent(Main_Login.this, Main.class);
+                            intent.putExtra("session_username", shortName);
+                            intent.putExtra("session_ma", ma_user);
+                            intent.putExtra("shortName", shortName);
+                            startActivity(intent);
+                            finish();
                         } else {
                             new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không đúng tài khoản.");
                             login_layout.startAnimation(animation);
@@ -147,7 +181,7 @@ public class Main_Login extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Main_Login.this, "Lỗi "+error, Toast.LENGTH_SHORT).show();
+                        new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không kết nối được Server!");
                     }
                 }
         ){
@@ -160,49 +194,6 @@ public class Main_Login extends AppCompatActivity {
             }
         };
         requestQueue.add(stringRequest);
-    }
-
-    private void setres(String response, String pass) {
-        StringTokenizer st = new StringTokenizer(response, ";");
-        while(st.hasMoreTokens())
-        {
-            ma_user = st.nextToken();
-            ten = st.nextToken();
-            shortName = st.nextToken();
-            username = st.nextToken();
-            password = st.nextToken();
-            level = st.nextToken();
-            chucdanh = st.nextToken();
-            created = st.nextToken();
-        }
-        if (cbRemember.isChecked()) {
-            SharedPreferences.Editor editor = shared.edit();
-            editor.putString("tk", username);
-            editor.putString("mk", pass);
-            editor.putString("ma", ma_user);
-            editor.putString("ten", ten);
-            editor.putString("shortName", shortName);
-            editor.putBoolean("checked", TRUE);
-            editor.putBoolean("isLogged", TRUE);
-            editor.commit();
-        } else {
-            SharedPreferences.Editor editor = shared.edit();
-            editor.putString("tk", "");
-            editor.putString("mk", "");
-            editor.putString("ma", "");
-            editor.putString("ten", "");
-            editor.putString("shortName", "");
-            editor.putBoolean("checked", FALSE);
-            editor.putBoolean("isLogged", FALSE);
-            editor.commit();
-        }
-        new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Xin chào " + shortName);
-        Intent intent = new Intent(Main_Login.this, Main.class);
-        intent.putExtra("session_username", shortName);
-        intent.putExtra("session_ma", ma_user);
-        intent.putExtra("shortName", shortName);
-        startActivity(intent);
-        finish();
     }
 
     private void anhxa() {

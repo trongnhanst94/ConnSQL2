@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+            <item
+                android:icon="@mipmap/ic_ht"
+                android:orderInCategory="100"
+                android:showAsAction="always|withText"
+                android:title="Hoàn tiền"
+                app:showAsAction="always|withText"
+                tools:ignore="AppCompatResource"></item>
+
+            <item
+                android:icon="@mipmap/ic_d1"
+                android:title="1 Đổi 1"
+                android:orderInCategory="100"
+                android:showAsAction="always|withText"
+                app:showAsAction="always|withText"
+                tools:ignore="AppCompatResource"></item>
+
+            <item
+                android:icon="@mipmap/ic_dkl"
+                android:title="Đổi lấy khác"
+                android:orderInCategory="100"
+                android:showAsAction="always|withText"
+                app:showAsAction="always|withText"
+                tools:ignore="AppCompatResource"></item>
+
+    <item
+        android:icon="@drawable/ic_choxuly"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:title="Chờ xử lý"
+        app:showAsAction="always|withText"
+        tools:ignore="AppCompatResource"></item>
+
+    <item
+        android:icon="@drawable/ic_doidungthu"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:title="Đổi dùng thử"
+        app:showAsAction="always|withText"
+        tools:ignore="AppCompatResource"></item>
+</menu>

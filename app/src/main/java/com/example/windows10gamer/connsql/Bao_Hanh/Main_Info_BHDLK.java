@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.BHDLK;
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
 import com.example.windows10gamer.connsql.R;
@@ -17,13 +17,13 @@ import com.example.windows10gamer.connsql.R;
 import java.util.ArrayList;
 
 public class Main_Info_BHDLK extends AppCompatActivity {
-    String maBH, dateToday, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, lydo, chechlech;
+    String maBH, dateToday, gio, gio_moi, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, lydo, chechlech;
     TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH,tvphidoiSP,tvlydoDLK,tvmaBHDLK,
             tvDlkSdtKH,tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
     ListView lv;
     Mylistview lv_moi;
     ArrayList<BHDLK> BHDLK = new ArrayList<>();
-    ArrayList<Sanpham> list, list_moi;
+    ArrayList<Sanpham_gio> list, list_moi;
     Adapter_Info_Order adapter, adapter_moi;
 
     @Override
@@ -45,6 +45,7 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         maOrder = BHDLK.get(0).getMaOrder();
         date = BHDLK.get(0).getDate();
         time = BHDLK.get(0).getTime();
+        gio = BHDLK.get(0).getGio();
         phidoiSP = BHDLK.get(0).getPhidoiSP();
         chinhanh = BHDLK.get(0).getChinhanh();
         tenNV = BHDLK.get(0).getTenNV();
@@ -56,26 +57,27 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         ngaynhap = BHDLK.get(0).getNgaynhap();
         von = BHDLK.get(0).getVon();
         gia = BHDLK.get(0).getGia();
-        list.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
+        list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         ghichuOrder = BHDLK.get(0).getGhichuOrder();
         tenKH = BHDLK.get(0).getTenKH();
         sdtKH = BHDLK.get(0).getSdtKH();
         ghichuKH = BHDLK.get(0).getGhichuKH();
+        gio_moi = BHDLK.get(0).getGio_moi();
         int tongdon = 0;
         for (int i = 0; i < BHDLK.size(); i++){
-            list_moi.add(new Sanpham(BHDLK.get(i).getMa_moi(), BHDLK.get(i).getTen_moi(), BHDLK.get(i).getBaohanh_moi(), BHDLK.get(i).getNguon_moi(), BHDLK.get(i).getNgaynhap_moi(), BHDLK.get(i).getVon_moi(), BHDLK.get(i).getGia_moi()));
+            list_moi.add(new Sanpham_gio(BHDLK.get(i).getGio_moi(), BHDLK.get(i).getMa_moi(), BHDLK.get(i).getTen_moi(), BHDLK.get(i).getBaohanh_moi(), BHDLK.get(i).getNguon_moi(), BHDLK.get(i).getNgaynhap_moi(), BHDLK.get(i).getVon_moi(), BHDLK.get(i).getGia_moi()));
             tongdon = tongdon + Integer.parseInt(BHDLK.get(i).getGia_moi());
         }
         lydo = BHDLK.get(0).getLydo();
         tvphidoiSP.setText(phidoiSP);
         tvmaBHDLK.setText("Mã BH: "+maBH);
-        tvDlkDatetoday.setText(Keys.setDate(dateToday));
+        tvDlkDatetoday.setText(dateToday);
         tvDlkTimetoday.setText(timeToday);
         tvChinhanhDLK.setText(chinhanhToday);
         tvDlkTenNVNhan.setText("Mã NV bảo hành: "+ maNVToday);
         tvDlkMaNVNhan.setText("Tên NV bảo hành: " + tenNVToday);
         tvDlkMaOrder.setText("Mã đơn hàng: " + maOrder);
-        tvDlkDate.setText(Keys.setDate(date));
+        tvDlkDate.setText(date);
         tvDlkTime.setText(time);
         tvChinhanhDLKOrder.setText(chinhanh);
         tvDlkMaNV.setText("Mã NV: " + maNV);

@@ -15,4 +15,7 @@
     <color name="aaaa">#cb000000</color>
     <color name="aapet">#5b000000</color>
     <color name="jaja">#65ffffff</color>
+    <color name="holo_cam">#ff8800</color>
+    <color name="holo_xanh">#34b5e5</color>
+    <color name="xanh_la">#69cc00</color>
 </resources>

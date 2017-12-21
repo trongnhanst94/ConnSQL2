@@ -6,13 +6,6 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/tvKQKKnhanvien"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
-
-    <TextView
         android:id="@+id/tvKQKKma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

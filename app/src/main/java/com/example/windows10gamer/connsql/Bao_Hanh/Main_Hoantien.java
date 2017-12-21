@@ -3,18 +3,20 @@ package com.example.windows10gamer.connsql.Bao_Hanh;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,8 +26,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
-import com.example.windows10gamer.connsql.Main_Menu;
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -49,52 +51,59 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Hoantien extends AppCompatActivity {
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
-            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, ghichuKH, gtConlai, lydo, chinhanhOrder;
-    ArrayList<Sanpham> sanpham = new ArrayList<>();
+            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, ghichuKH, lydo, chinhanhOrder, phitrahang;
+    ArrayList<Sanpham_gio> sanpham = new ArrayList<>();
+    int gtConlai = 0;
     ProgressDialog dialog;
-    TextView tvHtMaOrder,tvHtDate,tvHtTime,tvHtMaNV,tvHtTenNV,tvHtGhichuOrder,tvHtTenKH,
+    TextView tvHtMaOrder,tvHtDate,tvHtTime,tvHtMaNV,tvHtTenNV,tvHtGhichuOrder,tvHtTenKH,tvgtConlai,
             tvHtSdtKH,tvHtGhichuKH,tvHtTenNVNhan,tvHtMaNVNhan,tvHtDatetoday,tvHtTimetoday,tvChinhanhHT,tvChinhanhHTOrder ;
     int vitri;
     ListView lv;
     Adapter_Info_Order adapter_sales;
-    ArrayList<Sanpham> arrayList;
+    ArrayList<Sanpham_gio> arrayList;
     Button btnxacnhan;
-    EditText edgtConlai, edlydoHT;
-    String session_username = Main_Menu.session_username;
-    String session_ma = Main_Menu.session_ma;
-    String chinhanh = Main_Menu.chinhanh;
+    EditText edlydoHT, edphitrahang;
+    String session_username;
+    String session_ma;
+    String chinhanh, gio;
+    SharedPreferences shared, sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_hoantien);
         Anhxa();
-        maBH = Keys.MaDonhang();
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
+        sp = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = sp.getString("shortName", "");
+        session_ma = sp.getString("ma", "");
+        maBH = "BHHT_"+Keys.MaDonhang();
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder2");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
-        vitri       = bundle.getInt("vitri");
         maOrder     = bundle.getString("MaOrder");
         date        = bundle.getString("DateOrder");
         time        = bundle.getString("TimeOrder");
         chinhanhOrder = bundle.getString("ChinhanhOrder");
         tenNV       = bundle.getString("TenNVOrder");
         maNV        = bundle.getString("MaNVOrder");
-        ten         = sanpham.get(vitri).getTen();
-        ma          = sanpham.get(vitri).getMa();
-        baohanh     = sanpham.get(vitri).getBaohanh();
-        nguon       = sanpham.get(vitri).getNguon();
-        ngaynhap    = sanpham.get(vitri).getNgaynhap();
-        gia         = sanpham.get(vitri).getGiaban();
-        von         = sanpham.get(vitri).getVon();
+        ten         = bundle.getString("Ten");
+        ma          = bundle.getString("Ma");
+        baohanh     = bundle.getString("Baohanh");
+        nguon       = bundle.getString("Nguon");
+        ngaynhap    = bundle.getString("Ngaynhap");
+        gia         = bundle.getString("Giaban");
+        von         = bundle.getString("Von");
+        gio         = bundle.getString("Gio");
         tenKH       = bundle.getString("TenKH");
         sdtKH       = bundle.getString("SdtKH");
         ghichuKH    = bundle.getString("GhichuKH");
         ghichuOrder = bundle.getString("GhichuOrder");
         dateToday = Keys.getDateNow();
-        timeToday = Keys.getCalam();
+        timeToday = Keys.getCalam(chinhanh);
         arrayList = new ArrayList<>();
-        arrayList.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, von, gia));
+        arrayList.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter_sales = new Adapter_Info_Order(Main_Hoantien.this, arrayList);
         lv.setAdapter(adapter_sales);
         if (ghichuKH.equals("")){
@@ -108,9 +117,9 @@ public class Main_Hoantien extends AppCompatActivity {
             tvHtGhichuOrder.setText("Ghi chú đơn hàng: "+ghichuOrder);
         }
         tvHtMaOrder.setText("Mã đơn hàng: "+maOrder);
-        tvHtDate.setText(Keys.setDate(date));
+        tvHtDate.setText(date);
         tvHtTime.setText(time);
-        tvHtDatetoday.setText(Keys.setDate(dateToday));
+        tvHtDatetoday.setText(dateToday);
         tvHtTimetoday.setText(timeToday);
         tvHtMaNV.setText("Mã NV: "+maNV);
         tvHtTenNV.setText("Tên NV: "+tenNV);
@@ -120,41 +129,68 @@ public class Main_Hoantien extends AppCompatActivity {
         tvChinhanhHTOrder.setText(chinhanhOrder);
         tvHtTenNVNhan.setText("Mã NV bảo hành: "+session_username);
         tvHtMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        edphitrahang.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (edphitrahang.getText().toString().trim().equals("")){
+                    tvgtConlai.setText(Keys.getFormatedAmount(0));
+                } else {
+                    phitrahang = edphitrahang.getText().toString().trim();
+                    gtConlai = Integer.valueOf(gia) - Integer.valueOf(phitrahang);
+                    tvgtConlai.setText(Keys.getFormatedAmount(gtConlai));
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
         btnxacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!edgtConlai.getText().toString().trim().equals("") && !edlydoHT.getText().toString().trim().equals("")) {
-                    gtConlai = edgtConlai.getText().toString().trim();
-                    lydo = edlydoHT.getText().toString().trim();
-                    new SendRequestHT().execute();
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Hoantien.this).show();
+                else {
+                    if (gtConlai > 0) {
+                        if (!edlydoHT.getText().toString().trim().equals("") && !edphitrahang.getText().toString().trim().equals("")) {
+                            phitrahang = edphitrahang.getText().toString().trim();
+                            lydo = edlydoHT.getText().toString().trim();
+                            new SendRequestHT().execute();
+                        } else
+                            Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
+                    } else Snackbar.make(v, "Phí đổi hàng quá cao.", Snackbar.LENGTH_LONG).show();
                 }
-                else Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
             }
         });
         Button exit= (Button) findViewById(R.id.cancel);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Hoantien.this);
-                builder.setMessage("Bạn muốn hủy đơn bảo hành??");
-                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();                        }
-                });
-                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Main_Hoantien.this.finish();
-                    }
-                });
-                builder.show();
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Hoantien.this).show();
+                else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Hoantien.this);
+                    builder.setMessage("Bạn muốn hủy đơn bảo hành??");
+                    builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Main_Hoantien.this.finish();
+                        }
+                    });
+                    builder.show();
+                }
             }
         });
     }
 
     private void Anhxa() {
-        edgtConlai = (EditText) findViewById(R.id.edgtConlai);
+        tvgtConlai = (TextView) findViewById(R.id.tvgtConlai);
+        edphitrahang = (EditText) findViewById(R.id.edpthBHHT);
         edlydoHT = (EditText) findViewById(R.id.edlydoBHHT);
         tvHtMaOrder = (TextView) findViewById(R.id.tvHtMaOrder);
         tvHtDate = (TextView) findViewById(R.id.tvHtDate);
@@ -231,14 +267,15 @@ public class Main_Hoantien extends AppCompatActivity {
         try {
             URL url = new URL(Keys.SCRIPT_BH_HT);
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("maBH", "BHHT_"+maBH);
+            postDataParams.put("maBH", maBH);
             postDataParams.put("dateToday", dateToday);
             postDataParams.put("timeToday", timeToday);
+            postDataParams.put("gio", gio);
             postDataParams.put("chinhanhToday", chinhanh);
             postDataParams.put("tenNVToday", session_username);
             postDataParams.put("maNVToday", session_ma);
             postDataParams.put("maOrder", maOrder);
-            postDataParams.put("date", Keys.setDate(date));
+            postDataParams.put("date", date);
             postDataParams.put("time", time);
             postDataParams.put("chinhanh", chinhanhOrder);
             postDataParams.put("time", time);
@@ -248,14 +285,15 @@ public class Main_Hoantien extends AppCompatActivity {
             postDataParams.put("ma", ma);
             postDataParams.put("baohanh", baohanh);
             postDataParams.put("nguon", nguon);
-            postDataParams.put("ngaynhap", Keys.setNN(ngaynhap));
+            postDataParams.put("ngaynhap", ngaynhap);
             postDataParams.put("von", von);
             postDataParams.put("gia", gia);
             postDataParams.put("ghichuOrder", ghichuOrder);
             postDataParams.put("tenKH", tenKH);
             postDataParams.put("sdtKH", sdtKH);
             postDataParams.put("ghichuKH", ghichuKH);
-            postDataParams.put("gtConlai", gtConlai);
+            postDataParams.put("gtConlai", gtConlai+"");
+            postDataParams.put("phitrahang", phitrahang);
             postDataParams.put("lydo", lydo);
 
             Log.e("params", postDataParams.toString());
@@ -308,14 +346,14 @@ public class Main_Hoantien extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            Toast.makeText(Main_Hoantien.this, "Lỗi ", Toast.LENGTH_SHORT).show();
+                            new CustomToast().Show_Toast(Main_Hoantien.this, findViewById(android.R.id.content), "Lỗi ");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Main_Hoantien.this, "Lỗi "+error, Toast.LENGTH_SHORT).show();
+                        new CustomToast().Show_Toast(Main_Hoantien.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -323,14 +361,15 @@ public class Main_Hoantien extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_BHHT_WEB);
-                params.put("maBH", "BHHT_"+maBH);
+                params.put("maBH", maBH);
                 params.put("dateToday", dateToday);
                 params.put("timeToday", timeToday);
+                params.put("gio", gio);
                 params.put("chinhanhToday", chinhanh);
                 params.put("tenNVToday", session_username);
                 params.put("maNVToday", session_ma);
                 params.put("maOrder", maOrder);
-                params.put("date", Keys.setDate(date));
+                params.put("date", date);
                 params.put("time", time);
                 params.put("chinhanh", chinhanhOrder);
                 params.put("tenNV", tenNV);
@@ -339,14 +378,15 @@ public class Main_Hoantien extends AppCompatActivity {
                 params.put("ma", ma);
                 params.put("baohanh", baohanh);
                 params.put("nguon", nguon);
-                params.put("ngaynhap", Keys.setNN(ngaynhap));
+                params.put("ngaynhap", ngaynhap);
                 params.put("von", von);
                 params.put("gia", gia);
                 params.put("ghichuOrder", ghichuOrder);
                 params.put("tenKH", tenKH);
                 params.put("sdtKH", sdtKH);
                 params.put("ghichuKH", ghichuKH);
-                params.put("gtConlai", gtConlai);
+                params.put("gtConlai", gtConlai+"");
+                params.put("phitrahang", phitrahang);
                 params.put("lydo", lydo);
                 return params;
             }
