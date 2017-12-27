@@ -591,6 +591,8 @@ public class Main_ScanBH extends AppCompatActivity {
                                             object.getString("ngaynhap_moi"),
                                             object.getString("von_moi"),
                                             object.getString("gia_moi"),
+                                            object.getString("phidoiSP"),
+                                            object.getString("chenhlech"),
                                             object.getString("lydo")
                                     ));
                                 } catch (JSONException e) {

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +59,7 @@ public class Main_Doidungthu extends AppCompatActivity {
     ArrayList<Sanpham_gio> sanpham = new ArrayList<>();
     ProgressDialog dialog;
     SharedPreferences shared, sp;
-    TextView tvddtMaOrder,tvddtDate,tvddtTime,tvddtMaNV,tvddtTenNV,tvddtGhichuOrder,tvddtTenKH,
+    TextView tvddtMaOrder,tvddtDate,tvDdtChenhlech, tvddtTime,tvddtMaNV,tvddtTenNV,tvddtGhichuOrder,tvddtTenKH,
             tvddtSdtKH,tvddtGhichuKH,tvddtTenNVNhan,tvddtMaNVNhan,tvddtDatetoday,tvddtTimetoday,tvChinhanh1D1,tvChinhanh1D1Order ;
     ListView lv, lv_moi;
     Adapter_Info_Order adapter_sales;
@@ -67,7 +70,9 @@ public class Main_Doidungthu extends AppCompatActivity {
     ArrayList<Sanpham_gio>  array_moi;
     String session_username;
     String chinhanh;
+    int chenhlech = 0, phidoiSP = 0, total = 0;
     String session_ma, gio, gio_moi;
+    private EditText edphidoiSP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +143,13 @@ public class Main_Doidungthu extends AppCompatActivity {
         btnxacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lydo = edlydod1.getText().toString().trim();
-                new SendRequestDDT().execute();
+                if (!edlydod1.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
+                    phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
+                    lydo = edlydod1.getText().toString().trim();
+                    chenhlech = total - Integer.valueOf(gia) + phidoiSP;
+                    new SendRequestDDT().execute();
+                } else
+                    Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
             }
         });
         btnddt.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +186,21 @@ public class Main_Doidungthu extends AppCompatActivity {
                 }
             }
         });
+
+        edphidoiSP.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (edphidoiSP.getText().toString().trim().equals("")){
+                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                } else {
+                    phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
+                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech + phidoiSP));
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     private void scanSanpham_gio1doi1() {
@@ -203,6 +228,11 @@ public class Main_Doidungthu extends AppCompatActivity {
                     gia_moi = st.nextToken();
                     gio_moi = Keys.getTimeNow();
                     array_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
+                    total = total + Integer.parseInt(gia_moi);
+                    btnxacnhan.setEnabled(true);
+                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
+                    chenhlech = total-Integer.valueOf(gia);
+                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech));
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
                     btnddt.setEnabled(false);
@@ -216,6 +246,8 @@ public class Main_Doidungthu extends AppCompatActivity {
     }
 
     private void Anhxa() {
+        tvDdtChenhlech = (TextView) findViewById(R.id.tvDlkChenhlech);
+        edphidoiSP = (EditText) findViewById(R.id.edphidoiSP);
         btnddt = (Button) findViewById(R.id.btn_ddt_scan_now);
         edlydod1 = (EditText) findViewById(R.id.edlydoBHD1);
         tvddtMaOrder = (TextView) findViewById(R.id.tvddtMaOrder);
@@ -325,6 +357,8 @@ public class Main_Doidungthu extends AppCompatActivity {
             postDataParams.put("ngaynhap_moi", ngaynhap_moi);
             postDataParams.put("von_moi", von_moi);
             postDataParams.put("gia_moi", gia_moi);
+            postDataParams.put("phidoiSP", phidoiSP);
+            postDataParams.put("chenhlech", chenhlech);
             postDataParams.put("lydo", lydo);
 
             Log.e("params", postDataParams.toString());
@@ -424,6 +458,8 @@ public class Main_Doidungthu extends AppCompatActivity {
                 params.put("ngaynhap_moi", ngaynhap_moi);
                 params.put("von_moi", von_moi);
                 params.put("gia_moi", gia_moi);
+                params.put("phidoiSP", phidoiSP+"");
+                params.put("chenhlech", chenhlech+"");
                 params.put("lydo", lydo);
                 return params;
             }

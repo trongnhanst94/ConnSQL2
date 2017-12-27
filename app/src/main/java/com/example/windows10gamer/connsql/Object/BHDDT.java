@@ -8,9 +8,9 @@ import android.os.Parcelable;
  */
 
 public class BHDDT implements Parcelable {
-    String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, gio_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo;
+    String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, gio_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi,phidoisp, chenhlech, lydo;
 
-    public BHDDT(String maBH, String dateToday, String timeToday,String gio,  String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String gio_moi, String ma_moi, String ten_moi,  String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String lydo) {
+    public BHDDT(String maBH, String dateToday, String timeToday, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ten, String ma, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String ten_moi, String gio_moi, String ma_moi, String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String phidoisp, String chenhlech, String lydo) {
         this.maBH = maBH;
         this.dateToday = dateToday;
         this.timeToday = timeToday;
@@ -35,64 +35,18 @@ public class BHDDT implements Parcelable {
         this.tenKH = tenKH;
         this.sdtKH = sdtKH;
         this.ghichuKH = ghichuKH;
-        this.gio_moi = gio_moi;
         this.ten_moi = ten_moi;
+        this.gio_moi = gio_moi;
         this.ma_moi = ma_moi;
         this.baohanh_moi = baohanh_moi;
         this.nguon_moi = nguon_moi;
         this.ngaynhap_moi = ngaynhap_moi;
         this.von_moi = von_moi;
         this.gia_moi = gia_moi;
+        this.phidoisp = phidoisp;
+        this.chenhlech = chenhlech;
         this.lydo = lydo;
     }
-
-    protected BHDDT(Parcel in) {
-        maBH = in.readString();
-        dateToday = in.readString();
-        timeToday = in.readString();
-        gio = in.readString();
-        chinhanhToday = in.readString();
-        maNVToday = in.readString();
-        tenNVToday = in.readString();
-        maOrder = in.readString();
-        date = in.readString();
-        time = in.readString();
-        chinhanh = in.readString();
-        tenNV = in.readString();
-        maNV = in.readString();
-        ten = in.readString();
-        ma = in.readString();
-        baohanh = in.readString();
-        nguon = in.readString();
-        ngaynhap = in.readString();
-        von = in.readString();
-        gia = in.readString();
-        ghichuOrder = in.readString();
-        tenKH = in.readString();
-        sdtKH = in.readString();
-        ghichuKH = in.readString();
-        ten_moi = in.readString();
-        gio_moi = in.readString();
-        ma_moi = in.readString();
-        baohanh_moi = in.readString();
-        nguon_moi = in.readString();
-        ngaynhap_moi = in.readString();
-        von_moi = in.readString();
-        gia_moi = in.readString();
-        lydo = in.readString();
-    }
-
-    public static final Creator<BHDDT> CREATOR = new Creator<BHDDT>() {
-        @Override
-        public BHDDT createFromParcel(Parcel in) {
-            return new BHDDT(in);
-        }
-
-        @Override
-        public BHDDT[] newArray(int size) {
-            return new BHDDT[size];
-        }
-    };
 
     public String getMaBH() {
         return maBH;
@@ -350,6 +304,22 @@ public class BHDDT implements Parcelable {
         this.gia_moi = gia_moi;
     }
 
+    public String getPhidoisp() {
+        return phidoisp;
+    }
+
+    public void setPhidoisp(String phidoisp) {
+        this.phidoisp = phidoisp;
+    }
+
+    public String getChenhlech() {
+        return chenhlech;
+    }
+
+    public void setChenhlech(String chenhlech) {
+        this.chenhlech = chenhlech;
+    }
+
     public String getLydo() {
         return lydo;
     }
@@ -357,6 +327,60 @@ public class BHDDT implements Parcelable {
     public void setLydo(String lydo) {
         this.lydo = lydo;
     }
+
+    public static Creator<BHDDT> getCREATOR() {
+        return CREATOR;
+    }
+
+    protected BHDDT(Parcel in) {
+        maBH = in.readString();
+        dateToday = in.readString();
+        timeToday = in.readString();
+        gio = in.readString();
+        chinhanhToday = in.readString();
+        maNVToday = in.readString();
+        tenNVToday = in.readString();
+        maOrder = in.readString();
+        date = in.readString();
+        time = in.readString();
+        chinhanh = in.readString();
+        tenNV = in.readString();
+        maNV = in.readString();
+        ten = in.readString();
+        ma = in.readString();
+        baohanh = in.readString();
+        nguon = in.readString();
+        ngaynhap = in.readString();
+        von = in.readString();
+        gia = in.readString();
+        ghichuOrder = in.readString();
+        tenKH = in.readString();
+        sdtKH = in.readString();
+        ghichuKH = in.readString();
+        ten_moi = in.readString();
+        gio_moi = in.readString();
+        ma_moi = in.readString();
+        baohanh_moi = in.readString();
+        nguon_moi = in.readString();
+        ngaynhap_moi = in.readString();
+        von_moi = in.readString();
+        gia_moi = in.readString();
+        phidoisp = in.readString();
+        chenhlech = in.readString();
+        lydo = in.readString();
+    }
+
+    public static final Creator<BHDDT> CREATOR = new Creator<BHDDT>() {
+        @Override
+        public BHDDT createFromParcel(Parcel in) {
+            return new BHDDT(in);
+        }
+
+        @Override
+        public BHDDT[] newArray(int size) {
+            return new BHDDT[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -397,6 +421,8 @@ public class BHDDT implements Parcelable {
         dest.writeString(ngaynhap_moi);
         dest.writeString(von_moi);
         dest.writeString(gia_moi);
+        dest.writeString(phidoisp);
+        dest.writeString(chenhlech);
         dest.writeString(lydo);
     }
 }

@@ -16,6 +16,7 @@
         android:drawableStart="@android:drawable/btn_star_big_on"
         android:gravity="center_vertical"
         android:text="TextView"
+        android:textSize="@dimen/hai"
         android:textStyle="bold" />
 
     <TextView
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView"
+        android:textSize="@dimen/muoi"
         android:textStyle="italic" />
 
     <TextView
@@ -33,7 +35,8 @@
         android:layout_weight="1"
         android:text="TextView"
         android:textAlignment="viewEnd"
-        android:textColor="@color/RED" />
+        android:textColor="@color/RED"
+        android:textSize="@dimen/muoi" />
 
     <TextView
         android:id="@+id/tvRLnhanvien"
@@ -41,5 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView"
-        android:textAlignment="textEnd" />
+        android:textAlignment="textEnd"
+        android:textSize="@dimen/muoi" />
 </LinearLayout>

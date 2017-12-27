@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
+import com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
@@ -43,7 +45,7 @@ import static java.lang.Boolean.FALSE;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
-            btnLogout,btnReportBaohanh,btnRealtime;
+            btnChi,btnReportBaohanh,btnRealtime;
     public static String session_username, shortName, session_ma, chinhanh;
     SharedPreferences shared;
     ArrayList<String> position;
@@ -81,10 +83,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         btnDanhsachkiemkho = (Button) findViewById(R.id.btnDanhsachkiemkho);
         btnBaohanh         = (Button) findViewById(R.id.btnBaohanh);
         btnReportBaohanh   = (Button) findViewById(R.id.btnReportBaohanh);
+        btnChi             = (Button) findViewById(R.id.btnChi);
         tvchinhanh         = (TextView) findViewById(R.id.tvchinhanh);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
-        tvchinhanh.setText("Vị trí: "+chinhanh);
+        tvchinhanh.setText(chinhanh);
         if (chinhanh.equals("")){
             new Getvitri().execute();
         }
@@ -236,6 +239,23 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
         });
+
+        btnChi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+                    Intent intentget = getIntent();
+                    session_username = intentget.getStringExtra("session_username");
+                    session_ma = intentget.getStringExtra("session_ma");
+                    Intent intentput = new Intent(Main.this, Main_Khoan_Chi.class);
+                    intentput.putExtra("session_username", session_username);
+                    intentput.putExtra("session_ma", session_ma);
+                    startActivity(intentput);
+                }
+            }
+        });
     }
 
     @Override
@@ -371,9 +391,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             Connect_Internet.buildDialog(Main.this).show();
         else {
             this.position = position;
-            AlertDialog.Builder dialog = new AlertDialog.Builder(Main.this);
+            AlertDialog.Builder dialog = null;
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                dialog = new AlertDialog.Builder(Main.this);
+            } else {
+                dialog = new AlertDialog.Builder(Main.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+            }
+            dialog.setIcon(R.drawable.ic_settings)
+                    .setTitle("Chọn cửa hàng?");
             View mView = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
-            dialog.setTitle("Chọn cửa hàng cần báo cáo");
             dialog.setCancelable(false);
             final Spinner spinner = (Spinner) mView.findViewById(R.id.spinnerKM);
             ArrayAdapter mAdapter = new ArrayAdapter<>(Main.this, android.R.layout.simple_spinner_item, position);
@@ -384,7 +410,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     chinhanh = String.valueOf(spinner.getSelectedItem());
-                    tvchinhanh.setText("Vị trí: " + chinhanh);
+                    tvchinhanh.setText(chinhanh);
                     SharedPreferences.Editor editor = shared.edit();
                     editor.putString("chinhanh", chinhanh);
                     editor.commit();

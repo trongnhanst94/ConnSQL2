@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cam"
+        android:padding="10dp"
+        android:text="Khoản chi"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="@dimen/bon" />
+
+    <Button
+        android:id="@+id/btnthemchi"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg125"
+        android:drawableStart="@android:drawable/ic_input_add"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Thêm khoản chi"
+        android:textAlignment="center"
+        android:textColor="@color/cam"
+        android:textSize="@dimen/btn" />
+
+    <ListView
+        android:id="@+id/lvkhoanchi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/list_border" />
+</LinearLayout>

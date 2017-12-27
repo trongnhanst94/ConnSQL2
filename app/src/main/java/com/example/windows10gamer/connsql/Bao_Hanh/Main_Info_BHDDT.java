@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.BHDDT;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class Main_Info_BHDDT extends AppCompatActivity {
     ListView lvBHDDT_moi, lvBHDDT;
     ArrayList<Sanpham_gio> list, list_moi;
     Adapter_Info_Order adapter, adapter_moi;
+    TextView tvDlkChenhlech, tvphidoiSP;
+    String chechlech, phidoiSP;
 
 
     @Override
@@ -67,6 +70,8 @@ public class Main_Info_BHDDT extends AppCompatActivity {
         gia_moi = BHDDT.get(0).getGia_moi();
         lydo = BHDDT.get(0).getLydo();
         gio_moi = BHDDT.get(0).getGio_moi();
+        phidoiSP = BHDDT.get(0).getPhidoisp();
+        chechlech = BHDDT.get(0).getChenhlech();
         tvmaBHDDT.setText("Mã BH: "+maBH);
         tvd1Datetoday.setText(dateToday);
         tvd1Timetoday.setText(timeToday);
@@ -98,9 +103,13 @@ public class Main_Info_BHDDT extends AppCompatActivity {
         adapter_moi = new Adapter_Info_Order(Main_Info_BHDDT.this, list_moi);
         lvBHDDT_moi.setAdapter(adapter_moi);
         tvlydod1.setText("Lý do: " + lydo);
+        tvDlkChenhlech.setText(Keys.getFormatedAmount(Integer.valueOf(chechlech)));
+        tvphidoiSP.setText(Keys.getFormatedAmount(Integer.valueOf(phidoiSP)));
     }
 
     private void Anhxa() {
+        tvDlkChenhlech = (TextView) findViewById(R.id.tvDlkChenhlech);
+        tvphidoiSP = (TextView) findViewById(R.id.tvphidoiSP);
         lvBHDDT = (ListView) findViewById(R.id.lvBHD1);
         lvBHDDT_moi = (ListView) findViewById(R.id.lvBHDDT_moi);
         tvlydod1 = (TextView) findViewById(R.id.tvlydoBHD1);

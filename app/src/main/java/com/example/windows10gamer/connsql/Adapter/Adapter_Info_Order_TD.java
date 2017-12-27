@@ -276,7 +276,7 @@ public class Adapter_Info_Order_TD extends BaseAdapter{
     private String getFormatedAmount(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
-        return formatnumber+"đ";
+        return formatnumber+" đ";
     }
 
     private static class ViewHolder {

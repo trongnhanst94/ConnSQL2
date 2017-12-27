@@ -20,22 +20,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_place"
+                android:gravity="center_vertical"
+                android:paddingRight="20dp"
+                android:text="Vị trí:"
+                android:textSize="@dimen/muoi" />
 
             <TextView
                 android:id="@+id/tvchinhanh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:drawableLeft="@drawable/ic_action_name"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="Quét mã sản phẩm: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textAllCaps="false"
                 android:textColor="@color/RED"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
+                android:textSize="@dimen/bon" />
         </LinearLayout>
 
     </LinearLayout>
@@ -58,22 +65,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_warehouse"
                 android:paddingLeft="20dp"
-                android:text="Kiểm kho"/>
+                android:text="Kiểm kho"
+                android:textSize="@dimen/muoi" />
 
             <Button
                 android:id="@+id/btnDanhsachkiemkho"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_list2"
                 android:paddingLeft="20dp"
-                android:text="List kiểm kho" />
+                android:text="List kiểm kho"
+                android:textSize="@dimen/muoi" />
         </TableRow>
 
         <TableRow
@@ -86,23 +93,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_sale"
                 android:gravity="center_vertical|center_horizontal"
                 android:paddingLeft="20dp"
-                android:text="Bán hàng" />
+                android:text="Bán hàng"
+                android:textSize="@dimen/muoi" />
 
             <Button
                 android:id="@+id/btnListOrder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_list3"
                 android:paddingLeft="20dp"
-                android:text="List đơn hàng" />
+                android:text="List đơn hàng"
+                android:textSize="@dimen/muoi" />
 
 
         </TableRow>
@@ -116,22 +123,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_engineer"
                 android:paddingLeft="20dp"
-                android:text="BẢO HÀNH" />
+                android:text="BẢO HÀNH"
+                android:textSize="@dimen/muoi" />
 
             <Button
                 android:id="@+id/btnReportBaohanh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_list1"
                 android:paddingLeft="20dp"
-                android:text="List bảo hành" />
+                android:text="List bảo hành"
+                android:textSize="@dimen/muoi" />
         </TableRow>
 
         <TableRow
@@ -147,7 +154,7 @@
                 android:drawableStart="@drawable/ic_time"
                 android:paddingLeft="20dp"
                 android:text="Real-time"
-                android:textSize="11sp" />
+                android:textSize="@dimen/muoi" />
 
             <Button
                 android:id="@+id/btnXuatnhap"
@@ -155,35 +162,37 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg125"
-                android:drawableStart="@drawable/ic_reverse"
+                android:drawableStart="@drawable/ic_realtime"
                 android:paddingLeft="20dp"
                 android:text="Xuất - Nhập"
-                android:textSize="11sp" />
+                android:textSize="@dimen/muoi" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btnWeb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_browsing"
                 android:paddingLeft="20dp"
-                android:text="WEBSITE" />
+                android:text="WEBSITE"
+                android:textSize="11sp" />
 
             <Button
+                android:id="@+id/btnChi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="11sp"
                 android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_chi"
                 android:paddingLeft="20dp"
-                android:text="None" />
+                android:text="Khoản chi"
+                android:textSize="11sp" />
         </TableRow>
 
     </TableLayout>

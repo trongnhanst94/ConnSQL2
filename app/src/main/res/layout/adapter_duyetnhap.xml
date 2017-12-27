@@ -22,7 +22,6 @@
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="3dp"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:weightSum="10">
@@ -44,8 +43,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="14sp"
-                tools:text="TextViewasdjaksdasjdaksdja ádaksdjkasd asadjaksdj asdasdas ádasdasd" />
+                android:textSize="@dimen/hai"
+                tools:text="TextVie" />
         </LinearLayout>
 
         <LinearLayout
@@ -60,33 +59,31 @@
                 android:id="@+id/tvAdapterSalesMa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/tvAdapterSalesBaohanh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/tvAdapterSalesNguon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
         </LinearLayout>
 
@@ -108,7 +105,7 @@
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
+                android:textSize="@dimen/hai"
                 android:textStyle="bold" />
 
             <TextView
@@ -122,7 +119,7 @@
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
+                android:textSize="@dimen/hai"
                 android:textStyle="bold"
                 tools:text="TextView" />
         </LinearLayout>

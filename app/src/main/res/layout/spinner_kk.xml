@@ -10,7 +10,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg125"
+        android:padding="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,14 +27,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Kho mới" />
+            android:text="Kho mới"
+            android:textSize="@dimen/hai" />
 
         <RadioButton
             android:id="@+id/srbloi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Kho lỗi" />
+            android:text="Kho lỗi"
+            android:textSize="@dimen/hai" />
     </LinearLayout>
 
 

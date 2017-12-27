@@ -45,7 +45,7 @@ public class Adapter_Order extends ArrayAdapter<Order> {
         }
 
         Order item = getItem(position);
-        vh.tvMaOrder.setText(Keys.trimText(item.getTenSanpham(), 30));
+        vh.tvMaOrder.setText(Keys.trimText(item.getTenSanpham(), Keys.MAX_LENGHT));
         vh.tvTennvOrder.setText(item.getTenNhanvien());
         vh.tvTimeOrder.setText(" "+item.getCalam()+ " "+item.getNgay());
 

@@ -80,11 +80,11 @@ public class Main_Info_Xuathang extends AppCompatActivity {
         tvngay.setText(gio+" "+ngay);
         tvca.setText(ca);
         tvchinhanhToday.setText(chinhanhToday);
-        tvmaNVToday.setText(maNVToday);
-        tvtenNVToday.setText(tenNVToday);
+        tvmaNVToday.setText("Mã số: "+maNVToday);
+        tvtenNVToday.setText("Tên nhân viên: "+tenNVToday);
         tvchinhanhNhan.setText(chinhanhNhan);
-        tvmaNVNhan.setText(maNVNhan);
-        tvtenNVNhan.setText(tenNVNhan);
+        tvmaNVNhan.setText("Mã số: "+maNVNhan);
+        tvtenNVNhan.setText("Tên nhân viên: "+tenNVNhan);
         fabAn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

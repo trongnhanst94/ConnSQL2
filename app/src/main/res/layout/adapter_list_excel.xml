@@ -27,13 +27,16 @@
                 android:id="@+id/textViewten"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 android:drawableLeft="@android:drawable/btn_star_big_on"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="14sp"
+                android:textSize="@dimen/hai"
                 tools:text="TextView" />
         </LinearLayout>
 
@@ -49,33 +52,31 @@
                 android:id="@+id/textViewma"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/textViewbaohanh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
 
             <TextView
                 android:id="@+id/textViewnguon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 tools:text="TextView" />
         </LinearLayout>
 
@@ -97,7 +98,7 @@
                 android:paddingLeft="10dp"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
+                android:textSize="@dimen/hai"
                 android:textStyle="bold" />
 
             <TextView
@@ -111,7 +112,7 @@
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
-                android:textSize="12sp"
+                android:textSize="@dimen/hai"
                 android:textStyle="bold"
                 tools:text="TextView" />
         </LinearLayout>

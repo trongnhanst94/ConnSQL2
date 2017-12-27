@@ -50,7 +50,7 @@ public class Adapter_Realtime_Order extends ArrayAdapter<Order> {
 
         Order item = getItem(position);
         vh.tvRLgio.setText(item.getGio());
-        vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), 20));
+        vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), Keys.MAX_LENGHT));
         vh.tvRLnhanvien.setText(item.getTenNhanvien());
         vh.tvRLgia.setText(Keys.getFormatedAmount(Integer.parseInt(item.getGiaSanpham())));
 

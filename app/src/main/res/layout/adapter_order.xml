@@ -23,7 +23,7 @@
             android:background="@android:drawable/btn_star_big_on"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="@dimen/hai" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,7 +48,8 @@
                 android:layout_weight="12"
                 android:gravity="center_vertical"
                 android:text="03:00"
-                android:textStyle="bold" />
+                android:textSize="@dimen/muoi"
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/tvSoluong"
@@ -57,7 +58,8 @@
                 android:layout_weight="8"
                 android:text="TextView"
                 android:textAlignment="textEnd"
-                android:textColor="@color/RED" />
+                android:textColor="@color/RED"
+                android:textSize="@dimen/hai" />
 
         </LinearLayout>
 
@@ -76,8 +78,8 @@
                 android:layout_weight="15"
                 android:gravity="center_vertical"
                 android:text="32980382"
-                android:textSize="14sp"
-                android:textStyle="italic" />
+                android:textSize="@dimen/bon"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvTennvOrder"
@@ -85,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:text="thanh thùy"
-                android:textAlignment="viewEnd" />
+                android:textAlignment="viewEnd"
+                android:textSize="@dimen/muoi" />
         </LinearLayout>
 
     </LinearLayout>

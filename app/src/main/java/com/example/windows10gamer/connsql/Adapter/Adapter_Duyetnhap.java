@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.windows10gamer.connsql.Object.XuatNhap;
+import com.example.windows10gamer.connsql.Object.DuyetNhap;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 import com.example.windows10gamer.connsql.Xuat_Nhap.Main_Duyetnhap;
@@ -26,12 +26,12 @@ import static java.lang.Boolean.TRUE;
 
 public class Adapter_Duyetnhap extends BaseAdapter implements Serializable{
     private Main_Duyetnhap context;
-    private List<XuatNhap> sanphams;
+    private List<DuyetNhap> list;
     private int layout;
 
-    public Adapter_Duyetnhap(Main_Duyetnhap context, int layout, List<XuatNhap> sanphams) {
+    public Adapter_Duyetnhap(Main_Duyetnhap context, int layout, List<DuyetNhap> list) {
         this.context = context;
-        this.sanphams = sanphams;
+        this.list = list;
         this.layout = layout;
     }
 
@@ -42,7 +42,7 @@ public class Adapter_Duyetnhap extends BaseAdapter implements Serializable{
 
     @Override
     public int getCount() {
-        return sanphams.size();
+        return list.size();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Adapter_Duyetnhap extends BaseAdapter implements Serializable{
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
         if(view == null){
             holder = new ViewHolder();
@@ -74,29 +74,36 @@ public class Adapter_Duyetnhap extends BaseAdapter implements Serializable{
             holder = (ViewHolder) view.getTag();
         }
 
-        final XuatNhap sanpham = sanphams.get(i);
-
-        holder.tvAdapterSalesTen.setText("SP: "+sanpham.getTen());
-        holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
-        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGia())));
-        holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
-        holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+sanpham.getGio());
-        holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());
-        if (Integer.valueOf(sanpham.getTrangthai())== 1){
+        holder.tvAdapterSalesTen.setText("SP: "+list.get(i).getTen());
+        holder.tvAdapterSalesMa.setText("MSP: "+ list.get(i).getMa());
+        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(list.get(i).getGia())));
+        holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + list.get(i).getBaohanh());
+        holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+list.get(i).getGio());
+        holder.tvAdapterSalesNguon.setText("Nguồn: " + list.get(i).getNguon());
+        if (list.get(i).getTrangthai().equals("1")){
             holder.cbduyetnhap.setChecked(TRUE);
-            //check(sanpham.getMa());
         } else {
             holder.cbduyetnhap.setChecked(FALSE);
         }
         holder.cbduyetnhap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Check(i);
+                } else {
+                    Uncheck(i);
+                }
             }
         });
-
         return view;
     }
 
+    private void Check(int position) {
+        context.check(position);
+    }
 
+    private void Uncheck(int position) {
+        context.uncheck(position);
+    }
 }
 

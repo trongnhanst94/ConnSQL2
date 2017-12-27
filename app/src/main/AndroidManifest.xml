@@ -123,19 +123,26 @@
         <activity
             android:name=".Xuat_Nhap.Main_Danhsach_Xuathang"
             android:label="@string/title_activity_main__xuathang"
-            android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".Xuat_Nhap.Main_XuatNhap" />
-        <activity android:name=".Xuat_Nhap.Main_Taoxuat" />
-        <activity android:name=".Xuat_Nhap.Main_Info_Xuathang" />
-        <activity android:name=".Xuat_Nhap.Main_Danhsach_Nhaphang" />
-        <activity android:name=".Xuat_Nhap.Main_Duyetnhap" />
-        <activity android:name=".Xuat_Nhap.Main_XNOpen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_XuatNhap"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_Taoxuat"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_Info_Xuathang"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_Danhsach_Nhaphang"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_Duyetnhap"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Xuat_Nhap.Main_XNOpen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Khoan_Chi.Main_Khoan_Chi"></activity>
     </application>
 
 </manifest>

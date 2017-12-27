@@ -15,7 +15,7 @@
         android:text="Đơn nhập hàng"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="18sp"
+        android:textSize="@dimen/bon"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -25,8 +25,9 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:text="Nhân viên:" />
+        android:paddingTop="5dp"
+        android:text="Nhân viên:"
+        android:textSize="@dimen/muoi" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,8 +45,8 @@
             android:gravity="center_horizontal">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 app:srcCompat="@drawable/ic_userxuat"
                 tools:ignore="VectorDrawableCompat" />
         </LinearLayout>
@@ -70,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:text="Mã số: 000000000"
                     android:textColor="#000"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/muoi"
                     android:textStyle="italic" />
 
             </LinearLayout>
@@ -87,7 +88,7 @@
                     android:layout_weight="1"
                     android:text="Tên nhân viên: Trần thị thanh thuỳ"
                     android:textColor="#000"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/muoi"
                     android:textStyle="italic" />
             </LinearLayout>
 
@@ -113,7 +114,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chi nhánh:" />
+                android:text="Chi nhánh:"
+                android:textSize="@dimen/muoi" />
         </LinearLayout>
 
 
@@ -135,7 +137,7 @@
                 android:text="Chi nhánh SOL"
                 android:textAlignment="inherit"
                 android:textColor="#000"
-                android:textSize="16sp" />
+                android:textSize="@dimen/muoi" />
 
         </LinearLayout>
     </LinearLayout>
@@ -149,7 +151,7 @@
         android:text="DANH SÁCH NHẬP HÀNG"
         android:textAlignment="center"
         android:textColor="@color/cam"
-        android:textSize="16sp" />
+        android:textSize="@dimen/bon" />
 
     <ListView
         android:id="@+id/lvXuathang"

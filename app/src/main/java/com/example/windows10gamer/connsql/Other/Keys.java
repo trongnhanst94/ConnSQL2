@@ -89,12 +89,18 @@ public class Keys {
     public static final String SCRIPT_XUATHANG     = "https://script.google.com/macros/s/AKfycbxvWoPMt1SdiuIXzSZEM8j4aaHoH9lLGUc0M64vBSrNK60O-wM/exec";
     public static final String MAIN_XUATNHAP       = "http://dealtichtac.com/android/danhsach_xuatnhap.php";
     public static final String XUATNHAP            = "XUATNHAP";
-
+    public static final String UPDATE_XUATHANG_WEB = "UPDATE_XUATHANG_WEB";
+    public static final int MAX_LENGHT             = 20;
+    public static final String LINK_WEB_V2         = "http://dealtichtac.com/android/addV2.php";
+    public static final String ADD_CHI_WEB         = "ADD_CHI_WEB";
+    public static final String SCRIPT_KHOANCHI     = "https://script.google.com/macros/s/AKfycbxnGDQxHwpYHV6S7S7rm0LMxZQvQaFNF8ZOSNA90dJWkbil884/exec";
+    public static final String MAIN_KHOANCHI       = "http://dealtichtac.com/android/danhsach_khoanchi.php";
+    public static final String KHOANCHI            = "KHOANCHI";
 
     public static final String getFormatedAmount(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
-        return formatnumber+"đ";
+        return formatnumber+" đ";
     }
 
     public static final String MaDonhang() {

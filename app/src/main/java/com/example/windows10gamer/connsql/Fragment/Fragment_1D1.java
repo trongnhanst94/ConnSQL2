@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -132,7 +133,13 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
                             datePickerDialog.show();
                         }
                     });
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = null;
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        builder = new AlertDialog.Builder(getActivity());
+                    } else {
+                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                    }
+                    builder.setIcon(R.drawable.ic_settings);
                     builder.setView(customView);
                     builder.setTitle("Chọn ngày lọc:");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

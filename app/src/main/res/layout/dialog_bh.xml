@@ -21,6 +21,7 @@
             android:layout_weight="5"
             android:text="Ngày bắt đầu:"
             android:textColor="@color/cam"
+            android:textSize="@dimen/muoi"
             android:textStyle="italic" />
 
         <EditText
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="5"
-            android:calendarViewShown="false" />
+            android:calendarViewShown="false"
+            android:textSize="@dimen/sau" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,6 +47,7 @@
             android:layout_weight="5"
             android:text="Ngày kết thúc:"
             android:textColor="@color/cam"
+            android:textSize="@dimen/muoi"
             android:textStyle="italic" />
 
         <EditText
@@ -53,7 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="5"
-            android:calendarViewShown="false" />
+            android:calendarViewShown="false"
+            android:textSize="@dimen/sau" />
     </LinearLayout>
 
 

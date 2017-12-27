@@ -15,7 +15,7 @@
         android:text="Báo cáo danh thu"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tam" />
 
     <EditText
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:text="Tổng hợp báo cáo doanh thu"
                 android:textAlignment="center"
                 android:textColor="@color/cam"
-                android:textSize="18sp"
+                android:textSize="@dimen/tam"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -191,7 +191,7 @@
             android:layout_marginRight="20dp"
             android:text="TextView"
             android:textColor="@color/cam"
-            android:textSize="18sp"
+            android:textSize="@dimen/tam"
             android:textStyle="italic" />
 
         <HorizontalScrollView

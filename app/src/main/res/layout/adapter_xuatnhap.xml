@@ -33,7 +33,8 @@
                 android:gravity="center"
                 android:scaleType="fitXY"
                 android:text="32"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/muoi" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,7 +59,7 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:text="Chi nhánh nhận"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/hai"
                     android:textStyle="bold" />
 
                 <TextView
@@ -70,6 +71,7 @@
                     android:text="TextView"
                     android:textAlignment="viewEnd"
                     android:textColor="@color/holo_xanh"
+                    android:textSize="@dimen/hai"
                     android:textStyle="italic"
                     android:visibility="gone" />
             </LinearLayout>
@@ -77,7 +79,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="3"
                 android:orientation="horizontal"
                 android:weightSum="10">
@@ -90,6 +92,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="5dp"
                     android:text="ngày"
+                    android:textSize="@dimen/muoi"
                     android:textStyle="italic" />
 
                 <TextView
@@ -100,7 +103,8 @@
                     android:gravity="center_vertical"
                     android:paddingRight="10dp"
                     android:text="người xuất"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/muoi" />
             </LinearLayout>
 
         </LinearLayout>

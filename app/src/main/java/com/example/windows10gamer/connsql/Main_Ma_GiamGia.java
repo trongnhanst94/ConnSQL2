@@ -149,7 +149,13 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Ma_GiamGia.this).show();
                 else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Ma_GiamGia.this);
+                    AlertDialog.Builder dialog = null;
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        dialog = new AlertDialog.Builder(Main_Ma_GiamGia.this);
+                    } else {
+                        dialog = new AlertDialog.Builder(Main_Ma_GiamGia.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                    }
+                    dialog.setIcon(R.drawable.ic_settings);
                     dialog.setMessage("Bạn muốn sử dụng mã giảm giá này?");
                     dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                         @Override
@@ -343,6 +349,8 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
                             new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Lỗi ");
+                        } else if (response.trim().equals("success")){
+                            new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Tạo mã thành công!");
                         }
                     }
                 },

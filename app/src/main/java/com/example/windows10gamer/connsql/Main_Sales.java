@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -103,7 +104,7 @@ public class Main_Sales extends AppCompatActivity {
     boolean[] checkedItem;
     final ArrayList<String> itemKM = new ArrayList<>();
     ArrayList<String> realtime = new ArrayList<>();
-    LinearLayout lnTangqua, lnGiamgia, ln1, ln2, lnNVDefault, lnNVChange;
+    LinearLayout lnTangqua, lnGiamgia, ln1, ln2, lnNVDefault, lnNVChange, lnHidden;
     ProgressDialog pDialog;
     SharedPreferences shared;
     Button btnXacnhan, btnCancel, btn_scan_now, btnkiemtraMGG;
@@ -145,9 +146,11 @@ public class Main_Sales extends AppCompatActivity {
         snA               = (Spinner) findViewById(R.id.spChange);
         lnNVDefault       = (LinearLayout) findViewById(R.id.lnNVDefault);
         lnNVChange        = (LinearLayout) findViewById(R.id.lnNVChange);
+        lnHidden          = (LinearLayout) findViewById(R.id.lnHidden);
         switchChangeNV    = (Switch) findViewById(R.id.switchChangeNV);
         lnGiamgia.setVisibility(View.GONE);
         lnTangqua.setVisibility(View.GONE);
+        lnHidden.setVisibility(View.GONE);
         ln1.setVisibility(View.GONE);
         ln2.setVisibility(View.GONE);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
@@ -239,7 +242,13 @@ public class Main_Sales extends AppCompatActivity {
                     if(!Connect_Internet.checkConnection(getApplicationContext()))
                         Connect_Internet.buildDialog(Main_Sales.this).show();
                     else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(Main_Sales.this);
+                        AlertDialog.Builder builder = null;
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            builder = new AlertDialog.Builder(Main_Sales.this);
+                        } else {
+                            builder = new AlertDialog.Builder(Main_Sales.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                        }
+                        builder.setIcon(R.drawable.ic_settings);
                         builder.setMessage("Bạn muốn hủy đơn hàng??");
                         builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
                             @Override
@@ -403,6 +412,7 @@ public class Main_Sales extends AppCompatActivity {
     }
 
     private void scanSanpham() {
+        lnHidden.setVisibility(View.VISIBLE);
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
@@ -466,30 +476,32 @@ public class Main_Sales extends AppCompatActivity {
     }
 
     public void DeleteSP(final String msp){
-        for (int i =  0; i <= arrayList.size(); i++){
-            if (arrayList.get(i).getMa() == msp) {
-                total = total - Integer.parseInt(arrayList.get(i).getGiaban());
-                tvTongdonhang.setText(getFormatedAmount(total));
-                arrayList.remove(i);
-                realtime.remove(i);
-                break;
+        if (arrayList.size() != 1){
+            for (int i =  0; i <= arrayList.size(); i++){
+                if (arrayList.get(i).getMa() == msp) {
+                    total = total - Integer.parseInt(arrayList.get(i).getGiaban());
+                    tvTongdonhang.setText(getFormatedAmount(total));
+                    arrayList.remove(i);
+                    realtime.remove(i);
+                    break;
+                }
             }
-        }
-        itemKM.clear();
-        for (int i = 0; i<quatang.size(); i++){
-            if (total >= quatang.get(i).getToPrice() && total < quatang.get(i).getFromPrice()){
-                itemKM.add(quatang.get(i).getTen());
+            itemKM.clear();
+            for (int i = 0; i<quatang.size(); i++){
+                if (total >= quatang.get(i).getToPrice() && total < quatang.get(i).getFromPrice()){
+                    itemKM.add(quatang.get(i).getTen());
+                }
             }
+            if (itemKM.size() == 0){
+                rbTangqua.setEnabled(false);
+            } else {
+                rbTangqua.setEnabled(true);
+            }
+            rbTangqua.setChecked(false);
+            listKhuyenmai.setAdapter(null);
+            adapter.notifyDataSetChanged();
         }
-        if (itemKM.size() == 0){
-            rbTangqua.setEnabled(false);
-        } else {
-            rbTangqua.setEnabled(true);
-        }
-        rbTangqua.setChecked(false);
-        listKhuyenmai.setAdapter(null);
-        adapter.notifyDataSetChanged();
-
+        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Yêu cầu tạo đơn hàng mới!");
     }
 
     private String getDate() {
@@ -524,8 +536,8 @@ public class Main_Sales extends AppCompatActivity {
                 }
             }
             if (!maGiamgia.equals("")){
-                new DeleteMGG().execute();
-                deleteMagiamgiaWeb();
+                //new DeleteMGG().execute();
+                //deleteMagiamgiaWeb();
             }
             ResetActivity();
             return null;
@@ -754,7 +766,13 @@ public class Main_Sales extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 a.clear();
-                AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Sales.this);
+                AlertDialog.Builder dialog = null;
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                    dialog = new AlertDialog.Builder(Main_Sales.this);
+                } else {
+                    dialog = new AlertDialog.Builder(Main_Sales.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                }
+                dialog.setIcon(R.drawable.ic_settings);
                 View mView = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
                 dialog.setTitle("Chọn quà tặng");
                 final Spinner spinner = (Spinner) mView.findViewById(R.id.spinnerKM);

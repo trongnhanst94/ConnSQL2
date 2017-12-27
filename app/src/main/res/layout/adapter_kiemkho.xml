@@ -39,7 +39,7 @@
         android:gravity="center_vertical"
         android:padding="5dp"
         android:text="Bàn phím T20"
-        android:textSize="18sp"
+        android:textSize="@dimen/tam"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -71,7 +71,7 @@
             android:layout_weight="2"
             android:padding="5dp"
             android:text="Chị Sa"
-            android:textSize="12sp" />
+            android:textSize="@dimen/hai" />
 
     </LinearLayout>
 
@@ -87,7 +87,7 @@
             android:layout_weight="1"
             android:text="20-01-2017"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="12sp"
+            android:textSize="@dimen/hai"
             android:textStyle="bold" />
 
         <TextView
@@ -98,7 +98,7 @@
             android:gravity="end"
             android:text="275000"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="18sp"
+            android:textSize="@dimen/tam"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

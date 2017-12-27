@@ -423,7 +423,13 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
 
     private void setLisst(ArrayList<String> position) {
         this.position = position;
-        AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Ketqua_Kiemkho.this);
+        AlertDialog.Builder dialog = null;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            dialog = new AlertDialog.Builder(Main_Ketqua_Kiemkho.this);
+        } else {
+            dialog = new AlertDialog.Builder(Main_Ketqua_Kiemkho.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+        }
+        dialog.setIcon(R.drawable.ic_settings);
         View mView = getLayoutInflater().inflate(R.layout.spinner_kk, null);
         dialog.setTitle("Chọn chi nhánh và kho");
         dialog.setCancelable(false);

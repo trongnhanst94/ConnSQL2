@@ -10,12 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
         android:background="@color/cam"
         android:padding="10dp"
         android:text="Lịch sử bảo hành"
+        android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/bon" />
 
     <TextView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:text="Thông tin sản phẩm:"
         android:textColor="@color/cam"
-        android:textSize="16sp" />
+        android:textSize="@dimen/hai" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
             android:paddingTop="10dp"
             android:text="Lịch sử đã bảo hành:"
             android:textColor="@color/cam"
-            android:textSize="16sp" />
+            android:textSize="@dimen/hai" />
 
         <LinearLayout
             android:id="@+id/llHT"
@@ -78,7 +78,7 @@
                 android:paddingLeft="5dp"
                 android:text="Bảo hành - Hoàn tiền"
                 android:textColor="@color/aaaaa"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -110,7 +110,7 @@
                 android:paddingLeft="5dp"
                 android:text="Bảo hành - Đổi lấy khác"
                 android:textColor="@color/aaaaa"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -140,7 +140,7 @@
                 android:paddingLeft="5dp"
                 android:text="Bảo hành - 1 Đổi 1"
                 android:textColor="@color/aaaaa"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -170,7 +170,7 @@
                 android:paddingLeft="5dp"
                 android:text="Bảo hành - Chờ xử lý"
                 android:textColor="@color/aaaaa"
-                android:textSize="12sp"
+                android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
             <LinearLayout
@@ -200,7 +200,7 @@
                 android:paddingLeft="5dp"
                 android:text="Bảo hành - Đổi dùng thử"
                 android:textColor="@color/aaaaa"
-                android:textSize="12sp"
+                android:textSize="@dimen/hai"
                 android:textStyle="italic" />
 
             <LinearLayout

@@ -12,7 +12,7 @@
         android:text="BÁO CÁO KẾT QUẢ"
         android:textAlignment="center"
         android:textColor="@color/cam"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tam" />
 
     <TextView
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Người kiểm kho"
-                android:textSize="14sp"
+                android:textSize="@dimen/bon"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:text="Số lượng"
                 android:textAlignment="textEnd"
-                android:textSize="14sp"
+                android:textSize="@dimen/bon"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -161,7 +161,7 @@
             android:padding="10dp"
             android:text="Chuyển đến danh sách lệch kho"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="@dimen/hai" />
     </LinearLayout>
 
 </LinearLayout>

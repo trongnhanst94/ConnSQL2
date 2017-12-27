@@ -1,28 +1,28 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Duyetnhap;
-import com.example.windows10gamer.connsql.Object.XuatNhap;
+import com.example.windows10gamer.connsql.Object.DuyetNhap;
+import com.example.windows10gamer.connsql.Object.DuyetNhap_ID;
+import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -31,22 +31,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 public class Main_Duyetnhap extends AppCompatActivity {
+    boolean T = TRUE, F = FALSE;
     String maXN, ngay, gio, ca, chinhanhToday, maNVToday, tenNVToday, chinhanhNhan, maNVNhan, tenNVNhan, ghichu;
     TextView tvdanhan, tvchuanhan, tvtatca, tvmaXN, tvngay, tvca, tvchinhanhToday, tvmaNVToday, tvtenNVToday, tvchinhanhNhan, tvmaNVNhan, tvtenNVNhan, tvghichu, tvphantram;
     ListView lv;
     int soluong, phantram;
-    ArrayList<XuatNhap> list = new ArrayList<>();
+    ArrayList<DuyetNhap> list = new ArrayList<>();
     Adapter_Duyetnhap adapter;
     ProgressDialog dialog;
-    FloatingActionButton fabAn, fabHien, fabSubmit;
+    FloatingActionButton fabSubmit;
+    TextView fabAn, fabHien;
     LinearLayout lnghichu, lnHiden;
     ArrayList<String> mspList = new ArrayList<>();
     private ListView listview;
-    ArrayList<String> items = new ArrayList<String>();
     private int count;
     private boolean[] thumbnailsselection;
+    ArrayList<DuyetNhap_ID> str = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +77,8 @@ public class Main_Duyetnhap extends AppCompatActivity {
         tvphantram = (TextView) findViewById(R.id.tvphantram);
         lnghichu = (LinearLayout) findViewById(R.id.lnghichu);
         lnHiden = (LinearLayout) findViewById(R.id.lnHiden);
-        fabAn = (FloatingActionButton) findViewById(R.id.fabAn);
-        fabHien = (FloatingActionButton) findViewById(R.id.fabHien);
+        fabAn = (TextView) findViewById(R.id.fabAn);
+        fabHien = (TextView) findViewById(R.id.fabHien);
         fabSubmit = (FloatingActionButton) findViewById(R.id.fabSubmit);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("Main_Duyetnhap");
@@ -91,23 +99,38 @@ public class Main_Duyetnhap extends AppCompatActivity {
         tvngay.setText(gio+" "+ngay);
         tvca.setText(ca);
         tvchinhanhToday.setText(chinhanhToday);
-        tvmaNVToday.setText(maNVToday);
-        tvtenNVToday.setText(tenNVToday);
+        tvmaNVToday.setText("Mã số: "+maNVToday);
+        tvtenNVToday.setText("Tên nhân viên: "+tenNVToday);
         tvchinhanhNhan.setText(chinhanhNhan);
-        tvmaNVNhan.setText(maNVNhan);
-        tvtenNVNhan.setText(tenNVNhan);
+        tvmaNVNhan.setText("Mã số: "+maNVNhan);
+        tvtenNVNhan.setText("Tên nhân viên: "+tenNVNhan);
         if (ghichu.equals("")){
             lnghichu.setVisibility(View.GONE);
         } else {
             tvghichu.setText(ghichu);
         }
         tvphantram.setText("Tổng: "+phantram+"/"+soluong);
-        count = items.size();
+        count = list.size();
         thumbnailsselection = new boolean[count];
         GetDT(new VolleyCallback(){
             @Override
-            public void onSuccess(final ArrayList<XuatNhap> result) {
-                lv.setAdapter(new ImageAdapter(Main_Duyetnhap.this));
+            public void onSuccess(final ArrayList<DuyetNhap> result) {
+                adapter = new Adapter_Duyetnhap(Main_Duyetnhap.this, R.layout.adapter_duyetnhap, result);
+                lv.setAdapter(adapter);
+                fabSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        str.clear();
+                        for (int i=0; i<list.size(); i++) {
+                            if (list.get(i).getTrangthai().equals("1")) {
+                                str.add(new DuyetNhap_ID(list.get(i).getId(), 1));
+                            } else {
+                                str.add(new DuyetNhap_ID(list.get(i).getId(), 0));
+                            }
+                        }
+                        new SendRequest().execute();
+                    }
+                });
             }
         });
         fabAn.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +151,34 @@ public class Main_Duyetnhap extends AppCompatActivity {
         });
     }
 
-    public ArrayList<XuatNhap> GetDT(final VolleyCallback callback) {
+    public class SendRequest extends AsyncTask<String, Void, String> {
+
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+            dialog = new ProgressDialog(Main_Duyetnhap.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được xử lý.");
+            dialog.setIndeterminate(false);
+            dialog.setCancelable(false);
+        }
+
+        protected String doInBackground(String... arg0) {
+            int j = 0;
+            while (j < str.size()){
+                UpdateXuathangWeb(j);
+                j++;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+       }
+    }
+
+    public ArrayList<DuyetNhap> GetDT(final VolleyCallback callback) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, Keys.MAIN_XUATNHAP+"?maXN="+maXN, null,
                 new Response.Listener<JSONObject>() {
@@ -138,7 +188,8 @@ public class Main_Duyetnhap extends AppCompatActivity {
                             JSONArray ja = response.getJSONArray(Keys.XUATNHAP);
                             for(int i=0; i < ja.length(); i++){
                                 JSONObject object = ja.getJSONObject(i);
-                                list.add(new XuatNhap(
+                                list.add(new DuyetNhap(
+                                        object.getString("id"),
                                         object.getString("maXN"),
                                         object.getString("ngay"),
                                         object.getString("ca"),
@@ -160,7 +211,6 @@ public class Main_Duyetnhap extends AppCompatActivity {
                                         object.getString("trangthai")
                                 ));
                             }
-                            adapter.notifyDataSetChanged();
                         } catch (JSONException e) { e.printStackTrace();}
                         callback.onSuccess(list);
                     }
@@ -176,109 +226,54 @@ public class Main_Duyetnhap extends AppCompatActivity {
         return list;
     }
 
-//    public void Check(String msp) {
-//        mspList.add(msp);
-//        Log.d("qqq", msp+" add");
-//    }
-//
-//    public void Uncheck(String msp) {
-//        mspList.remove(msp);
-//        Log.d("qqq", msp+" remove");
-//    }
+    public void check(int position) {
+        list.get(position).setTrangthai("1");
+        adapter.notifyDataSetChanged();
+    }
+
+    public void uncheck(int position) {
+        list.get(position).setTrangthai("0");
+        adapter.notifyDataSetChanged();
+    }
 
     public interface VolleyCallback{
-        void onSuccess(ArrayList<XuatNhap> result);
+        void onSuccess(ArrayList<DuyetNhap> result);
     }
 
-    public class ImageAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
-        private Context mContext;
-        public ImageAdapter(Context context) {
-            mContext = context;
-        }
-        public int getCount() {
-            return count;
-        }
-        public Object getItem(int position) {
-            return position;
-        }
-        public long getItemId(int position) {
-            return position;
-        }
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_duyetnhap, null);
-                holder.tvAdapterSalesMa = (TextView) convertView.findViewById(R.id.tvAdapterSalesMa);
-                holder.tvAdapterSalesNguon = (TextView) convertView.findViewById(R.id.tvAdapterSalesNguon);
-                holder.tvAdapterSalesBaohanh = (TextView) convertView.findViewById(R.id.tvAdapterSalesBaohanh);
-                holder.tvAdapterSalesNgaynhap = (TextView) convertView.findViewById(R.id.tvAdapterSalesNgaynhap);
-                holder.tvAdapterSalesTen = (TextView) convertView.findViewById(R.id.tvAdapterSalesTen);
-                holder.tvAdapterSalesGia = (TextView) convertView.findViewById(R.id.tvAdapterSalesGia);
-                holder.cbduyetnhap = (CheckBox) convertView.findViewById(R.id.cbduyetnhap);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
+    public void UpdateXuathangWeb(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_XUATNHAP,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Lỗi ");
+                        } else if (response.trim().equals("success")){
+                            if (j == (str.size()-1)){
+                                dialog.dismiss();
+                                new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Check đơn thành công!!");
+                                startActivity(new Intent(Main_Duyetnhap.this, Main_Danhsach_Nhaphang.class));
+                                finish();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.UPDATE_XUATHANG_WEB);
+                params.put("id", str.get(j).getMa());
+                params.put("trangthai", str.get(j).getTrangthai()+"");
+                return params;
             }
-            holder.tvAdapterSalesMa.setId(position);
-            holder.tvAdapterSalesNguon.setId(position);
-            holder.tvAdapterSalesBaohanh.setId(position);
-            holder.tvAdapterSalesNgaynhap.setId(position);
-            holder.tvAdapterSalesTen.setId(position);
-            holder.tvAdapterSalesGia.setId(position);
-            holder.cbduyetnhap.setId(position);
-//            holder.checkbox.setOnClickListener(new OnClickListener() {
-//                public void onClick(View v) {
-//                    // TODO Auto-generated method stub
-//                    CheckBox cb = (CheckBox) v;
-//                    int id = cb.getId();
-//                    if (thumbnailsselection[id]) {
-//                        cb.setChecked(false);
-//                        thumbnailsselection[id] = false;
-//                    } else {
-//                        cb.setChecked(true);
-//                        thumbnailsselection[id] = true;
-//                    }
-//                }
-//            });
-//            holder.textview.setOnClickListener(new OnClickListener() {
-//                public void onClick(View v) {
-//                    // TODO Auto-generated method stub
-//                    int id = v.getId();
-//                }
-//            });
-//            holder.textview.setText(items.get(position));
-//            holder.checkbox.setChecked(thumbnailsselection[position]);
-//            holder.id = position;
-            return convertView;
-        }
+        };
+        requestQueue.add(stringRequest);
     }
-    private class ViewHolder{
-        TextView tvAdapterSalesMa, tvAdapterSalesTen, tvAdapterSalesGia, tvAdapterSalesNguon, tvAdapterSalesBaohanh, tvAdapterSalesNgaynhap;
-        CheckBox cbduyetnhap;
-    }
-//    public void click(View v) {
-//        if (v.getId() == R.id.button1) {
-//            final ArrayList<Integer> posSel = new ArrayList<Integer>();
-//            posSel.clear();
-//            boolean noSelect = false;
-//            for (int i = 0; i < thumbnailsselection.length; i++) {
-//                if (thumbnailsselection[i] == true) {
-//                    noSelect = true;
-//                    Log.e("sel pos thu-->", "" + i);
-//                    posSel.add(i);
-//                    // break;
-//                }
-//            }
-//            if (!noSelect) {
-//                Toast.makeText(MainActivity.this, "Please Select Item!",
-//                        Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(MainActivity.this,
-//                        "Selected Items:" + posSel.toString(),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
 }

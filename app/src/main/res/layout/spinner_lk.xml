@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_weight="3"
-        android:text="Tên trang:" />
+        android:text="Tên trang:"
+        android:textSize="@dimen/muoi" />
 
     <EditText
         android:id="@+id/input"
@@ -20,5 +21,6 @@
         android:layout_margin="10dp"
         android:layout_weight="7"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="@dimen/sau" />
 </LinearLayout>

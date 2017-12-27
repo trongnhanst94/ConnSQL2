@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,10 +57,10 @@ import javax.net.ssl.HttpsURLConnection;
 public class Main_Doilaykhac extends AppCompatActivity {
 
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
-            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, chinhanhOrder, ghichuKH, phidoiSP, lydo,ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi;
+            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, chinhanhOrder, ghichuKH, lydo,ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi;
     ArrayList<Sanpham_gio> sanpham = new ArrayList<>();
     ProgressDialog dialog;
-    TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH,edphidoiSP,
+    TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH, tvDlkChenhlech,
             tvDlkSdtKH,tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
     int vitri;
     Mylistview lv_moi;
@@ -67,10 +69,10 @@ public class Main_Doilaykhac extends AppCompatActivity {
     Adapter_Info_Order adapter_moi;
     ArrayList<Sanpham_gio> arrayList, array_moi;
     Button btnxacnhan;
-    EditText edlydoDLK;
+    EditText edlydoDLK, edphidoiSP;
     String session_username;
     String session_ma;
-    int total = 0;int chenhlech = 0;
+    int total = 0;int chenhlech = 0, phidoiSP = 0;
     String chinhanh, gio, gio_moi;
     SharedPreferences shared, sp;
 
@@ -148,8 +150,9 @@ public class Main_Doilaykhac extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Doilaykhac.this).show();
                 else {
                     if (!edlydoDLK.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
-                        phidoiSP = edphidoiSP.getText().toString().trim();
+                        phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
                         lydo = edlydoDLK.getText().toString().trim();
+                        chenhlech = total - Integer.valueOf(gia) + phidoiSP;
                         new SendRequestDLK().execute();
                     } else
                         Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
@@ -181,13 +184,29 @@ public class Main_Doilaykhac extends AppCompatActivity {
                 }
             }
         });
+        tvDlkChenhlech.setText(Keys.getFormatedAmount(0));
+        edphidoiSP.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (edphidoiSP.getText().toString().trim().equals("")){
+                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                } else {
+                    phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
+                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech + phidoiSP));
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     private void Anhxa() {
-        edphidoiSP = (TextView) findViewById(R.id.edphidoiSP);
+        edphidoiSP = (EditText) findViewById(R.id.edphidoiSP);
         edlydoDLK = (EditText) findViewById(R.id.edlydoBHDLK);
         tvDlkMaOrder = (TextView) findViewById(R.id.tvDlkMaOrder);
         tvDlkDate = (TextView) findViewById(R.id.tvDlkDate);
+        tvDlkChenhlech = (TextView) findViewById(R.id.tvDlkChenhlech);
         tvDlkTime = (TextView) findViewById(R.id.tvDlkTime);
         tvTongdonhang     = (TextView) findViewById(R.id.tvTongdonhang);
         tvDlkDatetoday = (TextView) findViewById(R.id.tvDlkDatetoday);
@@ -236,7 +255,8 @@ public class Main_Doilaykhac extends AppCompatActivity {
                     tvTongdonhang.setText(Keys.getFormatedAmount(total));
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
-                    edphidoiSP.setText(Keys.getFormatedAmount(Integer.valueOf(gia)-total));
+                    chenhlech = total-Integer.valueOf(gia);
+                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech));
                     adapter_moi.notifyDataSetChanged();
                     scanSanpham(findViewById(android.R.id.content));
                 }   catch (NoSuchElementException nse) {
@@ -254,7 +274,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
 
 
         protected void onPreExecute(){
-
+            super.onPreExecute();
             dialog = new ProgressDialog(Main_Doilaykhac.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được xử lý");
@@ -273,6 +293,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            super.onPostExecute(result);
             dialog.dismiss();
             new CustomToast().Show_Toast(Main_Doilaykhac.this, findViewById(android.R.id.content), "Gửi dữ liệu thành công.");
             ResetActivity();
@@ -344,7 +365,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
             postDataParams.put("von_moi", array_moi.get(j).getVon());
             postDataParams.put("gia_moi", array_moi.get(j).getGiaban());
             postDataParams.put("lydo", lydo);
-            postDataParams.put("chechlech", 0+"");
+            postDataParams.put("chenhlech", chenhlech);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -434,7 +455,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
                 params.put("tenKH", tenKH);
                 params.put("sdtKH", sdtKH);
                 params.put("ghichuKH", ghichuKH);
-                params.put("phidoiSP", phidoiSP);
+                params.put("phidoiSP", phidoiSP+"");
                 params.put("gio_moi", array_moi.get(j).getGio());
                 params.put("ten_moi", array_moi.get(j).getTen());
                 params.put("ma_moi", array_moi.get(j).getMa());
@@ -444,7 +465,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
                 params.put("von_moi", array_moi.get(j).getVon());
                 params.put("gia_moi", array_moi.get(j).getGiaban());
                 params.put("lydo", lydo);
-                params.put("chechlech", 0+"");
+                params.put("chenhlech", chenhlech+"");
                 return params;
             }
         };

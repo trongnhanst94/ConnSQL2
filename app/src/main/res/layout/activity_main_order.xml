@@ -26,12 +26,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:background="@color/cam"
             android:padding="10dp"
             android:text="Danh sách đơn hàng"
+            android:textAlignment="center"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="@dimen/bon" />
 
         <TextView
             android:layout_width="match_parent"
@@ -42,16 +42,8 @@
             android:paddingTop="5dp"
             android:text="Lọc đơn hàng bằng cách nhập vào ngày bắt đầu, ngày kết thúc và ca làm:"
             android:textAlignment="center"
-            android:textSize="14sp"
+            android:textSize="@dimen/muoi"
             android:textStyle="italic" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/button_selectorcolor"
-            android:paddingLeft="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,7 +64,7 @@
                 android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textColorLink="@color/cam"
-                android:textSize="14sp" />
+                android:textSize="@dimen/hai" />
 
             <EditText
                 android:id="@+id/edEndOrder"
@@ -86,7 +78,7 @@
                 android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textColorLink="@color/cam"
-                android:textSize="14sp" />
+                android:textSize="@dimen/hai" />
 
         </LinearLayout>
 
@@ -105,7 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="Ca sáng"
-                android:textColorLink="@color/cam" />
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
 
             <CheckBox
                 android:id="@+id/cbCachieuOrder"
@@ -113,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="Ca chiều"
-                android:textColorLink="@color/cam" />
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -134,7 +128,7 @@
                     android:padding="5dp"
                     android:text="Tìm kiếm"
                     android:textColor="#fff"
-                    android:textSize="10sp" />
+                    android:textSize="@dimen/btn" />
             </LinearLayout>
 
         </LinearLayout>
@@ -143,8 +137,8 @@
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/list_border"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

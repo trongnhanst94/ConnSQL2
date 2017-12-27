@@ -14,16 +14,16 @@
         android:orientation="vertical">
 
         <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/cam"
-        android:padding="10dp"
-        android:textAlignment="center"
-        android:text="Kiểm kho"
-        android:textColor="#fff"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="0dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cam"
+            android:padding="10dp"
+            android:text="Kiểm kho"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="@dimen/bon"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,13 +36,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:text="Chọn chi nhánh đang Kiểm kho:" />
+                android:text="Chọn chi nhánh đang Kiểm kho:"
+                android:textSize="@dimen/muoi" />
 
             <Spinner
                 android:id="@+id/spinnerKiemkho"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,15 +66,83 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Kho mới" />
+                    android:text="Kho mới"
+                    android:textSize="@dimen/hai" />
 
                 <RadioButton
                     android:id="@+id/rbkholoi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Kho lỗi" />
+                    android:text="Kho lỗi"
+                    android:textSize="@dimen/hai" />
             </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_userxuat"
+                    tools:ignore="VectorDrawableCompat" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:background="@drawable/bg125"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvScanManhanvien"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mã số: 000000000"
+                        android:textColor="#000"
+                        android:textSize="@dimen/muoi"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvScanTennhanvien"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tên nhân viên: Trần thị thanh thuỳ"
+                        android:textColor="#000"
+                        android:textSize="@dimen/muoi"
+                        android:textStyle="italic" />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -82,10 +153,12 @@
 
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
@@ -94,13 +167,13 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="Quét mã sản phẩm:"
-                android:textSize="16sp" />
+                android:textSize="@dimen/muoi" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
+                android:gravity="center_horizontal|end"
                 android:orientation="horizontal">
 
                 <Button
@@ -115,116 +188,32 @@
                     android:padding="5dp"
                     android:text="Scan"
                     android:textColor="#fff"
-                    android:textSize="8sp" />
+                    android:textSize="@dimen/btn" />
 
 
-            </LinearLayout>
-
-    </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="10dp"
-            android:background="@color/cam" />
-
-
-
-
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:orientation="horizontal"
-        android:weightSum="10">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center_horizontal">
-
-            <ImageView
-                android:id="@+id/ivDoinv"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/ic_user2"
-                tools:ignore="VectorDrawableCompat" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lnNVDefault"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="8"
-            android:background="@drawable/bg125"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvScanManhanvien"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mã số: 000000000"
-                    android:textColor="#000"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvScanTennhanvien"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Tên nhân viên: Trần thị thanh thuỳ"
-                    android:textColor="#000"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="10dp"
-            android:background="@color/cam" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
-            android:text="Danh sách sản phẩm"
+            android:paddingTop="5dp"
 
+            android:text="Danh sách sản phẩm"
             android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/cam"
-            android:textSize="20dp" />
+            android:textSize="@dimen/hai" />
 
         <ListView
             android:id="@+id/lvScan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
+            android:layout_marginLeft="@dimen/muoi"
+            android:layout_marginRight="@dimen/muoi"
             android:background="@drawable/list_border"
             app:layout_constraintTop_toBottomOf="@+id/btnScan"
             tools:layout_editor_absoluteX="19dp" />

@@ -15,7 +15,7 @@
         android:padding="10dp"
         android:text="Danh sách kiểm kho"
         android:textColor="#fff"
-        android:textSize="18sp"
+        android:textSize="@dimen/tam"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 

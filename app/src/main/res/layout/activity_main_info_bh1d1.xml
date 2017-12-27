@@ -16,7 +16,7 @@
         android:text="Bảo hành - 1 Đổi 1"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="16sp" />
+        android:textSize="@dimen/sau" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,89 +31,181 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:text="Thông tin nhân viên Bảo hành:"
-                    android:textColor="@color/cam"
-                    android:textSize="16sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvd1Datetoday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableStart="@android:drawable/ic_menu_my_calendar"
-                        android:gravity="center_vertical"
-                        android:text="20/10/2017" />
-
-                    <TextView
-                        android:id="@+id/tvd1Timetoday"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableStart="@android:drawable/ic_lock_idle_alarm"
-                        android:gravity="center_vertical"
-                        android:text="  ca sáng" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvChinhanh1D1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:drawableStart="@drawable/ic_action_name"
-                    android:gravity="center_vertical"
-                    android:text="Chi nhánh:"
-                    android:textStyle="bold" />
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="10dp">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/icon_user" />
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:weightSum="12">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:gravity="center_vertical"
+                            android:text="Ngày:"
+                            android:textSize="@dimen/muoi" />
+
+                        <TextView
+                            android:id="@+id/tvd1Datetoday"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:gravity="center_vertical"
+                            android:text="Giờ:"
+                            android:textSize="@dimen/muoi" />
+
+                        <TextView
+                            android:id="@+id/tvd1Timetoday"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nhân viên Bán:"
+                    android:textSize="@dimen/muoi" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:srcCompat="@drawable/ic_usernhan"
+                            tools:ignore="VectorDrawableCompat" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:background="@drawable/bg125"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp"
-                        android:weightSum="2">
+                        android:paddingLeft="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvd1MaNVNhan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Mã số: 000000000"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvd1TenNVNhan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Tên nhân viên: Trần thị thanh thuỳ"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal|center">
 
                         <TextView
-                            android:id="@+id/tvd1MaNVNhan"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="NVBH0294943"
-                            android:textSize="16sp"
-                            android:textStyle="italic" />
+                            android:layout_height="wrap_content"
+                            android:text="Chi nhánh:"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:background="@drawable/bg125"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvd1TenNVNhan"
+                            android:id="@+id/tvChinhanh1D1"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="Trần thị thanh thùy"
-                            android:textSize="14sp"
-                            android:textStyle="normal" />
+                            android:layout_height="match_parent"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="5dp"
+                            android:text="Chi nhánh SOL"
+                            android:textAlignment="inherit"
+                            android:textColor="#000"
+                            android:textSize="@dimen/muoi" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -122,97 +214,83 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="@color/cam" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:text="Thông tin Đơn hàng:"
-                    android:textColor="@color/cam"
-                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvd1MaOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="TextView" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvd1Date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableStart="@android:drawable/ic_menu_my_calendar"
-                        android:gravity="center_vertical"
-                        android:text="20/10/2017" />
-
-                    <TextView
-                        android:id="@+id/tvd1Time"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:drawableStart="@android:drawable/ic_lock_idle_alarm"
-                        android:gravity="center_vertical"
-                        android:text="  ca sáng" />
-                </LinearLayout>
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/cam"
+                    android:textSize="@dimen/hai" />
 
                 <TextView
-                    android:id="@+id/tvChinhanh1D1Order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:drawableStart="@drawable/ic_action_name"
-                    android:gravity="center_vertical"
-                    android:text="Chi nhánh:"
-                    android:textStyle="bold" />
+                    android:text="Nhân viên Bảo hành:"
+                    android:textSize="@dimen/muoi" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="10dp">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/icon_user" />
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:weightSum="12">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingLeft="10dp"
-                        android:weightSum="2">
+                        android:layout_weight="7"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
 
                         <TextView
-                            android:id="@+id/tvd1MaNV"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
                             android:gravity="center_vertical"
-                            android:text="NVBH0294943"
-                            android:textSize="14sp"
-                            android:textStyle="italic" />
+                            android:text="Ngày:"
+                            android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvd1TenNV"
+                            android:id="@+id/tvd1Date"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="Trần thị thanh thùy"
-                            android:textSize="14sp" />
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:gravity="center_vertical"
+                            android:text="Giờ:"
+                            android:textSize="@dimen/muoi" />
+
+                        <TextView
+                            android:id="@+id/tvd1Time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textSize="@dimen/muoi" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -220,37 +298,184 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="10">
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="49dp"
-                        app:srcCompat="@drawable/icon_listsanpham" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:srcCompat="@drawable/ic_userxuat"
+                            tools:ignore="VectorDrawableCompat" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:background="@drawable/bg125"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp"
-                        android:weightSum="2">
+                        android:paddingLeft="10dp">
 
-                        <TextView
-                            android:id="@+id/tvd1TenKH"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="Trần văn C"
-                            android:textSize="14sp" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tvd1SdtKH"
+                            <TextView
+                                android:id="@+id/tvd1MaNV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Mã số: 000000000"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="0909090222"
-                            android:textSize="14sp" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvd1TenNV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Tên nhân viên: Trần thị thanh thuỳ"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal|center">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Chi nhánh:"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:background="@drawable/bg125"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvChinhanh1D1Order"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="5dp"
+                            android:text="Chi nhánh SOL"
+                            android:textAlignment="inherit"
+                            android:textColor="#000"
+                            android:textSize="@dimen/muoi" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/cam" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Khách hàng:"
+                    android:textSize="@dimen/muoi" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:srcCompat="@drawable/ic_kha"
+                            tools:ignore="VectorDrawableCompat" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:background="@drawable/bg125"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvd1TenKH"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Mã số: 000000000"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvd1SdtKH"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Tên nhân viên: Trần thị thanh thuỳ"
+                                android:textColor="#000"
+                                android:textSize="@dimen/muoi"
+                                android:textStyle="italic" />
+                        </LinearLayout>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -263,6 +488,7 @@
                     android:padding="5dp"
                     android:paddingTop="5dp"
                     android:text="k có"
+                    android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
                 <TextView
@@ -277,9 +503,11 @@
                     android:id="@+id/tvd1Ghichu"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@color/white"
                     android:padding="5dp"
                     android:text="không có"
+                    android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
                 <ListView
@@ -298,7 +526,7 @@
                     android:paddingTop="10dp"
                     android:text="Sản phẩm đổi Bảo hành:"
                     android:textColor="@color/cam"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/muoi" />
 
                 <ListView
                     android:id="@+id/lvBH1D1_moi"
@@ -317,7 +545,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:text="Phí trả hàng:" />
+                        android:text="Phí trả hàng:"
+                        android:textSize="@dimen/muoi" />
 
                     <TextView
                         android:id="@+id/tvphibaohanh"
@@ -326,18 +555,20 @@
                         android:layout_weight="7"
                         android:textAlignment="textEnd"
                         android:textColor="@color/RED"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/sau" />
                 </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvlydoBHD1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="20dp"
-                        android:textStyle="italic" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvlydoBHD1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg125"
+                    android:padding="5dp"
+                    android:textSize="@dimen/sau"
+                    android:textStyle="italic" />
+            </LinearLayout>
 
 
         </LinearLayout>

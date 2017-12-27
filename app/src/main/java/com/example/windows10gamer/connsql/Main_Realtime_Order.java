@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Realtime_Order;
 import com.example.windows10gamer.connsql.Object.Order;
@@ -42,6 +43,9 @@ public class Main_Realtime_Order extends AppCompatActivity {
     String dateBegin, dateEnd;
     SharedPreferences shared ;
     String chinhanh;
+    TextView tvreload;
+    final Handler handler = new Handler();
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class Main_Realtime_Order extends AppCompatActivity {
         temp = new ArrayList<>();
         fabReportOrder.setVisibility(view.INVISIBLE);
         listView = (ListView) findViewById(R.id.listView);
+        tvreload = (TextView) findViewById(R.id.tvreload);
         dateBegin = Keys.getDateNowPlus(0);
         dateEnd   = Keys.getDateNowPlus(0);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
@@ -80,9 +85,9 @@ public class Main_Realtime_Order extends AppCompatActivity {
             LoadJson();
         }
 
-        final Handler handler = new Handler();
 
-        final Runnable r = new Runnable() {
+
+        runnable = new Runnable() {
             public void run() {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Realtime_Order.this).show();
@@ -91,7 +96,7 @@ public class Main_Realtime_Order extends AppCompatActivity {
             }
         };
 
-        handler.postDelayed(r, 1000);
+        handler.postDelayed(runnable, 1000);
 
         fabReportOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +116,12 @@ public class Main_Realtime_Order extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
     }
 
     private void sortList(ArrayList<Order> list) {

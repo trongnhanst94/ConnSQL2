@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Main_Info_BHDLK extends AppCompatActivity {
     String maBH, dateToday, gio, gio_moi, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, lydo, chechlech;
     TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH,tvphidoiSP,tvlydoDLK,tvmaBHDLK,
-            tvDlkSdtKH,tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
+            tvDlkSdtKH, tvDlkChenhlech, tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
     ListView lv;
     Mylistview lv_moi;
     ArrayList<BHDLK> BHDLK = new ArrayList<>();
@@ -56,6 +56,7 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         nguon = BHDLK.get(0).getNguon();
         ngaynhap = BHDLK.get(0).getNgaynhap();
         von = BHDLK.get(0).getVon();
+        chechlech = BHDLK.get(0).getChechlech();
         gia = BHDLK.get(0).getGia();
         list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         ghichuOrder = BHDLK.get(0).getGhichuOrder();
@@ -69,7 +70,6 @@ public class Main_Info_BHDLK extends AppCompatActivity {
             tongdon = tongdon + Integer.parseInt(BHDLK.get(i).getGia_moi());
         }
         lydo = BHDLK.get(0).getLydo();
-        tvphidoiSP.setText(phidoiSP);
         tvmaBHDLK.setText("Mã BH: "+maBH);
         tvDlkDatetoday.setText(dateToday);
         tvDlkTimetoday.setText(timeToday);
@@ -100,9 +100,12 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         adapter_moi = new Adapter_Info_Order(Main_Info_BHDLK.this, list_moi);
         lv_moi.setAdapter(adapter_moi);
         tvlydoDLK.setText("Lý do: " + lydo);
+        tvDlkChenhlech.setText(Keys.getFormatedAmount(Integer.valueOf(chechlech)));
+        tvphidoiSP.setText(Keys.getFormatedAmount(Integer.valueOf(phidoiSP)));
     }
 
     private void Anhxa() {
+        tvDlkChenhlech = (TextView) findViewById(R.id.tvDlkChenhlech);
         tvphidoiSP = (TextView) findViewById(R.id.tvphidoiSP);
         tvlydoDLK = (TextView) findViewById(R.id.tvlydoBHDLK);
         tvDlkMaOrder = (TextView) findViewById(R.id.tvDlkMaOrder);

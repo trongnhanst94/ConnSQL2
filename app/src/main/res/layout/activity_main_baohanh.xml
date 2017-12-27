@@ -11,15 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/cam"
             android:padding="10dp"
-            android:textAlignment="center"
             android:text="Bảo hành"
+            android:textAlignment="center"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="@dimen/bon" />
 
         <TextView
             android:layout_width="match_parent"
@@ -27,7 +28,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:text="Chọn cách tìm kiếm đơn hàng theo:" />
+            android:text="Chọn cách tìm kiếm đơn hàng theo:"
+            android:textSize="@dimen/muoi" />
 
         <RadioGroup
             android:id="@+id/rgBaohanh"
@@ -42,7 +44,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="Tên KH" />
+                android:text="Tên KH"
+                android:textSize="@dimen/hai" />
 
             <RadioButton
                 android:id="@+id/rbScanBaohanh"
@@ -50,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Quét mã"
-                android:textSize="12sp" />
+                android:textSize="@dimen/hai" />
 
             <RadioButton
                 android:id="@+id/rbSdtBaohanh"
@@ -58,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="SĐT"
-                android:textSize="12sp" />
+                android:textSize="@dimen/hai" />
 
             <RadioButton
                 android:id="@+id/rbDateBaohanh"
@@ -66,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Ngày"
-                android:textSize="12sp" />
+                android:textSize="@dimen/hai" />
         </RadioGroup>
 
         <TextView
@@ -94,7 +97,7 @@
                 android:padding="5dp"
                 android:text="Quét mã"
                 android:textColor="#fff"
-                android:textSize="10sp" />
+                android:textSize="@dimen/btn" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -120,7 +123,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Nhập vào Tên Khách hàng và Mã sản phẩm:"
-                android:textSize="14sp" />
+                android:textSize="@dimen/muoi" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,7 +141,7 @@
                     android:layout_weight="5"
                     android:hint="Tên khách hàng"
                     android:inputType="text"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/sau" />
 
                 <EditText
                     android:id="@+id/edMasanpham"
@@ -147,7 +150,7 @@
                     android:layout_weight="5"
                     android:hint="Mã sản phẩm"
                     android:inputType="text"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/sau" />
             </LinearLayout>
 
             <LinearLayout
@@ -166,7 +169,7 @@
                     android:padding="5dp"
                     android:text="Tìm kiếm"
                     android:textColor="#fff"
-                    android:textSize="10sp" />
+                    android:textSize="@dimen/btn" />
 
             </LinearLayout>
 
@@ -193,7 +196,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Nhập vào Số điện thoại Khách hàng:"
-                android:textSize="10sp" />
+                android:textSize="@dimen/muoi" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -210,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:inputType="phone"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/bon" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -228,7 +231,7 @@
                         android:padding="5dp"
                         android:text="Tìm kiếm"
                         android:textColor="#fff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/btn" />
 
                 </LinearLayout>
 
@@ -260,7 +263,7 @@
                 android:paddingTop="5dp"
                 android:text="Lọc đơn hàng bằng cách chọn vào ngày bắt đầu, ngày kết thúc và ca làm:"
                 android:textAlignment="center"
-                android:textSize="10sp"
+                android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
 
@@ -287,7 +290,7 @@
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     android:textColorLink="@color/cam"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/hai"
                     tools:targetApi="lollipop" />
 
                 <EditText
@@ -303,7 +306,7 @@
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     android:textColorLink="@color/cam"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/hai"
                     tools:targetApi="lollipop" />
 
             </LinearLayout>
@@ -323,7 +326,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="Ca sáng"
-                    android:textColorLink="@color/cam" />
+                    android:textColorLink="@color/cam"
+                    android:textSize="@dimen/muoi" />
 
                 <CheckBox
                     android:id="@+id/cbCachieuBaohanh"
@@ -331,7 +335,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="Ca chiều"
-                    android:textColorLink="@color/cam" />
+                    android:textColorLink="@color/cam"
+                    android:textSize="@dimen/muoi" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -349,7 +354,7 @@
                         android:padding="5dp"
                         android:text="Tìm kiếm"
                         android:textColor="#fff"
-                        android:textSize="10sp" />
+                        android:textSize="@dimen/btn" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -368,8 +373,10 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Danh sách đơn hàng:"
+            android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/cam"
-            android:textSize="16sp" />
+            android:textSize="@dimen/hai" />
 
         <ListView
             android:id="@+id/lvBaohanh"

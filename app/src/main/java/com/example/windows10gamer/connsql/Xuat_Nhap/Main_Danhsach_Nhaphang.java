@@ -82,6 +82,7 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
                     bundle.putString("ca", dem.get(position).getCa());
                     intent.putExtra("Main_Duyetnhap", bundle);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -212,6 +213,21 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
             dialog.dismiss();
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            recreate();
+//        } else {
+//            Intent intent = getIntent();
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//            finish();
+//            overridePendingTransition(0, 0);
+//            startActivity(intent);
+//            overridePendingTransition(0, 0);
+//        }
     }
 
     private int sosanhMaXN(ArrayList<XuatNhap_SL> dem, String ma) {
