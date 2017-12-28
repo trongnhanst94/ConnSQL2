@@ -188,7 +188,6 @@ public class Fragment_CXL extends Fragment {
         @Override
         protected Void doInBackground(String... params) {
             JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_BH_BHCXL+"?loadBegin="+params[0]+"&loadEnd="+params[1]);
-            Log.d("qqq" ,Keys.MAIN_BH_BHCXL+"?loadBegin="+params[0]+"&loadEnd="+params[1]);
             try {
                 list.clear();
                 listLoc.clear();

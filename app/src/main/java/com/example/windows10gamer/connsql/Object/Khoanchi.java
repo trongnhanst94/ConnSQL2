@@ -1,11 +1,14 @@
 package com.example.windows10gamer.connsql.Object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
- * Created by EVRESTnhan on 12/27/2017.
+ * Created by EVRESTnhan on 12/28/2017.
  */
 
-public class Khoanchi {
-    String maKC, ngay, ca, chinhanh, maNV, tenNV, noidung, sotien;
+public class Khoanchi implements Parcelable {
+    String maKC, ngay, ca, chinhanh, maNV, tenNV,  noidung, sotien;
 
     public Khoanchi(String maKC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String noidung, String sotien) {
         this.maKC = maKC;
@@ -18,67 +21,108 @@ public class Khoanchi {
         this.sotien = sotien;
     }
 
-    public java.lang.String getMaKC() {
+    protected Khoanchi(Parcel in) {
+        maKC = in.readString();
+        ngay = in.readString();
+        ca = in.readString();
+        chinhanh = in.readString();
+        maNV = in.readString();
+        tenNV = in.readString();
+        noidung = in.readString();
+        sotien = in.readString();
+    }
+
+    public static final Creator<Khoanchi> CREATOR = new Creator<Khoanchi>() {
+        @Override
+        public Khoanchi createFromParcel(Parcel in) {
+            return new Khoanchi(in);
+        }
+
+        @Override
+        public Khoanchi[] newArray(int size) {
+            return new Khoanchi[size];
+        }
+    };
+
+    public String getMaKC() {
         return maKC;
     }
 
-    public void setMaKC(java.lang.String maKC) {
+    public void setMaKC(String maKC) {
         this.maKC = maKC;
     }
 
-    public java.lang.String getNgay() {
+    public String getNgay() {
         return ngay;
     }
 
-    public void setNgay(java.lang.String ngay) {
+    public void setNgay(String ngay) {
         this.ngay = ngay;
     }
 
-    public java.lang.String getCa() {
+    public String getCa() {
         return ca;
     }
 
-    public void setCa(java.lang.String ca) {
+    public void setCa(String ca) {
         this.ca = ca;
     }
 
-    public java.lang.String getChinhanh() {
+    public String getChinhanh() {
         return chinhanh;
     }
 
-    public void setChinhanh(java.lang.String chinhanh) {
+    public void setChinhanh(String chinhanh) {
         this.chinhanh = chinhanh;
     }
 
-    public java.lang.String getMaNV() {
+    public String getMaNV() {
         return maNV;
     }
 
-    public void setMaNV(java.lang.String maNV) {
+    public void setMaNV(String maNV) {
         this.maNV = maNV;
     }
 
-    public java.lang.String getTenNV() {
+    public String getTenNV() {
         return tenNV;
     }
 
-    public void setTenNV(java.lang.String tenNV) {
+    public void setTenNV(String tenNV) {
         this.tenNV = tenNV;
     }
 
-    public java.lang.String getNoidung() {
+    public String getNoidung() {
         return noidung;
     }
 
-    public void setNoidung(java.lang.String noidung) {
+    public void setNoidung(String noidung) {
         this.noidung = noidung;
     }
 
-    public java.lang.String getSotien() {
+    public String getSotien() {
         return sotien;
     }
 
-    public void setSotien(java.lang.String sotien) {
+    public void setSotien(String sotien) {
         this.sotien = sotien;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(maKC);
+        dest.writeString(ngay);
+        dest.writeString(ca);
+        dest.writeString(chinhanh);
+        dest.writeString(maNV);
+        dest.writeString(tenNV);
+        dest.writeString(noidung);
+        dest.writeString(sotien);
+    }
 }
+

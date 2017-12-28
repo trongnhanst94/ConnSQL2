@@ -1,4 +1,4 @@
-package com.example.windows10gamer.connsql.Khoan_Chi;
+package com.example.windows10gamer.connsql.Khach_Hang;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -53,7 +53,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class Main_Khoan_Chi extends AppCompatActivity {
+public class Main_Dat_Coc extends AppCompatActivity {
 
     Button btnthemchi;
     ListView lvkhoanchi;
@@ -66,7 +66,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_khoan_chi);
+        setContentView(R.layout.activity_main_dat_coc);
         btnthemchi = (Button) findViewById(R.id.btnthemchi);
         lvkhoanchi = (ListView) findViewById(R.id.lvkhoanchi);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
@@ -77,7 +77,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
         arraylist = new ArrayList<Khoanchi>();
-        adapter = new Adapter_Khoanchi(Main_Khoan_Chi.this, arraylist);
+        adapter = new Adapter_Khoanchi(Main_Dat_Coc.this, arraylist);
         lvkhoanchi.setAdapter(adapter);
         new GetData().execute(chinhanh);
         lvkhoanchi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -85,9 +85,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder dialog = null;
                 if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                    dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 } else {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                    dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 }
                 dialog.setIcon(R.drawable.ic_addchi)
                         .setTitle("Tạo phiếu chi");
@@ -127,9 +127,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder dialog = null;
                 if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                    dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 } else {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                    dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 }
                 dialog.setIcon(R.drawable.ic_addchi)
                         .setTitle("Tạo phiếu chi");
@@ -149,7 +149,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         noidung = edchinoidung.getText().toString().trim();
                         sotien = edchisotien.getText().toString().trim();
                         if (noidung.equals("") && sotien.equals("") && sotien.equals("0")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         } else {
                             new SendRequest().execute();
                             new GetData().execute(chinhanh);
@@ -194,16 +194,16 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -314,7 +314,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog2 = new ProgressDialog(Main_Khoan_Chi.this);
+            dialog2 = new ProgressDialog(Main_Dat_Coc.this);
             dialog2.setTitle("Hãy chờ...");
             dialog2.setMessage("Dữ liệu đang được tải xuống");
             dialog2.setCancelable(false);
@@ -365,7 +365,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             if(arraylist.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Không có phiếu chi nào!!");
+                new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có phiếu chi nào!!");
             }
             dialog2.dismiss();
         }

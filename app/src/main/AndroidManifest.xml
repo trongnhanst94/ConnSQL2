@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.windows10gamer.connsql">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -141,8 +142,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Xuat_Nhap.Main_XNOpen"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Khoan_Chi.Main_Khoan_Chi"></activity>
+            android:screenOrientation="portrait"
+            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".Khoan_Chi.Main_Khoan_Chi" />
+        <activity android:name=".Khach_Hang.Main_Dat_Coc"></activity>
     </application>
 
 </manifest>
