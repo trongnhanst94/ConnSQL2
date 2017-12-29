@@ -96,6 +96,9 @@ public class Keys {
     public static final String KHOANCHI            = "KHOANCHI";
     public static final String ADD_KHOANCHI_WEB    = "ADD_KHOANCHI_WEB";
     public static final String MAIN_KHOANCHI       = "http://dealtichtac.com/android/danhsach_khoanchi.php";
+    public static final String ADD_DATCOC_WEB      = "ADD_DATCOC_WEB";
+    public static final String DATCOC              = "DATCOC";
+    public static final String MAIN_DATCOC         = "http://dealtichtac.com/android/danhsach_datcoc.php";
 
 
     public static final String getFormatedAmount(int amount){

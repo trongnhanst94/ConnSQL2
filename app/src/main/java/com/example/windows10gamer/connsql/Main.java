@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
+import com.example.windows10gamer.connsql.Khach_Hang.Main_Dat_Coc;
 import com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
@@ -45,7 +46,7 @@ import static java.lang.Boolean.FALSE;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
-            btnChi,btnReportBaohanh,btnRealtime;
+            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien;
     public static String session_username, shortName, session_ma, chinhanh;
     SharedPreferences shared;
     ArrayList<String> position;
@@ -74,8 +75,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         navigationView.setNavigationItemSelectedListener(this);
         btnWeb             = (Button) findViewById(R.id.btnWeb);
-        //  btnBaocaoDoanhthu  = (Button) findViewById(R.id.btnBaocaoDoanhthu);
-        btnXuatnhap           = (Button) findViewById(R.id.btnXuatnhap);
+        btnnhanvien        = (Button) findViewById(R.id.btnnhanvien);
+        btndatcoc          = (Button) findViewById(R.id.btndatcoc);
+        btnXuatnhap        = (Button) findViewById(R.id.btnXuatnhap);
         btnScan            = (Button) findViewById(R.id.btnScanQR);
         btnRealtime        = (Button) findViewById(R.id.btnRealtime);
         btnSales           = (Button) findViewById(R.id.btnSales);
@@ -253,6 +255,40 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     intentput.putExtra("session_username", session_username);
                     intentput.putExtra("session_ma", session_ma);
                     startActivity(intentput);
+                }
+            }
+        });
+
+        btndatcoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+                    Intent intentget = getIntent();
+                    session_username = intentget.getStringExtra("session_username");
+                    session_ma = intentget.getStringExtra("session_ma");
+                    Intent intentput = new Intent(Main.this, Main_Dat_Coc.class);
+                    intentput.putExtra("session_username", session_username);
+                    intentput.putExtra("session_ma", session_ma);
+                    startActivity(intentput);
+                }
+            }
+        });
+
+        btnChi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+//                    Intent intentget = getIntent();
+//                    session_username = intentget.getStringExtra("session_username");
+//                    session_ma = intentget.getStringExtra("session_ma");
+//                    Intent intentput = new Intent(Main.this, Main_Khoan_Chi.class);
+//                    intentput.putExtra("session_username", session_username);
+//                    intentput.putExtra("session_ma", session_ma);
+//                    startActivity(intentput);
                 }
             }
         });

@@ -55,6 +55,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Khoan_Chi extends AppCompatActivity {
 
+    TextView tvchitoday;
     Button btnthemchi;
     ListView lvkhoanchi;
     String session_username, session_ma, chinhanh, ngay, ca, noidung, sotien;
@@ -69,6 +70,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         setContentView(R.layout.activity_main_khoan_chi);
         btnthemchi = (Button) findViewById(R.id.btnthemchi);
         lvkhoanchi = (ListView) findViewById(R.id.lvkhoanchi);
+        tvchitoday = (TextView) findViewById(R.id.tvchitoday);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         Intent intent = getIntent();
@@ -76,6 +78,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         session_ma        = intent.getStringExtra("session_ma");
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
+        tvchitoday.setText("Ngày: "+ca+" "+ngay);
         arraylist = new ArrayList<Khoanchi>();
         adapter = new Adapter_Khoanchi(Main_Khoan_Chi.this, arraylist);
         lvkhoanchi.setAdapter(adapter);

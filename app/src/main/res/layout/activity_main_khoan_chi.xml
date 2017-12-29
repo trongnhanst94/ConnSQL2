@@ -17,19 +17,36 @@
         android:textColor="#fff"
         android:textSize="@dimen/bon" />
 
-    <Button
-        android:id="@+id/btnthemchi"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg125"
-        android:drawableStart="@android:drawable/ic_input_add"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="Thêm khoản chi"
-        android:textAlignment="center"
-        android:textColor="@color/cam"
-        android:textSize="@dimen/btn" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvchitoday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableStart="@android:drawable/ic_menu_my_calendar"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="âdasd"
+            android:textSize="@dimen/muoi" />
+
+        <Button
+            android:id="@+id/btnthemchi"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg125"
+            android:drawableStart="@android:drawable/ic_input_add"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Thêm khoản chi"
+            android:textAlignment="center"
+            android:textColor="@color/cam"
+            android:textSize="@dimen/btn" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lvkhoanchi"

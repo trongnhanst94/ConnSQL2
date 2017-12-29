@@ -27,8 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.windows10gamer.connsql.Adapter.Adapter_Khoanchi;
-import com.example.windows10gamer.connsql.Object.Khoanchi;
+import com.example.windows10gamer.connsql.Adapter.Adapter_Datcoc;
+import com.example.windows10gamer.connsql.Object.Datcoc;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -55,20 +55,27 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Dat_Coc extends AppCompatActivity {
 
-    Button btnthemchi;
-    ListView lvkhoanchi;
-    String session_username, session_ma, chinhanh, ngay, ca, noidung, sotien;
+    Button btnthemcoc;
+    TextView tvchitoday, tvtatca, tvdatcoc, tvdahoancoc;
+    ListView lvdatcoc;
+    String session_username, session_ma, chinhanh, ngay, ca, tenKH, sdtKH, sotien;
     SharedPreferences shared;
     private ProgressDialog dialog2;
-    Adapter_Khoanchi adapter;
-    ArrayList<Khoanchi> arraylist;
+    Adapter_Datcoc adapter;
+    ArrayList<Datcoc> tatca;
+    ArrayList<Datcoc> datcoc = new ArrayList<>();
+    ArrayList<Datcoc> dahoancoc = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dat_coc);
-        btnthemchi = (Button) findViewById(R.id.btnthemchi);
-        lvkhoanchi = (ListView) findViewById(R.id.lvkhoanchi);
+        btnthemcoc = (Button) findViewById(R.id.btnthemcoc);
+        lvdatcoc = (ListView) findViewById(R.id.lvdatcoc);
+        tvchitoday = (TextView) findViewById(R.id.tvcoctoday);
+        tvtatca = (TextView) findViewById(R.id.tvtatca);
+        tvdatcoc = (TextView) findViewById(R.id.tvdatcoc);
+        tvdahoancoc = (TextView) findViewById(R.id.tvdahoancoc);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         Intent intent = getIntent();
@@ -76,11 +83,33 @@ public class Main_Dat_Coc extends AppCompatActivity {
         session_ma        = intent.getStringExtra("session_ma");
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
-        arraylist = new ArrayList<Khoanchi>();
-        adapter = new Adapter_Khoanchi(Main_Dat_Coc.this, arraylist);
-        lvkhoanchi.setAdapter(adapter);
+        tvchitoday.setText("Ngày: "+ca+" "+ngay);
+        tatca = new ArrayList<Datcoc>();
+        adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca);
+        lvdatcoc.setAdapter(adapter);
         new GetData().execute(chinhanh);
-        lvkhoanchi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        tvtatca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca);
+                lvdatcoc.setAdapter(adapter);
+            }
+        });
+        tvdatcoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, datcoc);
+                lvdatcoc.setAdapter(adapter);
+            }
+        });
+        tvdahoancoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, dahoancoc);
+                lvdatcoc.setAdapter(adapter);
+            }
+        });
+        lvdatcoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder dialog = null;
@@ -89,28 +118,31 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 } else {
                     dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu chi");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
+                dialog.setIcon(R.drawable.ic_addcoc)
+                        .setTitle("Tạo đặt cọc");
+                View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
                 dialog.setCancelable(false);
                 final LinearLayout lnHidden = (LinearLayout) mView.findViewById(R.id.lnHidden);
-                final TextView tvchingay = (TextView) mView.findViewById(R.id.tvchingay);
-                final TextView tvchica = (TextView) mView.findViewById(R.id.tvchica);
-                final TextView tvchimanv = (TextView) mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = (TextView) mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = (TextView) mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = (EditText) mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = (EditText) mView.findViewById(R.id.edchisotien);
+                final TextView tvcocngay = (TextView) mView.findViewById(R.id.tvcocngay);
+                final TextView tvcocca = (TextView) mView.findViewById(R.id.tvcocca);
+                final TextView tvcocmanv = (TextView) mView.findViewById(R.id.tvcocmanv);
+                final TextView tvcoctennv = (TextView) mView.findViewById(R.id.tvcoctennv);
+                final TextView tvcocchinhanh = (TextView) mView.findViewById(R.id.tvcocchinhanh);
+                final EditText edcoctenkhachhang = (EditText) mView.findViewById(R.id.edcoctenkhachhang);
+                final EditText edcocsodienthoai = (EditText) mView.findViewById(R.id.edcocsodienthoai);
+                final EditText edcocsotien = (EditText) mView.findViewById(R.id.edcocsotien);
                 lnHidden.setVisibility(View.VISIBLE);
-                tvchingay.setText(arraylist.get(position).getNgay());
-                tvchica.setText(arraylist.get(position).getCa());
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+arraylist.get(position).getMaNV());
-                tvchitennv.setText("Tên nhân viên: "+arraylist.get(position).getTenNV());
-                edchinoidung.setEnabled(false);
-                edchisotien.setEnabled(false);
-                edchinoidung.setText(arraylist.get(position).getNoidung());
-                edchisotien.setText(Keys.getFormatedAmount(Integer.valueOf(arraylist.get(position).getSotien())));
+                tvcocngay.setText(tatca.get(position).getNgay());
+                tvcocca.setText(tatca.get(position).getCa());
+                tvcocchinhanh.setText(chinhanh);
+                tvcocmanv.setText("Mã số: "+tatca.get(position).getMaNV());
+                tvcoctennv.setText("Tên nhân viên: "+tatca.get(position).getTenNV());
+                edcoctenkhachhang.setEnabled(false);
+                edcocsodienthoai.setEnabled(false);
+                edcocsotien.setEnabled(false);
+                edcocsodienthoai.setText(tatca.get(position).getSodienthoai());
+                edcoctenkhachhang.setText(tatca.get(position).getTenkhachhang());
+                edcocsotien.setText(Keys.getFormatedAmount(Integer.valueOf(tatca.get(position).getSotien())));
                 dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -122,7 +154,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 al.show();
             }
         });
-        btnthemchi.setOnClickListener(new View.OnClickListener() {
+        btnthemcoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder dialog = null;
@@ -131,24 +163,26 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 } else {
                     dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu chi");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
+                dialog.setIcon(R.drawable.ic_addcoc)
+                        .setTitle("Tạo đặt cọc");
+                View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
                 dialog.setCancelable(false);
-                final TextView tvchimanv = (TextView) mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = (TextView) mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = (TextView) mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = (EditText) mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = (EditText) mView.findViewById(R.id.edchisotien);
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+session_ma);
-                tvchitennv.setText("Tên nhân viên: "+session_username);
+                final TextView tvcocmanv = (TextView) mView.findViewById(R.id.tvcocmanv);
+                final TextView tvcoctennv = (TextView) mView.findViewById(R.id.tvcoctennv);
+                final TextView tvcocchinhanh = (TextView) mView.findViewById(R.id.tvcocchinhanh);
+                final EditText edcoctenkhachhang = (EditText) mView.findViewById(R.id.edcoctenkhachhang);
+                final EditText edcocsodienthoai = (EditText) mView.findViewById(R.id.edcocsodienthoai);
+                final EditText edcocsotien = (EditText) mView.findViewById(R.id.edcocsotien);
+                tvcocchinhanh.setText(chinhanh);
+                tvcocmanv.setText("Mã số: "+session_ma);
+                tvcoctennv.setText("Tên nhân viên: "+session_username);
                 dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        noidung = edchinoidung.getText().toString().trim();
-                        sotien = edchisotien.getText().toString().trim();
-                        if (noidung.equals("") && sotien.equals("") && sotien.equals("0")){
+                        sdtKH = edcocsodienthoai.getText().toString().trim();
+                        tenKH = edcoctenkhachhang.getText().toString().trim();
+                        sotien = edcocsotien.getText().toString().trim();
+                        if (sdtKH.equals("") && tenKH.equals("") && sotien.equals("") && sotien.equals("0")){
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         } else {
                             new SendRequest().execute();
@@ -176,7 +210,10 @@ public class Main_Dat_Coc extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... arg0) {
-            addChiWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
+            tatca.clear();
+            dahoancoc.clear();
+            datcoc.clear();
+            addCocWeb(ngay, ca, chinhanh, session_ma, session_username, tenKH, sdtKH, sotien);
             return null;
         }
 
@@ -187,7 +224,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
     }
 
 
-    public void addChiWeb(final String ngay, final String ca, final String chinhanh, final String session_ma, final String session_username, final String noidung, final String sotien){
+    public void addCocWeb(final String ngay, final String ca, final String chinhanh, final String session_ma, final String session_username, final String tenKH, final String sdtKH, final String sotien){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
                 new Response.Listener<String>() {
@@ -196,7 +233,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                         if (response.trim().equals("error")){
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Tạo đặt cọc thành công!!");
                         }
                     }
                 },
@@ -210,15 +247,16 @@ public class Main_Dat_Coc extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("tacvu", Keys.ADD_KHOANCHI_WEB);
-                params.put("maKC", "CHI_"+ Keys.MaDonhang());
+                params.put("tacvu", Keys.ADD_DATCOC_WEB);
+                params.put("maDC", "COC_"+ Keys.MaDonhang());
                 params.put("ngay", ngay);
                 params.put("ca", ca);
                 params.put("chinhanh", chinhanh);
                 params.put("maNV", session_ma);
                 params.put("tenNV", session_username);
-                params.put("noidung", noidung);
                 params.put("sotien", sotien);
+                params.put("tenkhachhang", tenKH);
+                params.put("sodienthoai", sdtKH);
                 Log.e("params", params.toString());
                 return params;
             }
@@ -265,8 +303,9 @@ public class Main_Dat_Coc extends AppCompatActivity {
             postDataParams.put("chinhanh", chinhanh);
             postDataParams.put("maNV", session_ma);
             postDataParams.put("tenNV", session_username);
-            postDataParams.put("noidung", noidung);
             postDataParams.put("sotien", sotien);
+            postDataParams.put("tenkhachhang", tenKH);
+            postDataParams.put("sodienthoai", sdtKH);
 
             Log.e("postDataParams", postDataParams.toString());
 
@@ -324,27 +363,28 @@ public class Main_Dat_Coc extends AppCompatActivity {
         @Nullable
         @Override
         protected Void doInBackground(String... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KHOANCHI+"?chinhanh="+params[0]);
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_DATCOC+"?chinhanh="+params[0]);
             try {
                 if (jsonObject != null) {
-                    arraylist.clear();
+                    tatca.clear();
                     if(jsonObject.length() > 0) {
-                        JSONArray array = jsonObject.getJSONArray(Keys.KHOANCHI);
+                        JSONArray array = jsonObject.getJSONArray(Keys.DATCOC);
                         int lenArray = array.length();
                         if(lenArray > 0) {
                             for( ; jIndex < lenArray; jIndex++) {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
-                                    Log.d("qqq", arraylist.size()+"");
-                                    arraylist.add(new Khoanchi(
-                                            object.getString("maKC"),
+                                    tatca.add(new Datcoc(
+                                            object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
                                             object.getString("chinhanh"),
                                             object.getString("maNV"),
                                             object.getString("tenNV"),
-                                            object.getString("noidung"),
-                                            object.getString("sotien")
+                                            object.getString("sotien"),
+                                            object.getString("tenkhachhang"),
+                                            object.getString("sodienthoai"),
+                                            object.getString("trangthai")
                                     ));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -362,10 +402,17 @@ public class Main_Dat_Coc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(arraylist.size() > 0) {
+            if(tatca.size() > 0) {
                 adapter.notifyDataSetChanged();
+                for (int i = 0; i < tatca.size(); i++){
+                    if (tatca.get(i).getTrangthai().equals("0")){
+                        datcoc.add(tatca.get(i));
+                    } else {
+                        dahoancoc.add(tatca.get(i));
+                    }
+                }
             } else {
-                new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có phiếu chi nào!!");
+                new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có Đặt cọc nào!!");
             }
             dialog2.dismiss();
         }
