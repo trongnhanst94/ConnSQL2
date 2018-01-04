@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:paddingLeft="10dp"
+            android:text="TIền đầu ca:" />
+
+        <EditText
+            android:id="@+id/edtiendauca"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="@color/RED"
+            android:textSize="@dimen/bon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:paddingLeft="10dp"
+            android:text="Tiền trả về:" />
+
+        <EditText
+            android:id="@+id/edtientrave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="@color/RED"
+            android:textSize="@dimen/bon" />
+    </LinearLayout>
+</LinearLayout>

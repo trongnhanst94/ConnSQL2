@@ -34,7 +34,7 @@
             android:name=".Main_List_Excel"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Sales"
+            android:name=".Ban_Hang.Main_Sales"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Kiem_Kho.Main_List_Kiemkho"
@@ -43,19 +43,19 @@
             android:name=".Kiem_Kho.Main_Ketqua_Kiemkho"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Order"
+            android:name=".Ban_Hang.Main_Order"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Information_Order"
+            android:name=".Ban_Hang.Main_Information_Order"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Report_Sales"
+            android:name=".Ban_Hang.Main_Report_Sales"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Kiem_Kho.Main_List_Lechkho"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Baocao_Doanhthu"
+            android:name=".Ban_Hang.Main_Tao_BCDoanhthu"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Bao_Hanh.Main_Baohanh"
@@ -107,7 +107,7 @@
             android:name=".Main_Ma_GiamGia"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Realtime_Order"
+            android:name=".Ban_Hang.Main_Realtime_Order"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Bao_Hanh.Main_Choxuly"
@@ -145,7 +145,8 @@
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator" />
         <activity android:name=".Khoan_Chi.Main_Khoan_Chi" />
-        <activity android:name=".Khach_Hang.Main_Dat_Coc"></activity>
+        <activity android:name=".Khach_Hang.Main_Dat_Coc" />
+        <activity android:name=".Ban_Hang.Main_Doanhthu"></activity>
     </application>
 
 </manifest>

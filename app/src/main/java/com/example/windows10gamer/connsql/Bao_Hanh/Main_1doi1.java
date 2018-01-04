@@ -129,8 +129,8 @@ public class Main_1doi1 extends AppCompatActivity {
         tvd1Time.setText(time);
         tvd1Datetoday.setText(dateToday);
         tvd1Timetoday.setText(timeToday);
-        tvd1MaNV.setText("Mã NV: "+maNV);
-        tvd1TenNV.setText("Tên NV: "+tenNV);
+        tvd1MaNV.setText("Mã số: "+maNV);
+        tvd1TenNV.setText("Tên nhân viên: "+tenNV);
         tvd1TenKH.setText("Tên KH: "+tenKH);
         tvChinhanh1D1.setText(chinhanh);
         tvChinhanh1D1Order.setText(chinhanhOrder);

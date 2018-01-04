@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.windows10gamer.connsql.Main_Sales"
+    tools:context="com.example.windows10gamer.connsql.Ban_Hang.Main_Sales"
     android:weightSum="1">
 
     <ScrollView
@@ -26,11 +26,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"></LinearLayout>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +34,7 @@
                 android:textAlignment="center"
                 android:text="Form Bán Hàng"
                 android:textColor="#fff"
-                android:textSize="@dimen/tam" />
+                android:textSize="@dimen/tie" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,7 +42,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="3dp"
+                android:paddingTop="7dp"
                 android:weightSum="12">
 
                 <LinearLayout
@@ -61,7 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
-                        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                        android:drawableLeft="@drawable/ic_ngay"
                         android:gravity="center_vertical"
                         android:text="Ngày:"
                         android:textSize="@dimen/muoi" />
@@ -85,7 +80,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                        android:drawableLeft="@drawable/ic_gio"
                         android:gravity="center_vertical"
                         android:text="Giờ:"
                         android:textSize="@dimen/muoi" />
@@ -200,7 +195,8 @@
                     <Spinner
                         android:id="@+id/spChange"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></Spinner>
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_sn"></Spinner>
 
                 </LinearLayout>
             </LinearLayout>
@@ -323,6 +319,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
                 android:weightSum="10">
 
                 <LinearLayout
@@ -403,7 +400,8 @@
                             android:id="@+id/edGhichudonhang"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:background="@drawable/bg_edittext"
+                            android:inputType="text|textCapSentences"
                             android:textColorLink="@color/cam"
                             android:textSize="@dimen/sau"
                             android:textStyle="italic"
@@ -516,17 +514,17 @@
 
                 <EditText
                     android:id="@+id/edGiamgia"
-                    style="@android:style/Widget.Holo.EditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="7"
-                    android:drawableEnd="@drawable/ic_attach_money_black_24dp"
+                    android:background="@drawable/bg_edittext"
                     android:ems="10"
-                    android:hint="Nhập mã giảm giá..."
+                    android:hint="mã giảm giá..."
                     android:inputType="textCapCharacters"
-                    android:textColor="@color/RED"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/black"
                     android:textSize="@dimen/sau" />
 
                 <LinearLayout
@@ -654,6 +652,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
                 android:weightSum="10">
 
                 <LinearLayout
@@ -682,10 +681,12 @@
                         android:id="@+id/edKhachhang"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_edittext"
                         android:hint="Tên khách hàng"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:textAllCaps="false"
                         android:textColorLink="@color/cam"
-                        android:textSize="@dimen/sau"
+                        android:textSize="@dimen/bon"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -697,6 +698,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
                 android:weightSum="10">
 
                 <LinearLayout
@@ -725,10 +727,11 @@
                         android:id="@+id/edSodienthoai"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_edittext"
                         android:hint="Số điện thoại"
                         android:inputType="phone"
                         android:textColorLink="@color/cam"
-                        android:textSize="@dimen/sau"
+                        android:textSize="@dimen/bon"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -770,6 +773,7 @@
                         android:id="@+id/edGhichukhachhang"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_edittext"
                         android:inputType="text"
                         android:textColorLink="@color/cam"
                         android:textSize="@dimen/sau"
@@ -786,6 +790,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="50dp"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
                 android:weightSum="3">
 
                 <Button

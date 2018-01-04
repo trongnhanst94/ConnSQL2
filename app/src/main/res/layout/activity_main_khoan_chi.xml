@@ -15,7 +15,7 @@
         android:text="Khoản chi"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/bon" />
+        android:textSize="@dimen/tie" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@android:drawable/ic_menu_my_calendar"
+            android:drawableStart="@drawable/ic_ngay"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="âdasd"

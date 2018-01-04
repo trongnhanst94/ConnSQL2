@@ -20,6 +20,9 @@ public interface APIService_Sales {
     @PUT("danhsach_realtime_order.php?")
     Call<OrderList> getRealtime_Order(@Query("chinhanh") String chinhanh, @Query("ngay") String ngay);
 
+    @PUT("danhsach_realtime_order.php?")
+    Call<OrderList> getDoanhthu(@Query("chinhanh") String chinhanh, @Query("ngay") String ngay, @Query("calam") String calam);
+
     @PUT("main_sales.php?")
     Call<OrderList> getOrder(@Query("loadBegin")  String loadBegin,  @Query("loadEnd") String loadEnd);
 }

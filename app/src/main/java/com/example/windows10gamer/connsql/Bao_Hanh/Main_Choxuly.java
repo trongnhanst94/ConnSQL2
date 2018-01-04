@@ -131,8 +131,8 @@ public class Main_Choxuly extends AppCompatActivity {
         tvCxlTime.setText(time);
         tvCxlDatetoday.setText(dateToday);
         tvCxlTimetoday.setText(timeToday);
-        tvCxlMaNV.setText("Mã NV: "+maNV);
-        tvCxlTenNV.setText("Tên NV: "+tenNV);
+        tvCxlMaNV.setText("Mã số: "+maNV);
+        tvCxlTenNV.setText("Tên nhân viên: "+tenNV);
         tvCxlTenKH.setText("Tên KH: "+tenKH);
         tvCxlSdtKH.setText("SĐT KH: "+sdtKH);
         tvChinhanhHT.setText(chinhanh);

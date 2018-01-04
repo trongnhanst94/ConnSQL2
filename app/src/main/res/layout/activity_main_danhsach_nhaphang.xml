@@ -15,7 +15,7 @@
         android:text="Đơn nhập hàng"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/bon"
+        android:textSize="@dimen/tie"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -23,6 +23,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="3dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"

@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Khoanchi;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -113,7 +114,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                 edchinoidung.setEnabled(false);
                 edchisotien.setEnabled(false);
                 edchinoidung.setText(arraylist.get(position).getNoidung());
-                edchisotien.setText(Keys.getFormatedAmount(Integer.valueOf(arraylist.get(position).getSotien())));
+                edchisotien.setText(Keys.setMoney(Integer.valueOf(arraylist.get(position).getSotien())));
                 dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -179,7 +180,11 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... arg0) {
-            addChiWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
+            if(!Connect_Internet.checkConnection(getApplicationContext()))
+                Connect_Internet.buildDialog(Main_Khoan_Chi.this).show();
+            else {
+                addChiWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
+            }
             return null;
         }
 
@@ -189,6 +194,13 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         }
     }
 
+    public void ResetActivity(){
+        Intent intentput = new Intent(Main_Khoan_Chi.this, Main_Khoan_Chi.class);
+        intentput.putExtra("session_username", session_username);
+        intentput.putExtra("session_ma", session_ma);
+        startActivity(intentput);
+        finish();
+    }
 
     public void addChiWeb(final String ngay, final String ca, final String chinhanh, final String session_ma, final String session_username, final String noidung, final String sotien){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -200,6 +212,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                             new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                         } else if (response.trim().equals("success")){
                             new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
+                            ResetActivity();
                         }
                     }
                 },

@@ -16,7 +16,7 @@
         android:text="Bảo hành - Chờ xử lý"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/sau" />
+        android:textSize="@dimen/tie" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:drawableLeft="@drawable/ic_ngay"
                             android:gravity="center_vertical"
                             android:text="Ngày:"
                             android:textSize="@dimen/muoi" />
@@ -79,7 +79,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:drawableLeft="@drawable/ic_gio"
                             android:gravity="center_vertical"
                             android:text="Giờ:"
                             android:textSize="@dimen/muoi" />
@@ -254,7 +254,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:drawableLeft="@drawable/ic_ngay"
                             android:gravity="center_vertical"
                             android:text="Ngày:"
                             android:textSize="@dimen/muoi" />
@@ -278,7 +278,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:drawableLeft="@drawable/ic_gio"
                             android:gravity="center_vertical"
                             android:text="Giờ:"
                             android:textSize="@dimen/muoi" />
@@ -535,7 +535,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
                         android:backgroundTint="@android:color/transparent"
-                        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                        android:drawableLeft="@drawable/ic_ngay"
                         android:ems="10"
                         android:gravity="center_vertical"
                         android:hint="Chọn ngày"

@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.windows10gamer.connsql.Main_Sales;
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Sales;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -77,7 +77,7 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
 
         holder.tvAdapterSalesTen.setText("SP: "+sanpham.getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
-        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGiaban())));
+        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.setMoney(Integer.parseInt(sanpham.getGiaban())));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
         holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+sanpham.getGio());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());

@@ -74,7 +74,7 @@ public class Keys {
     public static final int GIOHETCABIGC           = 15;
     public static final String TENCASANG           = "Ca sáng";
     public static final String TENCACHIEU          = "Ca chiều";
-    public static final long LOAD_REALTIME         = 5000;
+    public static final long LOAD_REALTIME         = 10000;
     public static final String SCRIPT_BH_CXL       = "https://script.google.com/macros/s/AKfycbwKVYH32Z627O3X1_06anwMsJUXOTsYaLvyQ39TrPFa-tARDw4R/exec";
     public static final String ADD_BHCXL_WEB       = "ADD_BHCXL_WEB";
     public static final String ADD_BHDDT_WEB       = "ADD_BHDDT_WEB";
@@ -99,9 +99,12 @@ public class Keys {
     public static final String ADD_DATCOC_WEB      = "ADD_DATCOC_WEB";
     public static final String DATCOC              = "DATCOC";
     public static final String MAIN_DATCOC         = "http://dealtichtac.com/android/danhsach_datcoc.php";
+    public static final String UPDATE_DATCOC_WEB   = "UPDATE_DATCOC_WEB";
+    public static final String MAIN_DOANHTHU       = "http://dealtichtac.com/android/danhsach_doanhthu.php";
+    public static final String DOANHTHU            = "DOANHTHU";
 
 
-    public static final String getFormatedAmount(int amount){
+    public static final String setMoney(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
         return formatnumber+" đ";

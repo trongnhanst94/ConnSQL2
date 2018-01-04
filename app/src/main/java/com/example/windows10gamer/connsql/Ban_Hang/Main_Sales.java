@@ -1,4 +1,4 @@
-package com.example.windows10gamer.connsql;
+package com.example.windows10gamer.connsql.Ban_Hang;
 
 /**
  * Created by EVRESTnhan on 9/30/2017.
@@ -53,6 +53,7 @@ import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
+import com.example.windows10gamer.connsql.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -218,10 +219,10 @@ public class Main_Sales extends AppCompatActivity {
                 int totalTam = total;
                 if (edGiamgia.getText().toString().equals("")){
                     giamgia = 0;
-                    tvTongdonhang.setText(getFormatedAmount(total));
+                    tvTongdonhang.setText(setMoney(total));
                 } else {
                     totalTam = totalTam - giamgia;
-                    tvTongdonhang.setText(getFormatedAmount(totalTam));
+                    tvTongdonhang.setText(setMoney(totalTam));
                     if (totalTam < 0 ){
                         btnXacnhan.setEnabled(false);
                         btnXacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
@@ -421,7 +422,7 @@ public class Main_Sales extends AppCompatActivity {
         integrator.initiateScan();
     }
 
-    private String getFormatedAmount(int amount){
+    private String setMoney(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
         return formatnumber+"đ";
@@ -446,7 +447,7 @@ public class Main_Sales extends AppCompatActivity {
                     gia = st.nextToken();
                     arrayList.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
                     total = total + Integer.parseInt(gia);
-                    tvTongdonhang.setText(getFormatedAmount(total));
+                    tvTongdonhang.setText(setMoney(total));
                     itemKM.clear();
                     for (int i = 0; i<quatang.size(); i++){
                         if (total >= quatang.get(i).getToPrice() && total < quatang.get(i).getFromPrice()){
@@ -480,7 +481,7 @@ public class Main_Sales extends AppCompatActivity {
             for (int i =  0; i <= arrayList.size(); i++){
                 if (arrayList.get(i).getMa() == msp) {
                     total = total - Integer.parseInt(arrayList.get(i).getGiaban());
-                    tvTongdonhang.setText(getFormatedAmount(total));
+                    tvTongdonhang.setText(setMoney(total));
                     arrayList.remove(i);
                     realtime.remove(i);
                     break;
@@ -752,8 +753,8 @@ public class Main_Sales extends AppCompatActivity {
                 ln1.setVisibility(View.VISIBLE);
                 ln2.setVisibility(View.VISIBLE);
             }
-            tvgiatriMagiam.setText(Keys.getFormatedAmount(Integer.parseInt(giatriMagiamgia)));
-            tvphaithu.setText(Keys.getFormatedAmount(total - Integer.parseInt(giatriMagiamgia)));
+            tvgiatriMagiam.setText(Keys.setMoney(Integer.parseInt(giatriMagiamgia)));
+            tvphaithu.setText(Keys.setMoney(total - Integer.parseInt(giatriMagiamgia)));
             dismissProgressDialog();
         }
     }

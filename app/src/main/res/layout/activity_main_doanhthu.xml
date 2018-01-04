@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cam"
+            android:padding="10dp"
+            android:text="Báo cáo Doanh thu"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="@dimen/tie" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/edBegindt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_ngay"
+                android:ems="10"
+                android:hint="Bắt đầu"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
+
+            <EditText
+                android:id="@+id/edEnddt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_ngay"
+                android:ems="10"
+                android:hint="Kết thúc"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:weightSum="10">
+
+            <CheckBox
+                android:id="@+id/cbCasangdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Ca sáng"
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
+
+            <CheckBox
+                android:id="@+id/cbCachieudt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Ca chiều"
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnTimdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_blog_url"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="0dp"
+                    android:background="@android:color/holo_orange_light"
+                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:padding="5dp"
+                    android:text="Tìm kiếm"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/btn" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvdt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/list_border"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabdt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/RED" />
+
+</android.support.design.widget.CoordinatorLayout>

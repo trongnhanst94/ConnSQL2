@@ -48,7 +48,7 @@ public class Adapter_Khoanchi extends ArrayAdapter<Khoanchi> {
         vh.tvMaOrder.setText(Keys.trimText(item.getNoidung(), Keys.MAX_LENGHT));
         vh.tvTennvOrder.setText(item.getTenNV());
         vh.tvTimeOrder.setText(" "+item.getCa()+ " "+item.getNgay());
-        vh.tvSoluong.setText(Keys.getFormatedAmount(Integer.valueOf(item.getSotien())));
+        vh.tvSoluong.setText(Keys.setMoney(Integer.valueOf(item.getSotien())));
 
         return vh.rootView;
     }

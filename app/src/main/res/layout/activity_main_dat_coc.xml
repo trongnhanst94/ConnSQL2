@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:background="@color/cam"
         android:padding="10dp"
-        android:text="Đặt cọc"
+        android:text="Khách hàng đặt cọc"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/bon" />
+        android:textSize="@dimen/tie" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@android:drawable/ic_menu_my_calendar"
+            android:drawableStart="@drawable/ic_ngay"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="âdasd"

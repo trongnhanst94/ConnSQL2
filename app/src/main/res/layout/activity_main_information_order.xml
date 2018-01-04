@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.windows10gamer.connsql.Main_Information_Order">
+    tools:context="com.example.windows10gamer.connsql.Ban_Hang.Main_Information_Order">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:padding="10dp"
             android:text="Chi tiết đơn hàng:"
             android:textColor="#fff"
-            android:textSize="@dimen/hai" />
+            android:textSize="@dimen/tie" />
 
         <TextView
             android:id="@+id/tvifMaOrder"
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                    android:drawableLeft="@drawable/ic_ngay"
                     android:gravity="center_vertical"
                     android:text="Ngày:"
                     android:textSize="@dimen/muoi" />
@@ -87,7 +87,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                    android:drawableLeft="@drawable/ic_gio"
                     android:gravity="center_vertical"
                     android:text="Giờ:"
                     android:textSize="@dimen/muoi" />

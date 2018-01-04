@@ -1,4 +1,4 @@
-package com.example.windows10gamer.connsql;
+package com.example.windows10gamer.connsql.Ban_Hang;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order_TD;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 
@@ -81,7 +82,7 @@ public class Main_Information_Order extends AppCompatActivity {
         tvifMaOrder.setText(item.get(0).getMaDonhang());
         tvifDateOrder.setText("Ngày: "+item.get(0).getNgay());
         tvifTimeOrder.setText(" Ca: "+item.get(0).getCalam());
-        tvifMaNVOrder.setText("Mã nhân viên: "+item.get(0).getMaNhanvien());
+        tvifMaNVOrder.setText("Mã số: "+item.get(0).getMaNhanvien());
         tvifChinhanhOrder.setText(item.get(0).getChinhanh());
         tvifTenNVOrder.setText("Tên nhân viên: "+item.get(0).getTenNhanvien());
         if (item.get(0).getGhichuSanpham().equals("")){
@@ -96,8 +97,8 @@ public class Main_Information_Order extends AppCompatActivity {
         } else {
             tvifGhichuKH.setText("Ghi chú khách hàng: "+item.get(0).getGhichuKhachhang());
         }
-        tvifTotalOrder.setText("Tổng: "+Keys.getFormatedAmount(total));
-        tvifDoanhthutrensanpham.setText("Chỉ số KPI: "+ Keys.getFormatedAmount(total/item.size())+"/SP");
+        tvifTotalOrder.setText("Tổng: "+Keys.setMoney(total));
+        tvifDoanhthutrensanpham.setText("Chỉ số KPI: "+ Keys.setMoney(total/item.size())+"/SP");
 
         adapter = new Adapter_Info_Order_TD(Main_Information_Order.this, item);
         lvInfoOrder.setAdapter(adapter);

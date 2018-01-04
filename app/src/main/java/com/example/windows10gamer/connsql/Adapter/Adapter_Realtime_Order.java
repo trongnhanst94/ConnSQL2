@@ -52,7 +52,7 @@ public class Adapter_Realtime_Order extends ArrayAdapter<Order> {
         vh.tvRLgio.setText(item.getGio());
         vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), Keys.MAX_LENGHT));
         vh.tvRLnhanvien.setText(item.getTenNhanvien());
-        vh.tvRLgia.setText(Keys.getFormatedAmount(Integer.parseInt(item.getGiaSanpham())));
+        vh.tvRLgia.setText(Keys.setMoney(Integer.parseInt(item.getGiaSanpham())));
 
         return vh.rootView;
     }

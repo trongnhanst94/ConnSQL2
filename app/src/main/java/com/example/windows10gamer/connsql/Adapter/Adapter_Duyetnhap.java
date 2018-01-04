@@ -76,7 +76,7 @@ public class Adapter_Duyetnhap extends BaseAdapter implements Serializable{
 
         holder.tvAdapterSalesTen.setText("SP: "+list.get(i).getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ list.get(i).getMa());
-        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(list.get(i).getGia())));
+        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.setMoney(Integer.parseInt(list.get(i).getGia())));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + list.get(i).getBaohanh());
         holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+list.get(i).getGio());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + list.get(i).getNguon());

@@ -135,8 +135,8 @@ public class Main_Doilaykhac extends AppCompatActivity {
         tvDlkTime.setText(time);
         tvDlkDatetoday.setText(dateToday);
         tvDlkTimetoday.setText(timeToday);
-        tvDlkMaNV.setText("Mã NV: "+maNV);
-        tvDlkTenNV.setText("Tên NV: "+tenNV);
+        tvDlkMaNV.setText("Mã số: "+maNV);
+        tvDlkTenNV.setText("Tên nhân viên: "+tenNV);
         tvDlkTenKH.setText("Tên KH: "+tenKH);
         tvDlkSdtKH.setText("SĐT KH: "+sdtKH);
         tvChinhanhDLK.setText(chinhanh);
@@ -184,14 +184,14 @@ public class Main_Doilaykhac extends AppCompatActivity {
                 }
             }
         });
-        tvDlkChenhlech.setText(Keys.getFormatedAmount(0));
+        tvDlkChenhlech.setText(Keys.setMoney(0));
         edphidoiSP.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (edphidoiSP.getText().toString().trim().equals("")){
-                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                 } else {
                     phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
-                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech + phidoiSP));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech + phidoiSP));
                 }
             }
 
@@ -252,11 +252,11 @@ public class Main_Doilaykhac extends AppCompatActivity {
                     gio_moi = Keys.getTimeNow();
                     array_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
                     total = total + Integer.parseInt(gia_moi);
-                    tvTongdonhang.setText(Keys.getFormatedAmount(total));
+                    tvTongdonhang.setText(Keys.setMoney(total));
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
                     chenhlech = total-Integer.valueOf(gia);
-                    tvDlkChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                     adapter_moi.notifyDataSetChanged();
                     scanSanpham(findViewById(android.R.id.content));
                 }   catch (NoSuchElementException nse) {

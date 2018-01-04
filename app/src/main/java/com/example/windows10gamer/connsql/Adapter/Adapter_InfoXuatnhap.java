@@ -75,7 +75,7 @@ public class Adapter_InfoXuatnhap extends BaseAdapter implements Serializable{
 
         holder.tvAdapterSalesTen.setText("SP: "+sanpham.getTen());
         holder.tvAdapterSalesMa.setText("MSP: "+ sanpham.getMa());
-        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.getFormatedAmount(Integer.parseInt(sanpham.getGia())));
+        holder.tvAdapterSalesGia.setText("Giá bán: "+ Keys.setMoney(Integer.parseInt(sanpham.getGia())));
         holder.tvAdapterSalesBaohanh.setText("Bảo hành: " + sanpham.getBaohanh());
         holder.tvAdapterSalesNgaynhap.setText("Quét lúc: "+sanpham.getGio());
         holder.tvAdapterSalesNguon.setText("Nguồn: " + sanpham.getNguon());

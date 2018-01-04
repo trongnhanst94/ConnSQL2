@@ -1,4 +1,4 @@
-package com.example.windows10gamer.connsql;
+package com.example.windows10gamer.connsql.Ban_Hang;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +20,7 @@ import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,7 +88,7 @@ public class Main_Report_Sales extends AppCompatActivity {
                 tvnoti.setText("Thời gian: "+dateCasang+" và "+dateCachieu+" từ "+dateBegin+" đến "+dateEnd);
             }
         }
-        tvdoanhthu.setText( Keys.getFormatedAmount(doanhthuTotal));
+        tvdoanhthu.setText( Keys.setMoney(doanhthuTotal));
         ArrayList<Customer> khachhang = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
             int result = sosanhCustomer(khachhang, reportList.get(i).getTenKhachhang(), reportList.get(i).getMaDonhang());
@@ -97,8 +98,8 @@ public class Main_Report_Sales extends AppCompatActivity {
         }
         tvsokhachhangmua.setText(khachhang.size()+"");
         tvsosanphamban.setText(reportList.size()+"");
-        tvdoanhthutrensanpham.setText(Keys.getFormatedAmount(doanhthuTotal/reportList.size()));
-        tvdoanhthutrenkhachhang.setText(Keys.getFormatedAmount(doanhthuTotal/khachhang.size()));
+        tvdoanhthutrensanpham.setText(Keys.setMoney(doanhthuTotal/reportList.size()));
+        tvdoanhthutrenkhachhang.setText(Keys.setMoney(doanhthuTotal/khachhang.size()));
         tvNhanvienReport.setText("Danh sách nhân viên bán hàng: ");
         ArrayList<User> nhanVienList = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
@@ -223,7 +224,7 @@ public class Main_Report_Sales extends AppCompatActivity {
             t1v.setTextColor(Color.DKGRAY);
             tbrow.addView(t1v);
             TextView t2v = new TextView(this);
-            t2v.setText(Keys.getFormatedAmount(list.get(i).getDoanhthu()));
+            t2v.setText(Keys.setMoney(list.get(i).getDoanhthu()));
             t2v.setGravity(Gravity.CENTER);
             t2v.setBackgroundResource(R.drawable.cell_shape);
             t2v.setTextColor(Color.DKGRAY);
@@ -241,13 +242,13 @@ public class Main_Report_Sales extends AppCompatActivity {
             t4v.setTextColor(Color.DKGRAY);
             tbrow.addView(t4v);
             TextView t5v = new TextView(this);
-            t5v.setText(Keys.getFormatedAmount(list.get(i).getDttkh()));
+            t5v.setText(Keys.setMoney(list.get(i).getDttkh()));
             t5v.setGravity(Gravity.CENTER);
             t5v.setBackgroundResource(R.drawable.cell_shape);
             t5v.setTextColor(Color.DKGRAY);
             tbrow.addView(t5v);
             TextView t6v = new TextView(this);
-            t6v.setText(Keys.getFormatedAmount(list.get(i).getDttsp()));
+            t6v.setText(Keys.setMoney(list.get(i).getDttsp()));
             t6v.setGravity(Gravity.CENTER);
             t6v.setBackgroundResource(R.drawable.cell_shape);
             t6v.setTextColor(Color.DKGRAY);

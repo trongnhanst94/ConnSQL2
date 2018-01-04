@@ -121,8 +121,8 @@ public class Main_Hoantien extends AppCompatActivity {
         tvHtTime.setText(time);
         tvHtDatetoday.setText(dateToday);
         tvHtTimetoday.setText(timeToday);
-        tvHtMaNV.setText("Mã NV: "+maNV);
-        tvHtTenNV.setText("Tên NV: "+tenNV);
+        tvHtMaNV.setText("Mã số: "+maNV);
+        tvHtTenNV.setText("Tên nhân viên: "+tenNV);
         tvHtTenKH.setText("Tên KH: "+tenKH);
         tvHtSdtKH.setText("SĐT KH: "+sdtKH);
         tvChinhanhHT.setText(chinhanh);
@@ -132,11 +132,11 @@ public class Main_Hoantien extends AppCompatActivity {
         edphitrahang.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (edphitrahang.getText().toString().trim().equals("")){
-                    tvgtConlai.setText(Keys.getFormatedAmount(0));
+                    tvgtConlai.setText(Keys.setMoney(0));
                 } else {
                     phitrahang = edphitrahang.getText().toString().trim();
                     gtConlai = Integer.valueOf(gia) - Integer.valueOf(phitrahang);
-                    tvgtConlai.setText(Keys.getFormatedAmount(gtConlai));
+                    tvgtConlai.setText(Keys.setMoney(gtConlai));
                 }
             }
 

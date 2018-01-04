@@ -80,9 +80,9 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         tvDlkDate.setText(date);
         tvDlkTime.setText(time);
         tvChinhanhDLKOrder.setText(chinhanh);
-        tvDlkMaNV.setText("Mã NV: " + maNV);
-        tvDlkTenNV.setText("Tên NV: " + tenNV);
-        tvTongdonhang.setText(Keys.getFormatedAmount(tongdon));
+        tvDlkMaNV.setText("Mã số: " + maNV);
+        tvDlkTenNV.setText("Tên nhân viên: " + tenNV);
+        tvTongdonhang.setText(Keys.setMoney(tongdon));
         adapter = new Adapter_Info_Order(Main_Info_BHDLK.this, list);
         lv.setAdapter(adapter);
         if (ghichuKH.equals("")) {
@@ -100,8 +100,8 @@ public class Main_Info_BHDLK extends AppCompatActivity {
         adapter_moi = new Adapter_Info_Order(Main_Info_BHDLK.this, list_moi);
         lv_moi.setAdapter(adapter_moi);
         tvlydoDLK.setText("Lý do: " + lydo);
-        tvDlkChenhlech.setText(Keys.getFormatedAmount(Integer.valueOf(chechlech)));
-        tvphidoiSP.setText(Keys.getFormatedAmount(Integer.valueOf(phidoiSP)));
+        tvDlkChenhlech.setText(Keys.setMoney(Integer.valueOf(chechlech)));
+        tvphidoiSP.setText(Keys.setMoney(Integer.valueOf(phidoiSP)));
     }
 
     private void Anhxa() {

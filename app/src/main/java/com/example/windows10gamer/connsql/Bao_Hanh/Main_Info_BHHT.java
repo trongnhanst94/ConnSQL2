@@ -71,8 +71,8 @@ public class Main_Info_BHHT extends AppCompatActivity {
         tvHtDate.setText(date);
         tvHtTime.setText(time);
         tvChinhanhHTOrder.setText(chinhanh);
-        tvHtMaNV.setText("Mã NV: " + maNV);
-        tvHtTenNV.setText("Tên NV: " + tenNV);
+        tvHtMaNV.setText("Mã số: " + maNV);
+        tvHtTenNV.setText("Tên nhân viên: " + tenNV);
         list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter = new Adapter_Info_Order(Main_Info_BHHT.this, list);
         lv.setAdapter(adapter);
@@ -89,8 +89,8 @@ public class Main_Info_BHHT extends AppCompatActivity {
         tvHtTenKH.setText("Tên KH: " + tenKH);
         tvHtSdtKH.setText("SĐT KH: " + sdtKH);
         tvlydoHT.setText("Lý do: " + lydo);
-        tvphitrahang.setText(Keys.getFormatedAmount(Integer.parseInt(phitrahang)));
-        tvgtConlai.setText(Keys.getFormatedAmount(Integer.parseInt(gtConlai)));
+        tvphitrahang.setText(Keys.setMoney(Integer.parseInt(phitrahang)));
+        tvgtConlai.setText(Keys.setMoney(Integer.parseInt(gtConlai)));
     }
 
     private void Anhxa() {

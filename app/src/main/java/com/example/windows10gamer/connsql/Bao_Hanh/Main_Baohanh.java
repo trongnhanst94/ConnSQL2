@@ -22,7 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Order;
-import com.example.windows10gamer.connsql.Main_Information_Order;
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Information_Order;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;

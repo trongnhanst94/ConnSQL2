@@ -69,7 +69,7 @@
                 android:drawableStart="@drawable/ic_warehouse"
                 android:paddingLeft="20dp"
                 android:text="Kiểm kho"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnDanhsachkiemkho"
@@ -80,7 +80,7 @@
                 android:drawableStart="@drawable/ic_list2"
                 android:paddingLeft="20dp"
                 android:text="List kiểm kho"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
         </TableRow>
 
         <TableRow
@@ -98,7 +98,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:paddingLeft="20dp"
                 android:text="Bán hàng"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnListOrder"
@@ -109,7 +109,7 @@
                 android:drawableStart="@drawable/ic_list3"
                 android:paddingLeft="20dp"
                 android:text="List đơn hàng"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
 
 
         </TableRow>
@@ -127,7 +127,7 @@
                 android:drawableStart="@drawable/ic_datcoc"
                 android:paddingLeft="20dp"
                 android:text="ĐẶT CỌC"
-                android:textSize="11sp" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnnhanvien"
@@ -138,7 +138,7 @@
                 android:drawableStart="@drawable/ic_nhanvien"
                 android:paddingLeft="20dp"
                 android:text="NHÂN VIÊN"
-                android:textSize="11sp" />
+                android:textSize="@dimen/mainmenu" />
         </TableRow>
 
 
@@ -155,7 +155,7 @@
                 android:drawableStart="@drawable/ic_browsing"
                 android:paddingLeft="20dp"
                 android:text="WEBSITE"
-                android:textSize="11sp" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnChi"
@@ -166,7 +166,7 @@
                 android:drawableStart="@drawable/ic_chi"
                 android:paddingLeft="20dp"
                 android:text="Khoản chi"
-                android:textSize="11sp" />
+                android:textSize="@dimen/mainmenu" />
         </TableRow>
 
         <TableRow
@@ -182,7 +182,7 @@
                 android:drawableStart="@drawable/ic_engineer"
                 android:paddingLeft="20dp"
                 android:text="BẢO HÀNH"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnReportBaohanh"
@@ -193,7 +193,7 @@
                 android:drawableStart="@drawable/ic_list1"
                 android:paddingLeft="20dp"
                 android:text="List bảo hành"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
         </TableRow>
 
         <TableRow
@@ -209,7 +209,7 @@
                 android:drawableStart="@drawable/ic_time"
                 android:paddingLeft="20dp"
                 android:text="Real-time"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
 
             <Button
                 android:id="@+id/btnXuatnhap"
@@ -220,7 +220,34 @@
                 android:drawableStart="@drawable/ic_realtime"
                 android:paddingLeft="20dp"
                 android:text="Xuất - Nhập"
-                android:textSize="@dimen/muoi" />
+                android:textSize="@dimen/mainmenu" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnBcdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_baocao"
+                android:paddingLeft="20dp"
+                android:text="Doanh thu"
+                android:textSize="@dimen/mainmenu" />
+
+            <Button
+                android:id="@+id/btnNone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_remove"
+                android:paddingLeft="20dp"
+                android:text="Remove DATa"
+                android:textSize="@dimen/mainmenu" />
         </TableRow>
 
     </TableLayout>

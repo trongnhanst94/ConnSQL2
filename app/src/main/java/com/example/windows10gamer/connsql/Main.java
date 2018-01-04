@@ -24,6 +24,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu;
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Order;
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Realtime_Order;
+import com.example.windows10gamer.connsql.Ban_Hang.Main_Sales;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
 import com.example.windows10gamer.connsql.Khach_Hang.Main_Dat_Coc;
@@ -46,7 +50,7 @@ import static java.lang.Boolean.FALSE;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
-            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien;
+            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien, btnBcdt;
     public static String session_username, shortName, session_ma, chinhanh;
     SharedPreferences shared;
     ArrayList<String> position;
@@ -74,6 +78,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+        btnBcdt            = (Button) findViewById(R.id.btnBcdt);
         btnWeb             = (Button) findViewById(R.id.btnWeb);
         btnnhanvien        = (Button) findViewById(R.id.btnnhanvien);
         btndatcoc          = (Button) findViewById(R.id.btndatcoc);
@@ -138,6 +143,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     session_username = intentget.getStringExtra("session_username");
                     session_ma = intentget.getStringExtra("session_ma");
                     Intent intentput = new Intent(Main.this, Main_Baohanh.class);
+                    intentput.putExtra("session_username", session_username);
+                    startActivity(intentput);
+                }
+            }
+        });
+
+        btnBcdt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+                    Intent intentget = getIntent();
+                    session_username = intentget.getStringExtra("session_username");
+                    Intent intentput = new Intent(Main.this, Main_Doanhthu.class);
                     intentput.putExtra("session_username", session_username);
                     startActivity(intentput);
                 }
@@ -275,23 +295,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
         });
-
-        btnChi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else {
-//                    Intent intentget = getIntent();
-//                    session_username = intentget.getStringExtra("session_username");
-//                    session_ma = intentget.getStringExtra("session_ma");
-//                    Intent intentput = new Intent(Main.this, Main_Khoan_Chi.class);
-//                    intentput.putExtra("session_username", session_username);
-//                    intentput.putExtra("session_ma", session_ma);
-//                    startActivity(intentput);
-                }
-            }
-        });
     }
 
     @Override
@@ -359,7 +362,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 finish();
             }
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

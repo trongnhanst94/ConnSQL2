@@ -70,8 +70,8 @@ public class Main_Info_BHCXL extends AppCompatActivity {
         tvCxlDate.setText(date);
         tvCxlTime.setText(time);
         tvChinhanhHTOrder.setText(chinhanh);
-        tvCxlMaNV.setText("Mã NV: " + maNV);
-        tvCxlTenNV.setText("Tên NV: " + tenNV);
+        tvCxlMaNV.setText("Mã số: " + maNV);
+        tvCxlTenNV.setText("Tên nhân viên: " + tenNV);
         list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter = new Adapter_Info_Order(Main_Info_BHCXL.this, list);
         lv.setAdapter(adapter);

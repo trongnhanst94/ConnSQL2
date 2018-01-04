@@ -15,7 +15,7 @@
         android:text="Bảo hành - Hoàn tiền"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/bon" />
+        android:textSize="@dimen/tie" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:drawableLeft="@drawable/ic_ngay"
                             android:gravity="center_vertical"
                             android:text="Ngày:"
                             android:textSize="@dimen/muoi" />
@@ -78,7 +78,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:drawableLeft="@drawable/ic_gio"
                             android:gravity="center_vertical"
                             android:text="Giờ:"
                             android:textSize="@dimen/muoi" />
@@ -97,6 +97,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
                     android:text="Nhân viên Bán:"
                     android:textSize="@dimen/muoi" />
 
@@ -227,11 +228,7 @@
                     android:textColor="@color/cam"
                     android:textSize="@dimen/hai" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nhân viên Bảo hành:"
-                    android:textSize="@dimen/muoi" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,7 +250,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0"
-                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:drawableLeft="@drawable/ic_ngay"
                             android:gravity="center_vertical"
                             android:text="Ngày:"
                             android:textSize="@dimen/muoi" />
@@ -277,7 +274,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                            android:drawableLeft="@drawable/ic_gio"
                             android:gravity="center_vertical"
                             android:text="Giờ:"
                             android:textSize="@dimen/muoi" />
@@ -292,6 +289,13 @@
                             android:textSize="@dimen/muoi" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    android:text="Nhân viên Bảo hành:"
+                    android:textSize="@dimen/muoi" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -412,6 +416,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
                     android:text="Khách hàng:"
                     android:textSize="@dimen/muoi" />
 
@@ -518,6 +523,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
                     android:weightSum="10">
@@ -543,6 +549,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
                     android:weightSum="10">
 
@@ -558,6 +565,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
+                        android:background="@drawable/bg_edittext"
                         android:inputType="number"
                         android:textAlignment="textEnd"
                         android:textColor="#fa0a0a"
@@ -583,6 +591,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="7"
+                        android:background="@drawable/bg_edittext"
                         android:inputType="text"
                         android:textSize="@dimen/sau" />
                 </LinearLayout>
@@ -591,6 +600,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
                     android:layout_marginTop="50dp"

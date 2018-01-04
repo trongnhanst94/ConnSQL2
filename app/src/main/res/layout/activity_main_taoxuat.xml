@@ -18,7 +18,7 @@
             android:text="Tạo đơn xuất hàng"
             android:textAlignment="center"
             android:textColor="#fff"
-            android:textSize="@dimen/bon"
+            android:textSize="@dimen/tie"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="0dp" />
 
@@ -26,6 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
@@ -152,7 +153,8 @@
                 <Spinner
                     android:id="@+id/spChange"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></Spinner>
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_sn"></Spinner>
 
             </LinearLayout>
 
@@ -193,7 +195,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg124"
+                    android:background="@drawable/bg_sn"
                     android:padding="5dp" />
 
             </LinearLayout>
@@ -212,8 +214,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="10">
 
@@ -243,6 +247,7 @@
                     android:id="@+id/edTaoxuatghichu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_edittext"
                     android:padding="5dp"
                     android:textSize="@dimen/sau" />
 
@@ -276,7 +281,7 @@
                 <Button
                     android:id="@+id/btnScanTaoxuat"
                     android:layout_width="65dp"
-                    android:layout_height="37dp"
+                    android:layout_height="30dp"
                     android:layout_below="@+id/tv_blog_url"
                     android:layout_centerHorizontal="true"
                     android:background="@android:color/holo_orange_light"
@@ -319,6 +324,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_upload"
-        app:backgroundTint="@color/cam" />
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/RED" />
 </android.support.design.widget.CoordinatorLayout>

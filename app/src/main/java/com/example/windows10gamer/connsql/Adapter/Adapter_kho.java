@@ -77,13 +77,13 @@ public class Adapter_kho extends BaseAdapter implements Serializable{
         if (sanpham.getGiaban().equals("")){
             holder.tvAdapterSalesGia.setText("Giá bán: không có.");
         } else {
-            holder.tvAdapterSalesGia.setText("Giá bán: "+ getFormatedAmount(Integer.parseInt(sanpham.getGiaban())));
+            holder.tvAdapterSalesGia.setText("Giá bán: "+ setMoney(Integer.parseInt(sanpham.getGiaban())));
         }
 
         return view;
     }
 
-    private String getFormatedAmount(int amount){
+    private String setMoney(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
         return formatnumber+"đ";

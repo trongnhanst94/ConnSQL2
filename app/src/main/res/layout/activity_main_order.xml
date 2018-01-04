@@ -5,19 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.example.windows10gamer.connsql.Main_Order">
+        tools:context="com.example.windows10gamer.connsql.Ban_Hang.Main_Order">
 
-        <!--<android.support.design.widget.AppBarLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:background="?attr/colorPrimary"/>-->
-
-        <!--</android.support.design.widget.AppBarLayout>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +20,7 @@
             android:text="Danh sách đơn hàng"
             android:textAlignment="center"
             android:textColor="#fff"
-            android:textSize="@dimen/bon" />
+            android:textSize="@dimen/tie" />
 
         <TextView
             android:layout_width="match_parent"
@@ -58,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:backgroundTint="@android:color/transparent"
-                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                android:drawableLeft="@drawable/ic_ngay"
                 android:ems="10"
                 android:hint="Bắt đầu"
                 android:inputType="textPersonName"
@@ -72,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:backgroundTint="@android:color/transparent"
-                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                android:drawableLeft="@drawable/ic_ngay"
                 android:ems="10"
                 android:hint="Kết thúc"
                 android:inputType="textPersonName"
@@ -151,6 +140,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/report_icon"
-        app:backgroundTint="@android:color/holo_red_light" />
+        app:backgroundTint="@color/RED" />
 
 </android.support.design.widget.CoordinatorLayout>

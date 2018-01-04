@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.windows10gamer.connsql.Main_Report_Sales">
+    tools:context="com.example.windows10gamer.connsql.Ban_Hang.Main_Report_Sales">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:text="Báo cáo danh thu"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/bon" />
+        android:textSize="@dimen/tie" />
 
     <TextView
         android:id="@+id/tvnotiReport"

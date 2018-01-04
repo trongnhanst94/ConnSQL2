@@ -34,5 +34,5 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_search_black_24dp"
-        app:backgroundTint="@color/cam" />
+        app:backgroundTint="@color/RED" />
 </android.support.design.widget.CoordinatorLayout>

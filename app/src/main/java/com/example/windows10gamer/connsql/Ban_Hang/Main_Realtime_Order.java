@@ -1,4 +1,4 @@
-package com.example.windows10gamer.connsql;
+package com.example.windows10gamer.connsql.Ban_Hang;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +20,7 @@ import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
+import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

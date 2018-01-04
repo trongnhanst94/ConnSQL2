@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -29,6 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Datcoc;
 import com.example.windows10gamer.connsql.Object.Datcoc;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -38,20 +38,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Dat_Coc extends AppCompatActivity {
 
@@ -63,8 +52,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
     private ProgressDialog dialog2;
     Adapter_Datcoc adapter;
     ArrayList<Datcoc> tatca;
-    ArrayList<Datcoc> datcoc = new ArrayList<>();
-    ArrayList<Datcoc> dahoancoc = new ArrayList<>();
+    ArrayList<Datcoc> tatca_plus = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,33 +73,55 @@ public class Main_Dat_Coc extends AppCompatActivity {
         ca = Keys.getCalam(chinhanh);
         tvchitoday.setText("Ngày: "+ca+" "+ngay);
         tatca = new ArrayList<Datcoc>();
-        adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca);
+        adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
         lvdatcoc.setAdapter(adapter);
         new GetData().execute(chinhanh);
         tvtatca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca);
+                tatca_plus.clear();
+                for (int i = 0; i < tatca.size(); i++){
+                        tatca_plus.add(tatca.get(i));
+                }
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
                 lvdatcoc.setAdapter(adapter);
             }
         });
         tvdatcoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, datcoc);
+                tatca_plus.clear();
+                for (int i = 0; i < tatca.size(); i++){
+                    if (tatca.get(i).getTrangthai().equals("0")){
+                        tatca_plus.add(tatca.get(i));
+                    }
+                }
+                if(tatca_plus.size() == 0) {
+                    new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có đơn Đặt cọc nào!!");
+                }
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
                 lvdatcoc.setAdapter(adapter);
             }
         });
         tvdahoancoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, dahoancoc);
+                tatca_plus.clear();
+                for (int i = 0; i < tatca.size(); i++){
+                    if (tatca.get(i).getTrangthai().equals("1")){
+                        tatca_plus.add(tatca.get(i));
+                    }
+                }
+                if(tatca_plus.size() == 0) {
+                    new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có đơn Hoàn đặt cọc nào!!");
+                }
+                adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
                 lvdatcoc.setAdapter(adapter);
             }
         });
         lvdatcoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder dialog = null;
                 if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
                     dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
@@ -119,9 +129,10 @@ public class Main_Dat_Coc extends AppCompatActivity {
                     dialog = new AlertDialog.Builder(Main_Dat_Coc.this);
                 }
                 dialog.setIcon(R.drawable.ic_addcoc)
-                        .setTitle("Tạo đặt cọc");
+                        .setTitle("Thông tin đặt cọc");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
-                dialog.setCancelable(false);
+                final LinearLayout lnHidden3 = (LinearLayout) mView.findViewById(R.id.lnHidden3);
+                final LinearLayout lnHidden2 = (LinearLayout) mView.findViewById(R.id.lnHidden2);
                 final LinearLayout lnHidden = (LinearLayout) mView.findViewById(R.id.lnHidden);
                 final TextView tvcocngay = (TextView) mView.findViewById(R.id.tvcocngay);
                 final TextView tvcocca = (TextView) mView.findViewById(R.id.tvcocca);
@@ -131,18 +142,42 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 final EditText edcoctenkhachhang = (EditText) mView.findViewById(R.id.edcoctenkhachhang);
                 final EditText edcocsodienthoai = (EditText) mView.findViewById(R.id.edcocsodienthoai);
                 final EditText edcocsotien = (EditText) mView.findViewById(R.id.edcocsotien);
+                final Button btnhoantien = (Button) mView.findViewById(R.id.btnhoantien);
+                if (tatca_plus.get(position).getTrangthai().equals("0")){
+                    lnHidden2.setVisibility(View.VISIBLE);
+                } else {
+                    lnHidden3.setVisibility(View.VISIBLE);
+                    final TextView tvcoccatraa = (TextView) mView.findViewById(R.id.tvcoccatraa);
+                    final TextView tvcocngaytra = (TextView) mView.findViewById(R.id.tvcocngaytra);
+                    final TextView tvcocmanvtra = (TextView) mView.findViewById(R.id.tvcocmanvtra);
+                    final TextView tvcoctennvtra = (TextView) mView.findViewById(R.id.tvcoctennvtra);
+                    tvcoccatraa.setText(tatca_plus.get(position).getCatra());
+                    tvcocngaytra.setText(tatca_plus.get(position).getNgaytra());
+                    tvcocmanvtra.setText("Mã số: "+tatca_plus.get(position).getMaNVtra());
+                    tvcoctennvtra.setText("Tên nhân viên: "+tatca_plus.get(position).getTenNVtra());
+                }
                 lnHidden.setVisibility(View.VISIBLE);
-                tvcocngay.setText(tatca.get(position).getNgay());
-                tvcocca.setText(tatca.get(position).getCa());
+                tvcocngay.setText(tatca_plus.get(position).getNgay());
+                tvcocca.setText(tatca_plus.get(position).getCa());
                 tvcocchinhanh.setText(chinhanh);
-                tvcocmanv.setText("Mã số: "+tatca.get(position).getMaNV());
-                tvcoctennv.setText("Tên nhân viên: "+tatca.get(position).getTenNV());
+                tvcocmanv.setText("Mã số: "+tatca_plus.get(position).getMaNV());
+                tvcoctennv.setText("Tên nhân viên: "+tatca_plus.get(position).getTenNV());
                 edcoctenkhachhang.setEnabled(false);
                 edcocsodienthoai.setEnabled(false);
                 edcocsotien.setEnabled(false);
-                edcocsodienthoai.setText(tatca.get(position).getSodienthoai());
-                edcoctenkhachhang.setText(tatca.get(position).getTenkhachhang());
-                edcocsotien.setText(Keys.getFormatedAmount(Integer.valueOf(tatca.get(position).getSotien())));
+                edcocsodienthoai.setText(tatca_plus.get(position).getSodienthoai());
+                edcoctenkhachhang.setText(tatca_plus.get(position).getTenkhachhang());
+                edcocsotien.setText(Keys.setMoney(Integer.valueOf(tatca_plus.get(position).getSotien())));
+                btnhoantien.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!Connect_Internet.checkConnection(getApplicationContext()))
+                            Connect_Internet.buildDialog(Main_Dat_Coc.this).show();
+                        else {
+                            UpdateCocWeb(position, session_ma, session_username);
+                        }
+                    }
+                });
                 dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -166,7 +201,6 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 dialog.setIcon(R.drawable.ic_addcoc)
                         .setTitle("Tạo đặt cọc");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
-                dialog.setCancelable(false);
                 final TextView tvcocmanv = (TextView) mView.findViewById(R.id.tvcocmanv);
                 final TextView tvcoctennv = (TextView) mView.findViewById(R.id.tvcoctennv);
                 final TextView tvcocchinhanh = (TextView) mView.findViewById(R.id.tvcocchinhanh);
@@ -186,7 +220,6 @@ public class Main_Dat_Coc extends AppCompatActivity {
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         } else {
                             new SendRequest().execute();
-                            new GetData().execute(chinhanh);
                         }
                     }
                 });
@@ -203,6 +236,14 @@ public class Main_Dat_Coc extends AppCompatActivity {
         });
     }
 
+    public void ResetActivity(){
+        Intent intentput = new Intent(Main_Dat_Coc.this, Main_Dat_Coc.class);
+        intentput.putExtra("session_username", session_username);
+        intentput.putExtra("session_ma", session_ma);
+        startActivity(intentput);
+        finish();
+    }
+
     public class SendRequest extends AsyncTask<Void, Void, String> {
 
         protected void onPreExecute(){
@@ -210,10 +251,11 @@ public class Main_Dat_Coc extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... arg0) {
-            tatca.clear();
-            dahoancoc.clear();
-            datcoc.clear();
-            addCocWeb(ngay, ca, chinhanh, session_ma, session_username, tenKH, sdtKH, sotien);
+            if(!Connect_Internet.checkConnection(getApplicationContext()))
+                Connect_Internet.buildDialog(Main_Dat_Coc.this).show();
+            else {
+                addCocWeb(ngay, ca, chinhanh, session_ma, session_username, tenKH, sdtKH, sotien);
+            }
             return null;
         }
 
@@ -234,6 +276,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                         } else if (response.trim().equals("success")){
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Tạo đặt cọc thành công!!");
+                            ResetActivity();
                         }
                     }
                 },
@@ -264,87 +307,43 @@ public class Main_Dat_Coc extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public String getPostDataString(JSONObject params) throws Exception {
-
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        Iterator<String> itr = params.keys();
-
-        while(itr.hasNext()){
-
-            String key= itr.next();
-            Object value = params.get(key);
-
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-
-        }
-        Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
-        return result.toString();
-    }
-
-    public String putData(){
-        try {
-            // Link Script
-            URL url = new URL(Keys.SCRIPT_KHOANCHI);
-
-            // Load Json object
-            JSONObject postDataParams = new JSONObject();
-            postDataParams.put("maKC", "CHI_"+ Keys.MaDonhang());
-            postDataParams.put("ngay", ngay);
-            postDataParams.put("ca", ca);
-            postDataParams.put("chinhanh", chinhanh);
-            postDataParams.put("maNV", session_ma);
-            postDataParams.put("tenNV", session_username);
-            postDataParams.put("sotien", sotien);
-            postDataParams.put("tenkhachhang", tenKH);
-            postDataParams.put("sodienthoai", sdtKH);
-
-            Log.e("postDataParams", postDataParams.toString());
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
-
-            writer.flush();
-            writer.close();
-            os.close();
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-
-                    sb.append(line);
-                    break;
+    public void UpdateCocWeb(final int position, final String session_ma, final String session_username){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                        } else if (response.trim().equals("success")){
+                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Hoàn cọc thành công!!");
+                            ResetActivity();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Lỗi "+error);
+                    }
                 }
-                in.close();
-                return sb.toString();
-            } else {
-                return new String("");
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.UPDATE_DATCOC_WEB);
+                params.put("id", tatca_plus.get(position).getId());
+                params.put("ngaytra", Keys.getDateNow());
+                params.put("catra", Keys.getCalam(chinhanh));
+                params.put("maNVtra", session_ma);
+                params.put("tenNVtra", session_username);
+                Log.e("params", params.toString());
+                return params;
             }
-        } catch (Exception e) {
-            return new String("");
-        }
+        };
+        requestQueue.add(stringRequest);
     }
+
 
     class GetData extends AsyncTask<String, Void, Void> {
 
@@ -375,6 +374,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     tatca.add(new Datcoc(
+                                            object.getString("id"),
                                             object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -384,7 +384,11 @@ public class Main_Dat_Coc extends AppCompatActivity {
                                             object.getString("sotien"),
                                             object.getString("tenkhachhang"),
                                             object.getString("sodienthoai"),
-                                            object.getString("trangthai")
+                                            object.getString("trangthai"),
+                                            object.getString("ngaytra"),
+                                            object.getString("catra"),
+                                            object.getString("maNVtra"),
+                                            object.getString("tenNVtra")
                                     ));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -403,14 +407,11 @@ public class Main_Dat_Coc extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(tatca.size() > 0) {
-                adapter.notifyDataSetChanged();
+                tatca_plus.clear();
                 for (int i = 0; i < tatca.size(); i++){
-                    if (tatca.get(i).getTrangthai().equals("0")){
-                        datcoc.add(tatca.get(i));
-                    } else {
-                        dahoancoc.add(tatca.get(i));
-                    }
+                    tatca_plus.add(tatca.get(i));
                 }
+                adapter.notifyDataSetChanged();
             } else {
                 new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có Đặt cọc nào!!");
             }

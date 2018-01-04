@@ -16,7 +16,7 @@
         android:text="Xuất - Nhập hàng hóa"
         android:textAlignment="center"
         android:textColor="#fff"
-        android:textSize="@dimen/sau" />
+        android:textSize="@dimen/tie" />
 
     <TableLayout
         android:layout_width="match_parent"

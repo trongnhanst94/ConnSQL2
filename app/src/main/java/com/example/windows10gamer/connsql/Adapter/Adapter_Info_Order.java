@@ -65,13 +65,13 @@ public class Adapter_Info_Order extends BaseAdapter{
         if (item.getGiaban().equals("")){
             vh.textViewgiaban.setText("Giá bán: không có.");
         } else {
-            vh.textViewgiaban.setText("Giá bán: " + getFormatedAmount(Integer.parseInt(item.getGiaban())));
+            vh.textViewgiaban.setText("Giá bán: " + setMoney(Integer.parseInt(item.getGiaban())));
         }
 
         return vh.rootView;
     }
 
-    private String getFormatedAmount(int amount){
+    private String setMoney(int amount){
         String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
         String formatnumber = number.replace(",",".");
         return formatnumber+"đ";

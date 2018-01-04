@@ -132,8 +132,8 @@ public class Main_Doidungthu extends AppCompatActivity {
         tvddtTime.setText(time);
         tvddtDatetoday.setText(dateToday);
         tvddtTimetoday.setText(timeToday);
-        tvddtMaNV.setText("Mã NV: "+maNV);
-        tvddtTenNV.setText("Tên NV: "+tenNV);
+        tvddtMaNV.setText("Mã số: "+maNV);
+        tvddtTenNV.setText("Tên nhân viên: "+tenNV);
         tvddtTenKH.setText("Tên KH: "+tenKH);
         tvChinhanh1D1.setText(chinhanh);
         tvChinhanh1D1Order.setText(chinhanhOrder);
@@ -190,10 +190,10 @@ public class Main_Doidungthu extends AppCompatActivity {
         edphidoiSP.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (edphidoiSP.getText().toString().trim().equals("")){
-                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech));
                 } else {
                     phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
-                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech + phidoiSP));
+                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech + phidoiSP));
                 }
             }
 
@@ -232,7 +232,7 @@ public class Main_Doidungthu extends AppCompatActivity {
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
                     chenhlech = total-Integer.valueOf(gia);
-                    tvDdtChenhlech.setText(Keys.getFormatedAmount(chenhlech));
+                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech));
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
                     btnddt.setEnabled(false);

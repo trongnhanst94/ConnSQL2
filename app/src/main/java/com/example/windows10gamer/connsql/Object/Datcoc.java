@@ -5,9 +5,10 @@ package com.example.windows10gamer.connsql.Object;
  */
 
 public class Datcoc {
-    String maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, trangthai;
+    String id, maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, trangthai, ngaytra, catra, maNVtra, tenNVtra;
 
-    public Datcoc(String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String trangthai) {
+    public Datcoc(String id, String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String trangthai, String ngaytra, String catra, String maNVtra, String tenNVtra) {
+        this.id = id;
         this.maDC = maDC;
         this.ngay = ngay;
         this.ca = ca;
@@ -18,6 +19,18 @@ public class Datcoc {
         this.tenkhachhang = tenkhachhang;
         this.sodienthoai = sodienthoai;
         this.trangthai = trangthai;
+        this.ngaytra = ngaytra;
+        this.catra = catra;
+        this.maNVtra = maNVtra;
+        this.tenNVtra = tenNVtra;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMaDC() {
@@ -98,5 +111,37 @@ public class Datcoc {
 
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
+    }
+
+    public String getNgaytra() {
+        return ngaytra;
+    }
+
+    public void setNgaytra(String ngaytra) {
+        this.ngaytra = ngaytra;
+    }
+
+    public String getCatra() {
+        return catra;
+    }
+
+    public void setCatra(String catra) {
+        this.catra = catra;
+    }
+
+    public String getMaNVtra() {
+        return maNVtra;
+    }
+
+    public void setMaNVtra(String maNVtra) {
+        this.maNVtra = maNVtra;
+    }
+
+    public String getTenNVtra() {
+        return tenNVtra;
+    }
+
+    public void setTenNVtra(String tenNVtra) {
+        this.tenNVtra = tenNVtra;
     }
 }

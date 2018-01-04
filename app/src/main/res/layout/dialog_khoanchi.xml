@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                    android:drawableLeft="@drawable/ic_ngay"
                     android:gravity="center_vertical"
                     android:text="Ngày:"
                     android:textSize="@dimen/muoi" />
@@ -58,7 +59,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@android:drawable/ic_menu_recent_history"
+                    android:drawableLeft="@drawable/ic_gio"
                     android:gravity="center_vertical"
                     android:text="Giờ:"
                     android:textSize="@dimen/muoi" />
@@ -77,6 +78,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
             android:text="Nhân viên Chi:"
             android:textSize="@dimen/muoi" />
 
@@ -221,6 +223,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
+                android:background="@drawable/bg_edittext"
                 android:inputType="number"
                 android:textAlignment="textEnd"
                 android:textColor="@color/RED"

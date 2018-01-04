@@ -47,14 +47,13 @@
     </android.support.v4.view.ViewPager>
 
 
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabReportBH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
         android:layout_margin="@dimen/btn"
-        android:src="@drawable/icon_barcode"
+        android:src="@drawable/ic_qrcode"
         app:backgroundTint="@android:color/holo_orange_light" />
 
 

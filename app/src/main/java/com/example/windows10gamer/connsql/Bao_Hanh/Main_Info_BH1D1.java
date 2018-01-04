@@ -79,8 +79,8 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         tvd1Date.setText(date);
         tvd1Time.setText(time);
         tvChinhanh1D1Order.setText(chinhanh);
-        tvd1MaNV.setText("Mã NV: " + maNV);
-        tvd1TenNV.setText("Tên NV: " + tenNV);
+        tvd1MaNV.setText("Mã số: " + maNV);
+        tvd1TenNV.setText("Tên nhân viên: " + tenNV);
         list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter = new Adapter_Info_Order(Main_Info_BH1D1.this, list);
         lvBH1D1.setAdapter(adapter);
@@ -100,7 +100,7 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         adapter_moi = new Adapter_Info_Order(Main_Info_BH1D1.this, list_moi);
         lvBH1D1_moi.setAdapter(adapter_moi);
         tvlydod1.setText("Lý do: " + lydo);
-        tvphibaohanh.setText(Keys.getFormatedAmount(Integer.parseInt(phibaohanh)));
+        tvphibaohanh.setText(Keys.setMoney(Integer.parseInt(phibaohanh)));
     }
 
     private void Anhxa() {
