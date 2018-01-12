@@ -98,7 +98,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nhân viên Bán:"
+                    android:paddingBottom="3dp"
+                    android:text="Nhân viên Bảo hành:"
                     android:textSize="@dimen/muoi" />
 
                 <LinearLayout
@@ -228,11 +229,7 @@
                     android:textColor="@color/cam"
                     android:textSize="@dimen/hai" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nhân viên Bảo hành:"
-                    android:textSize="@dimen/muoi" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -294,6 +291,13 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
+                    android:text="Nhân viên Bán:"
+                    android:textSize="@dimen/muoi" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

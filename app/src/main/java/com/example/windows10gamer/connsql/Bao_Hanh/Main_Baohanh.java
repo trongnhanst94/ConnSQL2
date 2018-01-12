@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -73,27 +72,27 @@ public class Main_Baohanh extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_baohanh);
-        rgBaohanh        = (RadioGroup) findViewById(R.id.rgBaohanh);
-        rbSdtBaohanh     = (RadioButton) findViewById(R.id.rbSdtBaohanh);
-        rbDateBaohanh    = (RadioButton) findViewById(R.id.rbDateBaohanh);
-        rbScanBaohanh    = (RadioButton) findViewById(R.id.rbScanBaohanh);
-        edBenginBaohanh  = (EditText) findViewById(R.id.edBeginBaohanh);
-        edEndBaohanh     = (EditText) findViewById(R.id.edEndBaohanh);
-        btnDateBaohanh   = (Button) findViewById(R.id.btnDateBaohanh);
-        btnSdtBaohanh    = (Button) findViewById(R.id.btnSdtBaohanh);
-        btnScanBaohanh   = (Button) findViewById(R.id.btnScanBaohanh);
-        btnTenvaMa       = (Button) findViewById(R.id.btnTenvaMa);
-        cbCasang         = (CheckBox) findViewById(R.id.cbCasangBaohanh);
-        cbCachieu        = (CheckBox) findViewById(R.id.cbCachieuBaohanh);
-        edSdtBaohanh     =  (EditText) findViewById(R.id.edSdtBaohanh);
-        edTenkhachhang   =  (EditText) findViewById(R.id.edTenkhachhang);
-        edMasanpham      =  (EditText) findViewById(R.id.edMasanpham);
-        lnDateBaohanh    = (LinearLayout) findViewById(R.id.lnDateBaohanh);
-        lnTenvaMa        = (LinearLayout) findViewById(R.id.lnTenvaMa);
-        lnSdtBaohanh     = (LinearLayout) findViewById(R.id.lnSdtBaohanh);
-        lnScanBaohanh    = (LinearLayout) findViewById(R.id.lnScanBaohanh);
-        listView         = (ListView) findViewById(R.id.lvBaohanh);
-        tvNoti           = (TextView) findViewById(R.id.tvNoti);
+        rgBaohanh        = findViewById(R.id.rgBaohanh);
+        rbSdtBaohanh     = findViewById(R.id.rbSdtBaohanh);
+        rbDateBaohanh    = findViewById(R.id.rbDateBaohanh);
+        rbScanBaohanh    = findViewById(R.id.rbScanBaohanh);
+        edBenginBaohanh  = findViewById(R.id.edBeginBaohanh);
+        edEndBaohanh     = findViewById(R.id.edEndBaohanh);
+        btnDateBaohanh   = findViewById(R.id.btnDateBaohanh);
+        btnSdtBaohanh    = findViewById(R.id.btnSdtBaohanh);
+        btnScanBaohanh   = findViewById(R.id.btnScanBaohanh);
+        btnTenvaMa       = findViewById(R.id.btnTenvaMa);
+        cbCasang         = findViewById(R.id.cbCasangBaohanh);
+        cbCachieu        = findViewById(R.id.cbCachieuBaohanh);
+        edSdtBaohanh     = findViewById(R.id.edSdtBaohanh);
+        edTenkhachhang   = findViewById(R.id.edTenkhachhang);
+        edMasanpham      = findViewById(R.id.edMasanpham);
+        lnDateBaohanh    = findViewById(R.id.lnDateBaohanh);
+        lnTenvaMa        = findViewById(R.id.lnTenvaMa);
+        lnSdtBaohanh     = findViewById(R.id.lnSdtBaohanh);
+        lnScanBaohanh    = findViewById(R.id.lnScanBaohanh);
+        listView         = findViewById(R.id.lvBaohanh);
+        tvNoti           = findViewById(R.id.tvNoti);
         cbCasang.setChecked(true);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
@@ -204,7 +203,6 @@ public class Main_Baohanh extends AppCompatActivity {
                     listView.setVisibility(View.GONE);
                     listView.setBackgroundResource(R.drawable.list_border);
                     tvNoti.setText("");
-                    Log.d("qqq", edTenkhachhang.getText().toString().trim() + edMasanpham.getText().toString().trim());
                     LoadJsonTenvaMa(edTenkhachhang.getText().toString().trim(), edMasanpham.getText().toString().trim());
                 }
             }
@@ -306,14 +304,14 @@ public class Main_Baohanh extends AppCompatActivity {
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         Date hom = null; Date loadBegin1 = null; Date loadEnd1 = null;
                         try {
-                            loadBegin1 = (Date) simpleDateFormat.parse(loadBegin);
-                            loadEnd1   = (Date) simpleDateFormat.parse(loadEnd);
+                            loadBegin1 = simpleDateFormat.parse(loadBegin);
+                            loadEnd1   = simpleDateFormat.parse(loadEnd);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                         for (int i = 0; i < orignal.size(); i++) {
                             try {
-                                hom = (Date) simpleDateFormat.parse(orignal.get(i).getNgay());
+                                hom = simpleDateFormat.parse(orignal.get(i).getNgay());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -461,7 +459,6 @@ public class Main_Baohanh extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         contactList.clear();
                         temp.clear();
-                        Log.d("qqq", orignal.size()+ " orignal");
                         for (int i = 0; i < orignal.size(); i++) {
                             contactList.add(orignal.get(i));
                         }

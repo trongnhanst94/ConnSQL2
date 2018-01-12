@@ -40,14 +40,6 @@
             android:weightSum="16">
 
             <RadioButton
-                android:id="@+id/rbTenvaMa"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:text="Tên KH"
-                android:textSize="@dimen/hai" />
-
-            <RadioButton
                 android:id="@+id/rbScanBaohanh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -69,6 +61,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:text="Ngày"
+                android:textSize="@dimen/hai" />
+
+            <RadioButton
+                android:id="@+id/rbTenvaMa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="Tên KH"
                 android:textSize="@dimen/hai" />
         </RadioGroup>
 

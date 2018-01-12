@@ -18,6 +18,7 @@
         android:weightSum="10">
 
         <LinearLayout
+            android:id="@+id/lnchinhanh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -31,7 +32,7 @@
                 android:drawableLeft="@drawable/ic_place"
                 android:gravity="center_vertical"
                 android:paddingRight="20dp"
-                android:text="Vị trí:"
+                android:text="Chọn chi nhánh:"
                 android:textSize="@dimen/muoi" />
 
             <TextView
@@ -130,21 +131,23 @@
                 android:textSize="@dimen/mainmenu" />
 
             <Button
-                android:id="@+id/btnnhanvien"
+                android:id="@+id/btnChi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg125"
-                android:drawableStart="@drawable/ic_nhanvien"
+                android:drawableStart="@drawable/ic_chi"
                 android:paddingLeft="20dp"
-                android:text="NHÂN VIÊN"
+                android:text="Khoản chi"
                 android:textSize="@dimen/mainmenu" />
+
         </TableRow>
 
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btnWeb"
@@ -158,14 +161,14 @@
                 android:textSize="@dimen/mainmenu" />
 
             <Button
-                android:id="@+id/btnChi"
+                android:id="@+id/btnnhanvien"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg125"
-                android:drawableStart="@drawable/ic_chi"
+                android:drawableStart="@drawable/ic_nhanvien"
                 android:paddingLeft="20dp"
-                android:text="Khoản chi"
+                android:text="NHÂN VIÊN"
                 android:textSize="@dimen/mainmenu" />
         </TableRow>
 
@@ -235,11 +238,11 @@
                 android:background="@drawable/bg125"
                 android:drawableStart="@drawable/ic_baocao"
                 android:paddingLeft="20dp"
-                android:text="Doanh thu"
+                android:text="BC Doanh thu"
                 android:textSize="@dimen/mainmenu" />
 
             <Button
-                android:id="@+id/btnNone"
+                android:id="@+id/btnremove"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -247,6 +250,31 @@
                 android:drawableStart="@drawable/ic_remove"
                 android:paddingLeft="20dp"
                 android:text="Remove DATa"
+                android:textSize="@dimen/mainmenu" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnnhaphang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:drawableStart="@drawable/ic_stock"
+                android:paddingLeft="20dp"
+                android:text="NHập hàng"
+                android:textSize="@dimen/mainmenu" />
+
+            <Button
+                android:id="@+id/btnnone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg125"
+                android:paddingLeft="20dp"
                 android:textSize="@dimen/mainmenu" />
         </TableRow>
 

@@ -525,7 +525,7 @@
                     android:inputType="textCapCharacters"
                     android:textAllCaps="true"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/sau" />
+                    android:textSize="@dimen/bon" />
 
                 <LinearLayout
                     android:layout_width="0dp"

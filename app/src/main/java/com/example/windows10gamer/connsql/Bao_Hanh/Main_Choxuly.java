@@ -88,7 +88,6 @@ public class Main_Choxuly extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
-        maBH = "BHCXL_"+Keys.MaDonhang();
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder5");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -191,6 +190,7 @@ public class Main_Choxuly extends AppCompatActivity {
                         if(!Connect_Internet.checkConnection(getApplicationContext()))
                             Connect_Internet.buildDialog(Main_Choxuly.this).show();
                         else {
+                            maBH = "BHCXL_"+Keys.MaDonhang();
 //                  if (gtConlai > 0) {
 //                    if (!edlydoHT.getText().toString().trim().equals("") && !edphitrahang.getText().toString().trim().equals("")) {
                             thoigianhen = edthoigianhen.getText().toString().trim();
@@ -205,7 +205,7 @@ public class Main_Choxuly extends AppCompatActivity {
             }
         });
 
-        Button exit= (Button) findViewById(R.id.cancel);
+        Button exit= findViewById(R.id.cancel);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,25 +233,25 @@ public class Main_Choxuly extends AppCompatActivity {
     }
 
     private void Anhxa() {
-        snA = (Spinner) findViewById(R.id.spCXL);
-        tvCxlMaOrder = (TextView) findViewById(R.id.tvCxlMaOrder);
-        tvCxlDate = (TextView) findViewById(R.id.tvCxlDate);
-        tvCxlTime = (TextView) findViewById(R.id.tvCxlTime);
-        tvCxlDatetoday = (TextView) findViewById(R.id.tvCxlDatetoday);
-        tvCxlTimetoday = (TextView) findViewById(R.id.tvCxlTimetoday);
-        tvCxlMaNV = (TextView) findViewById(R.id.tvCxlMaNV);
-        tvCxlTenNV = (TextView) findViewById(R.id.tvCxlTenNV);
-        tvCxlGhichuOrder = (TextView) findViewById(R.id.tvCxlGhichu);
-        tvChinhanhHT = (TextView) findViewById(R.id.tvChinhanhHT);
-        tvChinhanhHTOrder = (TextView) findViewById(R.id.tvChinhanhHTOrder);
-        tvCxlTenKH = (TextView) findViewById(R.id.tvCxlTenKH);
-        tvCxlSdtKH = (TextView) findViewById(R.id.tvCxlSdtKH);
-        lv = (ListView) findViewById(R.id.lvBHCXL);
-        tvCxlGhichuKH = (TextView) findViewById(R.id.tvCxlGhichuKH);
-        tvCxlTenNVNhan = (TextView) findViewById(R.id.tvCxlTenNVNhan);
-        tvCxlMaNVNhan = (TextView) findViewById(R.id.tvCxlMaNVNhan);
-        btnxacnhan = (Button) findViewById(R.id.btnBHHT);
-        edthoigianhen = (EditText) findViewById(R.id.edthoigianhen);
+        snA = findViewById(R.id.spCXL);
+        tvCxlMaOrder = findViewById(R.id.tvCxlMaOrder);
+        tvCxlDate = findViewById(R.id.tvCxlDate);
+        tvCxlTime = findViewById(R.id.tvCxlTime);
+        tvCxlDatetoday = findViewById(R.id.tvCxlDatetoday);
+        tvCxlTimetoday = findViewById(R.id.tvCxlTimetoday);
+        tvCxlMaNV = findViewById(R.id.tvCxlMaNV);
+        tvCxlTenNV = findViewById(R.id.tvCxlTenNV);
+        tvCxlGhichuOrder = findViewById(R.id.tvCxlGhichu);
+        tvChinhanhHT = findViewById(R.id.tvChinhanhHT);
+        tvChinhanhHTOrder = findViewById(R.id.tvChinhanhHTOrder);
+        tvCxlTenKH = findViewById(R.id.tvCxlTenKH);
+        tvCxlSdtKH = findViewById(R.id.tvCxlSdtKH);
+        lv = findViewById(R.id.lvBHCXL);
+        tvCxlGhichuKH = findViewById(R.id.tvCxlGhichuKH);
+        tvCxlTenNVNhan = findViewById(R.id.tvCxlTenNVNhan);
+        tvCxlMaNVNhan = findViewById(R.id.tvCxlMaNVNhan);
+        btnxacnhan = findViewById(R.id.btnBHHT);
+        edthoigianhen = findViewById(R.id.edthoigianhen);
     }
 
     public ArrayList<User> GetUser(String urlUser, final Main_Ketqua_Kiemkho.VolleyCallback callback) {

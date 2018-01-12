@@ -91,9 +91,6 @@
             android:name=".Bao_Hanh.Main_ScanBH"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivitydebhht"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Main"
             android:label="Trang chủ"
             android:screenOrientation="portrait" />
@@ -104,7 +101,7 @@
             android:name=".Kiem_Kho.Main_Kiemkho_XemB"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main_Ma_GiamGia"
+            android:name=".Main_MaGiamGia"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Ban_Hang.Main_Realtime_Order"
@@ -144,9 +141,41 @@
             android:name=".Xuat_Nhap.Main_XNOpen"
             android:screenOrientation="portrait"
             tools:ignore="InnerclassSeparator" />
-        <activity android:name=".Khoan_Chi.Main_Khoan_Chi" />
-        <activity android:name=".Khach_Hang.Main_Dat_Coc" />
-        <activity android:name=".Ban_Hang.Main_Doanhthu"></activity>
+        <activity
+            android:name=".Khoan_Chi.Main_Khoan_Chi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Khach_Hang.Main_Dat_Coc"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Ban_Hang.Main_Doanhthu"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".Other.MyAndroidFirebaseMsgService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Other.MyAndroidFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <activity android:name=".Remove_Data.Main_Remove_Data" />
+        <activity android:name=".Remove_Data.Main_Remove_Order" />
+        <activity android:name=".Kho.Main_Nhaphang" />
+        <activity android:name=".Kho.Main_Taonhap" />
+        <activity android:name=".Remove_Data.Main_Remove_BCDT" />
+        <activity android:name=".Remove_Data.Main_Remove_Datcoc" />
+        <activity android:name=".Remove_Data.Main_Remove_Khoanchi"></activity>
     </application>
 
 </manifest>

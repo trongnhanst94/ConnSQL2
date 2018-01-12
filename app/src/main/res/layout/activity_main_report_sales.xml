@@ -226,8 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="6"
-                android:background="@drawable/bg124"
-                android:padding="5dp" />
+                android:background="@drawable/bg_sn" />
         </LinearLayout>
 
         <HorizontalScrollView

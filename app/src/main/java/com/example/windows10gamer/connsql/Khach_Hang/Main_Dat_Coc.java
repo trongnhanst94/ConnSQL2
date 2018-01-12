@@ -53,17 +53,18 @@ public class Main_Dat_Coc extends AppCompatActivity {
     Adapter_Datcoc adapter;
     ArrayList<Datcoc> tatca;
     ArrayList<Datcoc> tatca_plus = new ArrayList<>();
+    private String ghichu = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dat_coc);
-        btnthemcoc = (Button) findViewById(R.id.btnthemcoc);
-        lvdatcoc = (ListView) findViewById(R.id.lvdatcoc);
-        tvchitoday = (TextView) findViewById(R.id.tvcoctoday);
-        tvtatca = (TextView) findViewById(R.id.tvtatca);
-        tvdatcoc = (TextView) findViewById(R.id.tvdatcoc);
-        tvdahoancoc = (TextView) findViewById(R.id.tvdahoancoc);
+        btnthemcoc = findViewById(R.id.btnthemcoc);
+        lvdatcoc = findViewById(R.id.lvdatcoc);
+        tvchitoday = findViewById(R.id.tvcoctoday);
+        tvtatca = findViewById(R.id.tvtatca);
+        tvdatcoc = findViewById(R.id.tvdatcoc);
+        tvdahoancoc = findViewById(R.id.tvdahoancoc);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         Intent intent = getIntent();
@@ -131,26 +132,27 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 dialog.setIcon(R.drawable.ic_addcoc)
                         .setTitle("Thông tin đặt cọc");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
-                final LinearLayout lnHidden3 = (LinearLayout) mView.findViewById(R.id.lnHidden3);
-                final LinearLayout lnHidden2 = (LinearLayout) mView.findViewById(R.id.lnHidden2);
-                final LinearLayout lnHidden = (LinearLayout) mView.findViewById(R.id.lnHidden);
-                final TextView tvcocngay = (TextView) mView.findViewById(R.id.tvcocngay);
-                final TextView tvcocca = (TextView) mView.findViewById(R.id.tvcocca);
-                final TextView tvcocmanv = (TextView) mView.findViewById(R.id.tvcocmanv);
-                final TextView tvcoctennv = (TextView) mView.findViewById(R.id.tvcoctennv);
-                final TextView tvcocchinhanh = (TextView) mView.findViewById(R.id.tvcocchinhanh);
-                final EditText edcoctenkhachhang = (EditText) mView.findViewById(R.id.edcoctenkhachhang);
-                final EditText edcocsodienthoai = (EditText) mView.findViewById(R.id.edcocsodienthoai);
-                final EditText edcocsotien = (EditText) mView.findViewById(R.id.edcocsotien);
-                final Button btnhoantien = (Button) mView.findViewById(R.id.btnhoantien);
+                final LinearLayout lnHidden3 = mView.findViewById(R.id.lnHidden3);
+                final LinearLayout lnHidden2 = mView.findViewById(R.id.lnHidden2);
+                final LinearLayout lnHidden = mView.findViewById(R.id.lnHidden);
+                final TextView tvcocngay = mView.findViewById(R.id.tvcocngay);
+                final TextView tvcocca = mView.findViewById(R.id.tvcocca);
+                final TextView tvcocmanv = mView.findViewById(R.id.tvcocmanv);
+                final TextView tvcoctennv = mView.findViewById(R.id.tvcoctennv);
+                final TextView tvcocchinhanh = mView.findViewById(R.id.tvcocchinhanh);
+                final EditText edcocghichu = mView.findViewById(R.id.edcocghichu);
+                final EditText edcoctenkhachhang = mView.findViewById(R.id.edcoctenkhachhang);
+                final EditText edcocsodienthoai = mView.findViewById(R.id.edcocsodienthoai);
+                final EditText edcocsotien = mView.findViewById(R.id.edcocsotien);
+                final Button btnhoantien = mView.findViewById(R.id.btnhoantien);
                 if (tatca_plus.get(position).getTrangthai().equals("0")){
                     lnHidden2.setVisibility(View.VISIBLE);
                 } else {
                     lnHidden3.setVisibility(View.VISIBLE);
-                    final TextView tvcoccatraa = (TextView) mView.findViewById(R.id.tvcoccatraa);
-                    final TextView tvcocngaytra = (TextView) mView.findViewById(R.id.tvcocngaytra);
-                    final TextView tvcocmanvtra = (TextView) mView.findViewById(R.id.tvcocmanvtra);
-                    final TextView tvcoctennvtra = (TextView) mView.findViewById(R.id.tvcoctennvtra);
+                    final TextView tvcoccatraa = mView.findViewById(R.id.tvcoccatraa);
+                    final TextView tvcocngaytra = mView.findViewById(R.id.tvcocngaytra);
+                    final TextView tvcocmanvtra = mView.findViewById(R.id.tvcocmanvtra);
+                    final TextView tvcoctennvtra = mView.findViewById(R.id.tvcoctennvtra);
                     tvcoccatraa.setText(tatca_plus.get(position).getCatra());
                     tvcocngaytra.setText(tatca_plus.get(position).getNgaytra());
                     tvcocmanvtra.setText("Mã số: "+tatca_plus.get(position).getMaNVtra());
@@ -165,6 +167,8 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 edcoctenkhachhang.setEnabled(false);
                 edcocsodienthoai.setEnabled(false);
                 edcocsotien.setEnabled(false);
+                edcocghichu.setEnabled(false);
+                edcocghichu.setText(tatca_plus.get(position).getGhichu());
                 edcocsodienthoai.setText(tatca_plus.get(position).getSodienthoai());
                 edcoctenkhachhang.setText(tatca_plus.get(position).getTenkhachhang());
                 edcocsotien.setText(Keys.setMoney(Integer.valueOf(tatca_plus.get(position).getSotien())));
@@ -201,12 +205,13 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 dialog.setIcon(R.drawable.ic_addcoc)
                         .setTitle("Tạo đặt cọc");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_datcoc, null);
-                final TextView tvcocmanv = (TextView) mView.findViewById(R.id.tvcocmanv);
-                final TextView tvcoctennv = (TextView) mView.findViewById(R.id.tvcoctennv);
-                final TextView tvcocchinhanh = (TextView) mView.findViewById(R.id.tvcocchinhanh);
-                final EditText edcoctenkhachhang = (EditText) mView.findViewById(R.id.edcoctenkhachhang);
-                final EditText edcocsodienthoai = (EditText) mView.findViewById(R.id.edcocsodienthoai);
-                final EditText edcocsotien = (EditText) mView.findViewById(R.id.edcocsotien);
+                final TextView tvcocmanv = mView.findViewById(R.id.tvcocmanv);
+                final TextView tvcoctennv = mView.findViewById(R.id.tvcoctennv);
+                final TextView tvcocchinhanh = mView.findViewById(R.id.tvcocchinhanh);
+                final EditText edcoctenkhachhang = mView.findViewById(R.id.edcoctenkhachhang);
+                final EditText edcocsodienthoai = mView.findViewById(R.id.edcocsodienthoai);
+                final EditText edcocsotien = mView.findViewById(R.id.edcocsotien);
+                final EditText edcocghichu = mView.findViewById(R.id.edcocghichu);
                 tvcocchinhanh.setText(chinhanh);
                 tvcocmanv.setText("Mã số: "+session_ma);
                 tvcoctennv.setText("Tên nhân viên: "+session_username);
@@ -216,6 +221,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                         sdtKH = edcocsodienthoai.getText().toString().trim();
                         tenKH = edcoctenkhachhang.getText().toString().trim();
                         sotien = edcocsotien.getText().toString().trim();
+                        ghichu = edcocghichu.getText().toString().trim();
                         if (sdtKH.equals("") && tenKH.equals("") && sotien.equals("") && sotien.equals("0")){
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         } else {
@@ -300,6 +306,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 params.put("sotien", sotien);
                 params.put("tenkhachhang", tenKH);
                 params.put("sodienthoai", sdtKH);
+                params.put("ghichu", ghichu);
                 Log.e("params", params.toString());
                 return params;
             }
@@ -384,6 +391,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                                             object.getString("sotien"),
                                             object.getString("tenkhachhang"),
                                             object.getString("sodienthoai"),
+                                            object.getString("ghichu"),
                                             object.getString("trangthai"),
                                             object.getString("ngaytra"),
                                             object.getString("catra"),

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.example.windows10gamer.connsql.Main_Ma_GiamGia">
+    tools:context="com.example.windows10gamer.connsql.Main_MaGiamGia">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,7 +77,6 @@
         android:id="@+id/tvMagiamgia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
         android:text="0000"
         android:textAlignment="center"
         android:textColor="@color/cam"
@@ -86,12 +85,33 @@
     <Button
         android:id="@+id/btnSudungma"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="start"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/bg124"
         android:text="SỬ DỤNG MÃ NÀY"
-        android:textSize="@dimen/bon" />
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvHtMaOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:text="DANH SÁCH MÃ GIẢM GIÁ"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/cam"
+        android:textSize="@dimen/hai" />
+
+    <ListView
+        android:id="@+id/lvmagiamgia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/list_border" />
 </LinearLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabmgg"
@@ -101,4 +121,4 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_popup_sync"
         app:backgroundTint="@color/RED" />
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

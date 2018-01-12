@@ -31,7 +31,8 @@ public class Keys {
     public static final String DANHSACHLOGIN       = "http://dealtichtac.com/android/danhsachuser.php";
     public static final String SALE                = "banhang";
     public static final String RETROFIT_ORDER      = "http://dealtichtac.com/android/";
-    public static final String USER_CONTENT_KEY    = "main_sales.php";
+    public static final String USER_SALES_KEY      = "main_sales.php";
+    public static final String USER_KHO_KEY        = "danhsach_kho.php";
     public static final String SCRIPT_KHUYENMAI    = "https://script.google.com/macros/s/AKfycbx-SLcIVuQixDZ-n5pmFGIrjFZux9iIl9hunwGdqna_rMZ9lFI/exec";
     public static final String LINK_WEB            = "http://dealtichtac.com/android/addproduct_json.php";
     public static final String SCRIPT_BH_HT        = "https://script.google.com/macros/s/AKfycbwGtxm48MgPYzsagGOWjS0HliSCAEr_ODi0hNzhecjk2mvc98I/exec";
@@ -66,12 +67,9 @@ public class Keys {
     public static final String DELE_MAGIAMGIA_WEB  = "DELE_MAGIAMGIA_WEB";
     public static final String DELE_XEM_WEB        = "DELE_XEM_WEB";
     public static final String urlQT               = SCRIPT_DANHSACH +"?id="+ TABLE +"&sheet="+ DANHSACHQUATANG;
-    public static final String urlGG               = "http://dealtichtac.com/android/danhsach_magiamgia.php";
     public static final String BH_TENVAMA          = "baohanh_TenvaMa.php";
     public static final int GIOHETCANVL            = 15;
-    public static final int GIOHETCASOL            = 17;
-    public static final int GIOHETCA3_2            = 15;
-    public static final int GIOHETCABIGC           = 15;
+    public static final int GIOHETCASOL            = 16;
     public static final String TENCASANG           = "Ca sáng";
     public static final String TENCACHIEU          = "Ca chiều";
     public static final long LOAD_REALTIME         = 10000;
@@ -90,7 +88,7 @@ public class Keys {
     public static final String MAIN_XUATNHAP       = "http://dealtichtac.com/android/danhsach_xuatnhap.php";
     public static final String XUATNHAP            = "XUATNHAP";
     public static final String UPDATE_XUATHANG_WEB = "UPDATE_XUATHANG_WEB";
-    public static final int MAX_LENGHT             = 20;
+    public static final int MAX_LENGHT             = 16;
     public static final String LINK_WEB_V2         = "http://dealtichtac.com/android/addV2.php";
     public static final String SCRIPT_KHOANCHI     = "";
     public static final String KHOANCHI            = "KHOANCHI";
@@ -102,6 +100,15 @@ public class Keys {
     public static final String UPDATE_DATCOC_WEB   = "UPDATE_DATCOC_WEB";
     public static final String MAIN_DOANHTHU       = "http://dealtichtac.com/android/danhsach_doanhthu.php";
     public static final String DOANHTHU            = "DOANHTHU";
+    public static final String ADD_DOANHTHU_WEB    = "ADD_DOANHTHU_WEB";
+    public static final String MAIN_REALTIME       = "http://dealtichtac.com/android/danhsach_realtime_order.php";
+    public static final String DELE_DONHANG_WEB    = "DELE_DONHANG_WEB";
+    public static final String DELE_KIEMKHO_WEB    = "DELE_KIEMKHO_WEB";
+    public static final String KHO                 = "KHO";
+    public static final String DELE_DOANHTHU_WEB   = "DELE_DOANHTHU_WEB";
+    public static final String DELE_DATCOC_WEB     = "DELE_DATCOC_WEB";
+    public static final String DELE_KHOANCHI_WEB   = "DELE_KHOANCHI_WEB";
+    public static final String MAIN_MAGIAMGIA      = "http://dealtichtac.com/android/danhsach_magiamgia.php";
 
 
     public static final String setMoney(int amount){
@@ -161,22 +168,30 @@ public class Keys {
     }
 
     public static final String getCalam(String chinhanh) {
-        String ca; int gio = 0;
+        String ca, cas = ""; int gio = 0;
+        int hours = new Time(System.currentTimeMillis()).getHours();
+        int phut = new Time(System.currentTimeMillis()).getMinutes();
         if (chinhanh.equals("Chi nhánh SOL")){
             gio = GIOHETCASOL;
-        } else if (chinhanh.equals("Chi nhánh 3/2")){
-            gio = GIOHETCA3_2;
+            if (hours < gio){
+                cas = "Ca sáng";
+            } else {
+                cas = "Ca chiều";
+            }
         } else if (chinhanh.equals("Chi nhánh Nguyễn Văn Linh")){
-            gio = GIOHETCANVL;
-        } else if (chinhanh.equals("Chi nhánh Big C")){
-            gio = GIOHETCABIGC;
+            if (hours < 14){
+                cas = "Ca sáng";
+            } else if (hours >= 15){
+                cas = "Ca chiều";
+            } else {
+                if (phut < 31){
+                    cas = "Ca sáng";
+                } else {
+                    cas = "Ca chiều";
+                }
+            }
         }
-        int hours = new Time(System.currentTimeMillis()).getHours();
-        if (hours < gio){
-            ca = "Ca sáng";
-        } else {
-            ca = "Ca chiều";
-        }
+        ca = cas;
         return ca;
     }
 
@@ -198,4 +213,21 @@ public class Keys {
         return s;
     }
 
+    public static final String sothutu(int so){
+        if(so < 10){
+            return "0"+so;
+        }
+        return ""+so;
+    }
+
+    public static String trimTextGio(String s, int maxLength){
+        if(!TextUtils.isEmpty(s)){
+            if(s.length() >= maxLength){
+                return s.substring(0, maxLength);
+            } else {
+                return s;
+            }
+        }
+        return s;
+    }
 }

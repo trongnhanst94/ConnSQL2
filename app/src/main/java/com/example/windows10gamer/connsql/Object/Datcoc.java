@@ -1,13 +1,16 @@
 package com.example.windows10gamer.connsql.Object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by EVRESTnhan on 12/29/2017.
  */
 
-public class Datcoc {
-    String id, maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, trangthai, ngaytra, catra, maNVtra, tenNVtra;
+public class Datcoc implements Parcelable{
+    String id, maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, ghichu, trangthai, ngaytra, catra, maNVtra, tenNVtra;
 
-    public Datcoc(String id, String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String trangthai, String ngaytra, String catra, String maNVtra, String tenNVtra) {
+    public Datcoc(String id, String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String ghichu, String trangthai, String ngaytra, String catra, String maNVtra, String tenNVtra) {
         this.id = id;
         this.maDC = maDC;
         this.ngay = ngay;
@@ -18,12 +21,44 @@ public class Datcoc {
         this.sotien = sotien;
         this.tenkhachhang = tenkhachhang;
         this.sodienthoai = sodienthoai;
+        this.ghichu = ghichu;
         this.trangthai = trangthai;
         this.ngaytra = ngaytra;
         this.catra = catra;
         this.maNVtra = maNVtra;
         this.tenNVtra = tenNVtra;
     }
+
+    protected Datcoc(Parcel in) {
+        id = in.readString();
+        maDC = in.readString();
+        ngay = in.readString();
+        ca = in.readString();
+        chinhanh = in.readString();
+        maNV = in.readString();
+        tenNV = in.readString();
+        sotien = in.readString();
+        tenkhachhang = in.readString();
+        sodienthoai = in.readString();
+        ghichu = in.readString();
+        trangthai = in.readString();
+        ngaytra = in.readString();
+        catra = in.readString();
+        maNVtra = in.readString();
+        tenNVtra = in.readString();
+    }
+
+    public static final Creator<Datcoc> CREATOR = new Creator<Datcoc>() {
+        @Override
+        public Datcoc createFromParcel(Parcel in) {
+            return new Datcoc(in);
+        }
+
+        @Override
+        public Datcoc[] newArray(int size) {
+            return new Datcoc[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -105,6 +140,14 @@ public class Datcoc {
         this.sodienthoai = sodienthoai;
     }
 
+    public String getGhichu() {
+        return ghichu;
+    }
+
+    public void setGhichu(String ghichu) {
+        this.ghichu = ghichu;
+    }
+
     public String getTrangthai() {
         return trangthai;
     }
@@ -143,5 +186,30 @@ public class Datcoc {
 
     public void setTenNVtra(String tenNVtra) {
         this.tenNVtra = tenNVtra;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(maDC);
+        dest.writeString(ngay);
+        dest.writeString(ca);
+        dest.writeString(chinhanh);
+        dest.writeString(maNV);
+        dest.writeString(tenNV);
+        dest.writeString(sotien);
+        dest.writeString(tenkhachhang);
+        dest.writeString(sodienthoai);
+        dest.writeString(ghichu);
+        dest.writeString(trangthai);
+        dest.writeString(ngaytra);
+        dest.writeString(catra);
+        dest.writeString(maNVtra);
+        dest.writeString(tenNVtra);
     }
 }

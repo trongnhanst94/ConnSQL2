@@ -87,7 +87,6 @@ public class Main_Doilaykhac extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
-        maBH = "BHDLK_"+ Keys.MaDonhang();
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder3");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -150,6 +149,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Doilaykhac.this).show();
                 else {
                     if (!edlydoDLK.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
+                        maBH = "BHDLK_"+ Keys.MaDonhang();
                         phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
                         lydo = edlydoDLK.getText().toString().trim();
                         chenhlech = total - Integer.valueOf(gia) + phidoiSP;
@@ -159,7 +159,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
                 }
             }
         });
-        Button exit= (Button) findViewById(R.id.cancel);
+        Button exit= findViewById(R.id.cancel);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,28 +202,28 @@ public class Main_Doilaykhac extends AppCompatActivity {
     }
 
     private void Anhxa() {
-        edphidoiSP = (EditText) findViewById(R.id.edphidoiSP);
-        edlydoDLK = (EditText) findViewById(R.id.edlydoBHDLK);
-        tvDlkMaOrder = (TextView) findViewById(R.id.tvDlkMaOrder);
-        tvDlkDate = (TextView) findViewById(R.id.tvDlkDate);
-        tvDlkChenhlech = (TextView) findViewById(R.id.tvDlkChenhlech);
-        tvDlkTime = (TextView) findViewById(R.id.tvDlkTime);
-        tvTongdonhang     = (TextView) findViewById(R.id.tvTongdonhang);
-        tvDlkDatetoday = (TextView) findViewById(R.id.tvDlkDatetoday);
-        tvDlkTimetoday = (TextView) findViewById(R.id.tvDlkTimetoday);
-        tvDlkMaNV = (TextView) findViewById(R.id.tvDlkMaNV);
-        tvChinhanhDLK = (TextView) findViewById(R.id.tvChinhanhDLK);
-        tvChinhanhDLKOrder = (TextView) findViewById(R.id.tvChinhanhDLKOrder);
-        tvDlkTenNV = (TextView) findViewById(R.id.tvDlkTenNV);
-        tvDlkGhichuOrder = (TextView) findViewById(R.id.tvDlkGhichu);
-        tvDlkTenKH = (TextView) findViewById(R.id.tvDlkTenKH);
-        tvDlkSdtKH = (TextView) findViewById(R.id.tvDlkSdtKH);
-        lv = (ListView) findViewById(R.id.lvBHDLK);
-        lv_moi = (Mylistview) findViewById(R.id.lvBHDLK_moi);
-        tvDlkGhichuKH = (TextView) findViewById(R.id.tvDlkGhichuKH);
-        tvDlkTenNVNhan = (TextView) findViewById(R.id.tvDlkTenNVNhan);
-        tvDlkMaNVNhan = (TextView) findViewById(R.id.tvDlkMaNVNhan);
-        btnxacnhan = (Button) findViewById(R.id.btnBHDLK);
+        edphidoiSP = findViewById(R.id.edphidoiSP);
+        edlydoDLK = findViewById(R.id.edlydoBHDLK);
+        tvDlkMaOrder = findViewById(R.id.tvDlkMaOrder);
+        tvDlkDate = findViewById(R.id.tvDlkDate);
+        tvDlkChenhlech = findViewById(R.id.tvDlkChenhlech);
+        tvDlkTime = findViewById(R.id.tvDlkTime);
+        tvTongdonhang     = findViewById(R.id.tvTongdonhang);
+        tvDlkDatetoday = findViewById(R.id.tvDlkDatetoday);
+        tvDlkTimetoday = findViewById(R.id.tvDlkTimetoday);
+        tvDlkMaNV = findViewById(R.id.tvDlkMaNV);
+        tvChinhanhDLK = findViewById(R.id.tvChinhanhDLK);
+        tvChinhanhDLKOrder = findViewById(R.id.tvChinhanhDLKOrder);
+        tvDlkTenNV = findViewById(R.id.tvDlkTenNV);
+        tvDlkGhichuOrder = findViewById(R.id.tvDlkGhichu);
+        tvDlkTenKH = findViewById(R.id.tvDlkTenKH);
+        tvDlkSdtKH = findViewById(R.id.tvDlkSdtKH);
+        lv = findViewById(R.id.lvBHDLK);
+        lv_moi = findViewById(R.id.lvBHDLK_moi);
+        tvDlkGhichuKH = findViewById(R.id.tvDlkGhichuKH);
+        tvDlkTenNVNhan = findViewById(R.id.tvDlkTenNVNhan);
+        tvDlkMaNVNhan = findViewById(R.id.tvDlkMaNVNhan);
+        btnxacnhan = findViewById(R.id.btnBHDLK);
     }
 
     public void scanSanpham(View view){

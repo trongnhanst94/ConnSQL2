@@ -29,7 +29,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="5dp"
-            android:text="Lọc đơn hàng bằng cách nhập vào ngày bắt đầu, ngày kết thúc và ca làm:"
+            android:text="Nhập vào ngày bắt đầu, ngày kết thúc và ca làm:"
             android:textAlignment="center"
             android:textSize="@dimen/muoi"
             android:textStyle="italic" />
@@ -129,6 +129,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/list_border"
+            android:listSelector="@color/white_greyish"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </LinearLayout>
@@ -139,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/report_icon"
+        android:src="@drawable/ic_business_report"
         app:backgroundTint="@color/RED" />
 
 </android.support.design.widget.CoordinatorLayout>

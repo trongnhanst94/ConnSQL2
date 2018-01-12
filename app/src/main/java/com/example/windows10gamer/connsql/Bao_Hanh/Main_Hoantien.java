@@ -78,7 +78,6 @@ public class Main_Hoantien extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
-        maBH = "BHHT_"+Keys.MaDonhang();
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder2");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -152,6 +151,7 @@ public class Main_Hoantien extends AppCompatActivity {
                 else {
                     if (gtConlai > 0) {
                         if (!edlydoHT.getText().toString().trim().equals("") && !edphitrahang.getText().toString().trim().equals("")) {
+                            maBH = "BHHT_"+Keys.MaDonhang();
                             phitrahang = edphitrahang.getText().toString().trim();
                             lydo = edlydoHT.getText().toString().trim();
                             new SendRequestHT().execute();
@@ -161,7 +161,7 @@ public class Main_Hoantien extends AppCompatActivity {
                 }
             }
         });
-        Button exit= (Button) findViewById(R.id.cancel);
+        Button exit= findViewById(R.id.cancel);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,26 +189,26 @@ public class Main_Hoantien extends AppCompatActivity {
     }
 
     private void Anhxa() {
-        tvgtConlai = (TextView) findViewById(R.id.tvgtConlai);
-        edphitrahang = (EditText) findViewById(R.id.edpthBHHT);
-        edlydoHT = (EditText) findViewById(R.id.edlydoBHHT);
-        tvHtMaOrder = (TextView) findViewById(R.id.tvHtMaOrder);
-        tvHtDate = (TextView) findViewById(R.id.tvHtDate);
-        tvHtTime = (TextView) findViewById(R.id.tvHtTime);
-        tvHtDatetoday = (TextView) findViewById(R.id.tvHtDatetoday);
-        tvHtTimetoday = (TextView) findViewById(R.id.tvHtTimetoday);
-        tvHtMaNV = (TextView) findViewById(R.id.tvHtMaNV);
-        tvHtTenNV = (TextView) findViewById(R.id.tvHtTenNV);
-        tvHtGhichuOrder = (TextView) findViewById(R.id.tvHtGhichu);
-        tvChinhanhHT = (TextView) findViewById(R.id.tvChinhanhHT);
-        tvChinhanhHTOrder = (TextView) findViewById(R.id.tvChinhanhHTOrder);
-        tvHtTenKH = (TextView) findViewById(R.id.tvHtTenKH);
-        tvHtSdtKH = (TextView) findViewById(R.id.tvHtSdtKH);
-        lv = (ListView) findViewById(R.id.lvBHHT);
-        tvHtGhichuKH = (TextView) findViewById(R.id.tvHtGhichuKH);
-        tvHtTenNVNhan = (TextView) findViewById(R.id.tvHtTenNVNhan);
-        tvHtMaNVNhan = (TextView) findViewById(R.id.tvHtMaNVNhan);
-        btnxacnhan = (Button) findViewById(R.id.btnBHHT);
+        tvgtConlai = findViewById(R.id.tvgtConlai);
+        edphitrahang = findViewById(R.id.edpthBHHT);
+        edlydoHT = findViewById(R.id.edlydoBHHT);
+        tvHtMaOrder = findViewById(R.id.tvHtMaOrder);
+        tvHtDate = findViewById(R.id.tvHtDate);
+        tvHtTime = findViewById(R.id.tvHtTime);
+        tvHtDatetoday = findViewById(R.id.tvHtDatetoday);
+        tvHtTimetoday = findViewById(R.id.tvHtTimetoday);
+        tvHtMaNV = findViewById(R.id.tvHtMaNV);
+        tvHtTenNV = findViewById(R.id.tvHtTenNV);
+        tvHtGhichuOrder = findViewById(R.id.tvHtGhichu);
+        tvChinhanhHT = findViewById(R.id.tvChinhanhHT);
+        tvChinhanhHTOrder = findViewById(R.id.tvChinhanhHTOrder);
+        tvHtTenKH = findViewById(R.id.tvHtTenKH);
+        tvHtSdtKH = findViewById(R.id.tvHtSdtKH);
+        lv = findViewById(R.id.lvBHHT);
+        tvHtGhichuKH = findViewById(R.id.tvHtGhichuKH);
+        tvHtTenNVNhan = findViewById(R.id.tvHtTenNVNhan);
+        tvHtMaNVNhan = findViewById(R.id.tvHtMaNVNhan);
+        btnxacnhan = findViewById(R.id.btnBHHT);
     }
 
     public class SendRequestHT extends AsyncTask<String, Void, String> {

@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="3dp"
-                    android:text="Nhân viên Bán:"
+                    android:text="Nhân viên Bảo hành:"
                     android:textSize="@dimen/muoi" />
 
                 <LinearLayout
@@ -293,7 +293,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="3dp"
-                    android:text="Nhân viên Bảo hành:"
+                    android:paddingTop="3dp"
+                    android:text="Nhân viên Bán:"
                     android:textSize="@dimen/muoi" />
 
                 <LinearLayout

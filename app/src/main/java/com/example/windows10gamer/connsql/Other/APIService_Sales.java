@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 
 
 public interface APIService_Sales {
-    @GET(Keys.USER_CONTENT_KEY)
+    @GET(Keys.USER_SALES_KEY)
     Call<OrderList> getAllProduct();
 
     @PUT("baohanh_TenvaMa.php?")

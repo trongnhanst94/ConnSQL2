@@ -49,23 +49,33 @@ public class Adapter_Realtime_Order extends ArrayAdapter<Order> {
         }
 
         Order item = getItem(position);
+        vh.tvstt.setText(Keys.sothutu(position+1));
+        vh.tvstt.setTextColor(context.getResources().getColor(R.color.holo_xanh));
         vh.tvRLgio.setText(item.getGio());
-        vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), Keys.MAX_LENGHT));
+        vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), 25));
         vh.tvRLnhanvien.setText(item.getTenNhanvien());
         vh.tvRLgia.setText(Keys.setMoney(Integer.parseInt(item.getGiaSanpham())));
-
+        if(contactList.get(position).getId().equals("1")){
+            vh.container.setBackgroundColor(context.getResources().getColor(R.color.white_greyish));
+        } else {
+            vh.container.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
         return vh.rootView;
     }
 
     private static class ViewHolder {
         public final LinearLayout rootView;
+        public final LinearLayout container;
         public final TextView tvRLgio;
         public final TextView tvRLten;
+        public final TextView tvstt;
         public final TextView tvRLgia;
         public final TextView tvRLnhanvien;
 
-        public ViewHolder(LinearLayout rootView, TextView tvRLgio, TextView tvRLten, TextView tvRLgia, TextView tvRLnhanvien) {
+        public ViewHolder(LinearLayout rootView, LinearLayout container, TextView tvstt, TextView tvRLgio, TextView tvRLten, TextView tvRLgia, TextView tvRLnhanvien) {
             this.rootView = rootView;
+            this.container = container;
+            this.tvstt = tvstt;
             this.tvRLgio = tvRLgio;
             this.tvRLten = tvRLten;
             this.tvRLgia = tvRLgia;
@@ -73,11 +83,13 @@ public class Adapter_Realtime_Order extends ArrayAdapter<Order> {
         }
 
         public static ViewHolder create(LinearLayout rootView) {
-            TextView tvRLgia = (TextView) rootView.findViewById(R.id.tvRLgia);
-            TextView tvRLgio = (TextView) rootView.findViewById(R.id.tvRLgio);
-            TextView tvRLten = (TextView) rootView.findViewById(R.id.tvRLten);
-            TextView tvRLnhanvien = (TextView) rootView.findViewById(R.id.tvRLnhanvien);
-            return new ViewHolder(rootView, tvRLgio, tvRLten, tvRLgia, tvRLnhanvien);
+            LinearLayout container = rootView.findViewById(R.id.ctcontainer);
+            TextView tvstt = rootView.findViewById(R.id.tvstt);
+            TextView tvRLgia = rootView.findViewById(R.id.tvRLgia);
+            TextView tvRLgio = rootView.findViewById(R.id.tvRLgio);
+            TextView tvRLten = rootView.findViewById(R.id.tvRLten);
+            TextView tvRLnhanvien = rootView.findViewById(R.id.tvRLnhanvien);
+            return new ViewHolder(rootView,container, tvstt, tvRLgio, tvRLten, tvRLgia, tvRLnhanvien);
         }
     }
 }

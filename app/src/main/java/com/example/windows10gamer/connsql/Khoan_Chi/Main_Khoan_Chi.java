@@ -69,9 +69,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_khoan_chi);
-        btnthemchi = (Button) findViewById(R.id.btnthemchi);
-        lvkhoanchi = (ListView) findViewById(R.id.lvkhoanchi);
-        tvchitoday = (TextView) findViewById(R.id.tvchitoday);
+        btnthemchi = findViewById(R.id.btnthemchi);
+        lvkhoanchi = findViewById(R.id.lvkhoanchi);
+        tvchitoday = findViewById(R.id.tvchitoday);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         Intent intent = getIntent();
@@ -97,14 +97,14 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         .setTitle("Tạo phiếu chi");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
                 dialog.setCancelable(false);
-                final LinearLayout lnHidden = (LinearLayout) mView.findViewById(R.id.lnHidden);
-                final TextView tvchingay = (TextView) mView.findViewById(R.id.tvchingay);
-                final TextView tvchica = (TextView) mView.findViewById(R.id.tvchica);
-                final TextView tvchimanv = (TextView) mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = (TextView) mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = (TextView) mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = (EditText) mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = (EditText) mView.findViewById(R.id.edchisotien);
+                final LinearLayout lnHidden = mView.findViewById(R.id.lnHidden);
+                final TextView tvchingay = mView.findViewById(R.id.tvchingay);
+                final TextView tvchica = mView.findViewById(R.id.tvchica);
+                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
                 lnHidden.setVisibility(View.VISIBLE);
                 tvchingay.setText(arraylist.get(position).getNgay());
                 tvchica.setText(arraylist.get(position).getCa());
@@ -139,11 +139,11 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         .setTitle("Tạo phiếu chi");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
                 dialog.setCancelable(false);
-                final TextView tvchimanv = (TextView) mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = (TextView) mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = (TextView) mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = (EditText) mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = (EditText) mView.findViewById(R.id.edchisotien);
+                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
                 tvchichinhanh.setText(chinhanh);
                 tvchimanv.setText("Mã số: "+session_ma);
                 tvchitennv.setText("Tên nhân viên: "+session_username);
@@ -152,11 +152,11 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         noidung = edchinoidung.getText().toString().trim();
                         sotien = edchisotien.getText().toString().trim();
-                        if (noidung.equals("") && sotien.equals("") && sotien.equals("0")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
-                        } else {
+                        if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
                             new SendRequest().execute();
                             new GetData().execute(chinhanh);
+                        } else {
+                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         }
                     }
                 });
@@ -351,8 +351,8 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                             for( ; jIndex < lenArray; jIndex++) {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
-                                    Log.d("qqq", arraylist.size()+"");
                                     arraylist.add(new Khoanchi(
+                                            object.getString("id"),
                                             object.getString("maKC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
