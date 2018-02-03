@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Data">
+
+    <TextView
+        android:id="@+id/tvmaBH1D1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cam"
+        android:padding="10dp"
+        android:text="Remove Dữ liệu Server"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="@dimen/tie" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Lưu ý: những dữ liệu sau khi xóa sẽ không phục hồi được"
+        android:textAlignment="center"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn hàng"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmKiemkho"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Clear Kiểm kho"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmBCDT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa BC Doanh thu"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmKhoanchi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn khoản chi"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmDatcoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn đặt cọc"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmBaohanh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn bảo hành"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+
+</LinearLayout>

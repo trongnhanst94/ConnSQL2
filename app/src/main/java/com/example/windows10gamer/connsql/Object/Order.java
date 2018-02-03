@@ -2,6 +2,7 @@ package com.example.windows10gamer.connsql.Object;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,8 +10,11 @@ import com.google.gson.annotations.SerializedName;
  * Created by EVRESTnhan on 10/7/2017.
  */
 
-public class Order implements Parcelable {
+public class Order implements Parcelable, Comparable<Order> {
 
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("maDonhang")
     @Expose
     private String maDonhang;
@@ -68,11 +72,15 @@ public class Order implements Parcelable {
     @SerializedName("ghichuKhachhang")
     @Expose
     private String ghichuKhachhang;
-    @SerializedName("hinhthuc")
+    @SerializedName("maNhanvienbandum")
     @Expose
-    private String hinhthuc;
+    private String maNhanvienbandum;
+    @SerializedName("tenNhanvienbandum")
+    @Expose
+    private String tenNhanvienbandum;
 
-    public Order(String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String hinhthuc) {
+    public Order(String id, String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String maNhanvienbandum, String tenNhanvienbandum) {
+        this.id = id;
         this.maDonhang = maDonhang;
         this.ngay = ngay;
         this.calam = calam;
@@ -92,43 +100,17 @@ public class Order implements Parcelable {
         this.tenKhachhang = tenKhachhang;
         this.sodienthoaiKhachhang = sodienthoaiKhachhang;
         this.ghichuKhachhang = ghichuKhachhang;
-        this.hinhthuc = hinhthuc;
+        this.maNhanvienbandum = maNhanvienbandum;
+        this.tenNhanvienbandum = tenNhanvienbandum;
     }
 
-    protected Order(Parcel in) {
-        maDonhang = in.readString();
-        ngay = in.readString();
-        calam = in.readString();
-        gio = in.readString();
-        chinhanh = in.readString();
-        maNhanvien = in.readString();
-        tenNhanvien = in.readString();
-        maSanpham = in.readString();
-        tenSanpham = in.readString();
-        baohanhSanpham = in.readString();
-        nguonSanpham = in.readString();
-        ngaynhapSanpham = in.readString();
-        vonSanpham = in.readString();
-        giaSanpham = in.readString();
-        giamgia = in.readString();
-        ghichuSanpham = in.readString();
-        tenKhachhang = in.readString();
-        sodienthoaiKhachhang = in.readString();
-        ghichuKhachhang = in.readString();
-        hinhthuc = in.readString();
+    public String getId() {
+        return id;
     }
 
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
-        @Override
-        public Order createFromParcel(Parcel in) {
-            return new Order(in);
-        }
-
-        @Override
-        public Order[] newArray(int size) {
-            return new Order[size];
-        }
-    };
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getMaDonhang() {
         return maDonhang;
@@ -282,13 +264,58 @@ public class Order implements Parcelable {
         this.ghichuKhachhang = ghichuKhachhang;
     }
 
-    public String getHinhthuc() {
-        return hinhthuc;
+    public String getMaNhanvienbandum() {
+        return maNhanvienbandum;
     }
 
-    public void setHinhthuc(String hinhthuc) {
-        this.hinhthuc = hinhthuc;
+    public void setMaNhanvienbandum(String maNhanvienbandum) {
+        this.maNhanvienbandum = maNhanvienbandum;
     }
+
+    public String getTenNhanvienbandum() {
+        return tenNhanvienbandum;
+    }
+
+    public void setTenNhanvienbandum(String tenNhanvienbandum) {
+        this.tenNhanvienbandum = tenNhanvienbandum;
+    }
+
+    protected Order(Parcel in) {
+        id = in.readString();
+        maDonhang = in.readString();
+        ngay = in.readString();
+        calam = in.readString();
+        gio = in.readString();
+        chinhanh = in.readString();
+        maNhanvien = in.readString();
+        tenNhanvien = in.readString();
+        maSanpham = in.readString();
+        tenSanpham = in.readString();
+        baohanhSanpham = in.readString();
+        nguonSanpham = in.readString();
+        ngaynhapSanpham = in.readString();
+        vonSanpham = in.readString();
+        giaSanpham = in.readString();
+        giamgia = in.readString();
+        ghichuSanpham = in.readString();
+        tenKhachhang = in.readString();
+        sodienthoaiKhachhang = in.readString();
+        ghichuKhachhang = in.readString();
+        maNhanvienbandum = in.readString();
+        tenNhanvienbandum = in.readString();
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -297,6 +324,7 @@ public class Order implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(maDonhang);
         dest.writeString(ngay);
         dest.writeString(calam);
@@ -316,6 +344,12 @@ public class Order implements Parcelable {
         dest.writeString(tenKhachhang);
         dest.writeString(sodienthoaiKhachhang);
         dest.writeString(ghichuKhachhang);
-        dest.writeString(hinhthuc);
+        dest.writeString(maNhanvienbandum);
+        dest.writeString(tenNhanvienbandum);
+    }
+
+    @Override
+    public int compareTo(@NonNull Order o) {
+        return 0;
     }
 }

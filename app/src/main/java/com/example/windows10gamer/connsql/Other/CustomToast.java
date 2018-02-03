@@ -24,11 +24,11 @@ public class CustomToast {
                 (LinearLayout) view.findViewById(R.id.layout_error));
 
         // Get TextView id and set error
-        TextView text = (TextView) layout.findViewById(R.id.toast_error);
+        TextView text = layout.findViewById(R.id.toast_error);
         text.setText(error);
 
         Toast toast = new Toast(context);// Get Toast Context
-        toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+        toast.setGravity(Gravity.CENTER | Gravity.FILL_HORIZONTAL, 0, 0);
         toast.setMargin(0, 0);
         // Toast
         // gravity
@@ -36,7 +36,7 @@ public class CustomToast {
         // Fill
         // Horizoontal
 
-        toast.setDuration(Toast.LENGTH_SHORT);// Set Duration
+        toast.setDuration(Toast.LENGTH_LONG);// Set Duration
         toast.setView(layout); // Set Custom View over toast
 
         toast.show();// Finally show toast

@@ -23,6 +23,12 @@ public interface APIService_Sales {
     @PUT("danhsach_realtime_order.php?")
     Call<OrderList> getDoanhthu(@Query("chinhanh") String chinhanh, @Query("ngay") String ngay, @Query("calam") String calam);
 
-    @PUT("main_sales.php?")
+    @PUT(Keys.USER_SALES_KEY+"?")
     Call<OrderList> getOrder(@Query("loadBegin")  String loadBegin,  @Query("loadEnd") String loadEnd);
+
+    @PUT(Keys.USER_SALES_KEY+"?")
+    Call<OrderList> getBaohanhKo(@Query("masanpham")  String masanpham, @Query("tacvu")  String tacvu);
+
+    @PUT(Keys.USER_SALES_KEY+"?")
+    Call<OrderList> getBaohanhCo(@Query("loadBegin")  String loadBegin,  @Query("loadEnd") String loadEnd, @Query("masanpham")  String masanpham, @Query("tacvu")  String tacvu);
 }

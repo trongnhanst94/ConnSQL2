@@ -74,7 +74,9 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
     TextView tvga, tvgb, tvgiong, tvkhac, tvslga, tvslgb;
     Button tvxemA, tvxemB;
     ArrayList<String> position;
+    ProgressDialog dialog2;
     String vitriKK, kho = "Kho mới";
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,15 +91,15 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         if (shouldAskPermissions()) {
             askPermissions();
         }
-        tvxemA = (Button) findViewById(R.id.tvxemA);
-        tvxemB = (Button) findViewById(R.id.tvxemB);
-        linearLayout = (LinearLayout) findViewById(R.id.li);
-        lnXemchitiet = (LinearLayout) findViewById(R.id.lnXemchitiet);
-        lvScan = (ListView) findViewById(R.id.lvKetquakiemkho);
-        lvScan2 = (ListView) findViewById(R.id.lvKetquakiemkho2);
-        btnSubmit = (Button) findViewById(R.id.btnSubmitKQKK);
-        snA = (Spinner) findViewById(R.id.snKQKKA);
-        snB = (Spinner) findViewById(R.id.snKQKKB);
+        tvxemA = findViewById(R.id.tvxemA);
+        tvxemB = findViewById(R.id.tvxemB);
+        linearLayout = findViewById(R.id.li);
+        lnXemchitiet = findViewById(R.id.lnXemchitiet);
+        lvScan = findViewById(R.id.lvKetquakiemkho);
+        lvScan2 = findViewById(R.id.lvKetquakiemkho2);
+        btnSubmit = findViewById(R.id.btnSubmitKQKK);
+        snA = findViewById(R.id.snKQKKA);
+        snB = findViewById(R.id.snKQKKB);
         position = new ArrayList<>();
         lnXemchitiet.setVisibility(View.GONE);
         new Getvitri().execute();
@@ -127,7 +129,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         lvScan2.setAdapter(adapter2);
 
         // btn Cập nhật
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabKQKK);
+        FloatingActionButton fab = findViewById(R.id.fabKQKK);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(@NonNull View view) {
@@ -281,50 +283,19 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         lnXemchitiet.setVisibility(View.VISIBLE);
     }
 
-    public void setList(ArrayList<CountSanpham> list) {
-        this.dem = list;
-        for (int i = 0; i<dem.size(); i++){
-            if (dem.get(i).getNhanvien().equals(snUserA)){
-                demA.add(dem.get(i));
-            }
-            if (dem.get(i).getNhanvien().equals(snUserB)){
-                demB.add(dem.get(i));
-            }
-        }
-        final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
-                all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
-        ga.addAll(demA); gb.addAll(demB);
-        for (int i = 0; i < ga.size(); i++){
-            for (int j = 0; j < gb.size(); j++){
-                if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
-                    giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
-                }
-            }
-        }
-
-        all.addAll(ga);all.addAll(gb);
-        for (int i = 0; i < all.size(); i++){
-           int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
-            if (result == -1){
-                khac.add(all.get(i));
-            }
-        }
-        dialog(dem, giong, khac, ga, gb);
-    }
-
 
     public void dialog(final ArrayList<CountSanpham> dem, final ArrayList<CountSanpham> giong, final ArrayList<CountSanpham> khac, final ArrayList<CountSanpham> ga, final ArrayList<CountSanpham> gb){
         Dialog dialog = new Dialog(Main_Ketqua_Kiemkho.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_report);
         dialog.show();
-        btnDsLechKho = (Button) dialog.findViewById(R.id.btnDsLechkho);
-        tvga = (TextView) dialog.findViewById(R.id.tvga);
-        tvgb = (TextView) dialog.findViewById(R.id.tvgb);
-        tvgiong = (TextView) dialog.findViewById(R.id.tvgiong);
-        tvkhac = (TextView) dialog.findViewById(R.id.tvkhac);
-        tvslga = (TextView) dialog.findViewById(R.id.tvslga);
-        tvslgb = (TextView) dialog.findViewById(R.id.tvslgb);
+        btnDsLechKho = dialog.findViewById(R.id.btnDsLechkho);
+        tvga = dialog.findViewById(R.id.tvga);
+        tvgb = dialog.findViewById(R.id.tvgb);
+        tvgiong = dialog.findViewById(R.id.tvgiong);
+        tvkhac = dialog.findViewById(R.id.tvkhac);
+        tvslga = dialog.findViewById(R.id.tvslga);
+        tvslgb = dialog.findViewById(R.id.tvslgb);
         tvga.setText(nameUserA);tvgb.setText(nameUserB);
         tvslga.setText((ga.size())+"");
         tvslgb.setText((gb.size())+"");
@@ -362,7 +333,6 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
     }
 
     class Getvitri extends AsyncTask<Void, Void, Void> {
-        ProgressDialog dialog;
         int jIndex;
         int x;
 
@@ -374,11 +344,11 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                 jIndex = 0;
             else
                 jIndex = x;
-            dialog = new ProgressDialog(Main_Ketqua_Kiemkho.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được tải xuống");
-            dialog.setCancelable(false);
-            dialog.show();
+            dialog2 = new ProgressDialog(Main_Ketqua_Kiemkho.this);
+            dialog2.setTitle("Hãy chờ...");
+            dialog2.setMessage("Danh sách chi nhánh đang được tải xuống");
+            dialog2.setCancelable(false);
+            dialog2.show();
         }
 
         @Nullable
@@ -416,8 +386,8 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            dialog.dismiss();
             setLisst(position);
+            dialog2.dismiss();
         }
     }
 
@@ -433,9 +403,9 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         View mView = getLayoutInflater().inflate(R.layout.spinner_kk, null);
         dialog.setTitle("Chọn chi nhánh và kho");
         dialog.setCancelable(false);
-        final Spinner spinner = (Spinner) mView.findViewById(R.id.spinnerKM);
-        final RadioButton rbmoi = (RadioButton) mView.findViewById(R.id.srbmoi);
-        final RadioButton rbloi = (RadioButton) mView.findViewById(R.id.srbloi);
+        final Spinner spinner = mView.findViewById(R.id.spinnerKM);
+        final RadioButton rbmoi = mView.findViewById(R.id.srbmoi);
+        final RadioButton rbloi = mView.findViewById(R.id.srbloi);
         rbmoi.setChecked(true);
         ArrayAdapter mAdapter = new ArrayAdapter<>(Main_Ketqua_Kiemkho.this, android.R.layout.simple_spinner_item, position);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -478,13 +448,11 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
 
     class GetDataKho extends AsyncTask<Void, Void, Void> {
 
-        ProgressDialog dialog;
         int jIndex;
         int x;
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
             x = arrayList.size();
             if(x == 0)
                 jIndex = 0;
@@ -492,7 +460,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                 jIndex = x;
             dialog = new ProgressDialog(Main_Ketqua_Kiemkho.this);
             dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setMessage("Dữ liệu sản phẩm đang được tải xuống");
             dialog.setCancelable(false);
             dialog.show();
         }
@@ -508,7 +476,6 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                         int lenArray = array.length();
                         if(lenArray > 0) {
                             for( ; jIndex < lenArray; jIndex++) {
-
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     if (vitriKK.equals(object.getString("vitri")) && (object.getString("kho").equals(kho))){
@@ -569,7 +536,32 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
             linearLayout.setLayoutParams(params);
-            setList(dem);
+            for (int i = 0; i<dem.size(); i++){
+                if (dem.get(i).getNhanvien().equals(snUserA)){
+                    demA.add(dem.get(i));
+                }
+                if (dem.get(i).getNhanvien().equals(snUserB)){
+                    demB.add(dem.get(i));
+                }
+            }
+            final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
+                    all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
+            ga.addAll(demA); gb.addAll(demB);
+            for (int i = 0; i < ga.size(); i++){
+                for (int j = 0; j < gb.size(); j++){
+                    if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
+                        giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
+                    }
+                }
+            }
+            all.addAll(ga);all.addAll(gb);
+            for (int i = 0; i < all.size(); i++){
+                int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
+                if (result == -1){
+                    khac.add(all.get(i));
+                }
+            }
+            dialog(dem, giong, khac, ga, gb);
             dialog.dismiss();
         }
     }
@@ -620,7 +612,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object = response.getJSONObject(i);
-                                if (object.getInt("level") == Keys.LEVEL_BH){
+                                if (object.getInt("level") >= Keys.LEVEL_KHO){
                                     usernames.add(new User(
                                             object.getInt("id"),
                                             object.getString("ma_user"),

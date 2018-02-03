@@ -66,10 +66,10 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
         nameUser = bundle.getString("nameUserB");
         maUser = bundle.getString("snUserB");
         new GetDataKho().execute();
-        listView = (ListView) findViewById(R.id.lvXemB);
+        listView = findViewById(R.id.lvXemB);
         adapter = new Adapter_XemB(Main_Kiemkho_XemB.this,R.layout.adapter_xem, sanphams);
         listView.setAdapter(adapter);
-        searchView = (EditText) findViewById(R.id.svSearchItemXemB);
+        searchView = findViewById(R.id.svSearchItemXemB);
 
         searchView.addTextChangedListener(new TextWatcher() {
 
@@ -154,8 +154,6 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
                 postDataParams.put("chinhanh", chinhanh);
                 postDataParams.put("kho", kho);
                 postDataParams.put("nameUser", nameUser);
-                Log.d("qqq", params[0]+chinhanh+kho+nameUser);
-
                 Log.e("params",postDataParams.toString());
 
                 // Kết nối HTTP

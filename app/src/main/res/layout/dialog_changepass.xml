@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/ednowpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:hint="Mật khẩu cũ"
+            android:inputType="textPassword"
+            android:textSize="@dimen/tam" />
+
+        <EditText
+            android:id="@+id/edpass1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:fadeScrollbars="false"
+            android:hint="Nhập mật khẩu mới"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:minEms="4"
+            android:textSize="@dimen/tam"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edpass2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:hint="Nhập lại mật khẩu mới"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:minEms="4"
+            android:textSize="@dimen/tam"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textAlignment="center"
+            android:textColor="@color/RED"
+            android:textSize="@dimen/muoi" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/btnpass"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@color/RED"
+                android:text="Xác nhận"
+                android:textColor="@color/white"
+                android:textSize="@dimen/btn"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"></LinearLayout>
+
+</LinearLayout>

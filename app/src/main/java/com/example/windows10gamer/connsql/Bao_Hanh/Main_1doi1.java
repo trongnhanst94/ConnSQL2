@@ -194,7 +194,7 @@ public class Main_1doi1 extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
         integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
+        integrator.setBeepEnabled(true);
         integrator.initiateScan();
     }
 

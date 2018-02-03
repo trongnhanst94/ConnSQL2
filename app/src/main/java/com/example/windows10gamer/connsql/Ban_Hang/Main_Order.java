@@ -60,30 +60,36 @@ public class Main_Order extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_order);
-        edBenginOrder  = (EditText) findViewById(R.id.edBeginOrder);
-        edEndOrder     = (EditText) findViewById(R.id.edEndOrder);
-        btnSearchOrder = (Button) findViewById(R.id.btnDateOrder);
-        fabReportOrder = (FloatingActionButton) findViewById(R.id.fabReportOrder);
-        cbCasang       = (CheckBox) findViewById(R.id.cbCasangOrder);
-        cbCachieu      = (CheckBox) findViewById(R.id.cbCachieuOrder);
+        edBenginOrder  = findViewById(R.id.edBeginOrder);
+        edEndOrder     = findViewById(R.id.edEndOrder);
+        btnSearchOrder = findViewById(R.id.btnDateOrder);
+        fabReportOrder = findViewById(R.id.fabReportOrder);
+        cbCasang       = findViewById(R.id.cbCasangOrder);
+        cbCachieu      = findViewById(R.id.cbCachieuOrder);
         cbCasang.setChecked(true);
         cbCachieu.setChecked(true);
         edBenginOrder.setText(Keys.getDateNow());
         edEndOrder.setText(Keys.getDateNow());
         contactList = new ArrayList<>();
         temp = new ArrayList<>();
-        fabReportOrder.setVisibility(view.INVISIBLE);
-        listView = (ListView) findViewById(R.id.listView);
+        fabReportOrder.setVisibility(View.INVISIBLE);
+        listView = findViewById(R.id.listView);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArrayList<Order> sendlist = new ArrayList<>();
+                for (int i = 0; i < contactList.size(); i++) {
+                    if (temp.get(position).getMaDonhang().equals(contactList.get(i).getMaDonhang())){
+                        sendlist.add(contactList.get(i));
+                    }
+                }
                 Intent intent = new Intent(Main_Order.this, Main_Information_Order.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
-                bundle.putString("keyMaOrder", temp.get(position).getMaDonhang());
-                bundle.putParcelableArrayList("arrayOrder", contactList);
+                bundle.putString("keyMaOrder", sendlist.get(0).getMaDonhang());
+                bundle.putParcelableArrayList("arrayOrder", sendlist);
                 intent.putExtra("DataOrder", bundle);
                 startActivity(intent);
             }
@@ -96,7 +102,7 @@ public class Main_Order extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Order.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Order.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -115,7 +121,7 @@ public class Main_Order extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Order.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Order.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -149,21 +155,25 @@ public class Main_Order extends AppCompatActivity {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Order.this).show();
                 else {
-                    dateBegin = String.valueOf(edBenginOrder.getText());
-                    dateEnd = String.valueOf(edEndOrder.getText());
-                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
-                    else dateCasang = "FALSE";
-                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
-                    else dateCachieu = "FALSE";
-                    Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("ReportList", contactList);
-                    bundle.putString("dateBegin", dateBegin);
-                    bundle.putString("dateEnd", dateEnd);
-                    bundle.putString("dateCasang", dateCasang);
-                    bundle.putString("dateCachieu", dateCachieu);
-                    intent.putExtra("ReportBundle", bundle);
-                    startActivity(intent);
+                    if (contactList.size() > 0){
+                        dateBegin = String.valueOf(edBenginOrder.getText());
+                        dateEnd = String.valueOf(edEndOrder.getText());
+                        if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                        else dateCasang = "FALSE";
+                        if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                        else dateCachieu = "FALSE";
+                        Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("chinhanh", chinhanh);
+                        bundle.putString("dateBegin", dateBegin);
+                        bundle.putString("dateEnd", dateEnd);
+                        bundle.putString("dateCasang", dateCasang);
+                        bundle.putString("dateCachieu", dateCachieu);
+                        intent.putExtra("ReportBundle", bundle);
+                        startActivity(intent);
+                    } else {
+                        new CustomToast().Show_Toast(Main_Order.this, findViewById(android.R.id.content), "Không có dữ liệu!");
+                    }
                 }
             }
         });
@@ -253,7 +263,8 @@ public class Main_Order extends AppCompatActivity {
                                             contactList.get(j).getTenKhachhang(),
                                             contactList.get(j).getSodienthoaiKhachhang(),
                                             contactList.get(j).getGhichuKhachhang(),
-                                            contactList.get(j).getHinhthuc(),
+                                            contactList.get(j).getMaNhanvienbandum(),
+                                            contactList.get(j).getTenNhanvienbandum(),
                                             1
                                     ));
                                 } else {
@@ -277,12 +288,14 @@ public class Main_Order extends AppCompatActivity {
                                             temp.get(result).getTenKhachhang(),
                                             temp.get(result).getSodienthoaiKhachhang(),
                                             temp.get(result).getGhichuKhachhang(),
-                                            temp.get(result).getHinhthuc(),
+                                            temp.get(result).getMaNhanvienbandum(),
+                                            temp.get(result).getTenNhanvienbandum(),
                                             temp.get(result).getSoluong()+1
                                     ));
                                 }
                             }
                         }
+
                         getList(contactList);
                         if (temp.size() == 0){
                             new CustomToast().Show_Toast(Main_Order.this, v, "Không có đơn hàng!");
@@ -291,7 +304,7 @@ public class Main_Order extends AppCompatActivity {
                         adapter = new Adapter_Order_Plus(Main_Order.this, temp);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-                        fabReportOrder.setVisibility(view.VISIBLE);
+                        fabReportOrder.setVisibility(View.VISIBLE);
                     } else {
                         new CustomToast().Show_Toast(Main_Order.this, v, "Không có response!");
                     }

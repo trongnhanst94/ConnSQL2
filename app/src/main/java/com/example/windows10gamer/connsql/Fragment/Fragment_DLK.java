@@ -60,9 +60,9 @@ public class Fragment_DLK extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dlk, container, false);
-        lvBHDLK = (ListView) v.findViewById(R.id.lvBHDLK_Report);
-        fab = (FloatingActionButton) v.findViewById(R.id.fabBHDLK);
-        tvNoti = (TextView) v.findViewById(R.id.tvNoti);
+        lvBHDLK = v.findViewById(R.id.lvBHDLK_Report);
+        fab = v.findViewById(R.id.fabBHDLK);
+        tvNoti = v.findViewById(R.id.tvNoti);
         tvNoti.setText("Nhấn vào biểu tượng \"Kính lúp\" để tìm kiếm! ");
         listLoc = new ArrayList<>();
         bh = new ArrayList<>();
@@ -98,8 +98,8 @@ public class Fragment_DLK extends android.support.v4.app.Fragment {
                 else {
                     tvNoti.setText("");
                     View customView = getActivity().getLayoutInflater().inflate(R.layout.dialog_bh, null);
-                    final EditText dpStartDate = (EditText) customView.findViewById(R.id.dpStartDate);
-                    final EditText dpEndDate = (EditText) customView.findViewById(R.id.dpEndDate);
+                    final EditText dpStartDate = customView.findViewById(R.id.dpStartDate);
+                    final EditText dpEndDate = customView.findViewById(R.id.dpEndDate);
                     dpStartDate.setText(Keys.getDateNow());
                     dpEndDate.setText(Keys.getDateNow());
                     dpStartDate.setInputType(InputType.TYPE_NULL);
@@ -110,7 +110,7 @@ public class Fragment_DLK extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                     calendar.set(year, month, dayOfMonth);
@@ -129,7 +129,7 @@ public class Fragment_DLK extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                     calendar.set(year, month, dayOfMonth);

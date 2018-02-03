@@ -1,17 +1,30 @@
 package com.example.windows10gamer.connsql.Ban_Hang;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order_TD;
+import com.example.windows10gamer.connsql.Adapter.Adapter_QuaTangInfo;
 import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Other.GiftList;
+import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,40 +35,46 @@ public class Main_Information_Order extends AppCompatActivity {
     TextView tvifMaNVOrder;
     TextView tvifTenNVOrder;
     TextView tvifChinhanhOrder;
-    TextView tvifGiaOrder;
     TextView tvifGhichuOrder;
     TextView tvifTenKH;
     TextView tvifSdtKH;
     TextView tvifGhichuKH;
     TextView tvifTotalOrder;
-    TextView tvifDoanhthutrensanpham;
+    TextView tvifgiamgia, tvifsaugiamgia;
     SwipeMenuListView lvInfoOrder;
-
+    LinearLayout lnHide;
+    GiftList lvKhuyenmai;
     ArrayList<Order> orderInfo = new ArrayList<>();
     ArrayList<Order> item = new ArrayList<>();
     ArrayList<Sanpham_gio> sanphamOrder = new ArrayList<>();
-    int position, total;
+    int position, total, giamgia, saugiamgia;
     String keyMaOrder;
     Adapter_Info_Order_TD adapter;
+    private ProgressDialog dialog2;
+    Adapter_QuaTangInfo adapterKhuyenmai;
+    private ArrayList<Quatang> arraylist = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_information_order);
-        tvifMaOrder = (TextView) findViewById(R.id.tvifMaOrder);
-        tvifDateOrder = (TextView) findViewById(R.id.tvifDateOrder);
-        tvifTimeOrder = (TextView) findViewById(R.id.tvifTimeOrder);
-        tvifMaNVOrder = (TextView) findViewById(R.id.tvifMaNVOrder);
-        tvifTenNVOrder = (TextView) findViewById(R.id.tvifTenNVOrder);
-        tvifChinhanhOrder = (TextView) findViewById(R.id.tvifChinhanhOrder);
-        tvifGhichuOrder = (TextView) findViewById(R.id.tvifGhichuOrder);
-        tvifTenKH = (TextView) findViewById(R.id.tvifTenKH);
-        tvifSdtKH = (TextView) findViewById(R.id.tvifSdtKH);
-        tvifGhichuKH = (TextView) findViewById(R.id.tvifGhichuKH);
-        tvifTotalOrder = (TextView) findViewById(R.id.tvifTotalOrder);
-        tvifDoanhthutrensanpham = (TextView) findViewById(R.id.tvifDoanhthutrensanpham);
-        lvInfoOrder = (SwipeMenuListView) findViewById(R.id.lvInfoOrder);
+        lnHide = findViewById(R.id.lnHide);
+        lvKhuyenmai = findViewById(R.id.lvKhuyenmai);
+        tvifMaOrder = findViewById(R.id.tvifMaOrder);
+        tvifDateOrder = findViewById(R.id.tvifDateOrder);
+        tvifTimeOrder = findViewById(R.id.tvifTimeOrder);
+        tvifMaNVOrder = findViewById(R.id.tvifMaNVOrder);
+        tvifTenNVOrder = findViewById(R.id.tvifTenNVOrder);
+        tvifChinhanhOrder = findViewById(R.id.tvifChinhanhOrder);
+        tvifGhichuOrder = findViewById(R.id.tvifGhichuOrder);
+        tvifTenKH = findViewById(R.id.tvifTenKH);
+        tvifSdtKH = findViewById(R.id.tvifSdtKH);
+        tvifGhichuKH = findViewById(R.id.tvifGhichuKH);
+        tvifTotalOrder = findViewById(R.id.tvifTotalOrder);
+        tvifgiamgia = findViewById(R.id.tvifgiamgia);
+        tvifsaugiamgia = findViewById(R.id.tvifsaugiamgia);
+        lvInfoOrder = findViewById(R.id.lvInfoOrder);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("DataOrder");
         position  = bundle.getInt("position");
@@ -78,7 +97,7 @@ public class Main_Information_Order extends AppCompatActivity {
                     item.get(j).getGiaSanpham()));
             total+=Integer.parseInt(item.get(j).getGiaSanpham());
         }
-
+        new GetData().execute();
         tvifMaOrder.setText(item.get(0).getMaDonhang());
         tvifDateOrder.setText("Ngày: "+item.get(0).getNgay());
         tvifTimeOrder.setText(" Ca: "+item.get(0).getCalam());
@@ -97,137 +116,73 @@ public class Main_Information_Order extends AppCompatActivity {
         } else {
             tvifGhichuKH.setText("Ghi chú khách hàng: "+item.get(0).getGhichuKhachhang());
         }
-        tvifTotalOrder.setText("Tổng: "+Keys.setMoney(total));
-        tvifDoanhthutrensanpham.setText("Chỉ số KPI: "+ Keys.setMoney(total/item.size())+"/SP");
+        tvifTotalOrder.setText(Keys.setMoney(total));
+        tvifgiamgia.setText("- "+ Keys.setMoney(Integer.valueOf(item.get(0).getGiamgia())));
+        tvifsaugiamgia.setText(Keys.setMoney(total - Integer.valueOf(item.get(0).getGiamgia())));
 
         adapter = new Adapter_Info_Order_TD(Main_Information_Order.this, item);
         lvInfoOrder.setAdapter(adapter);
-//
-//        SwipeMenuCreator creator = new SwipeMenuCreator() {
-//
-//            @Override
-//            public void create(SwipeMenu menu) {
-//
-//                int totalWidth = findViewById(R.id.lvInfoOrder).getMeasuredWidth() - 40;
-//
-//                SwipeMenuItem hoantien = new SwipeMenuItem(getApplicationContext());
-//                hoantien.setWidth(totalWidth/3);
-//                hoantien.setTitle("HOÀN TIỀN");
-//                hoantien.setIcon(R.mipmap.ic_ht);
-//                hoantien.setTitleSize(10);
-//                hoantien.setTitleColor(R.color.cam);
-//                hoantien.setBackground(R.drawable.bg123);
-//                menu.addMenuItem(hoantien);
-//
-//                SwipeMenuItem khacloai = new SwipeMenuItem(getApplicationContext());
-//                khacloai.setWidth(totalWidth/3);
-//                khacloai.setTitle("ĐỔI KHÁC");
-//                khacloai.setIcon(R.mipmap.ic_dkl);
-//                khacloai.setTitleSize(10);
-//                khacloai.setTitleColor(R.color.cam);
-//                khacloai.setBackground(R.drawable.bg123);
-//                menu.addMenuItem(khacloai);
-//
-////                SwipeMenuItem doi1 = new SwipeMenuItem(getApplicationContext());
-////                doi1.setWidth(totalWidth/3);
-////                doi1.setTitle("1 ĐỔI 1");
-////                doi1.setIcon(R.mipmap.ic_d1);
-////                doi1.setTitleSize(10);
-////                doi1.setTitleColor(R.color.cam);
-////                doi1.setBackground(R.drawable.bg123);
-////                menu.addMenuItem(doi1);
-//
-//                SwipeMenuItem choxuly = new SwipeMenuItem(getApplicationContext());
-//                choxuly.setWidth(totalWidth/3);
-//                choxuly.setTitle("CHỜ XỬ LÝ");
-//                choxuly.setIcon(R.mipmap.ic_d1);
-//                choxuly.setTitleSize(10);
-//                choxuly.setTitleColor(R.color.cam);
-//                choxuly.setBackground(R.drawable.bg123);
-//                menu.addMenuItem(choxuly);
-//            }
-//        };
-//
-//        lvInfoOrder.setMenuCreator(creator);
-//
-//        lvInfoOrder.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-//                switch (index) {
-//                    case 0:
-//                        Intent intent2 = new Intent(Main_Information_Order.this, Main_Hoantien.class);
-//                        Bundle bundle2 = new Bundle();
-//                        bundle2.putString("MaOrder", item.get(0).getMaDonhang());
-//                        bundle2.putString("DateOrder", item.get(0).getNgay());
-//                        bundle2.putString("TimeOrder", item.get(0).getCalam());
-//                        bundle2.putString("ChinhanhOrder", item.get(0).getChinhanh());
-//                        bundle2.putString("MaNVOrder", item.get(0).getMaNhanvien());
-//                        bundle2.putString("TenNVOrder", item.get(0).getTenNhanvien());
-//                        bundle2.putString("GhichuOrder", item.get(0).getGhichuSanpham());
-//                        bundle2.putString("TenKH", item.get(0).getTenKhachhang());
-//                        bundle2.putString("SdtKH", item.get(0).getSodienthoaiKhachhang());
-//                        bundle2.putString("GhichuKH", item.get(0).getGhichuKhachhang());
-//                        bundle2.putInt("vitri", position);
-//                        bundle2.putParcelableArrayList("sanphamOrder", sanphamOrder);
-//                        intent2.putExtra("InfoOrder2", bundle2);
-//                        startActivity(intent2);
-//                        break;
-//                    case 1:
-//                        Intent intent3 = new Intent(Main_Information_Order.this, Main_Doilaykhac.class);
-//                        Bundle bundle3 = new Bundle();
-//                        bundle3.putString("MaOrder", item.get(0).getMaDonhang());
-//                        bundle3.putString("DateOrder", item.get(0).getNgay());
-//                        bundle3.putString("TimeOrder", item.get(0).getCalam());
-//                        bundle3.putString("ChinhanhOrder", item.get(0).getChinhanh());
-//                        bundle3.putString("MaNVOrder", item.get(0).getMaNhanvien());
-//                        bundle3.putString("TenNVOrder", item.get(0).getTenNhanvien());
-//                        bundle3.putString("GhichuOrder", item.get(0).getGhichuSanpham());
-//                        bundle3.putString("TenKH", item.get(0).getTenKhachhang());
-//                        bundle3.putString("SdtKH", item.get(0).getSodienthoaiKhachhang());
-//                        bundle3.putString("GhichuKH", item.get(0).getGhichuKhachhang());
-//                        bundle3.putInt("vitri", position);
-//                        bundle3.putParcelableArrayList("sanphamOrder", sanphamOrder);
-//                        intent3.putExtra("InfoOrder3", bundle3);
-//                        startActivity(intent3);
-//                        break;
-//                    case 2:
-////                        Intent intent4 = new Intent(Main_Information_Order.this, Main_1doi1.class);
-////                        Bundle bundle4 = new Bundle();
-////                        bundle4.putString("MaOrder", item.get(0).getMaDonhang());
-////                        bundle4.putString("DateOrder", item.get(0).getNgay());
-////                        bundle4.putString("TimeOrder", item.get(0).getCalam());
-////                        bundle4.putString("ChinhanhOrder", item.get(0).getChinhanh());
-////                        bundle4.putString("MaNVOrder", item.get(0).getMaNhanvien());
-////                        bundle4.putString("TenNVOrder", item.get(0).getTenNhanvien());
-////                        bundle4.putString("GhichuOrder", item.get(0).getGhichuSanpham());
-////                        bundle4.putString("TenKH", item.get(0).getTenKhachhang());
-////                        bundle4.putString("SdtKH", item.get(0).getSodienthoaiKhachhang());
-////                        bundle4.putString("GhichuKH", item.get(0).getGhichuKhachhang());
-////                        bundle4.putInt("vitri", position);
-////                        bundle4.putParcelableArrayList("sanphamOrder", sanphamOrder);
-////                        intent4.putExtra("InfoOrder4", bundle4);
-////                        startActivity(intent4);
-////                        break;
-//                        Intent intent4 = new Intent(Main_Information_Order.this, Main_Choxuly.class);
-//                        Bundle bundle4 = new Bundle();
-//                        bundle4.putString("MaOrder", item.get(0).getMaDonhang());
-//                        bundle4.putString("DateOrder", item.get(0).getNgay());
-//                        bundle4.putString("TimeOrder", item.get(0).getCalam());
-//                        bundle4.putString("ChinhanhOrder", item.get(0).getChinhanh());
-//                        bundle4.putString("MaNVOrder", item.get(0).getMaNhanvien());
-//                        bundle4.putString("TenNVOrder", item.get(0).getTenNhanvien());
-//                        bundle4.putString("GhichuOrder", item.get(0).getGhichuSanpham());
-//                        bundle4.putString("TenKH", item.get(0).getTenKhachhang());
-//                        bundle4.putString("SdtKH", item.get(0).getSodienthoaiKhachhang());
-//                        bundle4.putString("GhichuKH", item.get(0).getGhichuKhachhang());
-//                        bundle4.putInt("vitri", position);
-//                        bundle4.putParcelableArrayList("sanphamOrder", sanphamOrder);
-//                        intent4.putExtra("InfoOrder4", bundle4);
-//                        startActivity(intent4);
-//                        break;
-//                }
-//                return false;
-//            }
-//        });
+    }
+
+    class GetData extends AsyncTask<String, Void, Void> {
+        int jIndex;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog2 = new ProgressDialog(Main_Information_Order.this);
+            dialog2.setTitle("Hãy chờ...");
+            dialog2.setMessage("Dữ liệu đang được tải xuống");
+            dialog2.setCancelable(false);
+            dialog2.show();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KHUYENMAI+"?MASALES="+item.get(0).getMaDonhang());
+            try {
+                if (jsonObject != null) {
+                    arraylist.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.KHUYENMAI);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    arraylist.add(new Quatang(
+                                            object.getString("maSanpham"),
+                                            object.getString("tenSanpham"),
+                                            object.getString("baohanhSanpham"),
+                                            object.getString("nguonSanpham"),
+                                            object.getString("ngaynhapSanpham"),
+                                            object.getInt("vonSanpham"),
+                                            object.getInt("giaSanpham"),
+                                            0,
+                                            0
+                                    ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(arraylist.size() > 0) {
+                lnHide.setVisibility(View.VISIBLE);
+                adapterKhuyenmai = new Adapter_QuaTangInfo(Main_Information_Order.this, R.layout.adapter_quatang, arraylist);
+                lvKhuyenmai.setAdapter(adapterKhuyenmai);
+            }
+            dialog2.dismiss();
+        }
     }
 }

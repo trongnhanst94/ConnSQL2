@@ -1,11 +1,11 @@
 package com.example.windows10gamer.connsql.Ban_Hang;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,12 +19,19 @@ import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.APIService_Sales;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
+import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Other.OrderList;
+import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Main_Report_Sales extends AppCompatActivity {
     TextView tvNhanvienReport;
@@ -36,7 +43,7 @@ public class Main_Report_Sales extends AppCompatActivity {
     TextView tvdoanhthutrenkhachhang;
 
 
-    static ArrayList<Order> reportList;
+    static ArrayList<Order> reportList = new ArrayList<>();
     String dateBegin, dateEnd, dateCasang, dateCachieu;
     int doanhthuTotal;
     ArrayList<ReportSales> reportSalesList = new ArrayList<>();
@@ -46,6 +53,7 @@ public class Main_Report_Sales extends AppCompatActivity {
     ArrayList<String> arraySpiner = new ArrayList<>();
     ArrayAdapter<String> adapterSpiner;
     Spinner spinner;
+    private String chinhanh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +64,27 @@ public class Main_Report_Sales extends AppCompatActivity {
         arraySpiner.add("Số sản phẩm");
         arraySpiner.add("Doanh thu/ KH");
         arraySpiner.add("Doanh thu/ SP");
-        spinner = (Spinner) findViewById(R.id.spinRS);
-        tvNhanvienReport  = (TextView) findViewById(R.id.tvNhanvienReport);
-        tvnoti    = (TextView) findViewById(R.id.tvnotiReport);
-        tvdoanhthu = (TextView) findViewById(R.id.tvdoanhthu);
-        tvsokhachhangmua = (TextView) findViewById(R.id.tvsokhachhangmua);
-        tvsosanphamban       = (TextView) findViewById(R.id.tvsosanphamban);
-        tvdoanhthutrensanpham      = (TextView) findViewById(R.id.tvdoanhthutrensanpham);
-        tvdoanhthutrenkhachhang      = (TextView) findViewById(R.id.tvdoanhthutrenkhachhang);
+        spinner = findViewById(R.id.spinRS);
+        tvNhanvienReport  = findViewById(R.id.tvNhanvienReport);
+        tvnoti    = findViewById(R.id.tvnotiReport);
+        tvdoanhthu = findViewById(R.id.tvdoanhthu);
+        tvsokhachhangmua = findViewById(R.id.tvsokhachhangmua);
+        tvsosanphamban       = findViewById(R.id.tvsosanphamban);
+        tvdoanhthutrensanpham      = findViewById(R.id.tvdoanhthutrensanpham);
+        tvdoanhthutrenkhachhang      = findViewById(R.id.tvdoanhthutrenkhachhang);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("ReportBundle");
-        reportList = bundle.getParcelableArrayList("ReportList");
         dateBegin = bundle.getString("dateBegin");
         dateEnd = bundle.getString("dateEnd");
+        chinhanh = bundle.getString("chinhanh");
         dateCasang = bundle.getString("dateCasang");
         dateCachieu = bundle.getString("dateCachieu");
         doanhthuTotal = 0;
+        LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu);
+    }
+
+    private void xuly(ArrayList<Order> reportList) {
+        Main_Report_Sales.reportList = reportList;
         for (int i = 0; i < reportList.size(); i++){
             doanhthuTotal = doanhthuTotal + Integer.parseInt(reportList.get(i).getGiaSanpham());
         }
@@ -91,7 +104,7 @@ public class Main_Report_Sales extends AppCompatActivity {
         tvdoanhthu.setText( Keys.setMoney(doanhthuTotal));
         ArrayList<Customer> khachhang = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhCustomer(khachhang, reportList.get(i).getTenKhachhang(), reportList.get(i).getMaDonhang());
+            int result = Keys.sosanhCustomer(khachhang, reportList.get(i).getTenKhachhang(), reportList.get(i).getMaDonhang());
             if (result == -1){
                 khachhang.add(new Customer( reportList.get(i).getMaDonhang()+"KH", reportList.get(i).getTenKhachhang(), reportList.get(i).getSodienthoaiKhachhang(), reportList.get(i).getGhichuKhachhang(), reportList.get(i).getMaDonhang(), reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien()));
             }
@@ -103,7 +116,7 @@ public class Main_Report_Sales extends AppCompatActivity {
         tvNhanvienReport.setText("Danh sách nhân viên bán hàng: ");
         ArrayList<User> nhanVienList = new ArrayList<>();
         for (int i = 0; i < reportList.size(); i++){
-            int result = sosanhUser(nhanVienList, reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien());
+            int result = Keys.sosanhUser(nhanVienList, reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien());
             if (result == -1){
                 nhanVienList.add(new User(reportList.get(i).getMaNhanvien(), reportList.get(i).getTenNhanvien()));
                 tvNhanvienReport.append(reportList.get(i).getTenNhanvien()+". ");
@@ -113,19 +126,19 @@ public class Main_Report_Sales extends AppCompatActivity {
         for (int i = 0; i < nhanVienList.size(); i++){
             ma = nhanVienList.get(i).getMa();
             ten = nhanVienList.get(i).getShortName();
-            doanhthu    = DoanhthuCount(reportList, nhanVienList.get(i).getMa());
-            soKhachhang = SoKhachhang(khachhang, nhanVienList.get(i).getMa());
-            soSanpham   = SoSanpham(reportList, nhanVienList.get(i).getMa());
+            doanhthu    = Keys.DoanhthuCount(reportList, nhanVienList.get(i).getMa());
+            soKhachhang = Keys.SoKhachhang(khachhang, nhanVienList.get(i).getMa());
+            soSanpham   = Keys.SoSanpham(reportList, nhanVienList.get(i).getMa());
             dttkh       = doanhthu/soKhachhang;
             dttsp       = doanhthu/soSanpham;
             reportSalesList.add(new ReportSales(
-                    ma,
-                    ten,
-                    doanhthu,
-                    soKhachhang,
-                    soSanpham,
-                    dttkh,
-                    dttsp
+                            ma,
+                            ten,
+                            doanhthu,
+                            soKhachhang,
+                            soSanpham,
+                            dttkh,
+                            dttsp
                     )
             );
         }
@@ -140,19 +153,19 @@ public class Main_Report_Sales extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                 stk.removeAllViews();
                 if(position == 0) {
-                    sortDoanhthu(reportSalesList);
+                    Keys.sortDoanhthu(reportSalesList);
                     init(reportSalesList);
                 } else if(position == 1 ) {
-                    sortSoKH(reportSalesList);
+                    Keys.sortSoKH(reportSalesList);
                     init(reportSalesList);
                 } else if(position == 2) {
-                    sortSoSP(reportSalesList);
+                    Keys.sortSoSP(reportSalesList);
                     init(reportSalesList);
                 } else if(position == 3) {
-                    sortDttkh(reportSalesList);
+                    Keys.sortDttkh(reportSalesList);
                     init(reportSalesList);
                 } else if(position == 4) {
-                    sortDttsp(reportSalesList);
+                    Keys.sortDttsp(reportSalesList);
                     init(reportSalesList);
                 }
             }
@@ -162,8 +175,54 @@ public class Main_Report_Sales extends AppCompatActivity {
         });
     }
 
+    public void LoadJson(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu) {
+        if (Connect_Internet.checkConnection(getApplicationContext())) {
+            final ProgressDialog dialog;
+            dialog = new ProgressDialog(Main_Report_Sales.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+
+            APIService_Sales api = RetrofitClient.getApiService();
+
+            Call<OrderList> call = api.getOrder(loadBegin, loadEnd);
+
+            call.enqueue(new Callback<OrderList>() {
+                @Override
+                public void onResponse(Call<OrderList> call, Response<OrderList> response) {
+                    dialog.dismiss();
+                    reportList.clear();
+                    ArrayList<Order> orignal = new ArrayList<Order>();
+                    if (response.isSuccessful()) {
+                        orignal = response.body().getContacts();
+                        for (int i = 0; i < orignal.size(); i++) {
+                            if (orignal.get(i).getChinhanh().equals(chinhanh)) {
+                                if (loadCasang.equals(orignal.get(i).getCalam())) {
+                                    reportList.add(orignal.get(i));
+                                }
+                                if (loadCachieu.equals(orignal.get(i).getCalam())) {
+                                    reportList.add(orignal.get(i));
+                                }
+                            }
+                        }
+                        xuly(reportList);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OrderList> call, Throwable t) {
+                    dialog.dismiss();
+                }
+            });
+
+        } else {
+            new CustomToast().Show_Toast(Main_Report_Sales.this, findViewById(android.R.id.content), "Không có Internet!");
+        }
+    }
+
     public void init(ArrayList<ReportSales> list) {
-        stk = (TableLayout) findViewById(R.id.tbReport);
+        stk = findViewById(R.id.tbReport);
         TableRow tbrow0 = new TableRow(this);
         TextView tv = new TextView(this);
         tv.setText(" # ");
@@ -256,104 +315,5 @@ public class Main_Report_Sales extends AppCompatActivity {
             stk.addView(tbrow);
             stt++;
         }
-    }
-
-    private int SoSanpham(ArrayList<Order> reportList, String ma) {
-        int tong = 0;
-        for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNhanvien().equals(ma)){
-                tong++;
-            }
-        }
-        return tong;
-    }
-
-    private int SoKhachhang(ArrayList<Customer> khachhang, String ma) {
-        int tong = 0;
-        for (int i = 0; i < khachhang.size(); i++){
-            if (khachhang.get(i).getMaNhanvien().equals(ma)){
-                tong++;
-            }
-        }
-        return tong;
-    }
-
-    private int DoanhthuCount(ArrayList<Order> reportList, String ma) {
-        int tong = 0;
-        for (int i = 0; i < reportList.size(); i++){
-            if (reportList.get(i).getMaNhanvien().equals(ma)){
-                tong += Integer.valueOf(reportList.get(i).getGiaSanpham());
-            }
-        }
-        return tong;
-    }
-
-    private int sosanhUser(ArrayList<User> user, String ma, String ten) {
-        int result = -1;
-        if (user.size() != 0){
-            for (int i = 0; i < user.size(); i++){
-                Log.d("qqq", user.get(i).getMa()+" - "+(ma)+" - "+user.get(i).getShortName()+" - "+(ten));
-                if (user.get(i).getMa().equals(ma) && user.get(i).getShortName().equals(ten)){
-                    result = i;
-                }
-            }
-        }
-        return result;
-    }
-
-    private int sosanhCustomer(ArrayList<Customer> order_h, String orderName, String ma) {
-        int result = -1;
-        if (order_h.size() != 0){
-            for (int i = 0; i < order_h.size(); i++){
-                if (order_h.get(i).getTenCus().equals(orderName) && order_h.get(i).getOrderCus().equals(ma)){
-                    result = i;
-                }
-            }
-        }
-        return result;
-    }
-
-    private void sortDoanhthu(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDoanhthu()).compareTo(lhs.getDoanhthu());
-            }
-        });
-    }
-
-    private void sortSoKH(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoKhachhang()).compareTo(lhs.getSoKhachhang());
-            }
-        });
-    }
-
-    private void sortSoSP(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoSanpham()).compareTo(lhs.getSoSanpham());
-            }
-        });
-    }
-
-    private void sortDttkh(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttkh()).compareTo(lhs.getDttkh());
-            }
-        });
-    }
-    private void sortDttsp(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttsp()).compareTo(lhs.getDttsp());
-            }
-        });
     }
 }

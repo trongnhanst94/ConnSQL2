@@ -75,14 +75,14 @@ public class Main_ScanBH extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_scan_bh);
-        lvReportBHHT = (Mylistview) findViewById(R.id.lvReportBHHT);
-        lvInfoScan = (Mylistview) findViewById(R.id.lvInfoScan);
-        ll1D1 = (LinearLayout) findViewById(R.id.ll1D1);
-        llDLK = (LinearLayout) findViewById(R.id.llDLK);
-        llHT = (LinearLayout) findViewById(R.id.llHT);
-        llDDT = (LinearLayout) findViewById(R.id.llDDT);
-        llCXL = (LinearLayout) findViewById(R.id.llCXL);
-        tvScanBhNoti = (TextView) findViewById(R.id.tvScanBhNoti);
+        lvReportBHHT = findViewById(R.id.lvReportBHHT);
+        lvInfoScan = findViewById(R.id.lvInfoScan);
+        ll1D1 = findViewById(R.id.ll1D1);
+        llDLK = findViewById(R.id.llDLK);
+        llHT = findViewById(R.id.llHT);
+        llDDT = findViewById(R.id.llDDT);
+        llCXL = findViewById(R.id.llCXL);
+        tvScanBhNoti = findViewById(R.id.tvScanBhNoti);
         adapterInfoOrder = new Adapter_Info_Order(Main_ScanBH.this, arrayList);
         lvInfoScan.setAdapter(adapterInfoOrder);
         adapterHT = new Adapter_Report_BHHT(Main_ScanBH.this, R.layout.adapter_report_bh, listHT);
@@ -103,7 +103,7 @@ public class Main_ScanBH extends AppCompatActivity {
                 }
             }
         });
-        lvReportBH1D1 = (Mylistview) findViewById(R.id.lvReportBH1D1);
+        lvReportBH1D1 = findViewById(R.id.lvReportBH1D1);
         adapter1D1 = new Adapter_Report_BH1D1(Main_ScanBH.this, R.layout.adapter_report_bh, list1D1);
         lvReportBH1D1.setAdapter(adapter1D1);
         lvReportBH1D1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -122,7 +122,7 @@ public class Main_ScanBH extends AppCompatActivity {
                 }
             }
         });
-        lvReportBHDLK = (Mylistview) findViewById(R.id.lvReportBHDLK);
+        lvReportBHDLK = findViewById(R.id.lvReportBHDLK);
         adapterDLK = new Adapter_Report_BHDLK(Main_ScanBH.this, R.layout.adapter_report_bh, listDLKLoc);
         lvReportBHDLK.setAdapter(adapterDLK);
         lvReportBHDLK.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,7 +145,7 @@ public class Main_ScanBH extends AppCompatActivity {
                 }
             }
         });
-        lvReportBHDDT = (Mylistview) findViewById(R.id.lvReportBHDDT);
+        lvReportBHDDT = findViewById(R.id.lvReportBHDDT);
         adapterDDT = new Adapter_Report_BHDDT(Main_ScanBH.this, R.layout.adapter_report_bh, listDDT);
         lvReportBHDDT.setAdapter(adapterDDT);
         lvReportBHDDT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -164,7 +164,7 @@ public class Main_ScanBH extends AppCompatActivity {
                 }
             }
         });
-        lvReportBHCXL = (Mylistview) findViewById(R.id.lvReportBHCXL);
+        lvReportBHCXL = findViewById(R.id.lvReportBHCXL);
         adapterCXL = new Adapter_Report_BHCXL(Main_ScanBH.this, R.layout.adapter_report_bh, listCXL);
         lvReportBHCXL.setAdapter(adapterCXL);
         lvReportBHCXL.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -196,7 +196,7 @@ public class Main_ScanBH extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
         integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
+        integrator.setBeepEnabled(true);
         integrator.initiateScan();
     }
 
@@ -317,7 +317,6 @@ public class Main_ScanBH extends AppCompatActivity {
                 String sosanh;
                 for (int i = 0; i < BH1D1.size(); i++){
                     sosanh = BH1D1.get(i).getMa()+";"+BH1D1.get(i).getTen()+";"+BH1D1.get(i).getBaohanh()+";"+BH1D1.get(i).getNguon()+";"+BH1D1.get(i).getNgaynhap()+";"+BH1D1.get(i).getVon()+";"+BH1D1.get(i).getGia();
-                    Log.d("qqq", sosanh +"\t "+scannedData);
                     if (scannedData.equals(sosanh)){
                         list1D1.add(BH1D1.get(i));
                     }
@@ -409,7 +408,6 @@ public class Main_ScanBH extends AppCompatActivity {
                 String sosanh;
                 for (int i = 0; i < BHHT.size(); i++){
                     sosanh = BHHT.get(i).getMa()+";"+BHHT.get(i).getTen()+";"+BHHT.get(i).getBaohanh()+";"+BHHT.get(i).getNguon()+";"+BHHT.get(i).getNgaynhap()+";"+BHHT.get(i).getVon()+";"+BHHT.get(i).getGia();
-                    Log.d("qqq", sosanh +"\t "+scannedData);
                     if (scannedData.equals(sosanh)){
                         listHT.add(BHHT.get(i));
                     }
@@ -509,7 +507,6 @@ public class Main_ScanBH extends AppCompatActivity {
                 String sosanh;
                 for (int i = 0; i < BHDLK.size(); i++){
                     sosanh = BHDLK.get(i).getMa()+";"+BHDLK.get(i).getTen()+";"+BHDLK.get(i).getBaohanh()+";"+BHDLK.get(i).getNguon()+";"+BHDLK.get(i).getNgaynhap()+";"+BHDLK.get(i).getVon()+";"+BHDLK.get(i).getGia();
-                    Log.d("qqq", sosanh +"\t "+scannedData);
                     if (scannedData.equals(sosanh)){
                         listDLK.add(BHDLK.get(i));
                     }
@@ -616,7 +613,6 @@ public class Main_ScanBH extends AppCompatActivity {
                 String sosanh;
                 for (int i = 0; i < BHDDT.size(); i++){
                     sosanh = BHDDT.get(i).getMa()+";"+BHDDT.get(i).getTen()+";"+BHDDT.get(i).getBaohanh()+";"+BHDDT.get(i).getNguon()+";"+BHDDT.get(i).getNgaynhap()+";"+BHDDT.get(i).getVon()+";"+BHDDT.get(i).getGia();
-                    Log.d("qqq", sosanh +"\t "+scannedData);
                     if (scannedData.equals(sosanh)){
                         listDDT.add(BHDDT.get(i));
                     }
@@ -708,7 +704,6 @@ public class Main_ScanBH extends AppCompatActivity {
                 String sosanh;
                 for (int i = 0; i < BHCXL.size(); i++){
                     sosanh = BHCXL.get(i).getMa()+";"+BHCXL.get(i).getTen()+";"+BHCXL.get(i).getBaohanh()+";"+BHCXL.get(i).getNguon()+";"+BHCXL.get(i).getNgaynhap()+";"+BHCXL.get(i).getVon()+";"+BHCXL.get(i).getGia();
-                    Log.d("qqq", sosanh +"\t "+scannedData);
                     if (scannedData.equals(sosanh)){
                         listCXL.add(BHCXL.get(i));
                     }

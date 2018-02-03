@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "817538429184",
+    "firebase_url": "https://ideal-a33c3.firebaseio.com",
+    "project_id": "ideal-a33c3",
+    "storage_bucket": "ideal-a33c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817538429184:android:ddfe02025c655acb",
+        "android_client_info": {
+          "package_name": "com.example.windows10gamer.connsql"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817538429184-4if62f96tsfespjb6qp8a03kocsnnn2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmQiRUGjAI7skIf-9JJXo5xdrM_zgV70Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

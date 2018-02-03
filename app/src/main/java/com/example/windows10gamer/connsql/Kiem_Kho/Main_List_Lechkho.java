@@ -63,15 +63,17 @@ public class Main_List_Lechkho extends AppCompatActivity {
     ArrayList<Lechkho> lechkhoArrayList = new ArrayList<>();
     ProgressDialog dialog, dialog2;
     FloatingActionButton fabBCKK;
+    private ProgressDialog nPro;
+    private ProgressDialog dialog_plus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list_lechkho);
-        cbGiong = (CheckBox) findViewById(R.id.cbGiongLechkho);
-        cbKhac  = (CheckBox) findViewById(R.id.cbKhacLechkho);
-        btnLoc  = (Button)   findViewById(R.id.btnLocLechkho);
-        fabBCKK = (FloatingActionButton) findViewById(R.id.fabBCKK);
+        cbGiong = findViewById(R.id.cbGiongLechkho);
+        cbKhac  = findViewById(R.id.cbKhacLechkho);
+        btnLoc  = findViewById(R.id.btnLocLechkho);
+        fabBCKK = findViewById(R.id.fabBCKK);
         donhang = new ArrayList<>();
         giong = new ArrayList<>();
         khac = new ArrayList<>();
@@ -106,7 +108,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(Main_List_Lechkho.this);
                     dialog.setMessage("Bạn có chắc muốn báo cáo?");
                     View mView = getLayoutInflater().inflate(R.layout.spinner_lk, null);
-                    final EditText input = (EditText) mView.findViewById(R.id.input);
+                    final EditText input = mView.findViewById(R.id.input);
                     dialog.setView(input);
                     input.setText(Keys.getDateNow() + "_" + kho + "_" + chinhanh);
                     dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
@@ -356,12 +358,18 @@ public class Main_List_Lechkho extends AppCompatActivity {
             } else {
                 new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Không có dữ liệu được tìm thấy");
             }
-            setList(dem);
             dialog.dismiss();
+            setList(dem);
+            
         }
     }
 
     public void setList(ArrayList<CountSanpham> list) {
+        dialog_plus = new ProgressDialog(Main_List_Lechkho.this);
+        dialog_plus.setTitle("Hãy chờ...");
+        dialog_plus.setMessage("Dữ liệu đang được tải xuống");
+        dialog_plus.setCancelable(false);
+        dialog_plus.show();
         this.dem = list;
         for (int i = 0; i<dem.size(); i++){
             if (dem.get(i).getNhanvien().equals(snUserA)){
@@ -397,6 +405,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         sortList(fullga2);
         sortList(fullgb2);
         init(fullga2, fullgb2);
+        dialog_plus.dismiss();
     }
 
     private int sosanhMA(ArrayList<CountSanpham> dem_h, String masanpham, String nhanvien) {
@@ -425,7 +434,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
 
     public void init(ArrayList<CountSanpham2> fullga, ArrayList<CountSanpham2> fullgb) {
         TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-        stk = (TableLayout) findViewById(R.id.tbLechkho);
+        stk = findViewById(R.id.tbLechkho);
         TableRow tbrow0 = new TableRow(this);
         tbrow0.setLayoutParams(rowParams);
         TextView tv0 = new TextView(this);
@@ -529,30 +538,40 @@ public class Main_List_Lechkho extends AppCompatActivity {
         }
     }
 
-    public class SendRequest extends AsyncTask<String, Void, String> {
+    public class SendRequest extends AsyncTask<Void, Integer, String> {
 
 
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Main_List_Lechkho.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Đang tạo báo cáo");
-            dialog.setCancelable(false);
-            dialog.show();
+            nPro = new ProgressDialog(Main_List_Lechkho.this);
+            nPro.setTitle("Đang tạo đơn hàng!");
+            nPro.setMax(lechkhoArrayList.size());
+            nPro.setCancelable(false);
+            nPro.setProgress(0);
+            nPro.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            nPro.show();
         }
 
-        protected String doInBackground(String... arg0) {
-            int j = 0;
+        protected String doInBackground(Void... arg0) {
+            int j = 1;
             CreatedTable();
-            while (j < lechkhoArrayList.size()){
-                putData(j);
+            while (j <= lechkhoArrayList.size()){
+                putData(j-1);
+                publishProgress(j);
                 j++;
             }
             return null;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            int prog = values[0];
+            nPro.setProgress(prog);
+            nPro.setMessage("Đã tải lên "+prog+" trên "+lechkhoArrayList.size()+" sản phẩm...");
+        }
+
+        @Override
         protected void onPostExecute(String result) {
-            dialog.dismiss();
+            nPro.dismiss();
             new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Thành công!");
         }
     }

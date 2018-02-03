@@ -8,9 +8,9 @@ import android.os.Parcelable;
  */
 
 public class Doanhthu implements Parcelable {
-    String id, maDT, ngay, ca, chinhanh, maNV, tenNV, tiendauca, tientrave, doanhthu;
+    String id, maDT, ngay, ca, chinhanh, maNV, tenNV, tiendauca, tientrave, doanhthu, lechcuoica, tienthucte;
 
-    public Doanhthu(String id, String maDT, String ngay, String ca, String chinhanh, String maNV, String tenNV, String tiendauca, String tientrave, String doanhthu) {
+    public Doanhthu(String id, String maDT, String ngay, String ca, String chinhanh, String maNV, String tenNV, String tiendauca, String tientrave, String doanhthu, String lechcuoica, String tienthucte) {
         this.id = id;
         this.maDT = maDT;
         this.ngay = ngay;
@@ -21,6 +21,8 @@ public class Doanhthu implements Parcelable {
         this.tiendauca = tiendauca;
         this.tientrave = tientrave;
         this.doanhthu = doanhthu;
+        this.lechcuoica = lechcuoica;
+        this.tienthucte = tienthucte;
     }
 
     protected Doanhthu(Parcel in) {
@@ -34,6 +36,8 @@ public class Doanhthu implements Parcelable {
         tiendauca = in.readString();
         tientrave = in.readString();
         doanhthu = in.readString();
+        lechcuoica = in.readString();
+        tienthucte = in.readString();
     }
 
     public static final Creator<Doanhthu> CREATOR = new Creator<Doanhthu>() {
@@ -47,30 +51,6 @@ public class Doanhthu implements Parcelable {
             return new Doanhthu[size];
         }
     };
-
-    public String getDoanhthu() {
-        return doanhthu;
-    }
-
-    public void setDoanhthu(String doanhthu) {
-        this.doanhthu = doanhthu;
-    }
-
-    public String getMaNV() {
-        return maNV;
-    }
-
-    public void setMaNV(String maNV) {
-        this.maNV = maNV;
-    }
-
-    public String getTenNV() {
-        return tenNV;
-    }
-
-    public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
-    }
 
     public String getId() {
         return id;
@@ -112,6 +92,22 @@ public class Doanhthu implements Parcelable {
         this.chinhanh = chinhanh;
     }
 
+    public String getMaNV() {
+        return maNV;
+    }
+
+    public void setMaNV(String maNV) {
+        this.maNV = maNV;
+    }
+
+    public String getTenNV() {
+        return tenNV;
+    }
+
+    public void setTenNV(String tenNV) {
+        this.tenNV = tenNV;
+    }
+
     public String getTiendauca() {
         return tiendauca;
     }
@@ -126,6 +122,30 @@ public class Doanhthu implements Parcelable {
 
     public void setTientrave(String tientrave) {
         this.tientrave = tientrave;
+    }
+
+    public String getDoanhthu() {
+        return doanhthu;
+    }
+
+    public void setDoanhthu(String doanhthu) {
+        this.doanhthu = doanhthu;
+    }
+
+    public String getLechcuoica() {
+        return lechcuoica;
+    }
+
+    public void setLechcuoica(String lechcuoica) {
+        this.lechcuoica = lechcuoica;
+    }
+
+    public String getTienthucte() {
+        return tienthucte;
+    }
+
+    public void setTienthucte(String tienthucte) {
+        this.tienthucte = tienthucte;
     }
 
     @Override
@@ -145,5 +165,7 @@ public class Doanhthu implements Parcelable {
         dest.writeString(tiendauca);
         dest.writeString(tientrave);
         dest.writeString(doanhthu);
+        dest.writeString(lechcuoica);
+        dest.writeString(tienthucte);
     }
 }

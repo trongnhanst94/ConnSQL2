@@ -69,12 +69,15 @@ public class Order_Plus implements Parcelable {
     @SerializedName("ghichuKhachhang")
     @Expose
     private String ghichuKhachhang;
-    @SerializedName("hinhthuc")
+    @SerializedName("maNhanvienbandum")
     @Expose
-    private String hinhthuc;
+    private String maNhanvienbandum;
+    @SerializedName("tenNhanvienbandum")
+    @Expose
+    private String tenNhanvienbandum;
     private int soluong;
 
-    public Order_Plus(String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String hinhthuc, int soluong) {
+    public Order_Plus(String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String maNhanvienbandum, String tenNhanvienbandum, int soluong) {
         this.maDonhang = maDonhang;
         this.ngay = ngay;
         this.calam = calam;
@@ -94,7 +97,8 @@ public class Order_Plus implements Parcelable {
         this.tenKhachhang = tenKhachhang;
         this.sodienthoaiKhachhang = sodienthoaiKhachhang;
         this.ghichuKhachhang = ghichuKhachhang;
-        this.hinhthuc = hinhthuc;
+        this.maNhanvienbandum = maNhanvienbandum;
+        this.tenNhanvienbandum = tenNhanvienbandum;
         this.soluong = soluong;
     }
 
@@ -118,7 +122,8 @@ public class Order_Plus implements Parcelable {
         tenKhachhang = in.readString();
         sodienthoaiKhachhang = in.readString();
         ghichuKhachhang = in.readString();
-        hinhthuc = in.readString();
+        maNhanvienbandum = in.readString();
+        tenNhanvienbandum = in.readString();
         soluong = in.readInt();
     }
 
@@ -286,12 +291,20 @@ public class Order_Plus implements Parcelable {
         this.ghichuKhachhang = ghichuKhachhang;
     }
 
-    public String getHinhthuc() {
-        return hinhthuc;
+    public String getMaNhanvienbandum() {
+        return maNhanvienbandum;
     }
 
-    public void setHinhthuc(String hinhthuc) {
-        this.hinhthuc = hinhthuc;
+    public void setMaNhanvienbandum(String maNhanvienbandum) {
+        this.maNhanvienbandum = maNhanvienbandum;
+    }
+
+    public String getTenNhanvienbandum() {
+        return tenNhanvienbandum;
+    }
+
+    public void setTenNhanvienbandum(String tenNhanvienbandum) {
+        this.tenNhanvienbandum = tenNhanvienbandum;
     }
 
     public int getSoluong() {
@@ -328,7 +341,8 @@ public class Order_Plus implements Parcelable {
         dest.writeString(tenKhachhang);
         dest.writeString(sodienthoaiKhachhang);
         dest.writeString(ghichuKhachhang);
-        dest.writeString(hinhthuc);
+        dest.writeString(maNhanvienbandum);
+        dest.writeString(tenNhanvienbandum);
         dest.writeInt(soluong);
     }
 }

@@ -27,11 +27,11 @@ public class Main_Report_BH extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_report_bh);
-        fabReportBH = (FloatingActionButton) findViewById(R.id.fabReportBH);
+        fabReportBH = findViewById(R.id.fabReportBH);
         sectionsPage = new SectionsPageAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = findViewById(R.id.container);
         setupViewPager(viewPager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_BH);
+        TabLayout tabLayout = findViewById(R.id.tabs_BH);
         tabLayout.setupWithViewPager(viewPager);
         fabReportBH.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +50,7 @@ public class Main_Report_BH extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new Fragment_HT(), "Hoàn tiền");
-        adapter.addFragment(new Fragment_DLK(), "Đổi lấy khác");
+        adapter.addFragment(new Fragment_DLK(), "Đổi bảo hành");
         adapter.addFragment(new Fragment_1D1(), "1 đổi 1");
         adapter.addFragment(new Fragment_CXL(), "Chờ xử lý");
         adapter.addFragment(new Fragment_DDT(), "Đổi dùng thử");

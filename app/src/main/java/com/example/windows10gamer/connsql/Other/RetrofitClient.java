@@ -9,27 +9,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    /********
-     * URLS
-     *******/
-    private static final String ROOT_URL = Keys.RETROFIT_ORDER;
+    private static final String RETROFIT_ORDER_URL = Keys.RETROFIT_ORDER;
 
-    /**
-     * Get Retrofit Instance
-     */
     private static Retrofit getRetrofitInstance() {
         return new Retrofit.Builder()
-                .baseUrl(ROOT_URL)
+                .baseUrl(RETROFIT_ORDER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    /**
-     * Get API Service
-     *
-     * @return API Service
-     */
     public static APIService_Sales getApiService() {
         return getRetrofitInstance().create(APIService_Sales.class);
+    }
+
+    private static Retrofit getRetrofitInstance_kho() {
+        return new Retrofit.Builder()
+                .baseUrl(RETROFIT_ORDER_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    public static APIService_Kho getApiService_kho() {
+        return getRetrofitInstance_kho().create(APIService_Kho.class);
     }
 }

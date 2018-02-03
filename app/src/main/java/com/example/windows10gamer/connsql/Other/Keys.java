@@ -1,6 +1,12 @@
 package com.example.windows10gamer.connsql.Other;
 
+import android.graphics.Color;
 import android.text.TextUtils;
+
+import com.example.windows10gamer.connsql.Object.Customer;
+import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Object.ReportSales;
+import com.example.windows10gamer.connsql.Object.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,9 +14,13 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by EVRESTnhan on 9/29/2017.
@@ -26,7 +36,8 @@ public class Keys {
     public static final String TABLE               = "1KrIkqcjjqcoHbovhsQ5BbWNVDPOL3yxd9X37WuhziuQ";
     public static final String SCRIPT_DANHSACH     = "https://script.google.com/macros/s/AKfycbxOLElujQcy1-ZUer1KgEvK16gkTLUqYftApjNCM_IRTL3HSuDk/exec";
     public static final String SCRIPT_KIEMKHO      = "https://script.google.com/macros/s/AKfycbzDXojfyStMUnCM4kqG7XOWzgWEgN0k0D3rXLwaQbXber7CtUs/exec";
-    public static final String SCRIPT_BANHANG      = "https://script.google.com/macros/s/AKfycbyqUuHPIFcsIQYFj55EcjWrRZG8AzdabIxnKmd4pIQE8yjbV1h5/exec";
+    public static final String SCRIPT_BANHANG_NVL  = "https://script.google.com/macros/s/AKfycbycEFBmH7gNRt70F6K9u5nycej_Tt4s4BJHDqQ0lmHCI9IbdBkm/exec";
+    public static final String SCRIPT_BANHANG_SOL  = "https://script.google.com/macros/s/AKfycbwWCTvKS4Ywje_jMiD5qtLBpMOcehMkfeoWuSqG9PqUdYryI50/exec";
     public static final String LOGIN               = "http://dealtichtac.com/android/user.php";
     public static final String DANHSACHLOGIN       = "http://dealtichtac.com/android/danhsachuser.php";
     public static final String SALE                = "banhang";
@@ -49,7 +60,9 @@ public class Keys {
     public static final String BH1DOI1_SHEET       = "BH1DOI1_SHEET";
     public static final String BHHT_SHEET          = "BHHT_SHEET";
     public static final String BHDLK_SHEET         = "BHDLK_SHEET";
-    public static final int LEVEL_BH               = 1;
+    public static final int LEVEL_BH               = 2;
+    public static final int LEVEL_QL               = 0;
+    public static final int LEVEL_KHO              = 1;
     public static final String MAIN_KIEMKHO_URL    = "http://dealtichtac.com/android/danhsach_kiemkho.php";
     public static final String MAIN_BH_BH1DOI1     = "http://dealtichtac.com/android/danhsach_bh1d1.php";
     public static final String MAIN_BH_BHHT        = "http://dealtichtac.com/android/danhsach_bhht.php";
@@ -61,6 +74,7 @@ public class Keys {
     public static final String NameApp             = "iDeal";
     public static final String donhang             = "donhang";
     public static final String[] HELLOS            = {"1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","K","L","M","N","O","P","Q","S","T","U","V"};
+    public static final String[] RAND              = {"1","2","3","4","5","6","7","8","9","0"};
     public static final int SOMA_GIAMGIA           = 5;
     public static final String SCRIPT_MAGIAMGIA    = "https://script.google.com/macros/s/AKfycbymUIoVxGJ2NEo2h0IAtrxqp3lIE16Fj8i7IbjbSvHCekQPU60/exec";
     public static final String SCRIPT_DE_MAGIAMGIA = "https://script.google.com/macros/s/AKfycbwOh4Lzy65vgtyQ-FjpM4doyXgZk-ocREyf0MBd2yhA14lNslGv/exec";
@@ -109,6 +123,29 @@ public class Keys {
     public static final String DELE_DATCOC_WEB     = "DELE_DATCOC_WEB";
     public static final String DELE_KHOANCHI_WEB   = "DELE_KHOANCHI_WEB";
     public static final String MAIN_MAGIAMGIA      = "http://dealtichtac.com/android/danhsach_magiamgia.php";
+    public static final String LISTSOLUONG         = "LISTSOLUONG";
+    public static final String MAIN_LISTSOLUONG    = "http://dealtichtac.com/android/danhsach_listsoluong.php";
+    public static final int[] MY_COLORS = {
+            Color.parseColor("#FF4444"),
+            Color.parseColor("#FFBB33"),
+            Color.parseColor("#AA66CC"),
+            Color.parseColor("#33B5E5"),
+            Color.parseColor("#99CC00")
+    };
+    public static final String CHANGE_PASSWORD     = "CHANGE_PASSWORD";
+    private static final Random RANDOM             = new Random();
+    public static final String DI_CA               = "DI_CA";
+    public static final String DANHSACHDICA        = "http://dealtichtac.com/android/danhsach_dica.php";
+    public static final String MAIN_QUATANG        = "http://dealtichtac.com/android/danhsach_quatang.php";
+    public static final String QUA_TANG            = "QUA_TANG";
+    public static final String MAIN_CHITIEU_NV     = "http://dealtichtac.com/android/danhsach_chitieunhanvien.php";
+    public static final String CHITIEU_NHANVIEN    = "CHITIEU_NHANVIEN";
+    public static final String CN_SOL              = "Chi nhánh SOL";
+    public static final String CN_NVL              = "Chi nhánh Nguyễn Văn Linh";
+    public static final String MAIN_KHUYENMAI      = "http://dealtichtac.com/android/danhsach_khuyenmai.php";
+    public static final String KHUYENMAI           = "KHUYEN_MAI";
+    public static final String MAIN_CHUONGTRINH    = "http://dealtichtac.com/android/danhsach_chuongtrinh.php";
+    public static final String CHUONG_TRINH        = "CHUONG_TRINH";
 
 
     public static final String setMoney(int amount){
@@ -117,10 +154,16 @@ public class Keys {
         return formatnumber+" đ";
     }
 
+    public static final String setMoneyFloat(float amount){
+        String number = NumberFormat.getNumberInstance(Locale.US).format(amount);
+        String formatnumber = number.replace(",",".");
+        return formatnumber+" đ";
+    }
+
     public static final String MaDonhang() {
         DateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmss");
         String date = dateFormat.format(new Date());
-        return date;
+        return date+RandomMa();
     }
 
     public static final String getDateNow() {
@@ -167,18 +210,40 @@ public class Keys {
         return "";
     }
 
+    public static final String getScript_Banhang(String chinhanh) {
+        String link = SCRIPT_BANHANG_NVL;
+        if (chinhanh.equals(CN_SOL)){
+            link = SCRIPT_BANHANG_SOL;
+        } else if (chinhanh.equals(Keys.CN_NVL)){
+            link = SCRIPT_BANHANG_NVL;
+        }
+        return link;
+    }
+
     public static final String getCalam(String chinhanh) {
         String ca, cas = ""; int gio = 0;
         int hours = new Time(System.currentTimeMillis()).getHours();
         int phut = new Time(System.currentTimeMillis()).getMinutes();
-        if (chinhanh.equals("Chi nhánh SOL")){
+        if (chinhanh.equals(CN_SOL)){
             gio = GIOHETCASOL;
             if (hours < gio){
                 cas = "Ca sáng";
             } else {
                 cas = "Ca chiều";
             }
-        } else if (chinhanh.equals("Chi nhánh Nguyễn Văn Linh")){
+        } else if (chinhanh.equals(CN_NVL)){
+            if (hours < 14){
+                cas = "Ca sáng";
+            } else if (hours >= 15){
+                cas = "Ca chiều";
+            } else {
+                if (phut < 31){
+                    cas = "Ca sáng";
+                } else {
+                    cas = "Ca chiều";
+                }
+            }
+        } else if (chinhanh.equals("Chi nhánh Demo")){
             if (hours < 14){
                 cas = "Ca sáng";
             } else if (hours >= 15){
@@ -206,6 +271,72 @@ public class Keys {
         return s;
     }
 
+    public static final String RandomMa() {
+        int helloLength = RAND.length;
+        String magiamgia = "";
+        for (int i = 0; i < 1; i++){
+            String hello = RAND[RANDOM.nextInt(helloLength)];
+            magiamgia += hello;
+        }
+        return magiamgia;
+    }
+
+    public static final String TaoMa() {
+        int helloLength = HELLOS.length;
+        String magiamgia = "";
+        for (int i = 0; i < SOMA_GIAMGIA; i++){
+            String hello = HELLOS[RANDOM.nextInt(helloLength)];
+            magiamgia += hello;
+        }
+        return magiamgia;
+    }
+
+    public static final String bodautiengviet(String s){
+        if(!TextUtils.isEmpty(s)){
+            s = s.replaceAll( "à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ", "a");
+            s = s.replaceAll( "è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ", "e");
+            s = s.replaceAll( "ì|í|ị|ỉ|ĩ", "i");
+            s = s.replaceAll( "ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ", "o");
+            s = s.replaceAll( "ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ", "u");
+            s = s.replaceAll( "ỳ|ý|ỵ|ỷ|ỹ", "y");
+            s = s.replaceAll( "đ", "d");
+            s = s.replaceAll( "'|;", "");
+        }
+        return s;
+    }
+
+    public static final String giaimagiavon(String s){
+        if(!TextUtils.isEmpty(s)){
+            s = s.replaceAll( "`", 1+"");
+            s = s.replaceAll( "&", 2+"");
+            s = s.replaceAll( "/$", 3+"");
+            s = s.replaceAll( "!", 4+"");
+            s = s.replaceAll( "@", 5+"");
+            s = s.replaceAll( "%", 6+"");
+            s = s.replaceAll( "_", 7+"");
+            s = s.replaceAll( "A", 8+"");
+            s = s.replaceAll( "~", 9+"");
+            s = s.replaceAll( "#", 0+"");
+        }
+        return s;
+    }
+
+    public static final String mahoagiavon(String s){
+        if(!TextUtils.isEmpty(s)){
+            s = s.replaceAll( 1+"", "`");
+            s = s.replaceAll( 2+"", "&");
+            s = s.replaceAll( 3+"", "$");
+            s = s.replaceAll( 4+"", "!");
+            s = s.replaceAll( 5+"", "@");
+            s = s.replaceAll( 6+"", "%");
+            s = s.replaceAll( 7+"", "_");
+            s = s.replaceAll( 8+"", "A");
+            s = s.replaceAll( 9+"", "~");
+            s = s.replaceAll( 0+"", "#");
+        }
+        return s;
+    }
+
     public static final String trimChinhanh(String s){
         if(!TextUtils.isEmpty(s)){
             return s.substring(10);
@@ -229,5 +360,135 @@ public class Keys {
             }
         }
         return s;
+    }
+
+    public static int SoSanpham(ArrayList<Order> reportList, String ma) {
+        int tong = 0;
+        for (int i = 0; i < reportList.size(); i++){
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                tong++;
+            }
+        }
+        return tong;
+    }
+    public static int SoKhachhang(ArrayList<Customer> khachhang, String ma) {
+        int tong = 0;
+        for (int i = 0; i < khachhang.size(); i++){
+            if (khachhang.get(i).getMaNhanvien().equals(ma)){
+                tong++;
+            }
+        }
+        return tong;
+    }
+    public static int DoanhthuCount(ArrayList<Order> reportList, String ma) {
+        int tong = 0;
+        for (int i = 0; i < reportList.size(); i++){
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                tong += Integer.valueOf(reportList.get(i).getGiaSanpham());
+            }
+        }
+        return tong;
+    }
+    public static int sosanhUser(ArrayList<User> user, String ma, String ten) {
+        int result = -1;
+        if (user.size() != 0){
+            for (int i = 0; i < user.size(); i++){
+                if (user.get(i).getMa().equals(ma) && user.get(i).getShortName().equals(ten)){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
+    public static int sosanhCustomer(ArrayList<Customer> order_h, String orderName, String ma) {
+        int result = -1;
+        if (order_h.size() != 0){
+            for (int i = 0; i < order_h.size(); i++){
+                if (order_h.get(i).getTenCus().equals(orderName) && order_h.get(i).getOrderCus().equals(ma)){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
+    public static void sortDoanhthu(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Integer)rhs.getDoanhthu()).compareTo(lhs.getDoanhthu());
+            }
+        });
+    }
+    public static void sortSoKH(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Integer)rhs.getSoKhachhang()).compareTo(lhs.getSoKhachhang());
+            }
+        });
+    }
+    public static void sortSoSP(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Integer)rhs.getSoSanpham()).compareTo(lhs.getSoSanpham());
+            }
+        });
+    }
+    public static void sortDttkh(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Integer)rhs.getDttkh()).compareTo(lhs.getDttkh());
+            }
+        });
+    }
+    public static void sortDttsp(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Integer)rhs.getDttsp()).compareTo(lhs.getDttsp());
+            }
+        });
+    }
+
+    public static int trimgio(String s) {
+        if(!TextUtils.isEmpty(s)){
+            if(s.length() >= 2){
+                return Integer.valueOf(s.substring(0, 2));
+            } else {
+                return Integer.valueOf(s);
+            }
+        }
+        return Integer.valueOf(s);
+    }
+
+    public static String getDauthang() {
+        DateFormat dateFormat = new SimpleDateFormat("-MM-yyyy");
+        String date = dateFormat.format(new Date());
+        return "01"+date;
+    }
+
+    public static final String getTimeNowSL() {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        String date = dateFormat.format(new Date());
+        return date+":0";
+    }
+
+    public static Integer getTotalSoca(Integer intsoca, Float inttangca, Integer intchitieu) {
+        int result = 0;
+        result = (int) ((intsoca + inttangca/7.5)*intchitieu);
+        return result;
+    }
+
+    public static boolean checkMavach(String ma, String chinhanh) {
+        boolean result = false;
+        if (chinhanh.equals(CN_SOL) && ma.length() == 8){
+            result = true;
+        }
+        if (chinhanh.equals(CN_NVL) && ma.length() < 6){
+            result = true;
+        }
+        return result;
     }
 }

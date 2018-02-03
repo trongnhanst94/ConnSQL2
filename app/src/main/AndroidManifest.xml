@@ -37,9 +37,6 @@
             android:name=".Ban_Hang.Main_Sales"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Kiem_Kho.Main_List_Kiemkho"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Kiem_Kho.Main_Ketqua_Kiemkho"
             android:screenOrientation="portrait" />
         <activity
@@ -168,14 +165,35 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Remove_Data.Main_Remove_Data" />
-        <activity android:name=".Remove_Data.Main_Remove_Order" />
-        <activity android:name=".Kho.Main_Nhaphang" />
-        <activity android:name=".Kho.Main_Taonhap" />
-        <activity android:name=".Remove_Data.Main_Remove_BCDT" />
-        <activity android:name=".Remove_Data.Main_Remove_Datcoc" />
-        <activity android:name=".Remove_Data.Main_Remove_Khoanchi"></activity>
+        <activity
+            android:name=".Remove_Data.Main_Remove_Data"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Remove_Data.Main_Remove_Order"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kho.Main_Nhaphang"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Kho.Main_Taonhap"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Remove_Data.Main_Remove_BCDT"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Remove_Data.Main_Remove_Datcoc"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Remove_Data.Main_Remove_Khoanchi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Main_ScanVon"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Ban_Hang.Main_Khuyenmai"></activity>
     </application>
 
 </manifest>

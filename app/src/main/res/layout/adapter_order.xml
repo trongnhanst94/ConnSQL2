@@ -6,103 +6,92 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
     android:weightSum="10">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:layout_margin="5dp"
-            android:gravity="center_vertical"
-            android:background="@android:drawable/btn_star_big_on"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/hai" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="8"
-        android:orientation="vertical">
+            android:id="@+id/tvstt"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_edittext_focused"
+            android:gravity="center_vertical|center"
+            android:text="01"
+            android:textSize="@dimen/muoi" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="20">
-
-            <TextView
-                android:id="@+id/tvTimeOrder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="12"
-                android:gravity="center_vertical"
-                android:text="03:00"
-                android:textSize="@dimen/muoi"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/tvSoluong"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@color/RED"
-                android:textSize="@dimen/hai" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:weightSum="20">
-
-            <TextView
-                android:id="@+id/tvMaOrder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="15"
-                android:gravity="center_vertical"
-                android:text="32980382"
-                android:textSize="@dimen/bon"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvTennvOrder"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="thanh thùy"
-                android:textAlignment="viewEnd"
-                android:textSize="@dimen/muoi" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
+            android:id="@+id/ctcontainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_bh" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:weightSum="20">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTimeOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/cam"
+                    android:textSize="@dimen/muoi_nho"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSoluong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/RED"
+                    android:textSize="@dimen/muoi_nho" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvMaOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:ellipsize="marquee"
+                    android:text="TextView"
+                    android:textSize="@dimen/muoi"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tvTennvOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="TextView"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/muoi" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
+

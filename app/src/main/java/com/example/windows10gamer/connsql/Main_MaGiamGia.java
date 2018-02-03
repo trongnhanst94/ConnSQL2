@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -25,57 +27,57 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.windows10gamer.connsql.Adapter.Adapter_Magiamgia;
+import com.example.windows10gamer.connsql.Object.Magiamgia;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
+import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
-import javax.net.ssl.HttpsURLConnection;
-
-public class Main_Ma_GiamGia extends AppCompatActivity {
+public class Main_MaGiamGia extends AppCompatActivity {
 
     EditText edSotiengiamgia;
     TextView tvMagiamgia;
     Button btnGiamgia, btnSudungma;
     String maGiamgia, giaTri,session_username,session_ma;
-    private static final Random RANDOM = new Random();
     ProgressDialog dialog;
     FloatingActionButton fab;
     Intent intentget;
+    ArrayList<Magiamgia> contactList = new ArrayList<>();
+    Adapter_Magiamgia adapter;
+    ListView lvmagiamgia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_ma_giam_gia);
-        edSotiengiamgia = (EditText) findViewById(R.id.edSotiengiamgia);
-        tvMagiamgia = (TextView) findViewById(R.id.tvMagiamgia);
-        btnGiamgia = (Button) findViewById(R.id.btnGiamgia);
-        btnSudungma = (Button) findViewById(R.id.btnSudungma);
-        fab = (FloatingActionButton) findViewById(R.id.fabmgg);
+        edSotiengiamgia = findViewById(R.id.edSotiengiamgia);
+        tvMagiamgia = findViewById(R.id.tvMagiamgia);
+        btnGiamgia = findViewById(R.id.btnGiamgia);
+        btnSudungma = findViewById(R.id.btnSudungma);
+        fab = findViewById(R.id.fabmgg);
+        lvmagiamgia = findViewById(R.id.lvmagiamgia);
         btnSudungma.setVisibility(View.INVISIBLE);
         intentget = getIntent();
         session_username = intentget.getStringExtra("session_username");
         session_ma = intentget.getStringExtra("session_ma");
+        adapter = new Adapter_Magiamgia(Main_MaGiamGia.this, contactList);
+        lvmagiamgia.setAdapter(adapter);
+        new SendRequest().execute();
         edSotiengiamgia.setRawInputType(Configuration.KEYBOARD_12KEY);
-        edSotiengiamgia.addTextChangedListener(new TextWatcher()
-
-        {
+        edSotiengiamgia.addTextChangedListener(new TextWatcher(){
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count){
                 if(s.toString().length() > 0){
@@ -128,16 +130,16 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main_Ma_GiamGia.this).show();
+                    Connect_Internet.buildDialog(Main_MaGiamGia.this).show();
                 else {
                     if ((!edSotiengiamgia.getText().toString().trim().equals("0 VNĐ")) && (!edSotiengiamgia.getText().toString().trim().equals(""))) {
                         btnSudungma.setVisibility(View.VISIBLE);
-                        maGiamgia = TaoMa();
+                        maGiamgia = Keys.TaoMa();
                         tvMagiamgia.setText(maGiamgia);
                         btnSudungma.setEnabled(true);
                     } else {
                         btnSudungma.setVisibility(View.INVISIBLE);
-                        new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Chưa nhập số tiền giảm giá!!");
+                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Chưa nhập số tiền giảm giá!!");
                     }
                 }
             }
@@ -147,13 +149,13 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main_Ma_GiamGia.this).show();
+                    Connect_Internet.buildDialog(Main_MaGiamGia.this).show();
                 else {
                     AlertDialog.Builder dialog = null;
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        dialog = new AlertDialog.Builder(Main_Ma_GiamGia.this);
+                        dialog = new AlertDialog.Builder(Main_MaGiamGia.this);
                     } else {
-                        dialog = new AlertDialog.Builder(Main_Ma_GiamGia.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                        dialog = new AlertDialog.Builder(Main_MaGiamGia.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
                     }
                     dialog.setIcon(R.drawable.ic_settings);
                     dialog.setMessage("Bạn muốn sử dụng mã giảm giá này?");
@@ -166,7 +168,7 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
                     dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            new putDataMGG().execute();
+                            //new putDataMGG().execute();
                             addMagiamgiaWeb();
                             btnSudungma.setVisibility(View.GONE);
                         }
@@ -183,84 +185,34 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
         });
     }
 
-
-
-    public class putDataMGG extends AsyncTask<String, Void, String> {
-        protected void onPreExecute(){
-            dialog = new ProgressDialog(Main_Ma_GiamGia.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Mã giảm giá đang được tạo.");
-            dialog.setCancelable(false);
-            dialog.show();
-        }
-
-        protected String doInBackground(String... arg0) {
-
-            try{
-
-                // Link Script
-                URL url = new URL(Keys.SCRIPT_MAGIAMGIA);
-
-                // Load Json object
-                JSONObject postDataParams = new JSONObject();
-
-                postDataParams.put("maGiamgia", maGiamgia);
-                postDataParams.put("giaTri", giaTri);
-
-
-                Log.e("params",postDataParams.toString());
-
-                // Kết nối HTTP
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode=conn.getResponseCode();
-
-                // Nếu kết nối được
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer("");
-                    String line="";
-
-                    while((line = in.readLine()) != null) {
-
-                        sb.append(line);
-                        break;
+    public void Delete(final String id) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("success")){
+                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Xóa thành công!");
+                            ResetActivity();
+                        }
                     }
-                    //
-                    in.close();
-                    // Trả dữ liệu cho về để ghi lên Excel
-                    return sb.toString();
-
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                    }
                 }
-                else {
-                    return new String("false : "+responseCode);
-                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_MAGIAMGIA_WEB);
+                params.put("id", id);
+                return params;
             }
-            catch(Exception e){
-                return new String("Exception: " + e.getMessage());
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            dialog.dismiss();
-            new CustomToast().Show_Toast(getApplicationContext(), findViewById(android.R.id.content), result );
-        }
+        };
+        requestQueue.add(stringRequest);
     }
 
     public String getPostDataString(JSONObject params) throws Exception {
@@ -306,7 +258,6 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
         return money;
     }
 
-
     public String getMoney(int value){
         String money = "";
         giaTri = String.valueOf(value);
@@ -314,16 +265,6 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
         numberFormatter = NumberFormat.getNumberInstance(Locale.GERMAN);
         money += numberFormatter.format(value);
         return money + "  VNĐ";
-    }
-
-    public String TaoMa() {
-        int helloLength = Keys.HELLOS.length;
-        String magiamgia = "";
-        for (int i = 0; i < Keys.SOMA_GIAMGIA; i++){
-            String hello = Keys.HELLOS[RANDOM.nextInt(helloLength)];
-            magiamgia += hello;
-        }
-        return magiamgia;
     }
 
     public void ResetActivity(){
@@ -348,16 +289,17 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Lỗi ");
+                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Lỗi ");
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Tạo mã thành công!");
+                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Tạo mã thành công!");
+                            ResetActivity();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Ma_GiamGia.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Lỗi "+error);
                     }
                 }
         ){
@@ -367,10 +309,91 @@ public class Main_Ma_GiamGia extends AppCompatActivity {
                 params.put("tacvu", Keys.ADD_MAGIAMGIA_WEB);
                 params.put("maGiamgia", maGiamgia);
                 params.put("giaTri", giaTri);
-                params.put("nguoiTao", session_username);
+                params.put("nguoiTao", session_ma);
+                Log.e("bbb",params.toString());
                 return params;
             }
         };
         requestQueue.add(stringRequest);
+    }
+
+    public class SendRequest extends AsyncTask<Void, Void, String> {
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+            dialog = new ProgressDialog(Main_MaGiamGia.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        protected String doInBackground(Void... arg0) {
+            if(!Connect_Internet.checkConnection(getApplicationContext()))
+                Connect_Internet.buildDialog(Main_MaGiamGia.this).show();
+            else {
+                new GetMagiamgia().execute();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    class GetMagiamgia extends AsyncTask<String, Void, Void> {
+
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_MAGIAMGIA);
+            try {
+                if (jsonObject != null) {
+                    contactList.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.MAGIAMGIA);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    contactList.add(new Magiamgia(
+                                            object.getString("id"),
+                                            object.getString("maGiamgia"),
+                                            object.getString("giaTri"),
+                                            object.getString("nguoiTao"),
+                                            object.getString("trangThai"),
+                                            object.getString("created")
+                                    ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (contactList.size() > 0){
+                adapter.notifyDataSetChanged();
+            } else new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Không có mã giảm giá!");
+            dialog.dismiss();
+        }
     }
 }

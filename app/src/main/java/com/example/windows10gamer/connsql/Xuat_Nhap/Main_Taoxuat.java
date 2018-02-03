@@ -86,23 +86,22 @@ public class Main_Taoxuat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_taoxuat);
-        tvChuaco = (TextView) findViewById(R.id.tvChuaco);
-        tvTaoxuatmaNV = (TextView) findViewById(R.id.tvTaoxuatmaNV);
-        tvTaoxuattenNV = (TextView) findViewById(R.id.tvTaoxuattenNV);
-        spinnerTaoxuat = (Spinner) findViewById(R.id.spinnerTaoxuat);
-        btnTaoxuat = (Button) findViewById(R.id.btnScanTaoxuat);
-        lvTaoxuat = (ListView) findViewById(R.id.lvtaoxuat);
-        edTaoxuatghichu = (EditText) findViewById(R.id.edTaoxuatghichu);
-        snA = (Spinner) findViewById(R.id.spChange);
+        tvChuaco = findViewById(R.id.tvChuaco);
+        tvTaoxuatmaNV = findViewById(R.id.tvTaoxuatmaNV);
+        tvTaoxuattenNV = findViewById(R.id.tvTaoxuattenNV);
+        spinnerTaoxuat = findViewById(R.id.spinnerTaoxuat);
+        btnTaoxuat = findViewById(R.id.btnScanTaoxuat);
+        lvTaoxuat = findViewById(R.id.lvtaoxuat);
+        edTaoxuatghichu = findViewById(R.id.edTaoxuatghichu);
+        snA = findViewById(R.id.spChange);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanhNow = shared.getString("chinhanh", "");
-        maXN = "XNHH_"+ Keys.MaDonhang();
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanhNow);
         new Getvitri().execute();
         adapter_kho = new Adapter_Taoxuat(Main_Taoxuat.this, R.layout.adapter_sales, arrayList);
         lvTaoxuat.setAdapter(adapter_kho);
-        fabTaoxuat = (FloatingActionButton) findViewById(R.id.fabTaoxuat);
+        fabTaoxuat = findViewById(R.id.fabTaoxuat);
         shared = getSharedPreferences("login", MODE_PRIVATE);
         session_ma = shared.getString("ma", "");
         session_username = shared.getString("shortName", "");
@@ -128,7 +127,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Taoxuat.this);
                     dialog.setMessage("Bạn có chắc muốn báo cáo?");
                     View mView = getLayoutInflater().inflate(R.layout.spinner_lk, null);
-                    final EditText input = (EditText) mView.findViewById(R.id.input);
+                    final EditText input = mView.findViewById(R.id.input);
                     dialog.setView(input);
                     input.setText(ngay + "_" + chinhanhNow);
                     dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
@@ -137,6 +136,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                             if (input.getText().toString().trim().equals("")) {
                                 new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Không được để trống tên trang!");
                             } else {
+                                maXN = "XNHH_"+ Keys.MaDonhang();
                                 tentrang = input.getText().toString().trim();
                                 ghichu = edTaoxuatghichu.getText().toString().trim();
                                 new SendRequestXuatHang().execute();
@@ -246,7 +246,7 @@ public class Main_Taoxuat extends AppCompatActivity {
 
     private void setLisst(ArrayList<String> position) {
         this.position = position;
-        final Spinner spinnerKiemkho = (Spinner) findViewById(R.id.spinnerTaoxuat);
+        final Spinner spinnerKiemkho = findViewById(R.id.spinnerTaoxuat);
         mAdapter = new ArrayAdapter<>(Main_Taoxuat.this, android.R.layout.simple_spinner_item, position);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerKiemkho.setAdapter(mAdapter);

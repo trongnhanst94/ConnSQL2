@@ -1,14 +1,15 @@
 package com.example.windows10gamer.connsql.Kiem_Kho;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,8 +32,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.windows10gamer.connsql.Adapter.Adapter_kho;
-import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Adapter.Adapter_KiemKho;
+import com.example.windows10gamer.connsql.Object.SanphamAmount;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
@@ -66,11 +69,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Kiemkho extends AppCompatActivity {
     String scannedData;
+    Button btndanhsach;
     ListView lvScan;
-    ArrayList<Sanpham_gio> arrayList;
+    ArrayList<SanphamAmount> totalList = new ArrayList<>();
+    ArrayList<SanphamAmount> arrayList;
     ArrayList<String> position = new ArrayList<>();
     ArrayAdapter<String> mAdapter;
-    Adapter_kho adapter;
+    Adapter_KiemKho adapter;
     String session_username, session_ma, ngay, gio;
     private String ma, ten, nguon, baohanh, gia, ngaynhap, von, vitri;
     TextView tvScanManhanvien, tvScanTennhanvien;
@@ -79,31 +84,39 @@ public class Main_Kiemkho extends AppCompatActivity {
     RadioButton rbkholoi;
     String kho = "Kho mới";
     ProgressDialog dialog;
+    private SharedPreferences shared;
+    private String chinhanh;
+    private ProgressDialog slPro;
+    private ArrayList<String> listsoluong =  new ArrayList<>();
+    private int soluong;
+    private ProgressDialog nPro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // khai báo
         setContentView(R.layout.activity_main_kiem_kho);
-        Button btnScan =(Button) findViewById(R.id.btnScan);
-        lvScan = (ListView) findViewById(R.id.lvScan);
+        Button btnScan = findViewById(R.id.btnScan);
+        Button btndanhsach = findViewById(R.id.btndanhsach);
+        lvScan = findViewById(R.id.lvScan);
         arrayList = new ArrayList<>();
         final Activity activity = this;
         Intent intent = getIntent();
         session_username  = intent.getStringExtra("session_username");
         session_ma        = intent.getStringExtra("session_ma");
-        tvScanManhanvien  = (TextView) findViewById(R.id.tvScanManhanvien);
-        tvScanTennhanvien = (TextView) findViewById(R.id.tvScanTennhanvien);
-        rgkho             = (RadioGroup) findViewById(R.id.rgkho);
-        rbkhomoi          = (RadioButton) findViewById(R.id.rbkhomoi);
-        rbkholoi          = (RadioButton) findViewById(R.id.rbkholoi);
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
+        tvScanManhanvien  = findViewById(R.id.tvScanManhanvien);
+        tvScanTennhanvien = findViewById(R.id.tvScanTennhanvien);
+        rgkho             = findViewById(R.id.rgkho);
+        rbkhomoi          = findViewById(R.id.rbkhomoi);
+        rbkholoi          = findViewById(R.id.rbkholoi);
         rbkhomoi.setChecked(true);
         tvScanManhanvien.setText("Mã số: " + session_ma);
         tvScanTennhanvien.setText("Tên nhân viên: " + session_username);
         ngay = getDate();
-        new GetDataKho().execute();
+        new GetListSoluong().execute();
         new Getvitri().execute();
-        adapter = new Adapter_kho(Main_Kiemkho.this, R.layout.adapter_list_excel, arrayList);
+        adapter = new Adapter_KiemKho(Main_Kiemkho.this, R.layout.adapter_kiemkho_amount, totalList, listsoluong);
         lvScan.setAdapter(adapter);
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,18 +126,6 @@ public class Main_Kiemkho extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Kiemkho.this).show();
                 else {
                     StartScan();
-                }
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabKiemkho);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(@NonNull View view) {
-
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main_Kiemkho.this).show();
-                else {
-                    ResetActivity();
                 }
             }
         });
@@ -148,6 +149,23 @@ public class Main_Kiemkho extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 doOnDifficultyLevelChanged(group, checkedId);
+            }
+        });
+        btndanhsach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Kiemkho.this).show();
+                else {
+                    Intent intent = new Intent(Main_Kiemkho.this, Main_Kiemkho_XemA.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("nameUserA", session_username);
+                    bundle.putString("snUserA", session_ma);
+                    bundle.putString("chinhanh", chinhanh);
+                    bundle.putString("kho", kho);
+                    intent.putExtra("BundlexemA", bundle);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -176,22 +194,76 @@ public class Main_Kiemkho extends AppCompatActivity {
             scannedData = result.getContents();
             if (scannedData != null) {
                 try {
-                StringTokenizer st = new StringTokenizer(scannedData, ";");
-                ma = st.nextToken();
-                ten = st.nextToken();
-                baohanh = st.nextToken();
-                nguon = st.nextToken();
-                gio = getTime();
-                ngaynhap = st.nextToken();
-                von = st.nextToken();
-                gia = st.nextToken();
-                arrayList.add(0, new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
-                if(arrayList.size() > 0) {
-                    adapter.notifyDataSetChanged();
-                }
-                new SendRequest().execute();
-                addKiemkhoWeb();
-                StartScan();
+                    arrayList.clear();
+                    StringTokenizer st = new StringTokenizer(scannedData, ";");
+                    ma = st.nextToken();
+                    ten = st.nextToken();
+                    baohanh = st.nextToken();
+                    nguon = st.nextToken();
+                    gio = getTime();
+                    ngaynhap = st.nextToken();
+                    von = st.nextToken();
+                    gia = st.nextToken();
+                    soluong = 1;
+                    int checksoluong = check(ma, listsoluong);
+                    if (checksoluong != -1){
+                        android.app.AlertDialog.Builder dialog = null;
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            dialog = new android.app.AlertDialog.Builder(Main_Kiemkho.this);
+                        } else {
+                            dialog = new android.app.AlertDialog.Builder(Main_Kiemkho.this);
+                        }
+                        dialog.setIcon(R.drawable.ic_settings).setTitle("Nhập số lượng");
+                        View mView = Main_Kiemkho.this.getLayoutInflater().inflate(R.layout.dialog_soluongsales, null);
+                        final EditText edsoluong = mView.findViewById(R.id.edsoluong);
+                        final ImageView ivtru = mView.findViewById(R.id.ivtru);
+                        final ImageView ivcong = mView.findViewById(R.id.ivcong);
+                        edsoluong.setText(soluong+"");
+                        ivtru.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (Integer.valueOf(edsoluong.getText().toString()) > 1)
+                                    soluong = Integer.valueOf(edsoluong.getText().toString()) - 1;
+                                edsoluong.setText(soluong+"");
+                            }
+                        });
+                        ivcong.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                soluong = Integer.valueOf(edsoluong.getText().toString()) + 1;
+                                edsoluong.setText(soluong+"");
+                            }
+                        });
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                soluong = Integer.parseInt(edsoluong.getText().toString().trim());
+                                totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
+                                arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
+                                adapter.notifyDataSetChanged();
+                                if (!Connect_Internet.checkConnection(getApplicationContext()))
+                                    Connect_Internet.buildDialog(Main_Kiemkho.this).show();
+                                else {
+                                    new SendRequestKK().execute();
+                                }
+                            }
+                        });
+                        dialog.setView(mView);
+                        android.app.AlertDialog al = dialog.create();
+                        al.show();
+                    } else {
+                        totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
+                        arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
+                        if (arrayList.size() > 0) {
+                            adapter.notifyDataSetChanged();
+                        }
+                        if (!Connect_Internet.checkConnection(getApplicationContext()))
+                            Connect_Internet.buildDialog(Main_Kiemkho.this).show();
+                        else {
+                            new SendRequestKK().execute();
+                        }
+                        StartScan();
+                    }
                 }   catch (NoSuchElementException nse) {
                     new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
                 }
@@ -200,90 +272,229 @@ public class Main_Kiemkho extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // Lấy dữ liệu từ internet
-    public class SendRequest extends AsyncTask<String, Void, String> {
-        protected void onPreExecute(){}
-
-        protected String doInBackground(String... arg0) {
-
-            try{
-
-                // Link Script
-                URL url = new URL(Keys.SCRIPT_KIEMKHO);
-
-                // Load Json object
-                JSONObject postDataParams = new JSONObject();
-
-                postDataParams.put("salesNgay", ngay);
-                postDataParams.put("salesGio", gio);
-                postDataParams.put("salesVitri", vitri);
-                postDataParams.put("salesKho", kho);
-                postDataParams.put("SalesTennhanvien", session_username);
-                postDataParams.put("salesManhanvien", session_ma);
-                postDataParams.put("salesMasanpham", ma);
-                postDataParams.put("salesTensanpham", ten);
-                postDataParams.put("salesBaohanhsanpham", baohanh);
-                postDataParams.put("salesNguonsanpham", nguon);
-                postDataParams.put("salesNgaynhap", ngaynhap);
-                postDataParams.put("salesVonsanpham", von);
-                postDataParams.put("salesGiasanpham", gia);
-
-
-                Log.e("params",postDataParams.toString());
-
-                // Kết nối HTTP
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode=conn.getResponseCode();
-
-                // Nếu kết nối được
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer("");
-                    String line="";
-
-                    while((line = in.readLine()) != null) {
-
-                        sb.append(line);
-                        break;
-                    }
-                    //
-                    in.close();
-                    // Trả dữ liệu cho về để ghi lên Excel
-                    return sb.toString();
-
-                }
-                else {
-                    return new String("false : "+responseCode);
-                }
+    private int check(String ma, ArrayList<String> listsoluong) {
+        int dem = -1;
+        for (int i = 0; i < listsoluong.size(); i++) {
+            if (ma.equals(listsoluong.get(i))){
+                dem = i;
             }
-            catch(Exception e){
-                return new String("Exception: " + e.getMessage());
+        }
+        return dem;
+    }
+
+    public class SendRequestKK extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1){
+                nPro = new ProgressDialog(Main_Kiemkho.this);
+                nPro.setTitle("Đang tải lên!");
+                nPro.setMax(arrayList.size());
+                nPro.setCancelable(false);
+                nPro.setProgress(0);
+                nPro.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                nPro.show();
             }
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            new CustomToast().Show_Toast(getApplicationContext(), findViewById(android.R.id.content), result );
+        protected String doInBackground(Void... params) {
+            int progress = 1;
+            while (progress <= Integer.valueOf(arrayList.get(0).getSoluong())){
+                putData();
+                addKiemkhoWeb();
+                publishProgress(progress);
+                progress++;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int prog = values[0];
+            if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1) {
+                nPro.setProgress(prog);
+                nPro.setMessage("Đã tải lên " + prog + " trên " + arrayList.get(0).getSoluong() + " sản phẩm...");
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1){
+                nPro.hide();
+            }
         }
     }
 
-    // Lấy dữ liệu từ internet
+    public String putData(){
+        try {
+            URL url = new URL(Keys.SCRIPT_KIEMKHO);
+            JSONObject postDataParams = new JSONObject();
+
+            postDataParams.put("salesNgay", ngay);
+            postDataParams.put("salesGio", gio);
+            postDataParams.put("salesVitri", vitri);
+            postDataParams.put("salesKho", kho);
+            postDataParams.put("SalesTennhanvien", session_username);
+            postDataParams.put("salesManhanvien", session_ma);
+            postDataParams.put("salesMasanpham", arrayList.get(0).getMa());
+            postDataParams.put("salesTensanpham", arrayList.get(0).getTen());
+            postDataParams.put("salesBaohanhsanpham", arrayList.get(0).getBaohanh());
+            postDataParams.put("salesNguonsanpham", arrayList.get(0).getNguon());
+            postDataParams.put("salesNgaynhap", arrayList.get(0).getNgaynhap());
+            postDataParams.put("salesVonsanpham", arrayList.get(0).getVon());
+            postDataParams.put("salesGiasanpham", arrayList.get(0).getGiaban());
+
+            Log.e("postDataParams", postDataParams.toString());
+
+            // Kết nối HTTP
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+                in.close();
+                return sb.toString();
+            } else {
+                return new String("");
+            }
+        } catch (Exception e) {
+            return new String("");
+        }
+    }
+
+    public void addKiemkhoWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            AlertDialog.Builder dialog = null;
+                            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                                dialog = new AlertDialog.Builder(Main_Kiemkho.this);
+                            } else {
+                                dialog = new AlertDialog.Builder(Main_Kiemkho.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                            }
+                            dialog.setIcon(R.drawable.ic_warning).setMessage("Lỗi kết nối!!");
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AlertDialog.Builder dialog = null;
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            dialog = new AlertDialog.Builder(Main_Kiemkho.this);
+                        } else {
+                            dialog = new AlertDialog.Builder(Main_Kiemkho.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                        }
+                        dialog.setIcon(R.drawable.ic_warning).setMessage("Lỗi " + error);
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_KIEMKHO_WEB);
+                params.put("ngay", ngay);
+                params.put("gio", gio);
+                params.put("maNhanvien", session_ma );
+                params.put("tenNhanvien", session_username);
+                params.put("maSanpham", arrayList.get(0).getMa());
+                params.put("tenSanpham", arrayList.get(0).getTen());
+                params.put("baohanhSanpham", arrayList.get(0).getBaohanh());
+                params.put("nguonSanpham", arrayList.get(0).getNguon());
+                params.put("ngaynhapSanpham", arrayList.get(0).getNgaynhap());
+                params.put("vonSanpham", arrayList.get(0).getVon());
+                params.put("giaSanpham", arrayList.get(0).getGiaban());
+                params.put("vitri", vitri);
+                params.put("kho", kho);
+                Log.e("params", params.toString());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    class GetListSoluong extends AsyncTask<Void, Integer, String> {
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            slPro = new ProgressDialog(Main_Kiemkho.this);
+            slPro.setTitle("Hãy chờ!");
+            slPro.setCancelable(false);
+            slPro.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            slPro.show();
+
+        }
+
+        @Nullable
+        @Override
+        protected String doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_LISTSOLUONG);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.LISTSOLUONG);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    listsoluong.add(object.getString("masanpham"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                publishProgress(jIndex);
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int prog = values[0];
+            slPro.setMessage("Đang tải xuống "+prog+" sản phẩm...");
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            adapter.notifyDataSetChanged();
+            slPro.hide();
+        }
+    }
+
     class Getvitri extends AsyncTask<Void, Void, Void> {
         int jIndex;
         int x;
@@ -340,10 +551,11 @@ public class Main_Kiemkho extends AppCompatActivity {
 
     private void setLisst(ArrayList<String> position) {
         this.position = position;
-        final Spinner spinnerKiemkho = (Spinner) findViewById(R.id.spinnerKiemkho);
+        final Spinner spinnerKiemkho = findViewById(R.id.spinnerKiemkho);
         mAdapter = new ArrayAdapter<>(Main_Kiemkho.this, android.R.layout.simple_spinner_item, position);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerKiemkho.setAdapter(mAdapter);
+        selectValue(spinnerKiemkho, chinhanh);
         spinnerKiemkho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -354,9 +566,16 @@ public class Main_Kiemkho extends AppCompatActivity {
 
             }
         });
-        dialog.dismiss();
     }
 
+    private void selectValue(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
 
     public String getPostDataString(JSONObject params) throws Exception {
 
@@ -395,83 +614,6 @@ public class Main_Kiemkho extends AppCompatActivity {
         return date;
     }
 
-    class GetDataKho extends AsyncTask<Void, Void, Void> {
-        int jIndex;
-        int x;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            /**
-             * Progress Dialog for User Interaction
-             */
-
-            x = arrayList.size();
-
-            if(x == 0)
-                jIndex = 0;
-            else
-                jIndex = x;
-
-            dialog = new ProgressDialog(Main_Kiemkho.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được tải xuống");
-            dialog.setCancelable(false);
-            dialog.show();
-        }
-
-        @Nullable
-        @Override
-        protected Void doInBackground(Void... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KIEMKHO_URL);
-            try {
-                if (jsonObject != null) {
-                    if(jsonObject.length() > 0) {
-                        JSONArray array = jsonObject.getJSONArray(Keys.DANHSACHKIEMKHO2);
-                        int lenArray = array.length();
-                        if(lenArray > 0) {
-                            for( ; jIndex < lenArray; jIndex++) {
-
-                                try {
-                                    JSONObject object = array.getJSONObject(jIndex);
-                                    if (object.getString("maNhanvien").equals(session_ma)){
-                                        arrayList.add(0, new Sanpham_gio(
-                                                object.getString("gio"),
-                                                object.getString("maSanpham"),
-                                                object.getString("tenSanpham"),
-                                                object.getString("baohanhSanpham"),
-                                                object.getString("nguonSanpham"),
-                                                object.getString("ngaynhapSanpham"),
-                                                object.getString("vonSanpham"),
-                                                object.getString("giaSanpham")
-                                        ));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                } else {
-
-                }
-            } catch (JSONException je) {
-                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if(arrayList.size() > 0) {
-                adapter.notifyDataSetChanged();
-            } else {
-                new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Không có dữ liệu được tìm thấy");
-            }
-        }
-    }
-
     public void ResetActivity(){
         if (Build.VERSION.SDK_INT >= 11) {
             recreate();
@@ -485,44 +627,13 @@ public class Main_Kiemkho extends AppCompatActivity {
         }
     }
 
-    public void addKiemkhoWeb(){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Lỗi ");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Không kết nối được Server!");
-                    }
-                }
-        ){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("tacvu", Keys.ADD_KIEMKHO_WEB);
-                params.put("ngay", ngay);
-                params.put("gio", gio);
-                params.put("maNhanvien", session_ma );
-                params.put("tenNhanvien", session_username);
-                params.put("maSanpham", ma);
-                params.put("tenSanpham", ten);
-                params.put("baohanhSanpham", baohanh);
-                params.put("nguonSanpham", nguon);
-                params.put("ngaynhapSanpham", ngaynhap);
-                params.put("vonSanpham", von);
-                params.put("giaSanpham", gia);
-                params.put("vitri", vitri);
-                params.put("kho", kho);
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

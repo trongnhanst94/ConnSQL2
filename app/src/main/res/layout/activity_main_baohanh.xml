@@ -144,7 +144,7 @@
                     android:background="@drawable/bg_edittext"
                     android:hint="Tên khách hàng"
                     android:inputType="text"
-                    android:textSize="@dimen/sau" />
+                    android:textSize="@dimen/bon" />
 
                 <EditText
                     android:id="@+id/edMasanpham"
@@ -155,7 +155,7 @@
                     android:background="@drawable/bg_edittext"
                     android:hint="Mã sản phẩm"
                     android:inputType="text"
-                    android:textSize="@dimen/sau" />
+                    android:textSize="@dimen/bon" />
             </LinearLayout>
 
             <LinearLayout
@@ -197,6 +197,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
@@ -218,6 +219,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:background="@drawable/bg_edittext"
+                    android:hint="012345678xx"
                     android:inputType="phone"
                     android:textSize="@dimen/bon" />
 
@@ -326,6 +328,44 @@
                 android:paddingRight="10dp"
                 android:weightSum="10">
 
+                <EditText
+                    android:id="@+id/edmasanphamdo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Mã sản phẩm"
+                    android:inputType="text"
+                    android:textSize="@dimen/bon" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cbmasanphamdo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Không dữ liệu KH"
+                        android:textColorLink="@color/cam"
+                        android:textSize="@dimen/muoi" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:weightSum="10">
+
                 <CheckBox
                     android:id="@+id/cbCasangBaohanh"
                     android:layout_width="0dp"
@@ -364,6 +404,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"

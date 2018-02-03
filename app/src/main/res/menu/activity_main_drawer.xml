@@ -14,6 +14,7 @@
     <item android:title="Tài khoản">
         <menu>
             <item
+                android:id="@+id/nav_doimatkhau"
                 android:icon="@drawable/ic_password"
                 android:title="Đổi mật khẩu" />
             <item

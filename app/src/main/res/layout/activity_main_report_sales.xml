@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="Số KH mua;"
+                android:text="Số KH mua:"
                 android:textSize="@dimen/hai" />
 
             <TextView

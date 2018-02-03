@@ -494,10 +494,10 @@
                     android:layout_weight="2"
                     android:orientation="vertical">
 
-                    <ListView
+                    <com.example.windows10gamer.connsql.Other.GiftList
                         android:id="@+id/lvKhuyenmai"
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_height="120dp"
                         android:background="@drawable/list_border" />
                 </LinearLayout>
 

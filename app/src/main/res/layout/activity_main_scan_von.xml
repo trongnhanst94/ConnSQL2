@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.windows10gamer.connsql.Main_ScanVon">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cam"
+        android:padding="10dp"
+        android:text="Scan Mã vạch"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="@dimen/tie" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnscanvon"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_margin="10dp"
+            android:background="@color/orange4"
+            android:text="Quét sản phẩm"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn" />
+
+        <Button
+            android:id="@+id/btntao"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_margin="10dp"
+            android:background="@color/holo_xanh"
+            android:text="Tạo mã vạch"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lntao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvtao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="@dimen/bon" />
+
+        <ImageView
+            android:id="@+id/ivtao"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lnquet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvd1MaOrder2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Lịch sử quét"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/cam"
+            android:textSize="@dimen/hai" />
+
+        <ListView
+            android:id="@+id/lvscan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/list_border" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.windows10gamer.connsql.Object.Sanpham;
+import com.example.windows10gamer.connsql.Object.Quatang;
+import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.io.Serializable;
@@ -19,10 +20,10 @@ import java.util.List;
 
 public class Adapter_Quatang extends BaseAdapter implements Serializable {
     private Context context;
-    private List<Sanpham> sanphams;
+    private List<Quatang> sanphams;
     private int layout;
 
-    public Adapter_Quatang(Context context, int layout, List<Sanpham> sanphams) {
+    public Adapter_Quatang(Context context, int layout, List<Quatang> sanphams) {
         this.context = context;
         this.sanphams = sanphams;
         this.layout = layout;
@@ -54,15 +55,15 @@ public class Adapter_Quatang extends BaseAdapter implements Serializable {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
-            holder.tvAdapterSalesTen = (TextView) view.findViewById(R.id.tvAdapterSalesTenKM);
+            holder.tvAdapterSalesTen = view.findViewById(R.id.tvAdapterSalesTenKM);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        final Sanpham sanpham = sanphams.get(i);
+        final Quatang sanpham = sanphams.get(i);
 
-        holder.tvAdapterSalesTen.setText("MSP: "+ sanpham.getMa()+" - "+sanpham.getTen());
+        holder.tvAdapterSalesTen.setText("Quà tặng trên "+ Keys.setMoney(sanpham.getToPrice())+": "+sanpham.getTen());
         return view;
     }
 }

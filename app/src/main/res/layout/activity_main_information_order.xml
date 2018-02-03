@@ -320,6 +320,56 @@
             android:textStyle="italic" />
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/lnHide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Danh sách quà tặng:"
+                    android:textSize="@dimen/muoi" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <com.example.windows10gamer.connsql.Other.GiftList
+                android:id="@+id/lvKhuyenmai"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/list_border" />
+        </LinearLayout>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -416,7 +466,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:background="@color/cam"
                 android:text="120000đ"
                 android:textAlignment="textEnd"

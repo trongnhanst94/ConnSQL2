@@ -8,9 +8,10 @@ import android.os.Parcelable;
  */
 
 public class Khoanchi implements Parcelable {
-    String maKC, ngay, ca, chinhanh, maNV, tenNV,  noidung, sotien;
+    String id, maKC, ngay, ca, chinhanh, maNV, tenNV,  noidung, sotien;
 
-    public Khoanchi(String maKC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String noidung, String sotien) {
+    public Khoanchi(String id, String maKC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String noidung, String sotien) {
+        this.id = id;
         this.maKC = maKC;
         this.ngay = ngay;
         this.ca = ca;
@@ -22,6 +23,7 @@ public class Khoanchi implements Parcelable {
     }
 
     protected Khoanchi(Parcel in) {
+        id = in.readString();
         maKC = in.readString();
         ngay = in.readString();
         ca = in.readString();
@@ -43,6 +45,14 @@ public class Khoanchi implements Parcelable {
             return new Khoanchi[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getMaKC() {
         return maKC;
@@ -115,6 +125,7 @@ public class Khoanchi implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(maKC);
         dest.writeString(ngay);
         dest.writeString(ca);

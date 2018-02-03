@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,11 +34,9 @@ import com.example.windows10gamer.connsql.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -48,6 +47,8 @@ import retrofit2.Response;
 public class Main_Baohanh extends AppCompatActivity {
     private ListView listView;
     EditText edBenginBaohanh;
+    EditText edmasanphamdo;
+    CheckBox cbmasanphamdo;
     EditText edEndBaohanh, edSdtBaohanh, edTenkhachhang, edMasanpham;
     Button btnDateBaohanh, btnSdtBaohanh, btnScanBaohanh, btnTenvaMa;
     RadioGroup rgBaohanh;
@@ -64,7 +65,7 @@ public class Main_Baohanh extends AppCompatActivity {
     TextView tvNoti;
     LinearLayout lnDateBaohanh, lnSdtBaohanh, lnScanBaohanh, lnTenvaMa;
     String dateBegin, dateEnd, dateCasang, dateCachieu, tenKhachhang, maSanpham;
-    String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, von, chinhanh;
+    String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, von, chinhanh, checkdo, editdo;
 
 
 
@@ -93,6 +94,8 @@ public class Main_Baohanh extends AppCompatActivity {
         lnScanBaohanh    = findViewById(R.id.lnScanBaohanh);
         listView         = findViewById(R.id.lvBaohanh);
         tvNoti           = findViewById(R.id.tvNoti);
+        edmasanphamdo    = findViewById(R.id.edmasanphamdo);
+        cbmasanphamdo    = findViewById(R.id.cbmasanphamdo);
         cbCasang.setChecked(true);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
@@ -130,7 +133,7 @@ public class Main_Baohanh extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -149,7 +152,7 @@ public class Main_Baohanh extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,  new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -166,16 +169,20 @@ public class Main_Baohanh extends AppCompatActivity {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Baohanh.this).show();
                 else {
-                    listView.setVisibility(View.GONE);
-                    listView.setBackgroundResource(R.drawable.list_border);
-                    dateBegin = String.valueOf(edBenginBaohanh.getText());
-                    dateEnd = String.valueOf(edEndBaohanh.getText());
-                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
-                    else dateCasang = "FALSE";
-                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
-                    else dateCachieu = "FALSE";
-                    tvNoti.setText("");
-                    LoadJsonDATE(dateBegin, dateEnd, dateCasang, dateCachieu);
+
+                        listView.setVisibility(View.GONE);
+                        listView.setBackgroundResource(R.drawable.list_border);
+                        dateBegin = String.valueOf(edBenginBaohanh.getText());
+                        dateEnd = String.valueOf(edEndBaohanh.getText());
+                        if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                        else dateCasang = "FALSE";
+                        if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                        else dateCachieu = "FALSE";
+                        if (cbmasanphamdo.isChecked()) checkdo = "YES";
+                        else checkdo = "NO";
+                        editdo = edmasanphamdo.getText().toString().trim();
+                        tvNoti.setText("");
+                        LoadJsonDATE(dateBegin, dateEnd, dateCasang, dateCachieu, editdo);
                 }
             }
         });
@@ -279,7 +286,7 @@ public class Main_Baohanh extends AppCompatActivity {
         this.reportList = List;
     }
 
-    public void LoadJsonDATE(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu) {
+    public void LoadJsonDATE(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu, final String editdo) {
         if (Connect_Internet.checkConnection(getApplicationContext())) {
             final ProgressDialog dialog;
             dialog = new ProgressDialog(Main_Baohanh.this);
@@ -287,11 +294,17 @@ public class Main_Baohanh extends AppCompatActivity {
             dialog.setMessage("Dữ liệu đang được tải xuống");
             dialog.setCancelable(false);
             dialog.show();
-
+            Call<OrderList> call;
             APIService_Sales api = RetrofitClient.getApiService();
-
-            Call<OrderList> call = api.getAllProduct();
-
+            if (edmasanphamdo.getText().toString().trim().equals("")){
+                call = api.getOrder(loadBegin, loadEnd);
+            } else {
+                if (checkdo.equals("NO")) {
+                    call = api.getBaohanhCo(loadBegin, loadEnd, editdo, "NO");
+                } else {
+                    call = api.getBaohanhKo(editdo, "YES");
+                }
+            }
             call.enqueue(new Callback<OrderList>() {
                 @Override
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
@@ -301,34 +314,21 @@ public class Main_Baohanh extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         contactList.clear();
                         temp.clear();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                        Date hom = null; Date loadBegin1 = null; Date loadEnd1 = null;
-                        try {
-                            loadBegin1 = simpleDateFormat.parse(loadBegin);
-                            loadEnd1   = simpleDateFormat.parse(loadEnd);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
                         for (int i = 0; i < orignal.size(); i++) {
-                            try {
-                                hom = simpleDateFormat.parse(orignal.get(i).getNgay());
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            if (loadCasang.equals(orignal.get(i).getCalam())) {
+                                contactList.add(orignal.get(i));
                             }
-                            if(hom.compareTo(loadBegin1) >= 0  && hom.compareTo(loadEnd1) <= 0) {
-                                if (loadCasang.equals(orignal.get(i).getCalam())) {
-                                    contactList.add(orignal.get(i));
-                                }
-                                if (loadCachieu.equals(orignal.get(i).getCalam())) {
-                                    contactList.add(orignal.get(i));
-                                }
+                            if (loadCachieu.equals(orignal.get(i).getCalam())) {
+                                contactList.add(orignal.get(i));
                             }
                         }
                         for (int j = 0; j < contactList.size(); j++) {
-                            if (contactList.get(j).getChinhanh().equals(chinhanh)){
-                                if (sosanhBaohanh(temp, contactList.get(j).getMaDonhang()) == -1){
+                            if (checkdo.equals("NO")) {
+                                if (sosanhBaohanh(temp, contactList.get(j).getMaDonhang()) == -1) {
                                     temp.add(contactList.get(j));
                                 }
+                            } else {
+                                temp.add(contactList.get(j));
                             }
                         }
                         getList(contactList);
@@ -340,7 +340,7 @@ public class Main_Baohanh extends AppCompatActivity {
                             Bundle bundle = new Bundle();
                             bundle.putInt("position", 0);
                             bundle.putString("keyMaOrder", temp.get(0).getMaDonhang());
-                            bundle.putParcelableArrayList("arrayOrder", contactList);
+                            bundle.putParcelableArrayList("arrayOrder", temp);
                             intent.putExtra("DataOrder", bundle);
                             startActivity(intent);
                         } else {
@@ -612,7 +612,7 @@ public class Main_Baohanh extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
         integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
+        integrator.setBeepEnabled(true);
         integrator.initiateScan();
     }
 }

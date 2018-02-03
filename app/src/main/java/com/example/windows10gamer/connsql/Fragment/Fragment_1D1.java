@@ -60,9 +60,9 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_1d1, container, false);
-        lvBH1D1 = (ListView) v.findViewById(R.id.lvBH1D1_Report);
-        fab = (FloatingActionButton) v.findViewById(R.id.fabBH1D1);
-        tvNoti = (TextView) v.findViewById(R.id.tvNoti);
+        lvBH1D1 = v.findViewById(R.id.lvBH1D1_Report);
+        fab = v.findViewById(R.id.fabBH1D1);
+        tvNoti = v.findViewById(R.id.tvNoti);
         tvNoti.setText("Nhấn vào biểu tượng \"Kính lúp\" để tìm kiếm!");
         list = new ArrayList<>();listLoc = new ArrayList<>();
         adapter_bhdlk = new Adapter_Report_BH1D1(getActivity(), R.layout.adapter_report_bh, listLoc);
@@ -91,8 +91,8 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
                 else {
                     tvNoti.setText("");
                     View customView = getActivity().getLayoutInflater().inflate(R.layout.dialog_bh, null);
-                    final EditText dpStartDate = (EditText) customView.findViewById(R.id.dpStartDate);
-                    final EditText dpEndDate = (EditText) customView.findViewById(R.id.dpEndDate);
+                    final EditText dpStartDate = customView.findViewById(R.id.dpStartDate);
+                    final EditText dpEndDate = customView.findViewById(R.id.dpEndDate);
                     dpStartDate.setText(Keys.getDateNow());
                     dpEndDate.setText(Keys.getDateNow());
                     dpStartDate.setInputType(InputType.TYPE_NULL);
@@ -103,7 +103,7 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                     calendar.set(year, month, dayOfMonth);
@@ -122,7 +122,7 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                     calendar.set(year, month, dayOfMonth);
@@ -189,7 +189,6 @@ public class Fragment_1D1 extends android.support.v4.app.Fragment {
         @Override
         protected Void doInBackground(String... params) {
             JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_BH_BH1DOI1+"?loadBegin="+params[0]+"&loadEnd="+params[1]);
-            Log.d("qqq" ,Keys.MAIN_BH_BH1DOI1+"?loadBegin="+params[0]+"&loadEnd="+params[1]);
             try {
                 list.clear();
                 listLoc.clear();

@@ -109,7 +109,8 @@ public class Main_Login extends AppCompatActivity {
 
 
         protected void onPreExecute(){
-            progress = ProgressDialog.show(Main_Login.this, "Loading", "PleaseWait", true);
+            progress = ProgressDialog.show(Main_Login.this, "Hãy chờ", "Đang đăng nhập...", true);
+            progress.setCancelable(true);
             super.onPreExecute();
         }
 
@@ -120,7 +121,6 @@ public class Main_Login extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            progress.dismiss();
             super.onPostExecute(result);
         }
     }
@@ -154,6 +154,8 @@ public class Main_Login extends AppCompatActivity {
                             editor.putString("tk", username);
                             editor.putString("mk", pass);
                             editor.putString("ma", ma_user);
+                            editor.putString("level", level);
+                            editor.putString("chucdanh", chucdanh);
                             editor.putString("ten", ten);
                             editor.putString("shortName", shortName);
                             editor.putBoolean("checked", TRUE);
@@ -164,6 +166,7 @@ public class Main_Login extends AppCompatActivity {
                                 editor.putBoolean("isLogged", FALSE);
                                 editor.commit();
                             }
+                            progress.dismiss();
                             new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Xin chào " + shortName);
                             Intent intent = new Intent(Main_Login.this, Main.class);
                             intent.putExtra("session_username", shortName);
@@ -172,6 +175,7 @@ public class Main_Login extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
+                            progress.dismiss();
                             new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không đúng tài khoản.");
                             login_layout.startAnimation(animation);
                         }
@@ -197,12 +201,12 @@ public class Main_Login extends AppCompatActivity {
     }
 
     private void anhxa() {
-        edUser     = (EditText) findViewById(R.id.edEmail);
-        edPass     = (EditText) findViewById(R.id.edPass);
-        btnLogin   = (Button) findViewById(R.id.btnLogin);
-        cbRemember = (CheckBox) findViewById(R.id.cbRemember);
-        cbShowpass = (CheckBox) findViewById(R.id.cbShowpass);
-        login_layout = (LinearLayout) findViewById(R.id.login_layout);
+        edUser     = findViewById(R.id.edEmail);
+        edPass     = findViewById(R.id.edPass);
+        btnLogin   = findViewById(R.id.btnLogin);
+        cbRemember = findViewById(R.id.cbRemember);
+        cbShowpass = findViewById(R.id.cbShowpass);
+        login_layout = findViewById(R.id.login_layout);
         animation = AnimationUtils.loadAnimation(this, R.anim.shake);
     }
 }
