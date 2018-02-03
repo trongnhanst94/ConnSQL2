@@ -60,26 +60,26 @@ public class Main_Duyetnhap extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_duyetnhap);
-        tvmaXN = (TextView) findViewById(R.id.tvInfomaXN);
-        tvngay = (TextView) findViewById(R.id.tvInfoDate);
-        tvca = (TextView) findViewById(R.id.tvInfoTime);
-        tvchinhanhToday = (TextView) findViewById(R.id.tvInfochinhanhToday);
-        tvmaNVToday = (TextView) findViewById(R.id.tvInfomaNV);
-        tvtenNVToday = (TextView) findViewById(R.id.tvInfotenNV);
-        tvchinhanhNhan = (TextView) findViewById(R.id.tvInfochinhanhNhan);
-        tvmaNVNhan = (TextView) findViewById(R.id.tvInfomaNVNhan);
-        tvtenNVNhan = (TextView) findViewById(R.id.tvInfotenNVNhan);
-        tvghichu = (TextView) findViewById(R.id.tvInfoghichu);
-        tvdanhan = (TextView) findViewById(R.id.tvdanhan);
-        tvchuanhan = (TextView) findViewById(R.id.tvchuanhan);
-        tvtatca = (TextView) findViewById(R.id.tvtatca);
-        lv = (ListView) findViewById(R.id.lvInfoxuathang);
-        tvphantram = (TextView) findViewById(R.id.tvphantram);
-        lnghichu = (LinearLayout) findViewById(R.id.lnghichu);
-        lnHiden = (LinearLayout) findViewById(R.id.lnHiden);
-        fabAn = (TextView) findViewById(R.id.fabAn);
-        fabHien = (TextView) findViewById(R.id.fabHien);
-        fabSubmit = (FloatingActionButton) findViewById(R.id.fabSubmit);
+        tvmaXN = findViewById(R.id.tvInfomaXN);
+        tvngay = findViewById(R.id.tvInfoDate);
+        tvca = findViewById(R.id.tvInfoTime);
+        tvchinhanhToday = findViewById(R.id.tvInfochinhanhToday);
+        tvmaNVToday = findViewById(R.id.tvInfomaNV);
+        tvtenNVToday = findViewById(R.id.tvInfotenNV);
+        tvchinhanhNhan = findViewById(R.id.tvInfochinhanhNhan);
+        tvmaNVNhan = findViewById(R.id.tvInfomaNVNhan);
+        tvtenNVNhan = findViewById(R.id.tvInfotenNVNhan);
+        tvghichu = findViewById(R.id.tvInfoghichu);
+        tvdanhan = findViewById(R.id.tvdanhan);
+        tvchuanhan = findViewById(R.id.tvchuanhan);
+        tvtatca = findViewById(R.id.tvtatca);
+        lv = findViewById(R.id.lvInfoxuathang);
+        tvphantram = findViewById(R.id.tvphantram);
+        lnghichu = findViewById(R.id.lnghichu);
+        lnHiden = findViewById(R.id.lnHiden);
+        fabAn = findViewById(R.id.fabAn);
+        fabHien = findViewById(R.id.fabHien);
+        fabSubmit = findViewById(R.id.fabSubmit);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("Main_Duyetnhap");
         maXN =bundle.getString("maXN");
@@ -247,7 +247,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Lỗi ");
+                            new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Lỗi kết nối");
                         } else if (response.trim().equals("success")){
                             if (j == (str.size()-1)){
                                 dialog.dismiss();

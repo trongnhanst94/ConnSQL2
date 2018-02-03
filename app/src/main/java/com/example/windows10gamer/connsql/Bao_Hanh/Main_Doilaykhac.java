@@ -231,7 +231,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
         integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
+        integrator.setBeepEnabled(true);
         integrator.initiateScan();
     }
 

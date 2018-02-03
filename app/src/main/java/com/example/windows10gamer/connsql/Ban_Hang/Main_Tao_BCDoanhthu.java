@@ -12,16 +12,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Object.BH1D1;
 import com.example.windows10gamer.connsql.Object.BHDDT;
 import com.example.windows10gamer.connsql.Object.BHDLK;
@@ -30,13 +40,17 @@ import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Datcoc;
 import com.example.windows10gamer.connsql.Object.Doanhthu;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
+import com.example.windows10gamer.connsql.Object.Message;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
+import com.example.windows10gamer.connsql.Other.CustomToast;
+import com.example.windows10gamer.connsql.Other.FirebaseAPI;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Other.NotifyData;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.R;
@@ -45,17 +59,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     TextView tvnhanvien, tvthongbao, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
-    TextView tvdtddt, tvpddt, tvnddt, tvdtdlk, tvpdlk, tvndlk, tvtht, tvdt1d1, tvp1d1;
+    TextView tvdtddt, tvpddt, tvnddt, tvdtdlk, tvpdlk, tvndlk, tvtht, tvdt1d1, tvp1d1, tvlechdoanhthu;
+    TextView tvbcnhanvien;
+    EditText edtienthucte;
     Button btnGuibaocao;
     ArrayList<Order> donhanglist = new ArrayList<>();
     ArrayList<Khoanchi> khoanchilist = new ArrayList<>();
@@ -72,89 +97,332 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     private ProgressDialog dialog;
     private String ma, ten;
     int soSanpham, soKhachhang, dttkh;
-    String ngay, ca;
-    int check = 0;
+    String ngay, ca, madoanhthu, manhanvien, tennhanvien;
+    SharedPreferences getShared;
+    int check = 0, tienthucte = 0, lechcuoica = 0;
     private ArrayList<ReportSales> reportSalesList = new ArrayList<>();
     ArrayList<Doanhthu> intentList = new ArrayList<>();
+    private int doanhthusing;
+    private Integer position;
+    final ArrayList seletedItems=new ArrayList();
+    final ArrayList<User> usernames = new ArrayList<User>();
+    Button btnnv;
+    private ArrayList<String> stringDica = new ArrayList<>();
+    private ArrayList<User> arrayDica = new ArrayList<>();
+    private String madica;
+    private ProgressDialog nPro;
+    private ArrayList<String> listDica = new ArrayList<>();
+    private String mamaBCDT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tao_bcdoanhthu);
         anhxa();
+        madica = Keys.MaDonhang();
+        getShared = getSharedPreferences("login", MODE_PRIVATE);
+        tennhanvien = getShared.getString("shortName", "");
+        manhanvien = getShared.getString("ma", "");
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
-        ca = Keys.getCalam(chinhanh);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("DataDoanhthu");
+        position  = Integer.valueOf(bundle.getInt("position"));
         check  = Integer.valueOf(bundle.getString("check"));
         intentList = bundle.getParcelableArrayList("list");
         if (check == 1){
             btnGuibaocao.setVisibility(View.GONE);
-            ngay = intentList.get(0).getNgay();
-            ca = intentList.get(0).getCa();
-            chinhanh = intentList.get(0).getChinhanh();
-            tiendauca = Integer.valueOf(intentList.get(0).getTiendauca());
-            tientrave = Integer.valueOf(intentList.get(0).getTientrave());
+            ngay = intentList.get(position).getNgay();
+            ca = intentList.get(position).getCa();
+            chinhanh = intentList.get(position).getChinhanh();
+            tiendauca = Integer.valueOf(intentList.get(position).getTiendauca());
+            tientrave = Integer.valueOf(intentList.get(position).getTientrave());
+            lechcuoica = Integer.valueOf(intentList.get(position).getLechcuoica());
+            tienthucte = Integer.valueOf(intentList.get(position).getTienthucte());
+            mamaBCDT = String.valueOf(intentList.get(position).getMaDT());
             tvtiendauca.setText(Keys.setMoney(Integer.valueOf(tiendauca)));
             tvtientrave.setText(Keys.setMoney(Integer.valueOf(tientrave)));
+            btnnv.setEnabled(false);
+            btnnv.setBackgroundColor(getResources().getColor(R.color.aaaaa));
             new SendRequest().execute();
+            tvlechdoanhthu.setText(Keys.setMoney(Integer.valueOf(lechcuoica)));
+            edtienthucte.setText(Keys.setMoney(Integer.valueOf(tienthucte)));
+            edtienthucte.setEnabled(false);
+            tvbcnhanvien.setText("Nhân viên trong ca: ");
+            new getDica().execute();
         } else {
             ShowDialog();
             ngay = Keys.getDateNow();
             ca = Keys.getCalam(chinhanh);
         }
         tvthongbao.setText("Báo cáo doanh thu "+ca+" ngày: "+ngay);
+        edtienthucte.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (edtienthucte.getText().toString().trim().equals("")){
+                    tvlechdoanhthu.setText(Keys.setMoney(0));
+                } else {
+                    tienthucte = Integer.valueOf(edtienthucte.getText().toString().trim());
+                    lechcuoica = (tienthucte - tiencuoica);
+                    tvlechdoanhthu.setText(Keys.setMoney(lechcuoica));
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
         btnGuibaocao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = null;
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this);
-                } else {
-                    dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this);
+                if (edtienthucte.getText().toString().trim().equals("")){
+                    new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Chưa nhập tiền thực tế!");
+                } else  {
+                    if (arrayDica.size() == 0){
+                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Chưa chọn nhân viên đi ca!");
+                    } else {
+                        AlertDialog.Builder dialog = null;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this);
+                        } else {
+                            dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this);
+                        }
+                        dialog.setIcon(R.drawable.ic_settings).setTitle("Thông báo");
+                        dialog.setMessage("Bạn có chắc muốn báo cáo doanh thu?");
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                tienthucte = Integer.valueOf(edtienthucte.getText().toString().trim());
+                                if (tienthucte == 0) {
+                                } else {
+                                    madoanhthu = Keys.MaDonhang();
+                                    new SendRequestweb().execute();
+                                }
+                            }
+                        });
+                        dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
-                dialog.setIcon(R.drawable.ic_settings).setTitle("Thông báo");
-                dialog.setMessage("Bạn có chắc muốn báo cáo doanh thu?");
-                dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+            }
+        });
+        GetUser(Keys.DANHSACHLOGIN, new VolleyCallback() {
+            @Override
+            public void onSuccess(final ArrayList<User> result) {
+                btnnv.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(Main_Tao_BCDoanhthu.this, "đã gửi", Toast.LENGTH_SHORT).show();
+                    public void onClick(View v) {
+                        arrayDica.clear();
+                        seletedItems.clear();
+                        stringDica.clear();
+                        final String[] items = new String[usernames.size()];
+                        for (int i = 0; i<usernames.size(); i++) {
+                            items[i] = String.valueOf(usernames.get(i).getShortName());
+                        }
+                        AlertDialog dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this)
+                                .setTitle("Chọn nhân viên trong ca:").setCancelable(false)
+                                .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                        if (isChecked) {
+                                            seletedItems.add(indexSelected);
+                                        } else if (seletedItems.contains(indexSelected)) {
+                                            seletedItems.remove(Integer.valueOf(indexSelected));
+                                        }
+                                    }
+                                }).setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        tvbcnhanvien.setText("Nhân viên trong ca: ");
+                                        for (int i = 0; i < seletedItems.size(); i++) {
+                                            if (i == seletedItems.size()-1){
+                                                tvbcnhanvien.append(items[(int) seletedItems.get(i)].toString()+".");
+                                            } else {
+                                                tvbcnhanvien.append(items[(int) seletedItems.get(i)].toString()+ " - ");
+                                            }
+                                            stringDica.add(items[(int) seletedItems.get(i)].toString());
+                                        }
+                                        for (int i = 0; i < stringDica.size(); i++) {
+                                            for (int i1 = 0; i1 < usernames.size(); i1++) {
+                                                if (usernames.get(i1).getShortName().equals(stringDica.get(i))){
+                                                    arrayDica.add(usernames.get(i1));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //  Your code when user clicked on Cancel
+                                    }
+                                }).create();
+                        dialog.show();
                     }
                 });
-                dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
             }
         });
     }
 
+    public interface VolleyCallback{
+        void onSuccess(ArrayList<User> result);
+    }
+
+    public class SendRequestweb extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            nPro = new ProgressDialog(Main_Tao_BCDoanhthu.this);
+            nPro.setTitle("Đang tạo báo cáo doanh thu!");
+            nPro.setMax(arrayDica.size());
+            nPro.setCancelable(false);
+            nPro.setProgress(0);
+            nPro.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            nPro.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            int progress = 1;
+            int i = 0;
+            addDoanhthuWeb();
+            while (progress <= arrayDica.size()){
+                addDicaWeb(progress-1);
+                publishProgress(progress);
+                progress++;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int prog = values[0];
+            nPro.setProgress(prog);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            nPro.hide();
+        }
+    }
+
     private void anhxa() {
-        btnGuibaocao = (Button) findViewById(R.id.btnGuibaocao);
-        tvtiencuoica = (TextView) findViewById(R.id.tvtiencuoica);
-        tvdtddt = (TextView) findViewById(R.id.tvbcdtddt);
-        tvpddt = (TextView) findViewById(R.id.tvbcpddt);
-        tvnddt = (TextView) findViewById(R.id.tvbcnddt);
-        tvdtdlk = (TextView) findViewById(R.id.tvbcdtdlk);
-        tvpdlk = (TextView) findViewById(R.id.tvbcpdlk);
-        tvndlk = (TextView) findViewById(R.id.tvbcndlk);
-        tvtht = (TextView) findViewById(R.id.tvbctht);
-        tvdt1d1 = (TextView) findViewById(R.id.tvbcdt1d1);
-        tvp1d1 = (TextView) findViewById(R.id.tvbcp1d1);
-        tvdatcoc = (TextView) findViewById(R.id.tvbcdatcoc);
-        tvhoancoc = (TextView) findViewById(R.id.tvbchoancoc);
-        tvtongchi = (TextView) findViewById(R.id.tvbctongchi);
-        tvnhanvien = (TextView) findViewById(R.id.tvbcnhanvien);
-        tvthongbao = (TextView) findViewById(R.id.tvbcthongbao);
-        tvtiendauca = (TextView) findViewById(R.id.tvbctiendauca);
-        tvtientrave = (TextView) findViewById(R.id.tvbctientrave);
-        tvgiamgia = (TextView) findViewById(R.id.tvbcgiamgia);
-        tvdoanhthusaugiam = (TextView) findViewById(R.id.tvbcdoanhthusaugiam);
-        tvdoanhthu = (TextView) findViewById(R.id.tvbcdoanhthu);
+        tvbcnhanvien = findViewById(R.id.tvbcnhanvien);
+        edtienthucte = findViewById(R.id.edtienthucte);
+        tvlechdoanhthu = findViewById(R.id.tvlechdoanhthu);
+        btnGuibaocao = findViewById(R.id.btnGuibaocao);
+        tvtiencuoica = findViewById(R.id.tvtiencuoica);
+        tvdtddt = findViewById(R.id.tvbcdtddt);
+        tvpddt = findViewById(R.id.tvbcpddt);
+        tvnddt = findViewById(R.id.tvbcnddt);
+        tvdtdlk = findViewById(R.id.tvbcdtdlk);
+        tvpdlk = findViewById(R.id.tvbcpdlk);
+        tvndlk = findViewById(R.id.tvbcndlk);
+        btnnv = findViewById(R.id.btnnv);
+        tvtht = findViewById(R.id.tvbctht);
+        tvdt1d1 = findViewById(R.id.tvbcdt1d1);
+        tvp1d1 = findViewById(R.id.tvbcp1d1);
+        tvdatcoc = findViewById(R.id.tvbcdatcoc);
+        tvhoancoc = findViewById(R.id.tvbchoancoc);
+        tvtongchi = findViewById(R.id.tvbctongchi);
+        tvthongbao = findViewById(R.id.tvbcthongbao);
+        tvtiendauca = findViewById(R.id.tvbctiendauca);
+        tvtientrave = findViewById(R.id.tvbctientrave);
+        tvgiamgia = findViewById(R.id.tvbcgiamgia);
+        tvdoanhthusaugiam = findViewById(R.id.tvbcdoanhthusaugiam);
+        tvdoanhthu = findViewById(R.id.tvbcdoanhthu);
+    }
+
+    public ArrayList<User> GetUser(String urlUser, final VolleyCallback callback) {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(com.android.volley.Request.Method.GET, urlUser, null,
+                new com.android.volley.Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                if (object.getInt("level") >= Keys.LEVEL_KHO && !object.getString("trangthai").equals("0")){
+                                    usernames.add(new User(
+                                            object.getInt("id"),
+                                            object.getString("ma_user"),
+                                            object.getString("ten"),
+                                            object.getString("shortName"),
+                                            object.getString("username"),
+                                            object.getString("password")
+                                    ));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onSuccess(usernames);
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onSuccess(usernames);
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        return usernames;
+    }
+
+    class getDica extends AsyncTask<String, Void, Void> {
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.DANHSACHDICA+"?mamaBCDT="+mamaBCDT);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.DI_CA);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    if (chinhanh.equals(object.getString("chinhanh"))){
+                                        listDica.add(object.getString("tennhanvien"));
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(listDica.size() > 0) {
+                for (int i = 0; i < listDica.size(); i++) {
+                    if (i == listDica.size()-1){
+                        tvbcnhanvien.append(listDica.get(i)+".");
+                    } else {
+                        tvbcnhanvien.append(listDica.get(i)+ " - ");
+                    }
+                }
+            }
+        }
     }
 
     private void ShowDialog() {
@@ -164,15 +432,50 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         } else {
             dialog = new AlertDialog.Builder(Main_Tao_BCDoanhthu.this);
         }
+        dialog.setCancelable(false);
         dialog.setIcon(R.drawable.ic_settings).setTitle("Nhập liệu");
         View mView = getLayoutInflater().inflate(R.layout.dialog_baocaodoanhthu, null);
-        final EditText edtiendauca = (EditText) mView.findViewById(R.id.edtiendauca);
-        final EditText edtientrave = (EditText) mView.findViewById(R.id.edtientrave);
+        final EditText edtiendauca = mView.findViewById(R.id.edtiendauca);
+        final EditText edtientrave = mView.findViewById(R.id.edtientrave);
+        final RadioButton rbcasang = mView.findViewById(R.id.rbcasang);
+        final RadioButton rbcachieu = mView.findViewById(R.id.rbcachieu);
+        rbcasang.setChecked(true);
+        rbcasang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!rbcachieu.isChecked() && isChecked == false){
+                    rbcachieu.setChecked(true);
+                } else if (isChecked == true){
+                    rbcachieu.setChecked(false);
+                }
+            }
+        });
+        rbcachieu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!rbcasang.isChecked() && isChecked == false){
+                    rbcasang.setChecked(true);
+                } else if (isChecked == true){
+                    rbcasang.setChecked(false);
+                }
+            }
+        });
         dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                tiendauca = Integer.valueOf(edtiendauca.getText().toString().trim());
-                tientrave = Integer.valueOf(edtientrave.getText().toString().trim());
+                if (rbcasang.isChecked()){
+                    ca = "Ca sáng";
+                } else ca = "Ca chiều";
+                if (edtiendauca.getText().toString().trim().equals("")){
+                    tiendauca = 0;
+                    tientrave = Integer.valueOf(edtientrave.getText().toString().trim());
+                } else if (edtientrave.getText().toString().trim().equals("")){
+                    tientrave = 0;
+                    tiendauca = Integer.valueOf(edtiendauca.getText().toString().trim());
+                } else {
+                    tiendauca = Integer.valueOf(edtiendauca.getText().toString().trim());
+                    tientrave = Integer.valueOf(edtientrave.getText().toString().trim());
+                }
                 tvtiendauca.setText(Keys.setMoney(Integer.valueOf(tiendauca)));
                 tvtientrave.setText(Keys.setMoney(Integer.valueOf(tientrave)));
                 new SendRequest().execute();
@@ -187,6 +490,44 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         dialog.setView(mView);
         AlertDialog al = dialog.create();
         al.show();
+    }
+
+    public void addDicaWeb(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, Keys.LINK_WEB_V2,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            if (j == (arrayDica.size()-1)) {
+                                new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            }
+                        }
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Lỗi "+error);
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DI_CA);
+                params.put("maDica", "Dica_"+madica);
+                params.put("ngay", ngay);
+                params.put("ca", ca);
+                params.put("chinhanh", chinhanh);
+                params.put("manhanvien", arrayDica.get(j).getMa());
+                params.put("tennhanvien", arrayDica.get(j).getShortName());
+                params.put("maBCDT", "DT_"+madoanhthu);
+                Log.e("getParams: ", params.toString());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
     private void setList(ArrayList<Order> temp) {
@@ -207,34 +548,26 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             int result = sosanhUser(nhanVienList, donhanglist.get(i).getMaNhanvien(), donhanglist.get(i).getTenNhanvien());
             if (result == -1){
                 nhanVienList.add(new User(donhanglist.get(i).getMaNhanvien(), donhanglist.get(i).getTenNhanvien()));
-                tvnhanvien.append(donhanglist.get(i).getTenNhanvien()+". ");
             }
         }
 
         for (int i = 0; i < nhanVienList.size(); i++){
             ma = nhanVienList.get(i).getMa();
             ten = nhanVienList.get(i).getShortName();
-            doanhthu    = DoanhthuCount(donhanglist, nhanVienList.get(i).getMa());
+            doanhthusing    = DoanhthuCount(donhanglist, nhanVienList.get(i).getMa());
             soKhachhang = SoKhachhang(khachhang, nhanVienList.get(i).getMa());
             soSanpham   = SoSanpham(donhanglist, nhanVienList.get(i).getMa());
-            dttkh       = doanhthu/soKhachhang;
-            dttsp       = doanhthu/soSanpham;
-            reportSalesList.add(new ReportSales(
-                            ma,
-                            ten,
-                            doanhthu,
-                            soKhachhang,
-                            soSanpham,
-                            dttkh,
-                            dttsp
-                    )
+            dttkh       = doanhthusing/soKhachhang;
+            dttsp       = doanhthusing/soSanpham;
+            reportSalesList.add(
+                    new ReportSales(ma, ten, doanhthusing, soKhachhang, soSanpham, dttkh, dttsp)
             );
         }
         init(reportSalesList);
     }
 
     public void init(ArrayList<ReportSales> list) {
-        TableLayout stk = (TableLayout) findViewById(R.id.tbBCDT);
+        TableLayout stk = findViewById(R.id.tbBCDT);
         TableRow tbrow0 = new TableRow(this);
         TextView tv = new TextView(this);
         tv.setText(" # ");
@@ -459,14 +792,18 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
                     ArrayList<Order> orignal = new ArrayList<Order>();
+                    ArrayList<String> tempgiamgia = new ArrayList<>();
                     if(response.isSuccessful()) {
                         orignal = response.body().getContacts();
-                        Log.d("qqq", orignal.size()+" "+ngay+ca+chinhanh);
                         donhanglist.clear();
                         for (int i = 0; i < orignal.size(); i++) {
                             donhanglist.add(orignal.get(i));
                             doanhthu += Integer.valueOf(orignal.get(i).getGiaSanpham());
-                            giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
+                            int sosanhgiamgia = sosanhgiam(tempgiamgia, orignal.get(i).getMaDonhang());
+                            if (sosanhgiamgia == -1) {
+                                tempgiamgia.add(orignal.get(i).getMaDonhang());
+                                giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
+                            }
                         }
                         tvdoanhthu.setText(Keys.setMoney(doanhthu));
                         tvgiamgia.setText(Keys.setMoney(giamgia));
@@ -479,6 +816,18 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private int sosanhgiam(ArrayList<String> tempgiamgia, String maDonhang) {
+        int result = -1;
+        if (tempgiamgia.size() != 0){
+            for (int i = 0; i < tempgiamgia.size(); i++){
+                if (tempgiamgia.get(i).equals(maDonhang)){
+                    result = i;
+                }
+            }
+        }
+        return result;
     }
 
     class GetKhoanchi extends AsyncTask<String, Void, Void> {
@@ -505,6 +854,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     khoanchilist.add(new Khoanchi(
+                                            object.getString("id"),
                                             object.getString("maKC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -572,6 +922,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                             object.getString("sotien"),
                                             object.getString("tenkhachhang"),
                                             object.getString("sodienthoai"),
+                                            object.getString("ghichu"),
                                             object.getString("trangthai"),
                                             object.getString("ngaytra"),
                                             object.getString("catra"),
@@ -636,6 +987,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                             object.getString("sotien"),
                                             object.getString("tenkhachhang"),
                                             object.getString("sodienthoai"),
+                                            object.getString("ghichu"),
                                             object.getString("trangthai"),
                                             object.getString("ngaytra"),
                                             object.getString("catra"),
@@ -742,16 +1094,32 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(BHDDT.size() > 0) {
+                ArrayList<String> ssBHDDT = new ArrayList<>();
                 for (int i = 0; i < BHDDT.size(); i++){
+                    int demddt = ssddt(BHDDT.get(i).getMaBH(), ssBHDDT);
                     dtddt += Integer.valueOf(BHDDT.get(i).getGia_moi());
-                    pddt += Integer.valueOf(BHDDT.get(i).getPhidoisp());
-                    nddt += Integer.valueOf(BHDDT.get(i).getGia());
+                    if (demddt == -1){
+                        nddt += Integer.valueOf(BHDDT.get(i).getGia());
+                        pddt += Integer.valueOf(BHDDT.get(i).getPhidoisp());
+                        ssBHDDT.add(BHDDT.get(i).getMaBH());
+                    }
                 }
             }
+
             tvdtddt.setText(Keys.setMoney(dtddt));
             tvpddt.setText(Keys.setMoney(pddt));
             tvnddt.setText(Keys.setMoney(nddt));
         }
+    }
+
+    private int ssddt(String maBH, ArrayList<String> ssBHDDT) {
+        int dem = -1;
+        for (int i = 0; i < ssBHDDT.size(); i++) {
+            if (ssBHDDT.get(i).equals(maBH)){
+                dem = i;
+            }
+        }
+        return dem;
     }
 
     class GetBHDLK extends AsyncTask<String, Void, Void> {
@@ -829,16 +1197,31 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(BHDLK.size() > 0) {
+                ArrayList<String> ssBHDLK = new ArrayList<>();
                 for (int i = 0; i < BHDLK.size(); i++){
+                    int demdlk = ssdlk(BHDLK.get(i).getMaBH(), ssBHDLK);
                     dtdlk += Integer.valueOf(BHDLK.get(i).getGia_moi());
-                    pdlk += Integer.valueOf(BHDLK.get(i).getPhidoiSP());
-                    ndlk += Integer.valueOf(BHDLK.get(i).getGia());
+                    if (demdlk == -1){
+                        pdlk += Integer.valueOf(BHDLK.get(i).getPhidoiSP());
+                        ndlk += Integer.valueOf(BHDLK.get(i).getGia());
+                        ssBHDLK.add(BHDLK.get(i).getMaBH());
+                    }
                 }
             }
             tvdtdlk.setText(Keys.setMoney(dtdlk));
             tvpdlk.setText(Keys.setMoney(pdlk));
             tvndlk.setText(Keys.setMoney(ndlk));
         }
+    }
+
+    private int ssdlk(String maBH, ArrayList<String> ssBHDLK) {
+        int dem = -1;
+        for (int i = 0; i < ssBHDLK.size(); i++) {
+            if (ssBHDLK.get(i).equals(maBH)){
+                dem = i;
+            }
+        }
+        return dem;
     }
 
     class GetBHHT extends AsyncTask<String, Void, Void> {
@@ -998,10 +1381,104 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             tvdt1d1.setText(Keys.setMoney(dt1d1));
             tvp1d1.setText(Keys.setMoney(p1d1));
             dialog.dismiss();
-            tiencuoica = tiendauca+tientrave+doanhthu+giamgia-tongchi+datcoc-hoancoc+dtddt+pddt-nddt+dtdlk+pdlk-ndlk-tht+dt1d1+p1d1;
+            tiencuoica = tiendauca+tientrave+doanhthu-giamgia-tongchi+datcoc-hoancoc+dtddt+pddt-nddt+dtdlk+pdlk-ndlk-tht+p1d1;
             tvtiencuoica.setText(Keys.setMoney(tiencuoica));
         }
     }
 
+    public void sendNotification(View view) {
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+
+                // Request customization: add request headers
+                Request.Builder requestBuilder = original.newBuilder()
+                        .header("Authorization", "AIzaSyAD-fQsDEdLcplv9AJ17uv5QY2053AnJuo"); // <-- this is the important line
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        });
+
+        httpClient.addInterceptor(logging);
+        OkHttpClient client = httpClient.build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://fcm.googleapis.com")//url of FCM message server
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())//use for convert JSON file into object
+                .build();
+
+        // prepare call in Retrofit 2.0
+        FirebaseAPI firebaseAPI = retrofit.create(FirebaseAPI.class);
+
+        //for messaging server
+        NotifyData notifydata = new NotifyData("BOSS NOTIFICATION","Thay đổi nhân sự giữa các chi nhánh tháng 01/2018");
+
+        Call<Message> call2 = firebaseAPI.sendMessage(new Message("topic or deviceID", notifydata));
+
+        call2.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+
+                Log.d("Response ", "onResponse");
+                Toast.makeText(Main_Tao_BCDoanhthu.this, "Notification Thành công", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Log.d("Response ", "onFailure");
+                Toast.makeText(Main_Tao_BCDoanhthu.this, "Notification Thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addDoanhthuWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, Keys.LINK_WEB_V2,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                        } else if (response.trim().equals("success")){
+                            new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!!");
+                        }
+                        startActivity(new Intent(Main_Tao_BCDoanhthu.this, Main_Doanhthu.class));
+                        finish();
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Lỗi "+error);
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_DOANHTHU_WEB);
+                params.put("maDT", "DT_"+madoanhthu);
+                params.put("ngay", ngay);
+                params.put("ca", ca);
+                params.put("chinhanh", chinhanh);
+                params.put("maNV", manhanvien);
+                params.put("tenNV", tennhanvien);
+                params.put("tiendauca", tiendauca+"");
+                params.put("tientrave", tientrave+"");
+                params.put("doanhthu", tiencuoica+"");
+                params.put("lechcuoica", lechcuoica+"");
+                params.put("tienthucte", tienthucte+"");
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
 }
 

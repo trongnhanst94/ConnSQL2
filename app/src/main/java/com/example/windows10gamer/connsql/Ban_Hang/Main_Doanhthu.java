@@ -54,15 +54,15 @@ public class Main_Doanhthu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_doanhthu);
-        edBengin  = (EditText) findViewById(R.id.edBegindt);
-        edEnd     = (EditText) findViewById(R.id.edEnddt);
-        btnSearch = (Button) findViewById(R.id.btnTimdt);
-        fabAdd = (FloatingActionButton) findViewById(R.id.fabdt);
-        cbCasang       = (CheckBox) findViewById(R.id.cbCasangdt);
-        cbCachieu      = (CheckBox) findViewById(R.id.cbCachieudt);
+        edBengin  = findViewById(R.id.edBegindt);
+        edEnd     = findViewById(R.id.edEnddt);
+        btnSearch = findViewById(R.id.btnTimdt);
+        fabAdd = findViewById(R.id.fabdt);
+        cbCasang       = findViewById(R.id.cbCasangdt);
+        cbCachieu      = findViewById(R.id.cbCachieudt);
         edBengin.setText(Keys.getDateNow());
         edEnd.setText(Keys.getDateNow());
-        listView = (ListView) findViewById(R.id.lvdt);
+        listView = findViewById(R.id.lvdt);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         adapter = new Adapter_Doanhthu(Main_Doanhthu.this, R.layout.adapter_doanhthu, list);
@@ -73,6 +73,7 @@ public class Main_Doanhthu extends AppCompatActivity {
                 Intent intent = new Intent(Main_Doanhthu.this, Main_Tao_BCDoanhthu.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("check", "1");
+                bundle.putInt("position", position);
                 bundle.putParcelableArrayList("list", list);
                 intent.putExtra("DataDoanhthu", bundle);
                 startActivity(intent);
@@ -80,13 +81,10 @@ public class Main_Doanhthu extends AppCompatActivity {
         });
         dateBegin = Keys.getDateNow();
         dateEnd = Keys.getDateNow();
-        if (Keys.getCalam(chinhanh).equals("Ca sáng")){
-            cbCasang.setChecked(true);
-            dateCasang = "Ca sáng";
-        } else {
-            cbCachieu.setChecked(true);
-            dateCachieu = "Ca chiều";
-        }
+        cbCasang.setChecked(true);
+        dateCasang = "Ca sáng";
+        cbCachieu.setChecked(true);
+        dateCachieu = "Ca chiều";
         new GetDT().execute();
         edBengin.setInputType(InputType.TYPE_NULL);
         edBengin.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +94,7 @@ public class Main_Doanhthu extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Doanhthu.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Doanhthu.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -115,7 +113,7 @@ public class Main_Doanhthu extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Doanhthu.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Doanhthu.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -216,7 +214,9 @@ public class Main_Doanhthu extends AppCompatActivity {
                                             object.getString("tenNV"),
                                             object.getString("tiendauca"),
                                             object.getString("tientrave"),
-                                            object.getString("doanhthu")
+                                            object.getString("doanhthu"),
+                                            object.getString("lechcuoica"),
+                                            object.getString("tienthucte")
                                     ));
                                 } catch (JSONException e) {
                                     e.printStackTrace();

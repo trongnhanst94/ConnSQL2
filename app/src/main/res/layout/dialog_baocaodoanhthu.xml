@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:paddingLeft="10dp"
-            android:text="TIền đầu ca:" />
+            android:text="Tiền đầu ca:" />
 
         <EditText
             android:id="@+id/edtiendauca"
@@ -57,4 +57,26 @@
             android:textColor="@color/RED"
             android:textSize="@dimen/bon" />
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rgca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <RadioButton
+            android:id="@+id/rbcasang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ca sáng" />
+
+        <RadioButton
+            android:id="@+id/rbcachieu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ca chiều" />
+    </RadioGroup>
 </LinearLayout>

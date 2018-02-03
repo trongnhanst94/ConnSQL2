@@ -92,6 +92,9 @@ public class Adapter_Sales extends BaseAdapter implements Serializable{
         if (kiemtra == -1){
             holder.edsoluong.setEnabled(false);
         }
+        if (kiemtra != -1 & soluongbegin == 1 ){
+            holder.edsoluong.setEnabled(true);
+        }
         holder.edsoluong.setInputType(InputType.TYPE_NULL);
         holder.edsoluong.setOnClickListener(new View.OnClickListener() {
             @Override
