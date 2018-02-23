@@ -1,12 +1,14 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,12 +18,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Duyetnhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap_ID;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -54,12 +59,15 @@ public class Main_Duyetnhap extends AppCompatActivity {
     private int count;
     private boolean[] thumbnailsselection;
     ArrayList<DuyetNhap_ID> str = new ArrayList<>();
+    ImageView ivAvatar, ivAvatar2;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_duyetnhap);
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
         tvmaXN = findViewById(R.id.tvInfomaXN);
         tvngay = findViewById(R.id.tvInfoDate);
         tvca = findViewById(R.id.tvInfoTime);
@@ -149,8 +157,89 @@ public class Main_Duyetnhap extends AppCompatActivity {
                 fabHien.setVisibility(View.GONE);
             }
         });
+        GetUser(Main_Duyetnhap.this, maNVToday);
+        GetUser2(Main_Duyetnhap.this, maNVNhan);
     }
 
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void GetUser2(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
     public class SendRequest extends AsyncTask<String, Void, String> {
 
 

@@ -2,6 +2,7 @@ package com.example.windows10gamer.connsql.Bao_Hanh;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Spinner_NV;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
@@ -77,6 +80,7 @@ public class Main_Choxuly extends AppCompatActivity {
     String chinhanh, gio;
     SharedPreferences shared, sp;
     Spinner snA;
+    ImageView ivAvatar, ivAvatar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,7 @@ public class Main_Choxuly extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
+        Glide.with(Main_Choxuly.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder5");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -138,6 +143,7 @@ public class Main_Choxuly extends AppCompatActivity {
         tvChinhanhHTOrder.setText(chinhanhOrder);
         tvCxlTenNVNhan.setText("Mã NV bảo hành: "+session_username);
         tvCxlMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        GetUser(Main_Choxuly.this, maNV);
         edthoigianhen.setInputType(InputType.TYPE_NULL);
         edthoigianhen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +196,8 @@ public class Main_Choxuly extends AppCompatActivity {
                         if(!Connect_Internet.checkConnection(getApplicationContext()))
                             Connect_Internet.buildDialog(Main_Choxuly.this).show();
                         else {
+                            btnxacnhan.setEnabled(false);
+                            btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                             maBH = "BHCXL_"+Keys.MaDonhang();
 //                  if (gtConlai > 0) {
 //                    if (!edlydoHT.getText().toString().trim().equals("") && !edphitrahang.getText().toString().trim().equals("")) {
@@ -232,7 +240,49 @@ public class Main_Choxuly extends AppCompatActivity {
         });
     }
 
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
     private void Anhxa() {
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
         snA = findViewById(R.id.spCXL);
         tvCxlMaOrder = findViewById(R.id.tvCxlMaOrder);
         tvCxlDate = findViewById(R.id.tvCxlDate);

@@ -1,11 +1,13 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,9 +16,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_InfoXuatnhap;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Object.XuatNhap;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -37,30 +42,33 @@ public class Main_Info_Xuathang extends AppCompatActivity {
     ProgressDialog dialog;
     FloatingActionButton fabAn, fabHien;
     LinearLayout lnghichu, lnHiden;
+    ImageView ivAvatar, ivAvatar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_info_xuathang);
-        tvmaXN = (TextView) findViewById(R.id.tvInfomaXN);
-        tvngay = (TextView) findViewById(R.id.tvInfoDate);
-        tvca = (TextView) findViewById(R.id.tvInfoTime);
-        tvchinhanhToday = (TextView) findViewById(R.id.tvInfochinhanhToday);
-        tvmaNVToday = (TextView) findViewById(R.id.tvInfomaNV);
-        tvtenNVToday = (TextView) findViewById(R.id.tvInfotenNV);
-        tvchinhanhNhan = (TextView) findViewById(R.id.tvInfochinhanhNhan);
-        tvmaNVNhan = (TextView) findViewById(R.id.tvInfomaNVNhan);
-        tvtenNVNhan = (TextView) findViewById(R.id.tvInfotenNVNhan);
-        tvghichu = (TextView) findViewById(R.id.tvInfoghichu);
-        tvdanhan = (TextView) findViewById(R.id.tvdanhan);
-        tvchuanhan = (TextView) findViewById(R.id.tvchuanhan);
-        tvtatca = (TextView) findViewById(R.id.tvtatca);
-        lv = (ListView) findViewById(R.id.lvInfoxuathang);
-        tvphantram = (TextView) findViewById(R.id.tvphantram);
-        lnghichu = (LinearLayout) findViewById(R.id.lnghichu);
-        lnHiden = (LinearLayout) findViewById(R.id.lnHiden);
-        fabAn = (FloatingActionButton) findViewById(R.id.fabAn);
-        fabHien = (FloatingActionButton) findViewById(R.id.fabHien);
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        tvmaXN = findViewById(R.id.tvInfomaXN);
+        tvngay = findViewById(R.id.tvInfoDate);
+        tvca = findViewById(R.id.tvInfoTime);
+        tvchinhanhToday = findViewById(R.id.tvInfochinhanhToday);
+        tvmaNVToday = findViewById(R.id.tvInfomaNV);
+        tvtenNVToday = findViewById(R.id.tvInfotenNV);
+        tvchinhanhNhan = findViewById(R.id.tvInfochinhanhNhan);
+        tvmaNVNhan = findViewById(R.id.tvInfomaNVNhan);
+        tvtenNVNhan = findViewById(R.id.tvInfotenNVNhan);
+        tvghichu = findViewById(R.id.tvInfoghichu);
+        tvdanhan = findViewById(R.id.tvdanhan);
+        tvchuanhan = findViewById(R.id.tvchuanhan);
+        tvtatca = findViewById(R.id.tvtatca);
+        lv = findViewById(R.id.lvInfoxuathang);
+        tvphantram = findViewById(R.id.tvphantram);
+        lnghichu = findViewById(R.id.lnghichu);
+        lnHiden = findViewById(R.id.lnHiden);
+        fabAn = findViewById(R.id.fabAn);
+        fabHien = findViewById(R.id.fabHien);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("Info_Xuathang");
         maXN =bundle.getString("maXN");
@@ -154,6 +162,88 @@ public class Main_Info_Xuathang extends AppCompatActivity {
                 });
             }
         });
+        GetUser(Main_Info_Xuathang.this, maNVToday);
+        GetUser2(Main_Info_Xuathang.this, maNVNhan);
+    }
+
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void GetUser2(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     public ArrayList<XuatNhap> GetDT(final VolleyCallback callback) {

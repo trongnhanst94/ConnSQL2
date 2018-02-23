@@ -1,6 +1,7 @@
 package com.example.windows10gamer.connsql.Bao_Hanh;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,15 +25,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -67,6 +74,7 @@ public class Main_Hoantien extends AppCompatActivity {
     String session_ma;
     String chinhanh, gio;
     SharedPreferences shared, sp;
+    ImageView ivAvatar, ivAvatar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class Main_Hoantien extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
+        Glide.with(Main_Hoantien.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder2");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -128,6 +137,7 @@ public class Main_Hoantien extends AppCompatActivity {
         tvChinhanhHTOrder.setText(chinhanhOrder);
         tvHtTenNVNhan.setText("Mã NV bảo hành: "+session_username);
         tvHtMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        GetUser(Main_Hoantien.this, maNV);
         edphitrahang.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (edphitrahang.getText().toString().trim().equals("")){
@@ -151,6 +161,8 @@ public class Main_Hoantien extends AppCompatActivity {
                 else {
                     if (gtConlai > 0) {
                         if (!edlydoHT.getText().toString().trim().equals("") && !edphitrahang.getText().toString().trim().equals("")) {
+                            btnxacnhan.setEnabled(false);
+                            btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                             maBH = "BHHT_"+Keys.MaDonhang();
                             phitrahang = edphitrahang.getText().toString().trim();
                             lydo = edlydoHT.getText().toString().trim();
@@ -188,7 +200,49 @@ public class Main_Hoantien extends AppCompatActivity {
         });
     }
 
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
     private void Anhxa() {
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
         tvgtConlai = findViewById(R.id.tvgtConlai);
         edphitrahang = findViewById(R.id.edpthBHHT);
         edlydoHT = findViewById(R.id.edlydoBHHT);

@@ -1,5 +1,9 @@
 package com.example.windows10gamer.connsql.Other;
 
+/**
+ * Created by EVRESTnhan on 2/22/2018.
+ */
+
 import com.example.windows10gamer.connsql.Object.Message;
 
 import retrofit2.Call;

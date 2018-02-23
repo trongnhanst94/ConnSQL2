@@ -10,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_XuatNhap;
 import com.example.windows10gamer.connsql.Object.XuatNhap;
 import com.example.windows10gamer.connsql.Object.XuatNhap_SL;
@@ -39,15 +41,17 @@ public class Main_XNOpen extends AppCompatActivity {
     String session_ma, session_username;
     String chinhanh;
     TextView tvDSxuatmaNV, tvDSxuattenNV, tvDSxuatchinhanh;
+    ImageView ivAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_xnopen);
-        listView = (ListView) findViewById(R.id.lvXuathang);
-        tvDSxuatchinhanh = (TextView) findViewById(R.id.tvDSxuatchinhanh);
-        tvDSxuattenNV = (TextView) findViewById(R.id.tvDSxuattenNV);
-        tvDSxuatmaNV = (TextView) findViewById(R.id.tvDSxuatmaNV);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        listView = findViewById(R.id.lvXuathang);
+        tvDSxuatchinhanh = findViewById(R.id.tvDSxuatchinhanh);
+        tvDSxuattenNV = findViewById(R.id.tvDSxuattenNV);
+        tvDSxuatmaNV = findViewById(R.id.tvDSxuatmaNV);
         adapter = new Adapter_XuatNhap(Main_XNOpen.this, R.layout.adapter_xuatnhap, dem);
         listView.setAdapter(adapter);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
@@ -55,6 +59,7 @@ public class Main_XNOpen extends AppCompatActivity {
         shared = getSharedPreferences("login", MODE_PRIVATE);
         session_ma = shared.getString("ma", "");
         session_username = shared.getString("shortName", "");
+        Glide.with(Main_XNOpen.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         tvDSxuatchinhanh.setText(chinhanh);
         tvDSxuatmaNV.setText("Mã số: "+session_ma);
         tvDSxuattenNV.setText("Tên nhân viên: "+session_username);

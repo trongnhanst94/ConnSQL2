@@ -1,6 +1,7 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Spinner_NV;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Taoxuat;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
@@ -80,12 +83,17 @@ public class Main_Taoxuat extends AppCompatActivity {
     Spinner snA;
     String maXN;
     EditText edTaoxuatghichu;
+    TextView tvchinhanh;
     String ghichu, tentrang;
+    ImageView ivAvatar, ivAvatar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_taoxuat);
+        tvchinhanh = findViewById(R.id.tvchinhanh);
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
         tvChuaco = findViewById(R.id.tvChuaco);
         tvTaoxuatmaNV = findViewById(R.id.tvTaoxuatmaNV);
         tvTaoxuattenNV = findViewById(R.id.tvTaoxuattenNV);
@@ -96,6 +104,7 @@ public class Main_Taoxuat extends AppCompatActivity {
         snA = findViewById(R.id.spChange);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanhNow = shared.getString("chinhanh", "");
+        tvchinhanh.setText(chinhanhNow);
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanhNow);
         new Getvitri().execute();
@@ -110,7 +119,6 @@ public class Main_Taoxuat extends AppCompatActivity {
         btnTaoxuat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Taoxuat.this).show();
                 else {
@@ -159,9 +167,10 @@ public class Main_Taoxuat extends AppCompatActivity {
         GetUser(Keys.DANHSACHLOGIN, new Main_Ketqua_Kiemkho.VolleyCallback(){
             @Override
             public void onSuccess(final ArrayList<User> result) {
-                final ArrayList<String> resultName, resultMa;
+                final ArrayList<String> resultName, resultMa, resultImg;
                 resultName = new ArrayList<String>();
                 resultMa = new ArrayList<String>();
+                resultImg = new ArrayList<String>();
                 for (int i = 0; i < result.size(); i++){
                     resultName.add(result.get(i).getShortName());
                     resultMa.add(result.get(i).getMa());
@@ -176,6 +185,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                         maNVnhan = result.get(position).getMa();
                         tenNVnhan = result.get(position).getShortName();
+                        Glide.with(Main_Taoxuat.this).load(result.get(position).getImg()).override(300,300).fitCenter().into(ivAvatar2);
                     }
 
                     @Override
@@ -183,6 +193,47 @@ public class Main_Taoxuat extends AppCompatActivity {
                 });
             }
         });
+        GetUser(Main_Taoxuat.this, session_ma);
+    }
+
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     public void DeleteSP(final String msp){
@@ -247,7 +298,7 @@ public class Main_Taoxuat extends AppCompatActivity {
     private void setLisst(ArrayList<String> position) {
         this.position = position;
         final Spinner spinnerKiemkho = findViewById(R.id.spinnerTaoxuat);
-        mAdapter = new ArrayAdapter<>(Main_Taoxuat.this, android.R.layout.simple_spinner_item, position);
+        mAdapter = new ArrayAdapter<>(Main_Taoxuat.this, R.layout.spinner_taoxuat, position);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerKiemkho.setAdapter(mAdapter);
         spinnerKiemkho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -303,7 +354,7 @@ public class Main_Taoxuat extends AppCompatActivity {
     }
 
     public ArrayList<User> GetUser(String urlUser, final Main_Ketqua_Kiemkho.VolleyCallback callback) {
-        final ArrayList<User> usernames = new ArrayList<User>();
+        final ArrayList<User> usernames2 = new ArrayList<User>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlUser, null,
                 new Response.Listener<JSONArray>() {
@@ -313,31 +364,37 @@ public class Main_Taoxuat extends AppCompatActivity {
                             try {
                                 JSONObject object = response.getJSONObject(i);
                                 if (object.getInt("level") == Keys.LEVEL_BH){
-                                    usernames.add(new User(
+                                    usernames2.add(new User(
                                             object.getInt("id"),
                                             object.getString("ma_user"),
                                             object.getString("ten"),
                                             object.getString("shortName"),
                                             object.getString("username"),
-                                            object.getString("password")
+                                            object.getString("password"),
+                                            object.getString("level"),
+                                            object.getString("chucdanh"),
+                                            object.getString("trangthai"),
+                                            object.getString("created"),
+                                            object.getString("updated"),
+                                            object.getString("img")
                                     ));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                        callback.onSuccess(usernames);
+                        callback.onSuccess(usernames2);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onSuccess(usernames);
+                        callback.onSuccess(usernames2);
                     }
                 }
         );
         requestQueue.add(jsonArrayRequest);
-        return usernames;
+        return usernames2;
     }
 
     public interface VolleyCallback{

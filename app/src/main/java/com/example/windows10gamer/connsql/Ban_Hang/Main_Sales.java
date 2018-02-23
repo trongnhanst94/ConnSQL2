@@ -38,6 +38,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Quatang;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Sales;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Spinner_NV;
@@ -83,6 +84,8 @@ import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Main_Sales extends AppCompatActivity {
     EditText edGiamgia;
     CheckBox rbGiamgia;
@@ -122,6 +125,8 @@ public class Main_Sales extends AppCompatActivity {
     String maNhanvienban, tenNhanvienban;
     private ArrayList<Quatang> quatangFilter = new ArrayList<>();
     private ArrayList<Chuongtrinh> listChuongtrinh = new ArrayList<>();
+    private String linkAvatar;
+    private CircleImageView ivAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,12 +157,12 @@ public class Main_Sales extends AppCompatActivity {
         tvphaithu         = findViewById(R.id.tvphaithu);
         ln1               = findViewById(R.id.ln1);
         ln2               = findViewById(R.id.ln2);
-        ivDoinv           = findViewById(R.id.ivDoinv);
         snA               = findViewById(R.id.spChange);
         lnNVDefault       = findViewById(R.id.lnNVDefault);
         lnNVChange        = findViewById(R.id.lnNVChange);
         lnHidden          = findViewById(R.id.lnHidden);
         switchChangeNV    = findViewById(R.id.switchChangeNV);
+        ivAvatar          = findViewById(R.id.ivAvatar);
         lnGiamgia.setVisibility(View.GONE);
         lnTangqua.setVisibility(View.GONE);
         lnHidden.setVisibility(View.GONE);
@@ -170,6 +175,9 @@ public class Main_Sales extends AppCompatActivity {
         ca = Keys.getCalam(chinhanh);
         tvSalesDate.setText(ngay);
         tvSalesTime.setText(ca);
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        linkAvatar = shared.getString("img", "");
+        Glide.with(Main_Sales.this).load(linkAvatar).into(ivAvatar);
         Intent intentput  = getIntent();
         session_username1  = intentput.getStringExtra("session_username");
         session_ma1        = intentput.getStringExtra("session_ma");
@@ -303,6 +311,9 @@ public class Main_Sales extends AppCompatActivity {
         switchChangeNV.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked){
+                    Glide.with(Main_Sales.this).load(linkAvatar).into(ivAvatar);
+                }
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Sales.this).show();
                 else {
@@ -312,12 +323,14 @@ public class Main_Sales extends AppCompatActivity {
                         GetUser(Keys.DANHSACHLOGIN, new VolleyCallback() {
                             @Override
                             public void onSuccess(final ArrayList<User> result) {
-                                final ArrayList<String> resultName, resultMa;
+                                final ArrayList<String> resultName, resultMa, resultImg;
                                 resultName = new ArrayList<String>();
                                 resultMa = new ArrayList<String>();
+                                resultImg = new ArrayList<String>();
                                 for (int i = 0; i < result.size(); i++) {
                                     resultName.add(result.get(i).getShortName());
                                     resultMa.add(result.get(i).getMa());
+                                    resultImg.add(result.get(i).getImg());
                                 }
 
                                 Adapter_Spinner_NV customAdapter = new Adapter_Spinner_NV(getApplicationContext(), resultMa, resultName);
@@ -329,6 +342,7 @@ public class Main_Sales extends AppCompatActivity {
                                     public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                                         session_ma = result.get(position).getMa();
                                         session_username = result.get(position).getShortName();
+                                        Glide.with(Main_Sales.this).load(result.get(position).getImg()).into(ivAvatar);
                                     }
 
                                     @Override
@@ -340,19 +354,27 @@ public class Main_Sales extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         madonhang = Keys.MaDonhang();
-                                        if (arrayList.size() != 0) {
-                                            ngay = getDate();
-                                            ca = Keys.getCalam(chinhanh);
-                                            tenkhachhang = edKhachhang.getText().toString();
-                                            sodienthoaikhachhang = edSodienthoai.getText().toString();
-                                            ghichukhachhang = edGhichukhachhang.getText().toString();
-                                            ghichusanpham = edGhichudonhang.getText().toString();
-                                            maNhanvienban = session_ma1;
-                                            tenNhanvienban = session_username1;
-                                            setSoluong();
-                                            new SendRequest().execute();
-                                        } else
-                                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                                        if (session_ma.equals("Chọn")){
+                                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa chọn nhân viên bán!");
+                                        } else {
+                                            if (arrayList.size() != 0) {
+                                                btnXacnhan.setEnabled(false);
+                                                btnXacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
+                                                ngay = getDate();
+                                                ca = Keys.getCalam(chinhanh);
+                                                tenkhachhang = edKhachhang.getText().toString();
+                                                sodienthoaikhachhang = edSodienthoai.getText().toString();
+                                                ghichukhachhang = edGhichukhachhang.getText().toString();
+                                                ghichusanpham = edGhichudonhang.getText().toString();
+                                                maNhanvienban = session_ma1;
+                                                tenNhanvienban = session_username1;
+                                                setSoluong();
+                                                new SendRequest().execute();
+                                            } else {
+                                                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                                            }
+                                        }
+
                                     }
                                 });
                             }
@@ -376,6 +398,8 @@ public class Main_Sales extends AppCompatActivity {
                 else {
                     madonhang = Keys.MaDonhang();
                     if (arrayList.size() != 0) {
+                        btnXacnhan.setEnabled(false);
+                        btnXacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                         ngay = getDate();
                         ca = Keys.getCalam(chinhanh);
                         tenkhachhang = edKhachhang.getText().toString();
@@ -427,17 +451,24 @@ public class Main_Sales extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        usernames.add(new User(1, "Chọn", "Chọn", "Chọn", "Chọn", "Chọn", "Chọn", "Chọn", "Chọn", "Chọn", "Chọn","Chọn"));
                         for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object = response.getJSONObject(i);
-                                if (object.getInt("level") >= Keys.LEVEL_QL){
+                                if (object.getInt("level") > Keys.LEVEL_QL && object.getInt("trangthai") == 1){
                                     usernames.add(new User(
                                             object.getInt("id"),
                                             object.getString("ma_user"),
                                             object.getString("ten"),
                                             object.getString("shortName"),
                                             object.getString("username"),
-                                            object.getString("password")
+                                            object.getString("password"),
+                                            object.getString("level"),
+                                            object.getString("chucdanh"),
+                                            object.getString("trangthai"),
+                                            object.getString("created"),
+                                            object.getString("updated"),
+                                            object.getString("img")
                                     ));
                                 }
                             } catch (JSONException e) {
@@ -591,6 +622,17 @@ public class Main_Sales extends AppCompatActivity {
         total = 0;
         for (int i = 0; i < arrayListAmount.size(); i++){
             total = total + (Integer.parseInt(arrayListAmount.get(i).getGiaban()) * (Integer.parseInt(arrayListAmount.get(i).getSoluong())));
+        }
+        itemKM.clear();
+        for (int i = 0; i<quatang.size(); i++){
+            if (total >= quatang.get(i).getToPrice() && total < quatang.get(i).getFromPrice()){
+                itemKM.add(quatang.get(i).getTen());
+            }
+        }
+        if (itemKM.size() == 0){
+            rbTangqua.setEnabled(false);
+        } else {
+            rbTangqua.setEnabled(true);
         }
         tvTongdonhang.setText(setMoney(total));
         rbGiamgia.setChecked(false);

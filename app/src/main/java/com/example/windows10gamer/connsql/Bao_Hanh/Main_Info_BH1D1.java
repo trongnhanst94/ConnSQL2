@@ -1,17 +1,31 @@
 package com.example.windows10gamer.connsql.Bao_Hanh;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.BH1D1;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -23,6 +37,7 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
     ListView lvBH1D1_moi, lvBH1D1;
     ArrayList<Sanpham_gio> list, list_moi;
     Adapter_Info_Order adapter, adapter_moi;
+    ImageView ivAvatar, ivAvatar2;
 
 
     @Override
@@ -101,29 +116,113 @@ public class Main_Info_BH1D1 extends AppCompatActivity {
         lvBH1D1_moi.setAdapter(adapter_moi);
         tvlydod1.setText("Lý do: " + lydo);
         tvphibaohanh.setText(Keys.setMoney(Integer.parseInt(phibaohanh)));
+        GetUser(Main_Info_BH1D1.this, maNVToday);
+        GetUser2(Main_Info_BH1D1.this, maNV);
+    }
+
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void GetUser2(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar2);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     private void Anhxa() {
-        lvBH1D1 = (ListView) findViewById(R.id.lvBHD1);
-        lvBH1D1_moi = (ListView) findViewById(R.id.lvBH1D1_moi);
-        tvlydod1 = (TextView) findViewById(R.id.tvlydoBHD1);
-        tvmaBH1D1 = (TextView) findViewById(R.id.tvmaBH1D1);
-        tvd1MaOrder = (TextView) findViewById(R.id.tvd1MaOrder);
-        tvd1Date = (TextView) findViewById(R.id.tvd1Date);
-        tvd1Time = (TextView) findViewById(R.id.tvd1Time);
-        tvd1Datetoday = (TextView) findViewById(R.id.tvd1Datetoday);
-        tvd1Timetoday = (TextView) findViewById(R.id.tvd1Timetoday);
-        tvd1MaNV = (TextView) findViewById(R.id.tvd1MaNV);
-        tvd1TenNV = (TextView) findViewById(R.id.tvd1TenNV);
-        tvd1GhichuOrder = (TextView) findViewById(R.id.tvd1Ghichu);
-        tvd1TenKH = (TextView) findViewById(R.id.tvd1TenKH);
-        tvd1SdtKH = (TextView) findViewById(R.id.tvd1SdtKH);
-        tvChinhanh1D1 = (TextView) findViewById(R.id.tvChinhanh1D1);
-        tvChinhanh1D1Order = (TextView) findViewById(R.id.tvChinhanh1D1Order);
-        tvd1GhichuKH = (TextView) findViewById(R.id.tvd1GhichuKH);
-        tvd1TenNVToday = (TextView) findViewById(R.id.tvd1TenNVNhan);
-        tvd1MaNVToday = (TextView) findViewById(R.id.tvd1MaNVNhan);
-        tvphibaohanh = (TextView) findViewById(R.id.tvphibaohanh);
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        lvBH1D1 = findViewById(R.id.lvBHD1);
+        lvBH1D1_moi = findViewById(R.id.lvBH1D1_moi);
+        tvlydod1 = findViewById(R.id.tvlydoBHD1);
+        tvmaBH1D1 = findViewById(R.id.tvmaBH1D1);
+        tvd1MaOrder = findViewById(R.id.tvd1MaOrder);
+        tvd1Date = findViewById(R.id.tvd1Date);
+        tvd1Time = findViewById(R.id.tvd1Time);
+        tvd1Datetoday = findViewById(R.id.tvd1Datetoday);
+        tvd1Timetoday = findViewById(R.id.tvd1Timetoday);
+        tvd1MaNV = findViewById(R.id.tvd1MaNV);
+        tvd1TenNV = findViewById(R.id.tvd1TenNV);
+        tvd1GhichuOrder = findViewById(R.id.tvd1Ghichu);
+        tvd1TenKH = findViewById(R.id.tvd1TenKH);
+        tvd1SdtKH = findViewById(R.id.tvd1SdtKH);
+        tvChinhanh1D1 = findViewById(R.id.tvChinhanh1D1);
+        tvChinhanh1D1Order = findViewById(R.id.tvChinhanh1D1Order);
+        tvd1GhichuKH = findViewById(R.id.tvd1GhichuKH);
+        tvd1TenNVToday = findViewById(R.id.tvd1TenNVNhan);
+        tvd1MaNVToday = findViewById(R.id.tvd1MaNVNhan);
+        tvphibaohanh = findViewById(R.id.tvphibaohanh);
     }
 
 }

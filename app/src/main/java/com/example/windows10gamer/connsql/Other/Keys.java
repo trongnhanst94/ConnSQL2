@@ -1,12 +1,24 @@
 package com.example.windows10gamer.connsql.Other;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,6 +51,7 @@ public class Keys {
     public static final String SCRIPT_BANHANG_NVL  = "https://script.google.com/macros/s/AKfycbycEFBmH7gNRt70F6K9u5nycej_Tt4s4BJHDqQ0lmHCI9IbdBkm/exec";
     public static final String SCRIPT_BANHANG_SOL  = "https://script.google.com/macros/s/AKfycbwWCTvKS4Ywje_jMiD5qtLBpMOcehMkfeoWuSqG9PqUdYryI50/exec";
     public static final String LOGIN               = "http://dealtichtac.com/android/user.php";
+    public static final String LOGIN2              = "http://dealtichtac.com/android/login.php";
     public static final String DANHSACHLOGIN       = "http://dealtichtac.com/android/danhsachuser.php";
     public static final String SALE                = "banhang";
     public static final String RETROFIT_ORDER      = "http://dealtichtac.com/android/";
@@ -146,6 +159,17 @@ public class Keys {
     public static final String KHUYENMAI           = "KHUYEN_MAI";
     public static final String MAIN_CHUONGTRINH    = "http://dealtichtac.com/android/danhsach_chuongtrinh.php";
     public static final String CHUONG_TRINH        = "CHUONG_TRINH";
+    public static final String UPDATE_IMG          = "UPDATE_IMG";
+    public static final String UPLOAD_AVATAR       = "http://dealtichtac.com/android/upload_avatar.php";
+    public static final String LINK_AVATAR         = "http://dealtichtac.com/android/avatar/";
+    public static final String MAIN_VERSION        = "http://dealtichtac.com/android/danhsach_version.php";
+    public static final String VERSION             = "VERSION";
+    public static final String nowVersion          = "Version 5.8";
+    public static final String MAIN_LINKAVATAR     = "http://dealtichtac.com/android/linkavatar.php";
+    public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
+    public static final String FIREBASE_TOKEN      = "/topics/all";
+    public static final String FIREBASE_SERVER_KEY = "AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n";
+
 
 
     public static final String setMoney(int amount){
@@ -486,9 +510,67 @@ public class Keys {
         if (chinhanh.equals(CN_SOL) && ma.length() == 8){
             result = true;
         }
-        if (chinhanh.equals(CN_NVL) && ma.length() < 6){
+        if (chinhanh.equals(CN_NVL) && ma.length() < 7){
             result = true;
         }
         return result;
+    }
+
+    public static final String GetUser(Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        final String[] link = {""};
+        RequestQueue requestQueue = Volley.newRequestQueue(c);
+        Log.d("qqq", Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("qqq", "onResponse: "+response.length());
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                Log.d("qqq", "GetUser: "+object.getInt("id")+
+                                        object.getString("ma_user")+
+                                        object.getString("ten")+
+                                        object.getString("shortName")+
+                                        object.getString("username")+
+                                        object.getString("password")+
+                                        object.getString("level")+
+                                        object.getString("chucdanh")+
+                                        object.getString("trangthai")+
+                                        object.getString("created")+
+                                        object.getString("updated")+
+                                        object.getString("img"));
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        Log.d("qqq", "GetUser: "+link[0]);
+        return link[0];
     }
 }

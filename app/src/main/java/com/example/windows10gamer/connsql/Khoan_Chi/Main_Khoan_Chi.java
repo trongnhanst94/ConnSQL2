@@ -2,6 +2,7 @@ package com.example.windows10gamer.connsql.Khoan_Chi;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,10 +27,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Khoanchi;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
@@ -87,43 +92,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         lvkhoanchi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder dialog = null;
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
-                } else {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
-                }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu chi");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
-                dialog.setCancelable(false);
-                final LinearLayout lnHidden = mView.findViewById(R.id.lnHidden);
-                final TextView tvchingay = mView.findViewById(R.id.tvchingay);
-                final TextView tvchica = mView.findViewById(R.id.tvchica);
-                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
-                lnHidden.setVisibility(View.VISIBLE);
-                tvchingay.setText(arraylist.get(position).getNgay());
-                tvchica.setText(arraylist.get(position).getCa());
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+arraylist.get(position).getMaNV());
-                tvchitennv.setText("Tên nhân viên: "+arraylist.get(position).getTenNV());
-                edchinoidung.setEnabled(false);
-                edchisotien.setEnabled(false);
-                edchinoidung.setText(arraylist.get(position).getNoidung());
-                edchisotien.setText(Keys.setMoney(Integer.valueOf(arraylist.get(position).getSotien())));
-                dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(mView);
-                AlertDialog al = dialog.create();
-                al.show();
+                GetUser(position, Main_Khoan_Chi.this,arraylist.get(position).getMaNV());
             }
         });
         btnthemchi.setOnClickListener(new View.OnClickListener() {
@@ -139,11 +108,14 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         .setTitle("Tạo phiếu chi");
                 View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
                 dialog.setCancelable(false);
+                final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
                 final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
                 final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
                 final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
                 final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
                 final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                shared = getSharedPreferences("login", MODE_PRIVATE);
+                Glide.with(Main_Khoan_Chi.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
                 tvchichinhanh.setText(chinhanh);
                 tvchimanv.setText("Mã số: "+session_ma);
                 tvchitennv.setText("Tên nhân viên: "+session_username);
@@ -171,6 +143,84 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                 al.show();
             }
         });
+    }
+
+    private void GetUser(final int position, final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        AlertDialog.Builder dialog = null;
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                        } else {
+                            dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                        }
+                        dialog.setIcon(R.drawable.ic_addchi)
+                                .setTitle("Tạo phiếu chi");
+                        View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
+                        dialog.setCancelable(false);
+                        final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
+                        final LinearLayout lnHidden = mView.findViewById(R.id.lnHidden);
+                        final TextView tvchingay = mView.findViewById(R.id.tvchingay);
+                        final TextView tvchica = mView.findViewById(R.id.tvchica);
+                        final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                        final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                        final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                        final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                        final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                        lnHidden.setVisibility(View.VISIBLE);
+                        tvchingay.setText(arraylist.get(position).getNgay());
+                        tvchica.setText(arraylist.get(position).getCa());
+                        tvchichinhanh.setText(chinhanh);
+                        tvchimanv.setText("Mã số: "+arraylist.get(position).getMaNV());
+                        tvchitennv.setText("Tên nhân viên: "+arraylist.get(position).getTenNV());
+                        edchinoidung.setEnabled(false);
+                        edchisotien.setEnabled(false);
+                        edchinoidung.setText(arraylist.get(position).getNoidung());
+                        edchisotien.setText(Keys.setMoney(Integer.valueOf(arraylist.get(position).getSotien())));
+                        dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setView(mView);
+                        AlertDialog al = dialog.create();
+                        al.show();
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     public class SendRequest extends AsyncTask<Void, Void, String> {

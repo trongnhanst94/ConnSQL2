@@ -1,6 +1,7 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,10 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Nhaphang;
+import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Object.XuatNhap;
 import com.example.windows10gamer.connsql.Object.XuatNhap_SL;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
@@ -39,15 +49,17 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
     String session_ma, session_username;
     String chinhanh;
     TextView tvDSxuatmaNV, tvDSxuattenNV, tvDSxuatchinhanh;
+    ImageView ivAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_danhsach_nhaphang);
-        listView = (ListView) findViewById(R.id.lvXuathang);
-        tvDSxuatchinhanh = (TextView) findViewById(R.id.tvDSxuatchinhanh);
-        tvDSxuattenNV = (TextView) findViewById(R.id.tvDSxuattenNV);
-        tvDSxuatmaNV = (TextView) findViewById(R.id.tvDSxuatmaNV);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        listView = findViewById(R.id.lvXuathang);
+        tvDSxuatchinhanh = findViewById(R.id.tvDSxuatchinhanh);
+        tvDSxuattenNV = findViewById(R.id.tvDSxuattenNV);
+        tvDSxuatmaNV = findViewById(R.id.tvDSxuatmaNV);
         adapter = new Adapter_Nhaphang(Main_Danhsach_Nhaphang.this, R.layout.adapter_xuatnhap, dem);
         listView.setAdapter(adapter);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
@@ -55,6 +67,7 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
         shared = getSharedPreferences("login", MODE_PRIVATE);
         session_ma = shared.getString("ma", "");
         session_username = shared.getString("shortName", "");
+        Glide.with(Main_Danhsach_Nhaphang.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         tvDSxuatchinhanh.setText(chinhanh);
         tvDSxuatmaNV.setText("Mã số: "+session_ma);
         tvDSxuattenNV.setText("Tên nhân viên: "+session_username);
@@ -86,6 +99,46 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void GetUser(final Context c, final String manhanvien) {
+        final ArrayList<User> usernames = new ArrayList<User>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                usernames.add(new User(
+                                        object.getInt("id"),
+                                        object.getString("ma_user"),
+                                        object.getString("ten"),
+                                        object.getString("shortName"),
+                                        object.getString("username"),
+                                        object.getString("password"),
+                                        object.getString("level"),
+                                        object.getString("chucdanh"),
+                                        object.getString("trangthai"),
+                                        object.getString("created"),
+                                        object.getString("updated"),
+                                        object.getString("img")
+                                ));
+                                Glide.with(c).load(object.getString("img")).override(300,300).fitCenter().into(ivAvatar);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
     }
 
     class GetData extends AsyncTask<String, Void, Void> {

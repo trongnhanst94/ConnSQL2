@@ -75,7 +75,8 @@
                     android:layout_weight="1"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
-                    app:srcCompat="@drawable/ic_up_arrow" />
+                    app:srcCompat="@drawable/ic_up_arrow"
+                    tools:ignore="VectorDrawableCompat" />
             </LinearLayout>
 
         </LinearLayout>
@@ -100,109 +101,241 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_ln"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="THỐNG KÊ:"
-                        android:textColor="@color/cam"
-                        android:textSize="@dimen/hai" />
-
-                    <LinearLayout
+                    <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
-                        android:weightSum="10">
+                        android:paddingBottom="10dp"
+                        android:weightSum="9">
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_doanhthue"
+                                    android:gravity="center_vertical"
+                                    android:text="Ca làm việc"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/tvdica"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="Ca làm việc" />
-
-                            <TextView
-                                android:id="@+id/tvthang"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="Tháng làm việc" />
-
-                            <TextView
-                                android:id="@+id/tvluykeluong"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="Lũy kế lương" />
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="123.456.79"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_trensp"
+                                    android:gravity="center_vertical"
+                                    android:text="Tháng làm việc"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvthang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="TextView"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_trenkh"
+                                    android:gravity="center_vertical"
+                                    android:text="Lũy kế lương"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvluykeluong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="TextView"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon" />
+                        </LinearLayout>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="9">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_khachhangs"
+                                    android:gravity="center_vertical"
+                                    android:text="Doanh thu hiện tại"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/mdoanhthu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="TextView" />
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="TextView"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_nhv"
+                                    android:gravity="center_vertical"
+                                    android:text="Khách/tháng"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/khachhang"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="TextView" />
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="TextView"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_sanpham"
+                                    android:gravity="center_vertical"
+                                    android:text="Sản phẩm/tháng"
+                                    android:textColor="@color/cam"
+                                    android:textSize="@dimen/muoi_nho" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/sanpham"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/cell_shape"
-                                android:text="TextView" />
+                                android:fontFamily="sans-serif-smallcaps"
+                                android:paddingStart="15dp"
+                                android:text="3"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/holo_red_light"
+                                android:textSize="@dimen/bon"
+                                android:textStyle="normal" />
                         </LinearLayout>
-                    </LinearLayout>
 
-                </LinearLayout>
+                    </TableRow>
+                </TableLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="CHỈ TIÊU:"
-                        android:textColor="@color/cam"
-                        android:textSize="@dimen/hai" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
                         android:weightSum="10">
 
                         <TableLayout
@@ -219,9 +352,11 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
-                                    android:background="@drawable/row_bg"
+                                    android:background="@color/holo_cam"
+                                    android:padding="3dp"
                                     android:text="Hạng mục"
                                     android:textAlignment="center"
+                                    android:textColor="@color/white"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -229,9 +364,11 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
-                                    android:background="@drawable/row_bg"
+                                    android:background="@color/holo_cam"
+                                    android:padding="3dp"
                                     android:text="Kết quả/Chỉ tiêu"
                                     android:textAlignment="center"
+                                    android:textColor="@color/white"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -239,15 +376,18 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1.5"
-                                    android:background="@drawable/row_bg"
+                                    android:background="@color/holo_cam"
+                                    android:padding="3dp"
                                     android:text="%"
                                     android:textAlignment="center"
+                                    android:textColor="@color/white"
                                     android:textStyle="bold" />
                             </TableRow>
 
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:background="@color/white"
                                 android:weightSum="8">
 
                                 <TextView
@@ -255,6 +395,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
                                     android:background="@drawable/body_row"
+                                    android:paddingLeft="15dp"
                                     android:text="Số ca"
                                     android:textSize="@dimen/muoi" />
 
@@ -276,12 +417,14 @@
                                     android:layout_weight="1.5"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textSize="@dimen/muoi" />
+                                    android:textSize="@dimen/muoi"
+                                    android:textStyle="bold" />
                             </TableRow>
 
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:background="@color/white"
                                 android:weightSum="8">
 
                                 <TextView
@@ -289,6 +432,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
                                     android:background="@drawable/body_row"
+                                    android:paddingLeft="15dp"
                                     android:text="Giờ tăng ca"
                                     android:textSize="@dimen/muoi" />
 
@@ -315,6 +459,7 @@
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:background="@color/white"
                                 android:weightSum="8">
 
                                 <TextView
@@ -322,6 +467,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
                                     android:background="@drawable/body_row"
+                                    android:paddingLeft="15dp"
                                     android:text="Doanh thu"
                                     android:textSize="@dimen/muoi" />
 
@@ -351,6 +497,7 @@
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:background="@color/white"
                                 android:weightSum="8">
 
                                 <TextView
@@ -358,6 +505,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
                                     android:background="@drawable/body_row"
+                                    android:paddingLeft="15dp"
                                     android:text="DT/KH"
                                     android:textSize="@dimen/muoi" />
 
@@ -387,6 +535,7 @@
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:background="@color/white"
                                 android:weightSum="8">
 
                                 <TextView
@@ -394,6 +543,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
                                     android:background="@drawable/body_row"
+                                    android:paddingLeft="15dp"
                                     android:text="SP/KH"
                                     android:textSize="@dimen/muoi" />
 

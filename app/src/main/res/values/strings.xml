@@ -17,5 +17,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_main__xuathang">Xuất hàng</string>
+    <string name="notifications_admin_channel_name">fb tete</string>
+    <string name="notifications_admin_channel_description">fb description</string>
+    <string name="default_notification_channel_id">lalala</string>
+    <string name="default_notification_channel_name">sdasd</string>
+    <string name="msg_token_fmt">sdsd</string>
+    <string name="msg_subscribed">sdsd</string>
+    <string name="notification_add_to_cart_button">sss</string>
 
 </resources>

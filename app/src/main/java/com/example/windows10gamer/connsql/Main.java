@@ -1,14 +1,25 @@
 package com.example.windows10gamer.connsql;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +48,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Khuyenmai;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Order;
@@ -49,6 +63,7 @@ import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Chitieu_Nhanvien;
 import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Object.Version;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
@@ -58,15 +73,32 @@ import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Data;
 import com.example.windows10gamer.connsql.Xuat_Nhap.Main_XuatNhap;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import net.gotev.uploadservice.MultipartUploadRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,13 +143,29 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     TextView tvdica, ptdica;
     private int pdica = 0;
     private int ptrdica = 0;
+    private int PICK_IMAGE_REQUEST = 101;
+    private Bitmap bitmap;
+    View headerView;
+    NavigationView navigationView;
+    ImageView test;
+    private ProgressDialog progressDialog;
+    boolean check = true;
+    private Uri filePath;
+    private static final int STORAGE_PERMISSION_CODE = 123;
+    private String img;
+    private String linkAvatar;
+    private ArrayList<Version> listVersion = new ArrayList<>();
+    private String nowVersion, getVersion = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
+        requestStoragePermission();
         Toolbar toolbar = findViewById(R.id.toolbar);
+        anhxa();
+        firebase();
         mdoanhthu = findViewById(R.id.mdoanhthu);
         khachhang = findViewById(R.id.khachhang);
         sanpham = findViewById(R.id.sanpham);
@@ -127,16 +175,18 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         session_ma = shared.getString("ma", "");
         mkhau = shared.getString("mk", "");
         level = shared.getString("level", "");
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        ImageView ivAvatar = headerView.findViewById(R.id.ivAvatar);
+        img = shared.getString("img", "");
+        nowVersion = shared.getString("version", "");
+        navigationView = findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
         TextView tvshortName = headerView.findViewById(R.id.shortName);
         TextView tvsession_ma = headerView.findViewById(R.id.session_ma);
+        ImageView ivAvatar = navigationView.getHeaderView(0).findViewById(R.id.anhdaidien);
+        Glide.with(Main.this).load(img).override(300,300).fitCenter().into(ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                selectImageFromGallery();
             }
         });
         dialogbe = new ProgressDialog(Main.this);
@@ -145,6 +195,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         dialogbe.setCancelable(false);
         dialogbe.show();
         new SendRequest().execute();
+        new Getversion().execute();
         tvshortName.setText(shortName);
         tvsession_ma.setText(session_ma);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -152,39 +203,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        btnkhuyenmai       = findViewById(R.id.btnkhuyenmai);
-        ptdica             = findViewById(R.id.ptdica);
-        tvthang            = findViewById(R.id.tvthang);
-        tvdica             = findViewById(R.id.tvdica);
-        tvluykeluong       = findViewById(R.id.tvluykeluong);
-        ivHide             = findViewById(R.id.ivHide);
-        lnHide             = findViewById(R.id.lnHide);
-        btnHide            = findViewById(R.id.btnHide);
-        tvsoca             = findViewById(R.id.tvsoca);
-        tvtangca           = findViewById(R.id.tvtangca);
-        tvdt               = findViewById(R.id.tvdt);
-        tvdtkh             = findViewById(R.id.tvdtkh);
-        tvspkh             = findViewById(R.id.tvspkh);
-        btnnhaphang        = findViewById(R.id.btnnhaphang);
-        btnremove          = findViewById(R.id.btnremove);
-        btnscanvon         = findViewById(R.id.btnscanvon);
-        btnBcdt            = findViewById(R.id.btnBcdt);
-        btnWeb             = findViewById(R.id.btnWeb);
-        btnnhanvien        = findViewById(R.id.btnnhanvien);
-        btndatcoc          = findViewById(R.id.btndatcoc);
-        btnXuatnhap        = findViewById(R.id.btnXuatnhap);
-        btnScan            = findViewById(R.id.btnScanQR);
-        btnRealtime        = findViewById(R.id.btnRealtime);
-        btnSales           = findViewById(R.id.btnSales);
-        btnListOrder       = findViewById(R.id.btnListOrder);
-        btnDanhsachkiemkho = findViewById(R.id.btnDanhsachkiemkho);
-        btnBaohanh         = findViewById(R.id.btnBaohanh);
-        btnReportBaohanh   = findViewById(R.id.btnReportBaohanh);
-        btnChi             = findViewById(R.id.btnChi);
-        tvchinhanh         = findViewById(R.id.tvchinhanh);
-        ptdt               = findViewById(R.id.ptdt);
-        ptdtkh             = findViewById(R.id.ptdtkh);
-        ptspkh             = findViewById(R.id.ptspkh);
+        lnHide.setVisibility(View.GONE);
+        btnHide.setVisibility(View.GONE);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         tvchinhanh.setText(chinhanh);
@@ -506,6 +526,72 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
+    private void firebase() {
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String channelId = "1";
+        String channel2 = "2";
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId,
+                    "Channel 1",NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("This is BNT");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            NotificationChannel notificationChannel2 = new NotificationChannel(channel2,
+                    "Channel 2",NotificationManager.IMPORTANCE_MIN);
+
+            notificationChannel.setDescription("This is bTV");
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            notificationManager.createNotificationChannel(notificationChannel2);
+
+        }
+    }
+
+    private void anhxa() {
+        btnkhuyenmai       = findViewById(R.id.btnkhuyenmai);
+        ptdica             = findViewById(R.id.ptdica);
+        tvthang            = findViewById(R.id.tvthang);
+        tvdica             = findViewById(R.id.tvdica);
+        tvluykeluong       = findViewById(R.id.tvluykeluong);
+        ivHide             = findViewById(R.id.ivHide);
+        lnHide             = findViewById(R.id.lnHide);
+        btnHide            = findViewById(R.id.btnHide);
+        tvsoca             = findViewById(R.id.tvsoca);
+        tvtangca           = findViewById(R.id.tvtangca);
+        tvdt               = findViewById(R.id.tvdt);
+        tvdtkh             = findViewById(R.id.tvdtkh);
+        tvspkh             = findViewById(R.id.tvspkh);
+        btnnhaphang        = findViewById(R.id.btnnhaphang);
+        btnremove          = findViewById(R.id.btnremove);
+        btnscanvon         = findViewById(R.id.btnscanvon);
+        btnBcdt            = findViewById(R.id.btnBcdt);
+        btnWeb             = findViewById(R.id.btnWeb);
+        btnnhanvien        = findViewById(R.id.btnnhanvien);
+        btndatcoc          = findViewById(R.id.btndatcoc);
+        btnXuatnhap        = findViewById(R.id.btnXuatnhap);
+        btnScan            = findViewById(R.id.btnScanQR);
+        btnRealtime        = findViewById(R.id.btnRealtime);
+        btnSales           = findViewById(R.id.btnSales);
+        btnListOrder       = findViewById(R.id.btnListOrder);
+        btnDanhsachkiemkho = findViewById(R.id.btnDanhsachkiemkho);
+        btnBaohanh         = findViewById(R.id.btnBaohanh);
+        btnReportBaohanh   = findViewById(R.id.btnReportBaohanh);
+        btnChi             = findViewById(R.id.btnChi);
+        tvchinhanh         = findViewById(R.id.tvchinhanh);
+        ptdt               = findViewById(R.id.ptdt);
+        ptdtkh             = findViewById(R.id.ptdtkh);
+        ptspkh             = findViewById(R.id.ptspkh);
+    }
+
     public class SendRequest extends AsyncTask<Void, Void, String> {
 
         protected void onPreExecute(){
@@ -516,6 +602,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             if(!Connect_Internet.checkConnection(getApplicationContext()))
                 Connect_Internet.buildDialog(Main.this).show();
             else {
+                GetDonhang();
                 GetDonhang();
             }
             return null;
@@ -537,10 +624,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 public void onResponse(Call<OrderList> call, retrofit2.Response<OrderList> response) {
                     ArrayList<Order> orignal = new ArrayList<Order>();
                     if(response.isSuccessful()) {
+                        mySing.clear();
+                        myListAll.clear();
+                        totalDoanhthu = 0;
                         orignal = response.body().getContacts();
                         for (int i = 0; i < orignal.size(); i++) {
                             if (session_ma.equals(orignal.get(i).getMaNhanvien())){
-                                Log.d("qqq", orignal.get(i).getGiaSanpham()+ " - "+totalDoanhthu);
                                 myListAll.add(orignal.get(i));
                                 totalDoanhthu += (Integer.valueOf(orignal.get(i).getGiaSanpham()) - Integer.valueOf(orignal.get(i).getGiamgia()));
                                 int sosanhgiamgia = sosanhgiam(mySing, orignal.get(i).getMaDonhang());
@@ -549,9 +638,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                 }
                             }
                         }
-                        mdoanhthu.setText("DT/tháng: "+Keys.setMoney(totalDoanhthu));
-                        sanpham.setText("KH/tháng: "+mySing.size());
-                        khachhang.setText("SP/tháng: "+myListAll.size());
+                        mdoanhthu.setText(Keys.setMoney(totalDoanhthu));
+                        sanpham.setText(myListAll.size()+"");
+                        khachhang.setText(mySing.size()+"");
                         kqdoanhthu = totalDoanhthu;
                         kqkh = mySing.size();
                         kqsp = myListAll.size();
@@ -581,26 +670,36 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return result;
     }
 
+    public void selectImageFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh đại diện"), PICK_IMAGE_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-//            Uri selectedImage = data.getData();
-//            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-//
-//            Cursor cursor = getContentResolver().query(selectedImage,
-//                    filePathColumn, null, null, null);
-//            cursor.moveToFirst();
-//
-//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//            String picturePath = cursor.getString(columnIndex);
-//            cursor.close();
-//            ivAvatar.setImageURI(selectedImage);
-
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ImageView ivAvatar = navigationView.getHeaderView(0).findViewById(R.id.anhdaidien);
+                Glide.with(Main.this).load(filePath).into(ivAvatar);
+                uploadMultipart();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
 
-
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     @Override
@@ -678,6 +777,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         editor.putString("ten", "");
         editor.putString("level", "");
         editor.putString("chucdanh", "");
+        editor.putString("img", "");
         editor.putBoolean("checked", FALSE);
         editor.putBoolean("isLogged", FALSE);
         editor.commit();
@@ -796,6 +896,143 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         requestQueue.add(stringRequest);
     }
 
+    public void uploadMultipart() {
+        String path = getPath(filePath);
+        try {
+            String uploadId = UUID.randomUUID().toString();
+            String nn = Keys.TaoMa();
+            new MultipartUploadRequest(this, uploadId, Keys.UPLOAD_AVATAR)
+                    .addFileToUpload(path, "image")
+                    .addParameter("session_ma", session_ma)
+                    .addParameter("rand", nn)
+                    .setMaxRetries(2)
+                    .startUpload();
+            linkAvatar = Keys.LINK_AVATAR+session_ma+nn+".jpg";
+            SharedPreferences.Editor editor = shared.edit();
+            editor.putString("img", linkAvatar);
+            editor.commit();
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public String getPath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor.close();
+
+        cursor = getContentResolver().query(
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+        cursor.moveToFirst();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        cursor.close();
+        return path;
+    }
+
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        }
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
+
+    public class ImageProcessClass{
+
+        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try {
+
+                URL url;
+                HttpURLConnection httpURLConnectionObject ;
+                OutputStream OutPutStream;
+                BufferedWriter bufferedWriterObject ;
+                BufferedReader bufferedReaderObject ;
+                int RC ;
+
+                url = new URL(requestURL);
+
+                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
+
+                httpURLConnectionObject.setReadTimeout(19000);
+
+                httpURLConnectionObject.setConnectTimeout(19000);
+
+                httpURLConnectionObject.setRequestMethod("POST");
+
+                httpURLConnectionObject.setDoInput(true);
+
+                httpURLConnectionObject.setDoOutput(true);
+
+                OutPutStream = httpURLConnectionObject.getOutputStream();
+
+                bufferedWriterObject = new BufferedWriter(
+
+                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+
+                bufferedWriterObject.write(bufferedWriterDataFN(PData));
+
+                bufferedWriterObject.flush();
+
+                bufferedWriterObject.close();
+
+                OutPutStream.close();
+
+                RC = httpURLConnectionObject.getResponseCode();
+
+                if (RC == HttpsURLConnection.HTTP_OK) {
+
+                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
+
+                    stringBuilder = new StringBuilder();
+
+                    String RC2;
+
+                    while ((RC2 = bufferedReaderObject.readLine()) != null){
+
+                        stringBuilder.append(RC2);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
+
+            StringBuilder stringBuilderObject;
+
+            stringBuilderObject = new StringBuilder();
+
+            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
+
+                if (check)
+
+                    check = false;
+                else
+                    stringBuilderObject.append("&");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
+
+                stringBuilderObject.append("=");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
+            }
+
+            return stringBuilderObject.toString();
+        }
+
+    }
+
     class Getvitri extends AsyncTask<Void, Void, Void> {
         ProgressDialog dialog;
         int jIndex;
@@ -853,6 +1090,92 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    class Getversion extends AsyncTask<Void, Void, Void> {
+        ProgressDialog dialog;
+        int jIndex;
+        int x;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            jIndex = 0;
+            dialog = new ProgressDialog(Main.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_VERSION);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.VERSION);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            listVersion.clear();
+                            for( ; jIndex < lenArray; jIndex++) {
+
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    listVersion.add(new Version(
+                                            object.getString("id"),
+                                            object.getString("ten"),
+                                            object.getString("mota"),
+                                            object.getString("created")
+                                            )
+                                    );
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            dialog.dismiss();
+            getVersion = listVersion.get(0).getTen();
+            setVerrr(getVersion);
+        }
+    }
+
+    private void setVerrr(String getVersion) {
+        if (!getVersion.equals(Keys.nowVersion)){
+            AlertDialog.Builder builder = null;
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                builder = new AlertDialog.Builder(Main.this);
+            } else {
+                builder = new AlertDialog.Builder(Main.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+            }
+            builder.setIcon(R.drawable.ic_warning);
+            builder.setTitle("Cảnh báo");
+            builder.setMessage("Yêu cầu cập nhật phiên bản mới nhất trước khi sử dụng!");
+            builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int pid = android.os.Process.myPid();
+                    android.os.Process.killProcess(pid);
+                    System.exit(0);
+                }
+            });
+            builder.show();
+        }
+    }
+
     class getDica extends AsyncTask<String, Void, Void> {
         int jIndex;
 
@@ -865,13 +1188,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         @Override
         protected Void doInBackground(String... params) {
             JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.DANHSACHDICA+"?batdau="+Keys.getDauthang()+"&ketthuc="+Keys.getDateNow()+"&nhanvien="+session_ma);
-            Log.d("qqq", "doInBackground: "+Keys.DANHSACHDICA+"?batdau="+Keys.getDauthang()+"&ketthuc="+Keys.getDateNow()+"&nhanvien="+session_ma);
             try {
                 if (jsonObject != null) {
                     if(jsonObject.length() > 0) {
                         JSONArray array = jsonObject.getJSONArray(Keys.DI_CA);
                         int lenArray = array.length();
                         if(lenArray > 0) {
+                            listDica.clear();
                             for( ; jIndex < lenArray; jIndex++) {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
@@ -893,7 +1216,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             pdica = listDica.size();
-            tvdica.setText("Ca làm việc: "+pdica);
+            tvdica.setText(pdica+"");
             new GetChitieu().execute();
         }
     }
@@ -961,8 +1284,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             if (listChitieu.size() > 0){
                 lnHide.setVisibility(View.VISIBLE);
                 btnHide.setVisibility(View.VISIBLE);
-                tvthang.setText("Tháng làm việc: "+listChitieu.get(0).getThang());
-                tvluykeluong.setText("Lũy kế lương: "+Keys.setMoney(Integer.valueOf(listChitieu.get(0).getLuykeluong())));
+                tvthang.setText(listChitieu.get(0).getThang()+"");
+                tvluykeluong.setText(Keys.setMoney(Integer.valueOf(listChitieu.get(0).getLuykeluong())));
                 if (kqdoanhthu == -1 || kqsp == -1 || kqkh == -1){
                 } else {
                     DecimalFormat df = new DecimalFormat("0.0");

@@ -24,12 +24,15 @@ import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Object.BH1D1;
@@ -40,17 +43,14 @@ import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Datcoc;
 import com.example.windows10gamer.connsql.Object.Doanhthu;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
-import com.example.windows10gamer.connsql.Object.Message;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
-import com.example.windows10gamer.connsql.Other.FirebaseAPI;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
-import com.example.windows10gamer.connsql.Other.NotifyData;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.R;
@@ -59,22 +59,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     TextView tvnhanvien, tvthongbao, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
@@ -194,6 +187,8 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                 tienthucte = Integer.valueOf(edtienthucte.getText().toString().trim());
                                 if (tienthucte == 0) {
                                 } else {
+                                    btnGuibaocao.setEnabled(false);
+                                    btnGuibaocao.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                                     madoanhthu = Keys.MaDonhang();
                                     new SendRequestweb().execute();
                                 }
@@ -294,6 +289,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 publishProgress(progress);
                 progress++;
             }
+            sendFCMPush( "Doanh thu: "+Keys.setMoney(tienthucte)+" - "+ca,"Báo cáo "+chinhanh);
             return null;
         }
 
@@ -1386,56 +1382,96 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         }
     }
 
-    public void sendNotification(View view) {
+//    public void sendNotification() {
+//
+//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//
+//        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+//        httpClient.addInterceptor(new Interceptor() {
+//            @Override
+//            public okhttp3.Response intercept(Chain chain) throws IOException {
+//                Request original = chain.request();
+//                Request.Builder requestBuilder = original.newBuilder()
+//                        .header("Authorization", "key=AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n"); // <-- this is the important line
+//                Request request = requestBuilder.build();
+//                return chain.proceed(request);
+//            }
+//        });
+//
+//        httpClient.addInterceptor(logging);
+//        OkHttpClient client = httpClient.build();
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://fcm.googleapis.com")
+//                .client(client)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        FirebaseAPI firebaseAPI = retrofit.create(FirebaseAPI.class);
+//
+//        NotifyData notifydata = new NotifyData("Báo cáo doanh thu","Ngày 21-02-2018 Chi nhánh Nguyễn Văn Linh");
+//
+//        Message message = new Message("/topics/all", notifydata);
+//        Call<Message> call2 = firebaseAPI.sendMessage(message);
+//        call2.enqueue(new Callback<Message>() {
+//            @Override
+//            public void onResponse(Call<Message> call, Response<Message> response) {
+//                if(response.isSuccessful()) {
+//                    Log.d("qqq", "post submitted to API." + response.body().getTo());
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<Message> call, Throwable t) {
+//                Log.d("Response ", "onFailure");
+//            }
+//        });
+//    }
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+    private void sendFCMPush(String msg, String title) {
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
+        JSONObject obj = null;
+        JSONObject dataobjData = null;
+
+        try {
+            obj = new JSONObject();
+
+            dataobjData = new JSONObject();
+            dataobjData.put("message", msg);
+            dataobjData.put("title", title);
+
+            obj.put("to", Keys.FIREBASE_TOKEN);
+            obj.put("data", dataobjData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, Keys.FIREBASE_API_LINK, obj,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
+            public void onErrorResponse(VolleyError error) {
 
-                // Request customization: add request headers
-                Request.Builder requestBuilder = original.newBuilder()
-                        .header("Authorization", "AIzaSyAD-fQsDEdLcplv9AJ17uv5QY2053AnJuo"); // <-- this is the important line
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
             }
-        });
-
-        httpClient.addInterceptor(logging);
-        OkHttpClient client = httpClient.build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://fcm.googleapis.com")//url of FCM message server
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())//use for convert JSON file into object
-                .build();
-
-        // prepare call in Retrofit 2.0
-        FirebaseAPI firebaseAPI = retrofit.create(FirebaseAPI.class);
-
-        //for messaging server
-        NotifyData notifydata = new NotifyData("BOSS NOTIFICATION","Thay đổi nhân sự giữa các chi nhánh tháng 01/2018");
-
-        Call<Message> call2 = firebaseAPI.sendMessage(new Message("topic or deviceID", notifydata));
-
-        call2.enqueue(new Callback<Message>() {
+        })
+        {
             @Override
-            public void onResponse(Call<Message> call, Response<Message> response) {
-
-                Log.d("Response ", "onResponse");
-                Toast.makeText(Main_Tao_BCDoanhthu.this, "Notification Thành công", Toast.LENGTH_SHORT).show();
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "key=" + Keys.FIREBASE_SERVER_KEY);
+                params.put("Content-Type", "application/json");
+                return params;
             }
-
-            @Override
-            public void onFailure(Call<Message> call, Throwable t) {
-                Log.d("Response ", "onFailure");
-                Toast.makeText(Main_Tao_BCDoanhthu.this, "Notification Thất bại", Toast.LENGTH_SHORT).show();
-            }
-        });
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        int socketTimeout = 1000 * 60;// 60 seconds
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsObjRequest.setRetryPolicy(policy);
+        requestQueue.add(jsObjRequest);
     }
 
     public void addDoanhthuWeb(){

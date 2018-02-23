@@ -32,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_KiemKho;
 import com.example.windows10gamer.connsql.Object.SanphamAmount;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
@@ -78,18 +79,19 @@ public class Main_Kiemkho extends AppCompatActivity {
     Adapter_KiemKho adapter;
     String session_username, session_ma, ngay, gio;
     private String ma, ten, nguon, baohanh, gia, ngaynhap, von, vitri;
-    TextView tvScanManhanvien, tvScanTennhanvien;
+    TextView tvScanManhanvien, tvScanTennhanvien, tvchinhanhkiemkho;
     RadioGroup rgkho;
     RadioButton rbkhomoi;
     RadioButton rbkholoi;
     String kho = "Kho mới";
     ProgressDialog dialog;
-    private SharedPreferences shared;
+    private SharedPreferences shared, sp;
     private String chinhanh;
     private ProgressDialog slPro;
     private ArrayList<String> listsoluong =  new ArrayList<>();
     private int soluong;
     private ProgressDialog nPro;
+    ImageView ivAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +103,15 @@ public class Main_Kiemkho extends AppCompatActivity {
         arrayList = new ArrayList<>();
         final Activity activity = this;
         Intent intent = getIntent();
+        ivAvatar = findViewById(R.id.ivAvatar);
+        tvchinhanhkiemkho = findViewById(R.id.tvchinhanhkiemkho);
         session_username  = intent.getStringExtra("session_username");
         session_ma        = intent.getStringExtra("session_ma");
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
+        sp = getSharedPreferences("login", MODE_PRIVATE);
+        Glide.with(Main_Kiemkho.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
+        tvchinhanhkiemkho.setText(chinhanh);
         tvScanManhanvien  = findViewById(R.id.tvScanManhanvien);
         tvScanTennhanvien = findViewById(R.id.tvScanTennhanvien);
         rgkho             = findViewById(R.id.rgkho);
@@ -560,6 +567,7 @@ public class Main_Kiemkho extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 vitri = spinnerKiemkho.getSelectedItem().toString();
+                tvchinhanhkiemkho.setText(vitri);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
