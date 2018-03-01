@@ -68,6 +68,7 @@ public class Main_Information_Order extends AppCompatActivity {
     CircleImageView ivAvatar;
     FloatingActionButton fab;
     LinearLayout lnAn;
+    TextView tvThanhtoan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class Main_Information_Order extends AppCompatActivity {
         lnHide = findViewById(R.id.lnHide);
         fab = findViewById(R.id.fab);
         lnAn = findViewById(R.id.lnAn);
+        tvThanhtoan = findViewById(R.id.tvThanhtoan);
         lvKhuyenmai = findViewById(R.id.lvKhuyenmai);
         tvifMaOrder = findViewById(R.id.tvifMaOrder);
         tvifDateOrder = findViewById(R.id.tvifDateOrder);
@@ -128,6 +130,11 @@ public class Main_Information_Order extends AppCompatActivity {
             total+=Integer.parseInt(item.get(j).getGiaSanpham());
         }
         new GetData().execute();
+        if (item.get(0).getThanhtoan().equals(Keys.TIENMAT)){
+            tvThanhtoan.setText(item.get(0).getThanhtoan());
+        } else {
+            tvThanhtoan.setText(item.get(0).getThanhtoan()+" - "+item.get(0).getNguoino());
+        }
         tvifMaOrder.setText(item.get(0).getMaDonhang());
         tvifDateOrder.setText("Ngày: "+item.get(0).getNgay());
         tvifTimeOrder.setText(" Ca: "+item.get(0).getCalam());

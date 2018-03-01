@@ -75,7 +75,6 @@
                         android:id="@+id/tvmaNV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mã số: 000000000"
                         android:textColor="#000"
                         android:textSize="@dimen/muoi"
                         android:textStyle="italic" />
@@ -92,7 +91,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tên nhân viên: Trần thị thanh thuỳ"
                         android:textColor="#000"
                         android:textSize="@dimen/muoi"
                         android:textStyle="italic" />
@@ -140,7 +138,6 @@
                     android:paddingBottom="5dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
-                    android:text="Chi nhánh SOL"
                     android:textAlignment="inherit"
                     android:textColor="#000"
                     android:textSize="@dimen/muoi" />

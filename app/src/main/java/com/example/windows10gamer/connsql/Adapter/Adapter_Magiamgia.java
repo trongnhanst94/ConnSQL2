@@ -75,7 +75,7 @@ public class Adapter_Magiamgia  extends ArrayAdapter<Magiamgia> {
                 builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        xacNhanXoa(item.getId());
+                        xacNhanXoa(item.getTen());
                     }
                 });
                 builder.show();

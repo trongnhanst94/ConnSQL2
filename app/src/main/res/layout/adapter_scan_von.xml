@@ -18,7 +18,6 @@
             android:background="@drawable/btn_bggadient"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Cáp sạc Pisen"
             android:textAlignment="center"
             android:textSize="@dimen/bon"
             android:textStyle="bold" />
@@ -50,7 +49,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="C027"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>
@@ -73,7 +71,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="6 tháng"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>
@@ -96,7 +93,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nguyên phát"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>
@@ -119,7 +115,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="6 tháng"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>
@@ -142,7 +137,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="70000"
                 android:textAlignment="textEnd"
                 android:textColor="@color/RED"
                 android:textSize="@dimen/muoi" />
@@ -166,7 +160,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="45000"
                 android:textAlignment="textEnd"
                 android:textColor="@color/RED"
                 android:textColorLink="@color/RED"

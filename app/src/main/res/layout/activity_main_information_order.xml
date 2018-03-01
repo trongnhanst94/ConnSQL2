@@ -85,7 +85,6 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
-                            android:text="TextView"
                             android:textSize="@dimen/muoi" />
                     </LinearLayout>
 
@@ -109,7 +108,6 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:paddingLeft="5dp"
-                            android:text="TextView"
                             android:textSize="@dimen/muoi" />
                     </LinearLayout>
                 </LinearLayout>
@@ -168,7 +166,6 @@
                                         android:id="@+id/tvifMaNVOrder"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Mã số: 000000000"
                                         android:textColor="#000"
                                         android:textSize="@dimen/muoi"
                                         android:textStyle="italic" />
@@ -186,7 +183,6 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Tên nhân viên: Trần thị thanh thuỳ"
                                         android:textColor="#000"
                                         android:textSize="@dimen/muoi"
                                         android:textStyle="italic" />
@@ -218,7 +214,6 @@
                                     android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
                                     android:paddingTop="5dp"
-                                    android:text="Chi nhánh SOL"
                                     android:textAlignment="inherit"
                                     android:textColor="#000"
                                     android:textSize="@dimen/muoi" />
@@ -280,7 +275,6 @@
                                 android:id="@+id/tvifTenKH"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Mã số: 000000000"
                                 android:textColor="#000"
                                 android:textSize="@dimen/muoi"
                                 android:textStyle="italic" />
@@ -297,7 +291,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Tên nhân viên: Trần thị thanh thuỳ"
                                 android:textColor="#000"
                                 android:textSize="@dimen/muoi"
                                 android:textStyle="italic" />
@@ -313,7 +306,6 @@
                     android:background="@color/white"
                     android:padding="5dp"
                     android:paddingTop="5dp"
-                    android:text="k có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
@@ -332,7 +324,6 @@
                     android:layout_marginBottom="5dp"
                     android:background="@color/white"
                     android:padding="5dp"
-                    android:text="không có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -407,6 +398,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Tổng tiền:"
+                        android:textStyle="italic"
+                        android:textColor="@color/cam"
                         android:textSize="@dimen/bon" />
 
                     <TextView
@@ -414,7 +407,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="120000đ"
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="@dimen/hai"
@@ -443,6 +435,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Giảm giá:"
+                        android:textStyle="italic"
+                        android:textColor="@color/cam"
                         android:textSize="@dimen/bon" />
 
                     <TextView
@@ -450,7 +444,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="120000đ"
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="@dimen/hai"
@@ -512,6 +505,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Tổng tiền sau giảm giá:"
+                        android:textStyle="italic"
+                        android:textColor="@color/cam"
                         android:textSize="@dimen/bon" />
 
                     <TextView
@@ -526,6 +521,32 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:weightSum="10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:text="Thanh toán:"
+                    android:textColor="@color/cam"
+                    android:textStyle="italic"
+                    android:textSize="@dimen/bon"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvThanhtoan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/den"
+                    android:textSize="@dimen/bon"
+                    android:textStyle="bold|italic" />
             </LinearLayout>
         </LinearLayout>
 

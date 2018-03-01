@@ -208,7 +208,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.DELE_MAGIAMGIA_WEB);
-                params.put("id", id);
+                params.put("maGiamgia", maGiamgia);
                 return params;
             }
         };
@@ -310,7 +310,6 @@ public class Main_MaGiamGia extends AppCompatActivity {
                 params.put("maGiamgia", maGiamgia);
                 params.put("giaTri", giaTri);
                 params.put("nguoiTao", session_ma);
-                Log.e("bbb",params.toString());
                 return params;
             }
         };
@@ -367,7 +366,6 @@ public class Main_MaGiamGia extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     contactList.add(new Magiamgia(
-                                            object.getString("id"),
                                             object.getString("maGiamgia"),
                                             object.getString("giaTri"),
                                             object.getString("nguoiTao"),

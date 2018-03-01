@@ -19,7 +19,6 @@
             android:layout_weight="7"
             android:drawableStart="@android:drawable/btn_star_big_on"
             android:gravity="center_vertical"
-            android:text="TextView"
             android:textSize="@dimen/hai" />
 
         <TextView
@@ -29,7 +28,6 @@
             android:layout_weight="3"
             android:drawableEnd="@drawable/ic_bh"
             android:gravity="center_vertical"
-            android:text="TextView"
             android:textSize="@dimen/muoi" />
     </LinearLayout>
 </LinearLayout>

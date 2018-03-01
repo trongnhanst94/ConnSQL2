@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -35,6 +35,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -47,6 +48,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <activity android:name=".Wellcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -174,7 +176,6 @@
         <activity
             android:name=".Ban_Hang.Main_Doanhthu"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".Remove_Data.Main_Remove_Data"
             android:screenOrientation="portrait" />
@@ -199,7 +200,17 @@
         <activity
             android:name=".Main_ScanVon"
             android:screenOrientation="portrait" />
-        <activity android:name=".Ban_Hang.Main_Khuyenmai"></activity>
+        <activity
+            android:name=".Ban_Hang.Main_Khuyenmai"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Tra_Ve.Main_TienTraVe"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Khoan_Chi.Main_PhiCOD"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Remove_Data.Main_Remove_COD" />
+        <activity android:name=".Remove_Data.Main_Remove_Trave"></activity>
     </application>
 
 </manifest>

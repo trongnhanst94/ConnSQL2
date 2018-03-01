@@ -135,7 +135,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Realtime_Order.this, android.R.style.Theme_Holo_Dialog_NoActionBar , new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Realtime_Order.this, android.R.style.Theme_Holo_Light_Panel , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -298,8 +298,10 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                                 ArrayList<Order> settop = new ArrayList<>();
                                 settop.addAll(temp_plus);
                                 Collections.sort(settop);
-                                for (int i = 0; i < 10; i++) {
-                                    top5.add(new Top5(i+1+"", settop.get(i).getMaDonhang(), settop.get(i).getTenSanpham(), settop.get(i).getTenNhanvien(), settop.get(i).getGiaSanpham()));
+                                if (settop.size() > 9){
+                                    for (int i = 0; i < 9; i++) {
+                                        top5.add(new Top5(i+1+"", settop.get(i).getMaDonhang(), settop.get(i).getTenSanpham(), settop.get(i).getTenNhanvien(), settop.get(i).getGiaSanpham()));
+                                    }
                                 }
                                 adapter_top5.notifyDataSetChanged();
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

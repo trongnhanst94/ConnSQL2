@@ -3,7 +3,6 @@ package com.example.windows10gamer.connsql.Other;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,16 +40,13 @@ import java.util.Random;
 public class Keys {
     public static final String DANHSACHSANPHAM     = "Danh sách sản phẩm";
     public static final String MAGIAMGIA           = "MAGIAMGIA";
-    public static final String DANHSACHKIEMKHO     = "Kiểm kho";
     public static final String DANHSACHKIEMKHO2    = "Kiem kho";
     public static final String DANHSACHCUAHANG     = "CUAHANG";
-    public static final String DANHSACHQUATANG     = "Danh sách quà tặng";
     public static final String TABLE               = "1KrIkqcjjqcoHbovhsQ5BbWNVDPOL3yxd9X37WuhziuQ";
     public static final String SCRIPT_DANHSACH     = "https://script.google.com/macros/s/AKfycbxOLElujQcy1-ZUer1KgEvK16gkTLUqYftApjNCM_IRTL3HSuDk/exec";
     public static final String SCRIPT_KIEMKHO      = "https://script.google.com/macros/s/AKfycbzDXojfyStMUnCM4kqG7XOWzgWEgN0k0D3rXLwaQbXber7CtUs/exec";
     public static final String SCRIPT_BANHANG_NVL  = "https://script.google.com/macros/s/AKfycbycEFBmH7gNRt70F6K9u5nycej_Tt4s4BJHDqQ0lmHCI9IbdBkm/exec";
     public static final String SCRIPT_BANHANG_SOL  = "https://script.google.com/macros/s/AKfycbwWCTvKS4Ywje_jMiD5qtLBpMOcehMkfeoWuSqG9PqUdYryI50/exec";
-    public static final String LOGIN               = "http://dealtichtac.com/android/user.php";
     public static final String LOGIN2              = "http://dealtichtac.com/android/login.php";
     public static final String DANHSACHLOGIN       = "http://dealtichtac.com/android/danhsachuser.php";
     public static final String SALE                = "banhang";
@@ -81,20 +77,14 @@ public class Keys {
     public static final String MAIN_BH_BHHT        = "http://dealtichtac.com/android/danhsach_bhht.php";
     public static final String MAIN_BH_BHDLK       = "http://dealtichtac.com/android/danhsach_bhdlk.php";
     public static final String MAIN_MENU_DSCH      = "http://dealtichtac.com/android/danhsach_chinhanh.php";
-    public static final String SCRIPT_DEBH         = "https://script.google.com/macros/s/AKfycbyaebG-6_tGK066iBLGlMYdCCtyCvITCcv8j0pDQ8-EPyq1fRs/exec";
     public static final String SCRIPT_BC_KK        = "https://script.google.com/macros/s/AKfycbzJhrsk7bRmzusNOCt9FPC0HtGpngjl1TLcIr1vsjMAkYvZfOaH/exec";
     public static final String SCRIPT_CREATEDTABLE = "https://script.google.com/macros/s/AKfycbzg_j3uTnZ35KqVm1gjUrgJAXwnvpkGlDsKEZSq332tW9kt_xg/exec";
-    public static final String NameApp             = "iDeal";
-    public static final String donhang             = "donhang";
     public static final String[] HELLOS            = {"1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","K","L","M","N","O","P","Q","S","T","U","V"};
     public static final String[] RAND              = {"1","2","3","4","5","6","7","8","9","0"};
     public static final int SOMA_GIAMGIA           = 5;
-    public static final String SCRIPT_MAGIAMGIA    = "https://script.google.com/macros/s/AKfycbymUIoVxGJ2NEo2h0IAtrxqp3lIE16Fj8i7IbjbSvHCekQPU60/exec";
     public static final String SCRIPT_DE_MAGIAMGIA = "https://script.google.com/macros/s/AKfycbwOh4Lzy65vgtyQ-FjpM4doyXgZk-ocREyf0MBd2yhA14lNslGv/exec";
     public static final String DELE_MAGIAMGIA_WEB  = "DELE_MAGIAMGIA_WEB";
     public static final String DELE_XEM_WEB        = "DELE_XEM_WEB";
-    public static final String urlQT               = SCRIPT_DANHSACH +"?id="+ TABLE +"&sheet="+ DANHSACHQUATANG;
-    public static final String BH_TENVAMA          = "baohanh_TenvaMa.php";
     public static final int GIOHETCANVL            = 15;
     public static final int GIOHETCASOL            = 16;
     public static final String TENCASANG           = "Ca sáng";
@@ -117,7 +107,8 @@ public class Keys {
     public static final String UPDATE_XUATHANG_WEB = "UPDATE_XUATHANG_WEB";
     public static final int MAX_LENGHT             = 16;
     public static final String LINK_WEB_V2         = "http://dealtichtac.com/android/addV2.php";
-    public static final String SCRIPT_KHOANCHI     = "";
+    public static final String SCRIPT_KHOANCHI     = "https://script.google.com/macros/s/AKfycbwqiwY-EcnnA0qvMowimdWaQJL2dmKllqpuXC5cIjTcCJ1W5v0/exec";
+    public static final String SCRIPT_TIENTRAVE    = "https://script.google.com/macros/s/AKfycbwYqQW-QAhxmtFK36a7zz5bdFslTts7RavaIxG7WUN3LymLzaB5/exec";
     public static final String KHOANCHI            = "KHOANCHI";
     public static final String ADD_KHOANCHI_WEB    = "ADD_KHOANCHI_WEB";
     public static final String MAIN_KHOANCHI       = "http://dealtichtac.com/android/danhsach_khoanchi.php";
@@ -164,12 +155,21 @@ public class Keys {
     public static final String LINK_AVATAR         = "http://dealtichtac.com/android/avatar/";
     public static final String MAIN_VERSION        = "http://dealtichtac.com/android/danhsach_version.php";
     public static final String VERSION             = "VERSION";
-    public static final String nowVersion          = "Version 5.8";
+    public static final String nowVersion          = "Version 6.5";
     public static final String MAIN_LINKAVATAR     = "http://dealtichtac.com/android/linkavatar.php";
     public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
     public static final String FIREBASE_TOKEN      = "/topics/all";
     public static final String FIREBASE_SERVER_KEY = "AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n";
-
+    public static final String ADD_TIENTRAVE_WEB   = "ADD_TIENTRAVE_WEB";
+    public static final String TIEN_TRA_VE         = "TIEN_TRA_VE";
+    public static final String MAIN_TIENTRAVE      = "http://dealtichtac.com/android/danhsach_tientrave.php";
+    public static final String ADD_COD_WEB         = "ADD_COD_WEB";
+    public static final String SCRIPT_PHICOD       = "";
+    public static final String MAIN_PHICOD         = "http://dealtichtac.com/android/danhsach_phicod.php";
+    public static final String PHI_COD             = "PHI_COD";
+    public static final String TIENMAT             = "Tiền mặt";
+    public static final String DELE_COD_WEB        = "DELE_COD_WEB";
+    public static final String DELE_TIENTRAVE_WEB  = "DELE_TIENTRAVE_WEB";
 
 
     public static final String setMoney(int amount){
@@ -408,7 +408,7 @@ public class Keys {
         int tong = 0;
         for (int i = 0; i < reportList.size(); i++){
             if (reportList.get(i).getMaNhanvien().equals(ma)){
-                tong += Integer.valueOf(reportList.get(i).getGiaSanpham());
+                tong += (Integer.valueOf(reportList.get(i).getGiaSanpham()));
             }
         }
         return tong;
@@ -424,6 +424,33 @@ public class Keys {
         }
         return result;
     }
+    public static int GiamgiaCount(ArrayList<Order> reportList, String ma) {
+        int giamgia = 0;
+        ArrayList<Order> listInt = new ArrayList<>();
+        for (int i = 0; i < reportList.size(); i++) {
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                int sosanh = ssgiamgia(listInt, reportList.get(i).getMaDonhang());
+                if ( sosanh == -1){
+                    listInt.add(reportList.get(i));
+                    giamgia = Integer.parseInt(giamgia + reportList.get(i).getGiamgia());
+                }
+            }
+        }
+        return giamgia;
+    }
+
+    private static int ssgiamgia(ArrayList<Order> listInt, String maDonhang) {
+        int result = -1;
+        if (listInt.size() != 0){
+            for (int i = 0; i < listInt.size(); i++){
+                if (listInt.get(i).getMaDonhang().equals(maDonhang)){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
+
     public static int sosanhCustomer(ArrayList<Customer> order_h, String orderName, String ma) {
         int result = -1;
         if (order_h.size() != 0){
@@ -520,28 +547,14 @@ public class Keys {
         final ArrayList<User> usernames = new ArrayList<User>();
         final String[] link = {""};
         RequestQueue requestQueue = Volley.newRequestQueue(c);
-        Log.d("qqq", Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_LINKAVATAR+"?manhanvien="+manhanvien, null,
                 new Response.Listener<JSONArray>() {
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("qqq", "onResponse: "+response.length());
                         for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object = response.getJSONObject(i);
-                                Log.d("qqq", "GetUser: "+object.getInt("id")+
-                                        object.getString("ma_user")+
-                                        object.getString("ten")+
-                                        object.getString("shortName")+
-                                        object.getString("username")+
-                                        object.getString("password")+
-                                        object.getString("level")+
-                                        object.getString("chucdanh")+
-                                        object.getString("trangthai")+
-                                        object.getString("created")+
-                                        object.getString("updated")+
-                                        object.getString("img"));
                                 usernames.add(new User(
                                         object.getInt("id"),
                                         object.getString("ma_user"),
@@ -570,7 +583,8 @@ public class Keys {
                 }
         );
         requestQueue.add(jsonArrayRequest);
-        Log.d("qqq", "GetUser: "+link[0]);
         return link[0];
     }
+
+
 }

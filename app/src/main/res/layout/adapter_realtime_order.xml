@@ -38,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="TextView"
                 android:textColor="@color/cam"
                 android:textSize="@dimen/muoi"
                 android:textStyle="bold" />
@@ -48,7 +47,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="TextView"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/RED"
                 android:textSize="@dimen/muoi" />
@@ -65,7 +63,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:text="TextView"
                 android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
@@ -74,7 +71,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>

@@ -75,7 +75,7 @@ public class Main_Remove_Datcoc extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Remove_Datcoc.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Remove_Datcoc.this, android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year, month, dayOfMonth);
@@ -162,7 +162,6 @@ public class Main_Remove_Datcoc extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     contactList.add(new Datcoc(
-                                            object.getString("id"),
                                             object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -235,7 +234,7 @@ public class Main_Remove_Datcoc extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.DELE_DATCOC_WEB);
-                params.put("id", id);
+                params.put("maDC", id);
                 return params;
             }
         };

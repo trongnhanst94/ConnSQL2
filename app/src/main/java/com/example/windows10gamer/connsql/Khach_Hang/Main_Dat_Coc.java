@@ -389,7 +389,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.UPDATE_DATCOC_WEB);
-                params.put("id", tatca_plus.get(position).getId());
+                params.put("maDC", tatca_plus.get(position).getMaDC());
                 params.put("ngaytra", Keys.getDateNow());
                 params.put("catra", Keys.getCalam(chinhanh));
                 params.put("maNVtra", session_ma);
@@ -431,7 +431,6 @@ public class Main_Dat_Coc extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     tatca.add(new Datcoc(
-                                            object.getString("id"),
                                             object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),

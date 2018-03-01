@@ -1,7 +1,6 @@
 package com.example.windows10gamer.connsql.Kiem_Kho;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +48,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -110,7 +112,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         sp = getSharedPreferences("login", MODE_PRIVATE);
-        Glide.with(Main_Kiemkho.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
+        Glide.with(Main_Kiemkho.this).load(sp.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         tvchinhanhkiemkho.setText(chinhanh);
         tvScanManhanvien  = findViewById(R.id.tvScanManhanvien);
         tvScanTennhanvien = findViewById(R.id.tvScanTennhanvien);
@@ -125,6 +127,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         new Getvitri().execute();
         adapter = new Adapter_KiemKho(Main_Kiemkho.this, R.layout.adapter_kiemkho_amount, totalList, listsoluong);
         lvScan.setAdapter(adapter);
+        new GetDataKho().execute();
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,7 +254,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                                 if (!Connect_Internet.checkConnection(getApplicationContext()))
                                     Connect_Internet.buildDialog(Main_Kiemkho.this).show();
                                 else {
-                                    new SendRequestKK().execute();
+                                    new SendRequest().execute();
                                 }
                             }
                         });
@@ -261,15 +264,15 @@ public class Main_Kiemkho extends AppCompatActivity {
                     } else {
                         totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
                         arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
-                        if (arrayList.size() > 0) {
-                            adapter.notifyDataSetChanged();
-                        }
+                        appendLog(Keys.getTimeNow()+": "+gio+" - "+ ma+" - "+ ten+" - "+ baohanh+" - "+ nguon+" - "+ ngaynhap+" - "+ von+" - "+ gia);
                         if (!Connect_Internet.checkConnection(getApplicationContext()))
                             Connect_Internet.buildDialog(Main_Kiemkho.this).show();
                         else {
-                            new SendRequestKK().execute();
+                            new SendRequest().execute();
                         }
-                        StartScan();
+                        if (arrayList.size() > 0) {
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }   catch (NoSuchElementException nse) {
                     new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
@@ -277,6 +280,36 @@ public class Main_Kiemkho extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void appendLog(String text)
+    {
+        File logFile = new File("sdcard/log_iDeal.txt");
+        if (!logFile.exists())
+        {
+            try
+            {
+                logFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private int check(String ma, ArrayList<String> listsoluong) {
@@ -289,7 +322,7 @@ public class Main_Kiemkho extends AppCompatActivity {
         return dem;
     }
 
-    public class SendRequestKK extends AsyncTask<Void, Integer, String> {
+    public class SendRequest extends AsyncTask<Void, Integer, String> {
 
         @Override
         protected void onPreExecute() {
@@ -307,11 +340,14 @@ public class Main_Kiemkho extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             int progress = 1;
-            while (progress <= Integer.valueOf(arrayList.get(0).getSoluong())){
-                putData();
-                addKiemkhoWeb();
-                publishProgress(progress);
-                progress++;
+            if (Integer.valueOf(arrayList.get(0).getSoluong()) == 1) {
+                addKiemkhoWeb(gio);
+            } else {
+                while (progress <= Integer.valueOf(arrayList.get(0).getSoluong())){
+                    addKiemkhoWeb(gio+progress);
+                    publishProgress(progress);
+                    progress++;
+                }
             }
             return null;
         }
@@ -329,7 +365,10 @@ public class Main_Kiemkho extends AppCompatActivity {
         protected void onPostExecute(String s) {
             if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1){
                 nPro.hide();
+            } else {
+                StartScan();
             }
+
         }
     }
 
@@ -337,22 +376,20 @@ public class Main_Kiemkho extends AppCompatActivity {
         try {
             URL url = new URL(Keys.SCRIPT_KIEMKHO);
             JSONObject postDataParams = new JSONObject();
-
+            postDataParams.put("key", session_username+gio+ngay);
             postDataParams.put("salesNgay", ngay);
             postDataParams.put("salesGio", gio);
             postDataParams.put("salesVitri", vitri);
             postDataParams.put("salesKho", kho);
             postDataParams.put("SalesTennhanvien", session_username);
             postDataParams.put("salesManhanvien", session_ma);
-            postDataParams.put("salesMasanpham", arrayList.get(0).getMa());
-            postDataParams.put("salesTensanpham", arrayList.get(0).getTen());
-            postDataParams.put("salesBaohanhsanpham", arrayList.get(0).getBaohanh());
-            postDataParams.put("salesNguonsanpham", arrayList.get(0).getNguon());
-            postDataParams.put("salesNgaynhap", arrayList.get(0).getNgaynhap());
-            postDataParams.put("salesVonsanpham", arrayList.get(0).getVon());
-            postDataParams.put("salesGiasanpham", arrayList.get(0).getGiaban());
-
-            Log.e("postDataParams", postDataParams.toString());
+            postDataParams.put("salesMasanpham", ma);
+            postDataParams.put("salesTensanpham", ten);
+            postDataParams.put("salesBaohanhsanpham", baohanh);
+            postDataParams.put("salesNguonsanpham", nguon);
+            postDataParams.put("salesNgaynhap", ngaynhap);
+            postDataParams.put("salesVonsanpham", von);
+            postDataParams.put("salesGiasanpham", gia);
 
             // Kết nối HTTP
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -392,35 +429,17 @@ public class Main_Kiemkho extends AppCompatActivity {
         }
     }
 
-    public void addKiemkhoWeb(){
+    public void addKiemkhoWeb(final String gios){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (response.trim().equals("error")){
-                            AlertDialog.Builder dialog = null;
-                            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                                dialog = new AlertDialog.Builder(Main_Kiemkho.this);
-                            } else {
-                                dialog = new AlertDialog.Builder(Main_Kiemkho.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
-                            }
-                            dialog.setIcon(R.drawable.ic_warning).setMessage("Lỗi kết nối!!");
-                            dialog.show();
-                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        AlertDialog.Builder dialog = null;
-                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                            dialog = new AlertDialog.Builder(Main_Kiemkho.this);
-                        } else {
-                            dialog = new AlertDialog.Builder(Main_Kiemkho.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
-                        }
-                        dialog.setIcon(R.drawable.ic_warning).setMessage("Lỗi " + error);
-                        dialog.show();
                     }
                 }
         ){
@@ -429,19 +448,19 @@ public class Main_Kiemkho extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_KIEMKHO_WEB);
                 params.put("ngay", ngay);
-                params.put("gio", gio);
+                params.put("id", session_username+gios+ngay);
+                params.put("gio", gios);
                 params.put("maNhanvien", session_ma );
                 params.put("tenNhanvien", session_username);
-                params.put("maSanpham", arrayList.get(0).getMa());
-                params.put("tenSanpham", arrayList.get(0).getTen());
-                params.put("baohanhSanpham", arrayList.get(0).getBaohanh());
-                params.put("nguonSanpham", arrayList.get(0).getNguon());
-                params.put("ngaynhapSanpham", arrayList.get(0).getNgaynhap());
-                params.put("vonSanpham", arrayList.get(0).getVon());
-                params.put("giaSanpham", arrayList.get(0).getGiaban());
+                params.put("maSanpham", ma);
+                params.put("tenSanpham", ten);
+                params.put("baohanhSanpham", baohanh);
+                params.put("nguonSanpham", nguon);
+                params.put("ngaynhapSanpham", ngaynhap);
+                params.put("vonSanpham", von);
+                params.put("giaSanpham", gia);
                 params.put("vitri", vitri);
                 params.put("kho", kho);
-                Log.e("params", params.toString());
                 return params;
             }
         };
@@ -643,5 +662,80 @@ public class Main_Kiemkho extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    class GetDataKho extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog dialog;
+        int jIndex;
+        int x;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            x = totalList.size();
+            if(x == 0)
+                jIndex = 0;
+            else
+                jIndex = x;
+            dialog = new ProgressDialog(Main_Kiemkho.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... strings) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_KIEMKHO_URL);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.DANHSACHKIEMKHO2);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    if (chinhanh.equals(object.getString("vitri")) && (object.getString("kho").equals(kho)) && (object.getString("maNhanvien").equals(session_ma))){
+                                        totalList.add(new SanphamAmount(
+                                                        object.getString("gio"),
+                                                        object.getString("maSanpham"),
+                                                        object.getString("tenSanpham"),
+                                                        object.getString("baohanhSanpham"),
+                                                        object.getString("nguonSanpham"),
+                                                        object.getString("ngaynhapSanpham"),
+                                                        object.getString("vonSanpham"),
+                                                        object.getString("giaSanpham"),
+                                                        "1"
+                                                )
+                                        );
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void string) {
+            super.onPostExecute(string);
+            if(totalList.size() > 0) {
+                adapter.notifyDataSetChanged();
+            } else {
+                new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Không có dữ liệu!!");
+            }
+            dialog.dismiss();
+        }
     }
 }

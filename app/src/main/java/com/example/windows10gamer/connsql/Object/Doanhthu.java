@@ -8,10 +8,9 @@ import android.os.Parcelable;
  */
 
 public class Doanhthu implements Parcelable {
-    String id, maDT, ngay, ca, chinhanh, maNV, tenNV, tiendauca, tientrave, doanhthu, lechcuoica, tienthucte;
+    String maDT, ngay, ca, chinhanh, maNV, tenNV, tiendauca, tientrave, doanhthu, lechcuoica, tienthucte;
 
-    public Doanhthu(String id, String maDT, String ngay, String ca, String chinhanh, String maNV, String tenNV, String tiendauca, String tientrave, String doanhthu, String lechcuoica, String tienthucte) {
-        this.id = id;
+    public Doanhthu(String maDT, String ngay, String ca, String chinhanh, String maNV, String tenNV, String tiendauca, String tientrave, String doanhthu, String lechcuoica, String tienthucte) {
         this.maDT = maDT;
         this.ngay = ngay;
         this.ca = ca;
@@ -26,7 +25,6 @@ public class Doanhthu implements Parcelable {
     }
 
     protected Doanhthu(Parcel in) {
-        id = in.readString();
         maDT = in.readString();
         ngay = in.readString();
         ca = in.readString();
@@ -51,14 +49,6 @@ public class Doanhthu implements Parcelable {
             return new Doanhthu[size];
         }
     };
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getMaDT() {
         return maDT;
@@ -155,7 +145,6 @@ public class Doanhthu implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
         dest.writeString(maDT);
         dest.writeString(ngay);
         dest.writeString(ca);

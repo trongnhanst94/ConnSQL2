@@ -59,15 +59,13 @@
                 android:id="@+id/tvga"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="thanh thùy" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/tvslga"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1.800"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light" />
         </LinearLayout>
@@ -82,15 +80,13 @@
                 android:id="@+id/tvgb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="cẩm nguyên" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/tvslgb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="2.000"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light" />
         </LinearLayout>
@@ -114,7 +110,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="2500"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light" />
         </LinearLayout>
@@ -138,7 +133,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light" />
 

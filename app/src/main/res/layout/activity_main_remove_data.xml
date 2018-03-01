@@ -106,6 +106,36 @@
         android:textSize="@dimen/muoi" />
 
     <TextView
+        android:id="@+id/tvRmCOD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn Tạm ứng COD"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvRmTientrave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa đơn Tiền trả về"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
         android:id="@+id/tvRmBaohanh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

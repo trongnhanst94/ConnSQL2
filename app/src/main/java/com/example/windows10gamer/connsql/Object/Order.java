@@ -78,8 +78,14 @@ public class Order implements Parcelable, Comparable<Order> {
     @SerializedName("tenNhanvienbandum")
     @Expose
     private String tenNhanvienbandum;
+    @SerializedName("thanhtoan")
+    @Expose
+    private String thanhtoan;
+    @SerializedName("nguoino")
+    @Expose
+    private String nguoino;
 
-    public Order(String id, String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String maNhanvienbandum, String tenNhanvienbandum) {
+    public Order(String id, String maDonhang, String ngay, String calam, String gio, String chinhanh, String maNhanvien, String tenNhanvien, String maSanpham, String tenSanpham, String baohanhSanpham, String nguonSanpham, String ngaynhapSanpham, String vonSanpham, String giaSanpham, String giamgia, String ghichuSanpham, String tenKhachhang, String sodienthoaiKhachhang, String ghichuKhachhang, String maNhanvienbandum, String tenNhanvienbandum, String thanhtoan, String nguoino) {
         this.id = id;
         this.maDonhang = maDonhang;
         this.ngay = ngay;
@@ -102,7 +108,48 @@ public class Order implements Parcelable, Comparable<Order> {
         this.ghichuKhachhang = ghichuKhachhang;
         this.maNhanvienbandum = maNhanvienbandum;
         this.tenNhanvienbandum = tenNhanvienbandum;
+        this.thanhtoan = thanhtoan;
+        this.nguoino = nguoino;
     }
+
+    protected Order(Parcel in) {
+        id = in.readString();
+        maDonhang = in.readString();
+        ngay = in.readString();
+        calam = in.readString();
+        gio = in.readString();
+        chinhanh = in.readString();
+        maNhanvien = in.readString();
+        tenNhanvien = in.readString();
+        maSanpham = in.readString();
+        tenSanpham = in.readString();
+        baohanhSanpham = in.readString();
+        nguonSanpham = in.readString();
+        ngaynhapSanpham = in.readString();
+        vonSanpham = in.readString();
+        giaSanpham = in.readString();
+        giamgia = in.readString();
+        ghichuSanpham = in.readString();
+        tenKhachhang = in.readString();
+        sodienthoaiKhachhang = in.readString();
+        ghichuKhachhang = in.readString();
+        maNhanvienbandum = in.readString();
+        tenNhanvienbandum = in.readString();
+        thanhtoan = in.readString();
+        nguoino = in.readString();
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -280,42 +327,21 @@ public class Order implements Parcelable, Comparable<Order> {
         this.tenNhanvienbandum = tenNhanvienbandum;
     }
 
-    protected Order(Parcel in) {
-        id = in.readString();
-        maDonhang = in.readString();
-        ngay = in.readString();
-        calam = in.readString();
-        gio = in.readString();
-        chinhanh = in.readString();
-        maNhanvien = in.readString();
-        tenNhanvien = in.readString();
-        maSanpham = in.readString();
-        tenSanpham = in.readString();
-        baohanhSanpham = in.readString();
-        nguonSanpham = in.readString();
-        ngaynhapSanpham = in.readString();
-        vonSanpham = in.readString();
-        giaSanpham = in.readString();
-        giamgia = in.readString();
-        ghichuSanpham = in.readString();
-        tenKhachhang = in.readString();
-        sodienthoaiKhachhang = in.readString();
-        ghichuKhachhang = in.readString();
-        maNhanvienbandum = in.readString();
-        tenNhanvienbandum = in.readString();
+    public String getThanhtoan() {
+        return thanhtoan;
     }
 
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
-        @Override
-        public Order createFromParcel(Parcel in) {
-            return new Order(in);
-        }
+    public void setThanhtoan(String thanhtoan) {
+        this.thanhtoan = thanhtoan;
+    }
 
-        @Override
-        public Order[] newArray(int size) {
-            return new Order[size];
-        }
-    };
+    public String getNguoino() {
+        return nguoino;
+    }
+
+    public void setNguoino(String nguoino) {
+        this.nguoino = nguoino;
+    }
 
     @Override
     public int describeContents() {
@@ -346,6 +372,8 @@ public class Order implements Parcelable, Comparable<Order> {
         dest.writeString(ghichuKhachhang);
         dest.writeString(maNhanvienbandum);
         dest.writeString(tenNhanvienbandum);
+        dest.writeString(thanhtoan);
+        dest.writeString(nguoino);
     }
 
     @Override

@@ -20,7 +20,6 @@ public class Adapter_Khoanchi extends ArrayAdapter<Khoanchi> {
     Context context;
     private LayoutInflater mInflater;
 
-    // Constructors
     public Adapter_Khoanchi(Context context, List<Khoanchi> objects) {
         super(context, 0, objects);
         this.context = context;
@@ -69,10 +68,10 @@ public class Adapter_Khoanchi extends ArrayAdapter<Khoanchi> {
         }
 
         public static ViewHolder create(LinearLayout rootView) {
-            TextView tvTimeOrder = (TextView) rootView.findViewById(R.id.tvTimeOrder);
-            TextView tvMaOrder = (TextView) rootView.findViewById(R.id.tvMaOrder);
-            TextView tvTennvOrder = (TextView) rootView.findViewById(R.id.tvTennvOrder);
-            TextView tvSoluong = (TextView) rootView.findViewById(R.id.tvSoluong);
+            TextView tvTimeOrder = rootView.findViewById(R.id.tvTimeOrder);
+            TextView tvMaOrder = rootView.findViewById(R.id.tvMaOrder);
+            TextView tvTennvOrder = rootView.findViewById(R.id.tvTennvOrder);
+            TextView tvSoluong = rootView.findViewById(R.id.tvSoluong);
             return new ViewHolder(rootView, tvMaOrder, tvTennvOrder,tvTimeOrder, tvSoluong);
         }
     }

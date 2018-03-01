@@ -80,7 +80,7 @@ public class Adapter_Remove_BCDT extends ArrayAdapter<Doanhthu> {
                 builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        xacNhanXoa(item.getId());
+                        xacNhanXoa(item.getMaDT());
                     }
                 });
                 builder.show();

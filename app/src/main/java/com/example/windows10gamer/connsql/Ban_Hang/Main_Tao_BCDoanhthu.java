@@ -44,7 +44,9 @@ import com.example.windows10gamer.connsql.Object.Datcoc;
 import com.example.windows10gamer.connsql.Object.Doanhthu;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
 import com.example.windows10gamer.connsql.Object.Order;
+import com.example.windows10gamer.connsql.Object.PhiCOD;
 import com.example.windows10gamer.connsql.Object.ReportSales;
+import com.example.windows10gamer.connsql.Object.TienTraVe;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
@@ -70,12 +72,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Main_Tao_BCDoanhthu extends AppCompatActivity {
-    TextView tvnhanvien, tvthongbao, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
+    private TextView tvcod, tvthongbao, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
     TextView tvdtddt, tvpddt, tvnddt, tvdtdlk, tvpdlk, tvndlk, tvtht, tvdt1d1, tvp1d1, tvlechdoanhthu;
     TextView tvbcnhanvien;
     EditText edtienthucte;
     Button btnGuibaocao;
     ArrayList<Order> donhanglist = new ArrayList<>();
+    ArrayList<PhiCOD> codlist = new ArrayList<>();
     ArrayList<Khoanchi> khoanchilist = new ArrayList<>();
     ArrayList<Datcoc> datcoclist = new ArrayList<>();
     ArrayList<Datcoc> hoancoclist = new ArrayList<>();
@@ -85,7 +88,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     ArrayList<BHDDT> BHDDT = new ArrayList<>();
     SharedPreferences shared;
     String chinhanh;
-    int tiencuoica= 0, doanhthu = 0, giamgia = 0, tongchi = 0, datcoc = 0, hoancoc = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
+    int tiencuoica= 0, doanhthu = 0, giamgia = 0, tongchi = 0, giamgiasing = 0, datcoc = 0, hoancoc = 0, tamungcod = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
     int tiendauca, tientrave;
     private ProgressDialog dialog;
     private String ma, ten;
@@ -106,6 +109,8 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     private ProgressDialog nPro;
     private ArrayList<String> listDica = new ArrayList<>();
     private String mamaBCDT;
+    private Integer tongtrave = 0;
+    ArrayList<TienTraVe> travelist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,6 +311,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     }
 
     private void anhxa() {
+        tvcod = findViewById(R.id.tvbccod);
         tvbcnhanvien = findViewById(R.id.tvbcnhanvien);
         edtienthucte = findViewById(R.id.edtienthucte);
         tvlechdoanhthu = findViewById(R.id.tvlechdoanhthu);
@@ -432,7 +438,6 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         dialog.setIcon(R.drawable.ic_settings).setTitle("Nhập liệu");
         View mView = getLayoutInflater().inflate(R.layout.dialog_baocaodoanhthu, null);
         final EditText edtiendauca = mView.findViewById(R.id.edtiendauca);
-        final EditText edtientrave = mView.findViewById(R.id.edtientrave);
         final RadioButton rbcasang = mView.findViewById(R.id.rbcasang);
         final RadioButton rbcachieu = mView.findViewById(R.id.rbcachieu);
         rbcasang.setChecked(true);
@@ -464,16 +469,10 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 } else ca = "Ca chiều";
                 if (edtiendauca.getText().toString().trim().equals("")){
                     tiendauca = 0;
-                    tientrave = Integer.valueOf(edtientrave.getText().toString().trim());
-                } else if (edtientrave.getText().toString().trim().equals("")){
-                    tientrave = 0;
-                    tiendauca = Integer.valueOf(edtiendauca.getText().toString().trim());
                 } else {
                     tiendauca = Integer.valueOf(edtiendauca.getText().toString().trim());
-                    tientrave = Integer.valueOf(edtientrave.getText().toString().trim());
                 }
                 tvtiendauca.setText(Keys.setMoney(Integer.valueOf(tiendauca)));
-                tvtientrave.setText(Keys.setMoney(Integer.valueOf(tientrave)));
                 new SendRequest().execute();
             }
         });
@@ -550,13 +549,14 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         for (int i = 0; i < nhanVienList.size(); i++){
             ma = nhanVienList.get(i).getMa();
             ten = nhanVienList.get(i).getShortName();
-            doanhthusing    = DoanhthuCount(donhanglist, nhanVienList.get(i).getMa());
+            doanhthusing = DoanhthuCount(donhanglist, nhanVienList.get(i).getMa());
+            giamgiasing = GiamgiaCount(donhanglist, nhanVienList.get(i).getMa());
             soKhachhang = SoKhachhang(khachhang, nhanVienList.get(i).getMa());
             soSanpham   = SoSanpham(donhanglist, nhanVienList.get(i).getMa());
             dttkh       = doanhthusing/soKhachhang;
             dttsp       = doanhthusing/soSanpham;
             reportSalesList.add(
-                    new ReportSales(ma, ten, doanhthusing, soKhachhang, soSanpham, dttkh, dttsp)
+                    new ReportSales(ma, ten, doanhthusing - giamgiasing, soKhachhang, soSanpham, dttkh, dttsp)
             );
         }
         init(reportSalesList);
@@ -684,6 +684,34 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         }
         return tong;
     }
+
+    public static int GiamgiaCount(ArrayList<Order> reportList, String ma) {
+        int giamgia = 0;
+        ArrayList<Order> listInt = new ArrayList<>();
+        for (int i = 0; i < reportList.size(); i++) {
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                int sosanh = ssgiamgia(listInt, reportList.get(i).getMaDonhang());
+                if ( sosanh == -1){
+                    listInt.add(reportList.get(i));
+                    giamgia = giamgia + Integer.parseInt(reportList.get(i).getGiamgia());
+                }
+            }
+        }
+        return giamgia;
+    }
+
+    private static int ssgiamgia(ArrayList<Order> listInt, String maDonhang) {
+        int result = -1;
+        if (listInt.size() != 0){
+            for (int i = 0; i < listInt.size(); i++){
+                if (listInt.get(i).getMaDonhang().equals(maDonhang)){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
+
     private int sosanhUser(ArrayList<User> user, String ma, String ten) {
         int result = -1;
         if (user.size() != 0){
@@ -764,6 +792,10 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             else {
                 GetDonhang();
                 new GetKhoanchi().execute(chinhanh);
+                if (check != 1){
+                    new GetTientrave().execute(chinhanh);
+                }
+                new GetCOD().execute(chinhanh);
                 new GetDatcoc().execute(chinhanh);
                 new GetHoancoc().execute(chinhanh);
                 new GetBHDDT().execute(chinhanh);
@@ -793,12 +825,14 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         donhanglist.clear();
                         for (int i = 0; i < orignal.size(); i++) {
-                            donhanglist.add(orignal.get(i));
-                            doanhthu += Integer.valueOf(orignal.get(i).getGiaSanpham());
-                            int sosanhgiamgia = sosanhgiam(tempgiamgia, orignal.get(i).getMaDonhang());
-                            if (sosanhgiamgia == -1) {
-                                tempgiamgia.add(orignal.get(i).getMaDonhang());
-                                giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
+                            if (orignal.get(i).getThanhtoan().equals(Keys.TIENMAT)){
+                                donhanglist.add(orignal.get(i));
+                                doanhthu += Integer.valueOf(orignal.get(i).getGiaSanpham());
+                                int sosanhgiamgia = sosanhgiam(tempgiamgia, orignal.get(i).getMaDonhang());
+                                if (sosanhgiamgia == -1) {
+                                    tempgiamgia.add(orignal.get(i).getMaDonhang());
+                                    giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
+                                }
                             }
                         }
                         tvdoanhthu.setText(Keys.setMoney(doanhthu));
@@ -850,7 +884,6 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     khoanchilist.add(new Khoanchi(
-                                            object.getString("id"),
                                             object.getString("maKC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -885,6 +918,122 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         }
     }
 
+    class GetCOD extends AsyncTask<String, Void, Void> {
+
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_PHICOD+"?chinhanh="+params[0]+"&ngay="+ngay+"&ca="+ca);
+            try {
+                if (jsonObject != null) {
+                    codlist.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.PHI_COD);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    codlist.add(new PhiCOD(
+                                            object.getString("maCOD"),
+                                            object.getString("ngay"),
+                                            object.getString("ca"),
+                                            object.getString("chinhanh"),
+                                            object.getString("maNV"),
+                                            object.getString("tenNV"),
+                                            object.getString("noidung"),
+                                            object.getString("sotien")
+                                    ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(codlist.size() > 0) {
+                for (int i = 0; i < codlist.size(); i++) {
+                    tamungcod += Integer.valueOf(codlist.get(i).getSotien());
+                }
+            }
+            tvcod.setText(Keys.setMoney(tamungcod));
+        }
+    }
+
+    class GetTientrave extends AsyncTask<String, Void, Void> {
+
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_TIENTRAVE+"?chinhanh="+params[0]+"&ngay="+ngay+"&ca="+ca);
+            try {
+                if (jsonObject != null) {
+                    travelist.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.TIEN_TRA_VE);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    travelist.add(new TienTraVe(
+                                            object.getString("maTV"),
+                                            object.getString("ngay"),
+                                            object.getString("ca"),
+                                            object.getString("chinhanh"),
+                                            object.getString("maNV"),
+                                            object.getString("tenNV"),
+                                            object.getString("noidung"),
+                                            object.getString("sotien")
+                                    ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(travelist.size() > 0) {
+                for (int i = 0; i < travelist.size(); i++) {
+                    tientrave += Integer.valueOf(travelist.get(i).getSotien());
+                }
+            }
+            tvtientrave.setText(Keys.setMoney(tientrave));
+        }
+    }
+
     class GetDatcoc extends AsyncTask<String, Void, Void> {
 
         int jIndex;
@@ -908,7 +1057,6 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     datcoclist.add(new Datcoc(
-                                            object.getString("id"),
                                             object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -973,7 +1121,6 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     hoancoclist.add(new Datcoc(
-                                            object.getString("id"),
                                             object.getString("maDC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),
@@ -1377,56 +1524,10 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             tvdt1d1.setText(Keys.setMoney(dt1d1));
             tvp1d1.setText(Keys.setMoney(p1d1));
             dialog.dismiss();
-            tiencuoica = tiendauca+tientrave+doanhthu-giamgia-tongchi+datcoc-hoancoc+dtddt+pddt-nddt+dtdlk+pdlk-ndlk-tht+p1d1;
+            tiencuoica = tiendauca+tientrave-tamungcod+doanhthu-giamgia-tongchi+datcoc-hoancoc+dtddt+pddt-nddt+dtdlk+pdlk-ndlk-tht+p1d1;
             tvtiencuoica.setText(Keys.setMoney(tiencuoica));
         }
     }
-
-//    public void sendNotification() {
-//
-//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-//
-//        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//        httpClient.addInterceptor(new Interceptor() {
-//            @Override
-//            public okhttp3.Response intercept(Chain chain) throws IOException {
-//                Request original = chain.request();
-//                Request.Builder requestBuilder = original.newBuilder()
-//                        .header("Authorization", "key=AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n"); // <-- this is the important line
-//                Request request = requestBuilder.build();
-//                return chain.proceed(request);
-//            }
-//        });
-//
-//        httpClient.addInterceptor(logging);
-//        OkHttpClient client = httpClient.build();
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://fcm.googleapis.com")
-//                .client(client)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        FirebaseAPI firebaseAPI = retrofit.create(FirebaseAPI.class);
-//
-//        NotifyData notifydata = new NotifyData("Báo cáo doanh thu","Ngày 21-02-2018 Chi nhánh Nguyễn Văn Linh");
-//
-//        Message message = new Message("/topics/all", notifydata);
-//        Call<Message> call2 = firebaseAPI.sendMessage(message);
-//        call2.enqueue(new Callback<Message>() {
-//            @Override
-//            public void onResponse(Call<Message> call, Response<Message> response) {
-//                if(response.isSuccessful()) {
-//                    Log.d("qqq", "post submitted to API." + response.body().getTo());
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<Message> call, Throwable t) {
-//                Log.d("Response ", "onFailure");
-//            }
-//        });
-//    }
 
     private void sendFCMPush(String msg, String title) {
 

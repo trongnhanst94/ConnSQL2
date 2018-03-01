@@ -126,6 +126,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         sotien = edchisotien.getText().toString().trim();
                         if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
                             new SendRequest().execute();
+                            putData();
                             new GetData().execute(chinhanh);
                         } else {
                             new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
@@ -402,7 +403,6 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     arraylist.add(new Khoanchi(
-                                            object.getString("id"),
                                             object.getString("maKC"),
                                             object.getString("ngay"),
                                             object.getString("ca"),

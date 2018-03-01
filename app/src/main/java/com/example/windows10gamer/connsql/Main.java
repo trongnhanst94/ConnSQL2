@@ -50,7 +50,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu;
-import com.example.windows10gamer.connsql.Ban_Hang.Main_Khuyenmai;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Order;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Realtime_Order;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Sales;
@@ -59,6 +58,7 @@ import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
 import com.example.windows10gamer.connsql.Khach_Hang.Main_Dat_Coc;
 import com.example.windows10gamer.connsql.Kho.Main_Nhaphang;
 import com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi;
+import com.example.windows10gamer.connsql.Khoan_Chi.Main_PhiCOD;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Chitieu_Nhanvien;
@@ -72,6 +72,7 @@ import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Data;
+import com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe;
 import com.example.windows10gamer.connsql.Xuat_Nhap.Main_XuatNhap;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -107,7 +108,7 @@ import static java.lang.Boolean.FALSE;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
-            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien, btnBcdt, btnremove, btnnhaphang, btnscanvon, btnkhuyenmai;
+            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien, btnBcdt, btnremove, btnnhaphang, btnscanvon, btnphicod, btntientrave;
     public static String session_username, shortName, session_ma, chinhanh, level, mkhau;
     SharedPreferences shared;
     ArrayList<String> position;
@@ -230,13 +231,19 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });
 
-        btnkhuyenmai.setOnClickListener(new View.OnClickListener() {
+        btnphicod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
                 else {
-                    startActivity(new Intent(Main.this, Main_Khuyenmai.class));
+                    Intent intentget = getIntent();
+                    session_username = intentget.getStringExtra("session_username");
+                    session_ma = intentget.getStringExtra("session_ma");
+                    Intent intentput = new Intent(Main.this, Main_PhiCOD.class);
+                    intentput.putExtra("session_username", session_username);
+                    intentput.putExtra("session_ma", session_ma);
+                    startActivity(intentput);
                 }
             }
         });
@@ -501,6 +508,23 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });
 
+        btntientrave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+                    Intent intentget = getIntent();
+                    session_username = intentget.getStringExtra("session_username");
+                    session_ma = intentget.getStringExtra("session_ma");
+                    Intent intentput = new Intent(Main.this, Main_TienTraVe.class);
+                    intentput.putExtra("session_username", session_username);
+                    intentput.putExtra("session_ma", session_ma);
+                    startActivity(intentput);
+                }
+            }
+        });
+
         btndatcoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -557,7 +581,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void anhxa() {
-        btnkhuyenmai       = findViewById(R.id.btnkhuyenmai);
+        btntientrave       = findViewById(R.id.btntientrave);
+        btnphicod       = findViewById(R.id.btnphicod);
         ptdica             = findViewById(R.id.ptdica);
         tvthang            = findViewById(R.id.tvthang);
         tvdica             = findViewById(R.id.tvdica);

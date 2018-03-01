@@ -64,6 +64,7 @@ public class Main_Login extends AppCompatActivity {
         progress = new ProgressDialog(Main_Login.this);
         progress.setMessage("Đang đăng nhập.");
         progress.setIndeterminate(false);
+        progress.show();
         shared = getSharedPreferences("login", MODE_PRIVATE);
         if (shared.getBoolean("isLogged", TRUE) == TRUE){
             User = shared.getString("tk", "");
@@ -88,6 +89,7 @@ public class Main_Login extends AppCompatActivity {
                     progress = new ProgressDialog(Main_Login.this);
                     progress.setMessage("Đang đăng nhập.");
                     progress.setIndeterminate(false);
+                    progress.show();
                     User = edUser.getText().toString().trim();
                     Pass = edPass.getText().toString().trim();
                     GetUser();

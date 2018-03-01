@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main_Remove_Data extends AppCompatActivity {
-    TextView tvRmOrder, tvRmkiemkho, tvRmBCDT, tvRmDatcoc, tvRmKhoanchi;
+    TextView tvRmOrder, tvRmkiemkho, tvRmBCDT, tvRmDatcoc, tvRmKhoanchi, tvRmCOD, tvRmTientrave;
     String chinhanh;
     ArrayList<String> position = new ArrayList<>();
 
@@ -64,6 +64,28 @@ public class Main_Remove_Data extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Remove_Data.this).show();
                 else {
                     startActivity(new Intent(Main_Remove_Data.this, Main_Remove_Khoanchi.class));
+                }
+            }
+        });
+        tvRmCOD = findViewById(R.id.tvRmCOD);
+        tvRmCOD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Remove_Data.this).show();
+                else {
+                    startActivity(new Intent(Main_Remove_Data.this, Main_Remove_COD.class));
+                }
+            }
+        });
+        tvRmTientrave = findViewById(R.id.tvRmTientrave);
+        tvRmTientrave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Remove_Data.this).show();
+                else {
+                    startActivity(new Intent(Main_Remove_Data.this, Main_Remove_Trave.class));
                 }
             }
         });

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.windows10gamer.connsql.Remove_Data.Main_Remove_COD">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cam"
+            android:padding="10dp"
+            android:text="Xóa đơn Tạm ứng COD"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="@dimen/tie" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/edRmngay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_ngay"
+                android:ems="10"
+                android:hint="Chọn ngày bán"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColorLink="@color/cam"
+                android:textSize="@dimen/hai" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_horizontal|end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnRmOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_blog_url"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="0dp"
+                    android:background="@android:color/holo_orange_light"
+                    android:drawableLeft="@drawable/ic_search_black_24dp"
+                    android:padding="5dp"
+                    android:text="Tìm kiếm"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/btn" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvRmOrder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/list_border"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </LinearLayout>
+
+</LinearLayout>

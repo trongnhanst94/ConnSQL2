@@ -48,7 +48,7 @@ public class Main_Report_Sales extends AppCompatActivity {
     int doanhthuTotal;
     ArrayList<ReportSales> reportSalesList = new ArrayList<>();
     String ma, ten;
-    int doanhthu = 0, soKhachhang = 0, soSanpham = 0, dttkh = 0, dttsp = 0;
+    int doanhthu = 0, soKhachhang = 0, soSanpham = 0, dttkh = 0, dttsp = 0, giamgiasing = 0;
     TableLayout stk;
     ArrayList<String> arraySpiner = new ArrayList<>();
     ArrayAdapter<String> adapterSpiner;
@@ -127,20 +127,12 @@ public class Main_Report_Sales extends AppCompatActivity {
             ma = nhanVienList.get(i).getMa();
             ten = nhanVienList.get(i).getShortName();
             doanhthu    = Keys.DoanhthuCount(reportList, nhanVienList.get(i).getMa());
+            giamgiasing = GiamgiaCount(reportList, nhanVienList.get(i).getMa());
             soKhachhang = Keys.SoKhachhang(khachhang, nhanVienList.get(i).getMa());
             soSanpham   = Keys.SoSanpham(reportList, nhanVienList.get(i).getMa());
             dttkh       = doanhthu/soKhachhang;
             dttsp       = doanhthu/soSanpham;
-            reportSalesList.add(new ReportSales(
-                            ma,
-                            ten,
-                            doanhthu,
-                            soKhachhang,
-                            soSanpham,
-                            dttkh,
-                            dttsp
-                    )
-            );
+            reportSalesList.add(new ReportSales(ma, ten, doanhthu - giamgiasing, soKhachhang, soSanpham, dttkh, dttsp));
         }
         init(reportSalesList);
 
@@ -173,6 +165,33 @@ public class Main_Report_Sales extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {}
         });
+    }
+
+    public static int GiamgiaCount(ArrayList<Order> reportList, String ma) {
+        int giamgia = 0;
+        ArrayList<Order> listInt = new ArrayList<>();
+        for (int i = 0; i < reportList.size(); i++) {
+            if (reportList.get(i).getMaNhanvien().equals(ma)){
+                int sosanh = ssgiamgia(listInt, reportList.get(i).getMaDonhang());
+                if ( sosanh == -1){
+                    listInt.add(reportList.get(i));
+                    giamgia = giamgia + Integer.parseInt(reportList.get(i).getGiamgia());
+                }
+            }
+        }
+        return giamgia;
+    }
+
+    private static int ssgiamgia(ArrayList<Order> listInt, String maDonhang) {
+        int result = -1;
+        if (listInt.size() != 0){
+            for (int i = 0; i < listInt.size(); i++){
+                if (listInt.get(i).getMaDonhang().equals(maDonhang)){
+                    result = i;
+                }
+            }
+        }
+        return result;
     }
 
     public void LoadJson(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu) {

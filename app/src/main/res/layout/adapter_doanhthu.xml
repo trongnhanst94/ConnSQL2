@@ -46,7 +46,6 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                android:text="Ca sáng 31-12-2017"
                 android:textSize="@dimen/muoi"
                 android:textStyle="italic" />
 
@@ -54,7 +53,6 @@
                 android:id="@+id/tvdoanhthu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12.500.000 đ"
                 android:textAlignment="textEnd"
                 android:textColor="@color/RED"
                 android:textSize="@dimen/hai" />
@@ -75,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="15"
                 android:gravity="center_vertical"
-                android:text="Chi nhánh Nguyên văn linh"
                 android:textSize="@dimen/bon"
                 android:textStyle="bold" />
 
@@ -84,7 +81,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="thanh thùy"
                 android:textAlignment="viewEnd"
                 android:textSize="@dimen/muoi" />
         </LinearLayout>

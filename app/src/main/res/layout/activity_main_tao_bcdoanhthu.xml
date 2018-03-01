@@ -119,6 +119,31 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/cell_shape"
+                            android:text="Tạm ứng COD:"
+                            android:textSize="@dimen/muoi" />
+
+                        <TextView
+                            android:id="@+id/tvbccod"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:textAlignment="textEnd"
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="@dimen/muoi" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
                             android:text="Doanh thu:"
                             android:textSize="@dimen/muoi" />
 

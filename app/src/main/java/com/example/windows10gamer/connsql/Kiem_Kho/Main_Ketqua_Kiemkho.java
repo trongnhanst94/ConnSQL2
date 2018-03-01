@@ -612,7 +612,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object = response.getJSONObject(i);
-                                if (object.getInt("level") >= Keys.LEVEL_KHO){
+                                //if (object.getInt("level") >= Keys.LEVEL_KHO){
                                     usernames.add(new User(
                                             object.getInt("id"),
                                             object.getString("ma_user"),
@@ -621,7 +621,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                                             object.getString("username"),
                                             object.getString("password")
                                     ));
-                                }
+                                //}
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -53,7 +53,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:text="TextView"
                     android:textAllCaps="false"
                     android:textColor="@color/RED"
                     android:textSize="@dimen/bon" />
@@ -142,7 +141,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="123.456.79"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon" />
                         </LinearLayout>
@@ -176,7 +174,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="TextView"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon" />
                         </LinearLayout>
@@ -209,7 +206,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="TextView"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon" />
                         </LinearLayout>
@@ -249,7 +245,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="TextView"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon" />
                         </LinearLayout>
@@ -282,7 +277,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="TextView"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon" />
@@ -316,7 +310,6 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-smallcaps"
                                 android:paddingStart="15dp"
-                                android:text="3"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/holo_red_light"
                                 android:textSize="@dimen/bon"
@@ -405,7 +398,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
-                                    android:text="None"
                                     android:textAlignment="center"
                                     android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
@@ -442,7 +434,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
-                                    android:text="None"
                                     android:textAlignment="center"
                                     android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
@@ -477,7 +468,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
-                                    android:text="None"
                                     android:textAlignment="center"
                                     android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
@@ -488,7 +478,6 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1.5"
                                     android:background="@drawable/body_row"
-                                    android:text="80%"
                                     android:textAlignment="center"
                                     android:textSize="@dimen/muoi"
                                     android:textStyle="bold" />
@@ -515,7 +504,6 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
-                                    android:text="None"
                                     android:textAlignment="center"
                                     android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
@@ -526,7 +514,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1.5"
                                     android:background="@drawable/body_row"
-                                    android:text="90%"
                                     android:textAlignment="center"
                                     android:textSize="@dimen/muoi"
                                     android:textStyle="bold" />
@@ -553,7 +540,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
-                                    android:text="None"
                                     android:textAlignment="center"
                                     android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
@@ -564,7 +550,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1.5"
                                     android:background="@drawable/body_row"
-                                    android:text="75%"
                                     android:textAlignment="center"
                                     android:textSize="@dimen/muoi"
                                     android:textStyle="bold" />
@@ -824,28 +809,29 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone">
+                    android:layout_height="match_parent">
 
                     <Button
-                        android:id="@+id/btnnone"
+                        android:id="@+id/btntientrave"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/bg125"
+                        android:drawableStart="@drawable/ic_changingmoney"
                         android:paddingLeft="20dp"
+                        android:text="Tiền Trả về"
                         android:textColor="@color/text_main"
                         android:textSize="@dimen/mainmenu" />
 
                     <Button
-                        android:id="@+id/btnkhuyenmai"
+                        android:id="@+id/btnphicod"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/bg125"
-                        android:drawableStart="@drawable/ic_gift_qua"
+                        android:drawableStart="@drawable/ic_fast_delivery"
                         android:paddingLeft="20dp"
-                        android:text="List Khuyến mãi"
+                        android:text="Tạm ứng COD"
                         android:textColor="@color/text_main"
                         android:textSize="@dimen/mainmenu" />
                 </TableRow>

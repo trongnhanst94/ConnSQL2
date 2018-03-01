@@ -65,7 +65,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="Doanh thu"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/hai" />
@@ -91,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/hai" />
@@ -117,7 +115,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/hai" />
@@ -143,7 +140,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/hai" />
@@ -169,7 +165,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/cell_shape"
-                android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/hai" />
@@ -183,7 +178,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="TextView"
         android:textColor="@color/cam"
         android:textSize="@dimen/bon"
         android:textStyle="italic" />

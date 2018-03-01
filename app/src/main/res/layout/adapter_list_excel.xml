@@ -36,8 +36,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="@dimen/hai"
-                tools:text="TextView" />
+                android:textSize="@dimen/hai" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,8 +55,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="@dimen/muoi"
-                tools:text="TextView" />
+                android:textSize="@dimen/muoi" />
 
             <TextView
                 android:id="@+id/textViewbaohanh"
@@ -65,8 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="@dimen/muoi"
-                tools:text="TextView" />
+                android:textSize="@dimen/muoi" />
 
             <TextView
                 android:id="@+id/textViewnguon"
@@ -76,8 +73,7 @@
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textSize="@dimen/muoi"
-                tools:text="TextView" />
+                android:textSize="@dimen/muoi" />
         </LinearLayout>
 
 
@@ -113,8 +109,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="@dimen/hai"
-                android:textStyle="bold"
-                tools:text="TextView" />
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

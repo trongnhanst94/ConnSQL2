@@ -30,7 +30,6 @@
             android:drawableStart="@drawable/ic_ngay"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="âdasd"
             android:textSize="@dimen/muoi" />
 
         <Button

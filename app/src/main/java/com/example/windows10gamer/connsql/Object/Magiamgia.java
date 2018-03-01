@@ -5,23 +5,14 @@ package com.example.windows10gamer.connsql.Object;
  */
 
 public class Magiamgia {
-    private String id, ten, giatri, nguoitao, trangthai, ngaytao;
+    private String ten, giatri, nguoitao, trangthai, ngaytao;
 
-    public Magiamgia(String id, String ten, String giatri, String nguoitao, String trangthai, String ngaytao) {
-        this.id = id;
+    public Magiamgia(String ten, String giatri, String nguoitao, String trangthai, String ngaytao) {
         this.ten = ten;
         this.giatri = giatri;
         this.nguoitao = nguoitao;
         this.trangthai = trangthai;
         this.ngaytao = ngaytao;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTen() {

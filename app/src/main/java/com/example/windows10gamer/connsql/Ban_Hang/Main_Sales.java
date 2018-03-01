@@ -26,6 +26,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -90,6 +92,10 @@ public class Main_Sales extends AppCompatActivity {
     EditText edGiamgia;
     CheckBox rbGiamgia;
     CheckBox rbTangqua;
+    RadioGroup rgThanhtoan;
+    RadioButton rbTienmat, rbGhino;
+    EditText edNguoino;
+    LinearLayout lnThanhtoan;
     TextView tvManhanvien, tvTongdonhang, tvTennhanvien, tvSalesDate, tvSalesTime, tvChinhanhSales, tvgiatriMagiam, tvphaithu;
     EditText edKhachhang, edSodienthoai, edGhichudonhang, edGhichukhachhang;
     ImageView ivDoinv;
@@ -127,11 +133,17 @@ public class Main_Sales extends AppCompatActivity {
     private ArrayList<Chuongtrinh> listChuongtrinh = new ArrayList<>();
     private String linkAvatar;
     private CircleImageView ivAvatar;
+    String thanhtoan = "Tiền mặt", nguoino = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_sales);
+        lnThanhtoan       = findViewById(R.id.lnThanhtoan);
+        edNguoino         = findViewById(R.id.edNguoino);
+        rgThanhtoan       = findViewById(R.id.rgThanhtoan);
+        rbGhino           = findViewById(R.id.rbGhino);
+        rbTienmat         = findViewById(R.id.rbTienmat);
         tvTongdonhang     = findViewById(R.id.tvTongdonhang);
         tvManhanvien      = findViewById(R.id.tvManhanvien);
         tvTennhanvien     = findViewById(R.id.tvTennhanvien);
@@ -163,6 +175,8 @@ public class Main_Sales extends AppCompatActivity {
         lnHidden          = findViewById(R.id.lnHidden);
         switchChangeNV    = findViewById(R.id.switchChangeNV);
         ivAvatar          = findViewById(R.id.ivAvatar);
+        rbTienmat.setChecked(true);
+        lnThanhtoan.setVisibility(View.GONE);
         lnGiamgia.setVisibility(View.GONE);
         lnTangqua.setVisibility(View.GONE);
         lnHidden.setVisibility(View.GONE);
@@ -288,6 +302,12 @@ public class Main_Sales extends AppCompatActivity {
                     }
                 }
             });
+        rgThanhtoan.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                doOnDifficultyLevelChanged(group, checkedId);
+            }
+        });
         btnkiemtraMGG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -366,6 +386,7 @@ public class Main_Sales extends AppCompatActivity {
                                                 sodienthoaikhachhang = edSodienthoai.getText().toString();
                                                 ghichukhachhang = edGhichukhachhang.getText().toString();
                                                 ghichusanpham = edGhichudonhang.getText().toString();
+                                                nguoino = edNguoino.getText().toString();
                                                 maNhanvienban = session_ma1;
                                                 tenNhanvienban = session_username1;
                                                 setSoluong();
@@ -406,6 +427,7 @@ public class Main_Sales extends AppCompatActivity {
                         sodienthoaikhachhang = edSodienthoai.getText().toString();
                         ghichukhachhang = edGhichukhachhang.getText().toString();
                         ghichusanpham = edGhichudonhang.getText().toString();
+                        nguoino = edNguoino.getText().toString();
                         maNhanvienban = session_ma1;
                         tenNhanvienban = session_username1;
                         setSoluong();
@@ -415,6 +437,18 @@ public class Main_Sales extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // TODO: 2/27/2018 check Thanh toan
+    private void doOnDifficultyLevelChanged(RadioGroup group, int checkedId) {
+        int checkedRadioId = group.getCheckedRadioButtonId();
+        if(checkedRadioId== R.id.rbTienmat) {
+            lnThanhtoan.setVisibility(View.GONE);
+            thanhtoan = "Tiền mặt";
+        } else if(checkedRadioId== R.id.rbGhino ) {
+            lnThanhtoan.setVisibility(View.VISIBLE);
+            thanhtoan = "Ghi nợ";
+        }
     }
 
     private void setSoluong() {
@@ -794,6 +828,8 @@ public class Main_Sales extends AppCompatActivity {
             postDataParams.put("salesGhichukhachhang", ghichukhachhang);
             postDataParams.put("salesTennhanvienbandum", tenNhanvienban);
             postDataParams.put("salesManhanvienbandum", maNhanvienban);
+            postDataParams.put("salesThanhtoan", thanhtoan);
+            postDataParams.put("salesNguoino", nguoino);
             j++;
 
             Log.e("params", postDataParams.toString());
@@ -1155,7 +1191,7 @@ public class Main_Sales extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
                             if (j == (arrayList.size()-1)) {
-                                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                                //new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                             }
                         } else if (response.trim().equals("success")){
                             if (j == (arrayList.size()-1)){
@@ -1176,6 +1212,7 @@ public class Main_Sales extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_SALES_WEB);
+                params.put("id", madonhang+arrayList.get(j).getGio());
                 params.put("maDonhang", "SA_"+madonhang);
                 params.put("ngay", ngay);
                 params.put("calam", ca);
@@ -1197,6 +1234,8 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("ghichuKhachhang", ghichukhachhang);
                 params.put("maNhanvienbandum", session_ma);
                 params.put("tenNhanvienbandum", session_username);
+                params.put("thanhtoan", thanhtoan);
+                params.put("nguoino", nguoino);
                 return params;
             }
         };

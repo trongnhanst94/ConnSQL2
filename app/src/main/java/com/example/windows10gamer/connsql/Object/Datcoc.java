@@ -8,10 +8,9 @@ import android.os.Parcelable;
  */
 
 public class Datcoc implements Parcelable{
-    String id, maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, ghichu, trangthai, ngaytra, catra, maNVtra, tenNVtra;
+    String maDC, ngay, ca, chinhanh, maNV, tenNV, sotien, tenkhachhang, sodienthoai, ghichu, trangthai, ngaytra, catra, maNVtra, tenNVtra;
 
-    public Datcoc(String id, String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String ghichu, String trangthai, String ngaytra, String catra, String maNVtra, String tenNVtra) {
-        this.id = id;
+    public Datcoc(String maDC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String sotien, String tenkhachhang, String sodienthoai, String ghichu, String trangthai, String ngaytra, String catra, String maNVtra, String tenNVtra) {
         this.maDC = maDC;
         this.ngay = ngay;
         this.ca = ca;
@@ -30,7 +29,6 @@ public class Datcoc implements Parcelable{
     }
 
     protected Datcoc(Parcel in) {
-        id = in.readString();
         maDC = in.readString();
         ngay = in.readString();
         ca = in.readString();
@@ -59,14 +57,6 @@ public class Datcoc implements Parcelable{
             return new Datcoc[size];
         }
     };
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getMaDC() {
         return maDC;
@@ -195,7 +185,6 @@ public class Datcoc implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
         dest.writeString(maDC);
         dest.writeString(ngay);
         dest.writeString(ca);

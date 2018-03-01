@@ -76,7 +76,7 @@ public class Adapter_Remove_Khoanchi extends ArrayAdapter<Khoanchi> {
                 builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        xacNhanXoa(item.getId());
+                        xacNhanXoa(item.getMaKC());
                     }
                 });
                 builder.show();
