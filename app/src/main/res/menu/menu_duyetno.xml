@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_tratien"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:title="Đã thanh toán"
+        app:showAsAction="always|withText"
+        tools:ignore="AppCompatResource"></item>
+
+    <item
+        android:icon="@drawable/ic_trahang"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:title="Hoàn trả hàng"
+        app:showAsAction="always|withText"
+        tools:ignore="AppCompatResource"></item>
+
+</menu>

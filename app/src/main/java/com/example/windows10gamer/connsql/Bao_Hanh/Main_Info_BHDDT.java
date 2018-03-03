@@ -17,10 +17,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
-import com.example.windows10gamer.connsql.Object.BHDDT;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Object.BHDDT;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Other.Mylistview;
 import com.example.windows10gamer.connsql.R;
 
 import org.json.JSONArray;
@@ -30,17 +31,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Main_Info_BHDDT extends AppCompatActivity {
-    String maBH, dateToday, timeToday, gio, gio_moi, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi, lydo;
+    String maBH, dateToday, gio, gio_moi, timeToday, chinhanhToday, tenNVToday, maNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, phidoiSP, lydo, chechlech;
+    TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH,tvphidoiSP,tvlydoDLK,tvmaBHDDT,
+            tvDlkSdtKH, tvDlkChenhlech, tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
+    ListView lv;
+    Mylistview lv_moi;
     ArrayList<BHDDT> BHDDT = new ArrayList<>();
-    TextView tvd1MaOrder,tvmaBHDDT, tvd1Date, tvd1Time, tvd1MaNV, tvd1TenNV, tvd1GhichuOrder, tvd1TenKH,tvlydod1, tvphibaohanh,
-            tvd1SdtKH, tvd1GhichuKH, tvd1TenNVToday, tvd1MaNVToday, tvd1Datetoday, tvd1Timetoday, tvChinhanhDDT, tvChinhanhDDTOrder;
-    ListView lvBHDDT_moi, lvBHDDT;
     ArrayList<Sanpham_gio> list, list_moi;
     Adapter_Info_Order adapter, adapter_moi;
-    TextView tvDlkChenhlech, tvphidoiSP;
-    String chechlech, phidoiSP;
     ImageView ivAvatar, ivAvatar2;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,63 +60,61 @@ public class Main_Info_BHDDT extends AppCompatActivity {
         maOrder = BHDDT.get(0).getMaOrder();
         date = BHDDT.get(0).getDate();
         time = BHDDT.get(0).getTime();
+        gio = BHDDT.get(0).getGio();
+        phidoiSP = BHDDT.get(0).getPhidoisp();
         chinhanh = BHDDT.get(0).getChinhanh();
         tenNV = BHDDT.get(0).getTenNV();
         maNV = BHDDT.get(0).getMaNV();
         ten = BHDDT.get(0).getTen();
         ma = BHDDT.get(0).getMa();
-        gio = BHDDT.get(0).getGio();
         baohanh = BHDDT.get(0).getBaohanh();
         nguon = BHDDT.get(0).getNguon();
         ngaynhap = BHDDT.get(0).getNgaynhap();
         von = BHDDT.get(0).getVon();
+        chechlech = BHDDT.get(0).getChenhlech();
         gia = BHDDT.get(0).getGia();
+        list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         ghichuOrder = BHDDT.get(0).getGhichuOrder();
         tenKH = BHDDT.get(0).getTenKH();
         sdtKH = BHDDT.get(0).getSdtKH();
         ghichuKH = BHDDT.get(0).getGhichuKH();
-        ten_moi = BHDDT.get(0).getTen_moi();
-        ma_moi = BHDDT.get(0).getMa_moi();
-        baohanh_moi = BHDDT.get(0).getBaohanh_moi();
-        nguon_moi = BHDDT.get(0).getNguon_moi();
-        ngaynhap_moi = BHDDT.get(0).getNgaynhap_moi();
-        von_moi = BHDDT.get(0).getVon_moi();
-        gia_moi = BHDDT.get(0).getGia_moi();
-        lydo = BHDDT.get(0).getLydo();
         gio_moi = BHDDT.get(0).getGio_moi();
-        phidoiSP = BHDDT.get(0).getPhidoisp();
-        chechlech = BHDDT.get(0).getChenhlech();
+        int tongdon = 0;
+        for (int i = 0; i < BHDDT.size(); i++){
+            list_moi.add(new Sanpham_gio(BHDDT.get(i).getGio_moi(), BHDDT.get(i).getMa_moi(), BHDDT.get(i).getTen_moi(), BHDDT.get(i).getBaohanh_moi(), BHDDT.get(i).getNguon_moi(), BHDDT.get(i).getNgaynhap_moi(), BHDDT.get(i).getVon_moi(), BHDDT.get(i).getGia_moi()));
+            tongdon = tongdon + Integer.parseInt(BHDDT.get(i).getGia_moi());
+        }
+        lydo = BHDDT.get(0).getLydo();
         tvmaBHDDT.setText("Mã BH: "+maBH);
-        tvd1Datetoday.setText(dateToday);
-        tvd1Timetoday.setText(timeToday);
-        tvChinhanhDDT.setText(chinhanhToday);
-        tvd1TenNVToday.setText("Mã NV bảo hành: "+ maNVToday);
-        tvd1MaNVToday.setText("Tên NV bảo hành: " + tenNVToday);
-        tvd1MaOrder.setText("Mã đơn hàng: " + maOrder);
-        tvd1Date.setText(date);
-        tvd1Time.setText(time);
-        tvChinhanhDDTOrder.setText(chinhanh);
-        tvd1MaNV.setText("Mã số: " + maNV);
-        tvd1TenNV.setText("Tên nhân viên: " + tenNV);
-        list.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
+        tvDlkDatetoday.setText(dateToday);
+        tvDlkTimetoday.setText(timeToday);
+        tvChinhanhDLK.setText(chinhanhToday);
+        tvDlkTenNVNhan.setText("Mã NV bảo hành: "+ maNVToday);
+        tvDlkMaNVNhan.setText("Tên NV bảo hành: " + tenNVToday);
+        tvDlkMaOrder.setText("Mã đơn hàng: " + maOrder);
+        tvDlkDate.setText(date);
+        tvDlkTime.setText(time);
+        tvChinhanhDLKOrder.setText(chinhanh);
+        tvDlkMaNV.setText("Mã số: " + maNV);
+        tvDlkTenNV.setText("Tên nhân viên: " + tenNV);
+        tvTongdonhang.setText(Keys.setMoney(tongdon));
         adapter = new Adapter_Info_Order(Main_Info_BHDDT.this, list);
-        lvBHDDT.setAdapter(adapter);
+        lv.setAdapter(adapter);
         if (ghichuKH.equals("")) {
-            tvd1GhichuKH.setVisibility(View.GONE);
+            tvDlkGhichuKH.setVisibility(View.GONE);
         } else {
-            tvd1GhichuKH.setText("Ghi chú KH: " + ghichuKH);
+            tvDlkGhichuKH.setText("Ghi chú KH: " + ghichuKH);
         }
         if (ghichuOrder.equals("")) {
-            tvd1GhichuOrder.setVisibility(View.GONE);
+            tvDlkGhichuOrder.setVisibility(View.GONE);
         } else {
-            tvd1GhichuOrder.setText("Ghi chú đơn hàng: " + ghichuOrder);
+            tvDlkGhichuOrder.setText("Ghi chú đơn hàng: " + ghichuOrder);
         }
-        tvd1TenKH.setText("Tên KH: " + tenKH);
-        tvd1SdtKH.setText("SĐT KH: " + sdtKH);
-        list_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
+        tvDlkTenKH.setText("Tên KH: " + tenKH);
+        tvDlkSdtKH.setText("SĐT KH: " + sdtKH);
         adapter_moi = new Adapter_Info_Order(Main_Info_BHDDT.this, list_moi);
-        lvBHDDT_moi.setAdapter(adapter_moi);
-        tvlydod1.setText("Lý do: " + lydo);
+        lv_moi.setAdapter(adapter_moi);
+        tvlydoDLK.setText("Lý do: " + lydo);
         tvDlkChenhlech.setText(Keys.setMoney(Integer.valueOf(chechlech)));
         tvphidoiSP.setText(Keys.setMoney(Integer.valueOf(phidoiSP)));
         GetUser(Main_Info_BHDDT.this, maNVToday);
@@ -209,26 +206,25 @@ public class Main_Info_BHDDT extends AppCompatActivity {
         ivAvatar = findViewById(R.id.ivAvatar);
         tvDlkChenhlech = findViewById(R.id.tvDlkChenhlech);
         tvphidoiSP = findViewById(R.id.tvphidoiSP);
-        lvBHDDT = findViewById(R.id.lvBHD1);
-        lvBHDDT_moi = findViewById(R.id.lvBHDDT_moi);
-        tvlydod1 = findViewById(R.id.tvlydoBHD1);
-        tvmaBHDDT = findViewById(R.id.tvmaBHDDT);
-        tvd1MaOrder = findViewById(R.id.tvd1MaOrder);
-        tvd1Date = findViewById(R.id.tvd1Date);
-        tvd1Time = findViewById(R.id.tvd1Time);
-        tvd1Datetoday = findViewById(R.id.tvd1Datetoday);
-        tvd1Timetoday = findViewById(R.id.tvd1Timetoday);
-        tvd1MaNV = findViewById(R.id.tvd1MaNV);
-        tvd1TenNV = findViewById(R.id.tvd1TenNV);
-        tvd1GhichuOrder = findViewById(R.id.tvd1Ghichu);
-        tvd1TenKH = findViewById(R.id.tvd1TenKH);
-        tvd1SdtKH = findViewById(R.id.tvd1SdtKH);
-        tvChinhanhDDT = findViewById(R.id.tvChinhanhDDT);
-        tvChinhanhDDTOrder = findViewById(R.id.tvChinhanhDDTOrder);
-        tvd1GhichuKH = findViewById(R.id.tvd1GhichuKH);
-        tvd1TenNVToday = findViewById(R.id.tvd1TenNVNhan);
-        tvd1MaNVToday = findViewById(R.id.tvd1MaNVNhan);
-        tvphibaohanh = findViewById(R.id.tvphibaohanh);
+        tvlydoDLK = findViewById(R.id.tvlydoBHDLK);
+        tvDlkMaOrder = findViewById(R.id.tvDlkMaOrder);
+        tvDlkDate = findViewById(R.id.tvDlkDate);
+        tvDlkTime = findViewById(R.id.tvDlkTime);
+        tvTongdonhang     = findViewById(R.id.tvTongdonhang);
+        tvDlkDatetoday = findViewById(R.id.tvDlkDatetoday);
+        tvDlkTimetoday = findViewById(R.id.tvDlkTimetoday);
+        tvDlkMaNV = findViewById(R.id.tvDlkMaNV);
+        tvChinhanhDLK = findViewById(R.id.tvChinhanhDLK);
+        tvChinhanhDLKOrder = findViewById(R.id.tvChinhanhDLKOrder);
+        tvDlkTenNV = findViewById(R.id.tvDlkTenNV);
+        tvDlkGhichuOrder = findViewById(R.id.tvDlkGhichu);
+        tvDlkTenKH = findViewById(R.id.tvDlkTenKH);
+        tvDlkSdtKH = findViewById(R.id.tvDlkSdtKH);
+        lv = findViewById(R.id.lvBHDLK);
+        lv_moi = findViewById(R.id.lvBHDLK_moi);
+        tvDlkGhichuKH = findViewById(R.id.tvDlkGhichuKH);
+        tvDlkTenNVNhan = findViewById(R.id.tvDlkTenNVNhan);
+        tvDlkMaNVNhan = findViewById(R.id.tvDlkMaNVNhan);
+        tvmaBHDDT = findViewById(R.id.tvmaBHDLK);
     }
-
 }

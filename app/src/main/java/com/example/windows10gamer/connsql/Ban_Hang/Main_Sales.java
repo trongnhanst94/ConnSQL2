@@ -282,7 +282,7 @@ public class Main_Sales extends AppCompatActivity {
                         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
                             builder = new AlertDialog.Builder(Main_Sales.this);
                         } else {
-                            builder = new AlertDialog.Builder(Main_Sales.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                            builder = new AlertDialog.Builder(Main_Sales.this, android.R.style.Theme_Holo_Light_Panel);
                         }
                         builder.setIcon(R.drawable.ic_settings);
                         builder.setMessage("Bạn muốn hủy đơn hàng??");
@@ -1236,6 +1236,7 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("tenNhanvienbandum", session_username);
                 params.put("thanhtoan", thanhtoan);
                 params.put("nguoino", nguoino);
+                Log.e("qqq", "params: "+params.toString());
                 return params;
             }
         };

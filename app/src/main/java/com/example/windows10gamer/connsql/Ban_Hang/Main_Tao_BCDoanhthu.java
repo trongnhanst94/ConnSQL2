@@ -72,7 +72,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Main_Tao_BCDoanhthu extends AppCompatActivity {
-    private TextView tvcod, tvthongbao, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
+    private TextView tvcod, tvthongbao, tvdoanhthubanno, tvtiendauca, tvtientrave, tvtiencuoica, tvsokhachhang, tvsosanpham, tvdoanhthu, tvgiamgia, tvdoanhthusaugiam, tvtongchi, tvdatcoc, tvhoancoc;
     TextView tvdtddt, tvpddt, tvnddt, tvdtdlk, tvpdlk, tvndlk, tvtht, tvdt1d1, tvp1d1, tvlechdoanhthu;
     TextView tvbcnhanvien;
     EditText edtienthucte;
@@ -88,7 +88,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     ArrayList<BHDDT> BHDDT = new ArrayList<>();
     SharedPreferences shared;
     String chinhanh;
-    int tiencuoica= 0, doanhthu = 0, giamgia = 0, tongchi = 0, giamgiasing = 0, datcoc = 0, hoancoc = 0, tamungcod = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
+    int tiencuoica= 0, doanhthu = 0, giamgia = 0, tongchi = 0, doanhthubanno = 0, giamgiasing = 0, datcoc = 0, hoancoc = 0, tamungcod = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
     int tiendauca, tientrave;
     private ProgressDialog dialog;
     private String ma, ten;
@@ -311,6 +311,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     }
 
     private void anhxa() {
+        tvdoanhthubanno = findViewById(R.id.tvdoanhthubanno);
         tvcod = findViewById(R.id.tvbccod);
         tvbcnhanvien = findViewById(R.id.tvbcnhanvien);
         edtienthucte = findViewById(R.id.edtienthucte);
@@ -465,8 +466,8 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (rbcasang.isChecked()){
-                    ca = "Ca sáng";
-                } else ca = "Ca chiều";
+                    ca = Keys.CA_SANG;
+                } else ca = Keys.CA_CHIEU;
                 if (edtiendauca.getText().toString().trim().equals("")){
                     tiendauca = 0;
                 } else {
@@ -511,6 +512,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.DI_CA);
+                params.put("id", madica+arrayDica.get(j).getMa());
                 params.put("maDica", "Dica_"+madica);
                 params.put("ngay", ngay);
                 params.put("ca", ca);
@@ -833,8 +835,11 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                     tempgiamgia.add(orignal.get(i).getMaDonhang());
                                     giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
                                 }
+                            } else if (orignal.get(i).getThanhtoan().equals(Keys.GHINO)) {
+                                doanhthubanno += Integer.valueOf(orignal.get(i).getGiaSanpham());
                             }
                         }
+                        tvdoanhthubanno.setText(Keys.setMoney(doanhthubanno));
                         tvdoanhthu.setText(Keys.setMoney(doanhthu));
                         tvgiamgia.setText(Keys.setMoney(giamgia));
                         tvdoanhthusaugiam.setText(Keys.setMoney(doanhthu-giamgia));
@@ -1612,6 +1617,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 params.put("doanhthu", tiencuoica+"");
                 params.put("lechcuoica", lechcuoica+"");
                 params.put("tienthucte", tienthucte+"");
+                Log.e("qqq", "getParams: "+params.toString());
                 return params;
             }
         };

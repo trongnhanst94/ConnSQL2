@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -69,6 +68,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
     private ProgressDialog dialog2;
     Adapter_Khoanchi adapter;
     ArrayList<Khoanchi> arraylist;
+    private String maMa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,12 +122,11 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                 dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        maMa = Keys.MaDonhang();
                         noidung = edchinoidung.getText().toString().trim();
                         sotien = edchisotien.getText().toString().trim();
                         if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
                             new SendRequest().execute();
-                            putData();
-                            new GetData().execute(chinhanh);
                         } else {
                             new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         }
@@ -234,6 +233,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             if(!Connect_Internet.checkConnection(getApplicationContext()))
                 Connect_Internet.buildDialog(Main_Khoan_Chi.this).show();
             else {
+                putData();
                 addChiWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
             }
             return null;
@@ -242,6 +242,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            new GetData().execute(chinhanh);
         }
     }
 
@@ -278,7 +279,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_KHOANCHI_WEB);
-                params.put("maKC", "CHI_"+ Keys.MaDonhang());
+                params.put("maKC", "CHI_"+ maMa);
                 params.put("ngay", ngay);
                 params.put("ca", ca);
                 params.put("chinhanh", chinhanh);
@@ -315,7 +316,6 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             result.append(URLEncoder.encode(value.toString(), "UTF-8"));
 
         }
-        Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
         return result.toString();
     }
 
@@ -326,7 +326,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("maKC", "CHI_"+ Keys.MaDonhang());
+            postDataParams.put("maKC", "CHI_"+ maMa);
             postDataParams.put("ngay", ngay);
             postDataParams.put("ca", ca);
             postDataParams.put("chinhanh", chinhanh);
@@ -336,7 +336,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             postDataParams.put("sotien", sotien);
 
             Log.e("postDataParams", postDataParams.toString());
-
+            // Kết nối HTTP
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -351,21 +351,19 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             writer.flush();
             writer.close();
             os.close();
+            int responseCode2 = conn.getResponseCode();
+            if (responseCode2 == HttpsURLConnection.HTTP_OK) {
+                BufferedReader in2 = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb2 = new StringBuffer("");
+                String line2 = "";
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                while ((line2 = in2.readLine()) != null) {
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-
-                    sb.append(line);
+                    sb2.append(line2);
                     break;
                 }
-                in.close();
-                return sb.toString();
+                in2.close();
+                return sb2.toString();
             } else {
                 return new String("");
             }

@@ -26,19 +26,19 @@
                 app:showAsAction="always|withText"
                 tools:ignore="AppCompatResource"></item>
 
-    <item
-        android:icon="@drawable/ic_choxuly"
-        android:orderInCategory="100"
-        android:showAsAction="always|withText"
-        android:title="Chờ xử lý"
-        app:showAsAction="always|withText"
-        tools:ignore="AppCompatResource"></item>
+            <item
+                android:icon="@drawable/ic_choxuly"
+                android:orderInCategory="100"
+                android:showAsAction="always|withText"
+                android:title="Chờ xử lý"
+                app:showAsAction="always|withText"
+                tools:ignore="AppCompatResource"></item>
 
-    <item
-        android:icon="@drawable/ic_doidungthu"
-        android:orderInCategory="100"
-        android:showAsAction="always|withText"
-        android:title="Đổi dùng thử"
-        app:showAsAction="always|withText"
-        tools:ignore="AppCompatResource"></item>
+            <item
+                android:icon="@drawable/ic_doidungthu"
+                android:orderInCategory="100"
+                android:showAsAction="always|withText"
+                android:title="Đổi dùng thử"
+                app:showAsAction="always|withText"
+                tools:ignore="AppCompatResource"></item>
 </menu>

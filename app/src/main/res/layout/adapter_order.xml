@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
                     android:ellipsize="marquee"
-                    android:textSize="@dimen/muoi"
+                    android:textSize="@dimen/bon"
                     android:textStyle="italic" />
 
                 <TextView

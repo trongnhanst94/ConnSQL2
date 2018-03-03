@@ -1,5 +1,6 @@
 package com.example.windows10gamer.connsql.Bao_Hanh;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +35,7 @@ import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
+import com.example.windows10gamer.connsql.Other.Mylistview;
 import com.example.windows10gamer.connsql.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -62,26 +63,27 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Doidungthu extends AppCompatActivity {
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
-            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, ghichuKH, chinhanhOrder, lydo, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi;
+            dateToday, timeToday, tenKH, sdtKH, ghichuOrder, chinhanhOrder, ghichuKH, lydo,ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi;
     ArrayList<Sanpham_gio> sanpham = new ArrayList<>();
     ProgressDialog dialog;
-    SharedPreferences shared, sp;
-    TextView tvddtMaOrder,tvddtDate,tvDdtChenhlech, tvddtTime,tvddtMaNV,tvddtTenNV,tvddtGhichuOrder,tvddtTenKH,
-            tvddtSdtKH,tvddtGhichuKH,tvddtTenNVNhan,tvddtMaNVNhan,tvddtDatetoday,tvddtTimetoday,tvChinhanh1D1,tvChinhanh1D1Order ;
-    ListView lv, lv_moi;
+    TextView tvDlkMaOrder,tvDlkDate,tvDlkTime,tvDlkMaNV,tvDlkTenNV,tvDlkGhichuOrder,tvDlkTenKH, tvDlkChenhlech,
+            tvDlkSdtKH,tvDlkGhichuKH,tvDlkTenNVNhan,tvDlkMaNVNhan,tvDlkDatetoday,tvDlkTimetoday, tvTongdonhang,tvChinhanhDLK,tvChinhanhDLKOrder ;
+    int vitri;
+    Mylistview lv_moi;
+    ListView lv;
     Adapter_Info_Order adapter_sales;
-    ArrayList<Sanpham_gio> arrayList;
-    Button btnxacnhan, btnddt;
-    EditText edlydod1;
     Adapter_Info_Order adapter_moi;
-    ArrayList<Sanpham_gio>  array_moi;
+    ArrayList<Sanpham_gio> arrayList, array_moi;
+    Button btnxacnhan;
+    EditText edlydoDLK, edphidoiSP;
     String session_username;
-    String chinhanh;
-    int chenhlech = 0, phidoiSP = 0, total = 0;
-    String session_ma, gio, gio_moi;
-    private EditText edphidoiSP;
+    String session_ma;
+    int total = 0;int chenhlech = 0, phidoiSP = 0;
+    String chinhanh, gio, gio_moi;
+    SharedPreferences shared, sp;
     ImageView ivAvatar, ivAvatar2;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,63 +116,58 @@ public class Main_Doidungthu extends AppCompatActivity {
         sdtKH       = bundle.getString("SdtKH");
         ghichuKH    = bundle.getString("GhichuKH");
         ghichuOrder = bundle.getString("GhichuOrder");
-        btnxacnhan.setEnabled(false);
-        btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
         dateToday = Keys.getDateNow();
         timeToday = Keys.getCalam(chinhanh);
-        array_moi = new ArrayList<>();
         arrayList = new ArrayList<>();
+        array_moi = new ArrayList<>();
+        btnxacnhan.setEnabled(false);
+        btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
         arrayList.add(new Sanpham_gio(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia));
         adapter_sales = new Adapter_Info_Order(Main_Doidungthu.this, arrayList);
         lv.setAdapter(adapter_sales);
         adapter_moi = new Adapter_Info_Order(Main_Doidungthu.this, array_moi);
         lv_moi.setAdapter(adapter_moi);
         if (ghichuKH.equals("")){
-            tvddtGhichuKH.setVisibility(View.GONE);
+            tvDlkGhichuKH.setVisibility(View.GONE);
         } else {
-            tvddtGhichuKH.setText("Ghi chú KH: "+ghichuKH);
+            tvDlkGhichuKH.setText("Ghi chú KH: "+ghichuKH);
         }
         if (ghichuOrder.equals("")){
-            tvddtGhichuOrder.setVisibility(View.GONE);
+            tvDlkGhichuOrder.setVisibility(View.GONE);
         } else {
-            tvddtGhichuOrder.setText("Ghi chú đơn hàng: "+ghichuOrder);
+            tvDlkGhichuOrder.setText("Ghi chú đơn hàng: "+ghichuOrder);
         }
-        tvddtMaOrder.setText("Mã đơn hàng: "+maOrder);
-        tvddtDate.setText(date);
-        tvddtTime.setText(time);
-        tvddtDatetoday.setText(dateToday);
-        tvddtTimetoday.setText(timeToday);
-        tvddtMaNV.setText("Mã số: "+maNV);
-        tvddtTenNV.setText("Tên nhân viên: "+tenNV);
-        tvddtTenKH.setText("Tên KH: "+tenKH);
-        tvChinhanh1D1.setText(chinhanh);
-        tvChinhanh1D1Order.setText(chinhanhOrder);
-        tvddtSdtKH.setText("SĐT KH: "+sdtKH);
-        tvddtTenNVNhan.setText("Mã NV bảo hành: "+session_username);
-        tvddtMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        tvDlkMaOrder.setText("Mã đơn hàng: "+maOrder);
+        tvDlkDate.setText(date);
+        tvDlkTime.setText(time);
+        tvDlkDatetoday.setText(dateToday);
+        tvDlkTimetoday.setText(timeToday);
+        tvDlkMaNV.setText("Mã số: "+maNV);
+        tvDlkTenNV.setText("Tên nhân viên: "+tenNV);
+        tvDlkTenKH.setText("Tên KH: "+tenKH);
+        tvDlkSdtKH.setText("SĐT KH: "+sdtKH);
+        tvChinhanhDLK.setText(chinhanh);
+        tvChinhanhDLKOrder.setText(chinhanhOrder);
+        tvDlkTenNVNhan.setText("Mã NV bảo hành: "+session_username);
+        tvDlkMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
         GetUser(Main_Doidungthu.this, maNV);
         btnxacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!edlydod1.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
-                    btnxacnhan.setEnabled(false);
-                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
-                    maBH = "BHDDT_"+Keys.MaDonhang();
-                    phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
-                    lydo = edlydod1.getText().toString().trim();
-                    chenhlech = total - Integer.valueOf(gia) + phidoiSP;
-                    new SendRequestDDT().execute();
-                } else
-                    Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
-            }
-        });
-        btnddt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Doidungthu.this).show();
-                else {scanSanpham_gio1doi1();}
+                else {
+                    if (!edlydoDLK.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
+                        btnxacnhan.setEnabled(false);
+                        btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
+                        maBH = "BHDLK_"+ Keys.MaDonhang();
+                        phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
+                        lydo = edlydoDLK.getText().toString().trim();
+                        chenhlech = total - Integer.valueOf(gia) + phidoiSP;
+                        new SendRequestDLK().execute();
+                    } else
+                        Snackbar.make(v, "Phải nhập tất cả các trường.", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         Button exit= findViewById(R.id.cancel);
@@ -198,14 +195,14 @@ public class Main_Doidungthu extends AppCompatActivity {
                 }
             }
         });
-
+        tvDlkChenhlech.setText(Keys.setMoney(0));
         edphidoiSP.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if (edphidoiSP.getText().toString().trim().equals("")){
-                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                 } else {
                     phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
-                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech + phidoiSP));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech + phidoiSP));
                 }
             }
 
@@ -254,8 +251,34 @@ public class Main_Doidungthu extends AppCompatActivity {
         );
         requestQueue.add(jsonArrayRequest);
     }
+    private void Anhxa() {
+        ivAvatar2 = findViewById(R.id.ivAvatar2);
+        ivAvatar = findViewById(R.id.ivAvatar);
+        edphidoiSP = findViewById(R.id.edphidoiSP);
+        edlydoDLK = findViewById(R.id.edlydoBHDLK);
+        tvDlkMaOrder = findViewById(R.id.tvDlkMaOrder);
+        tvDlkDate = findViewById(R.id.tvDlkDate);
+        tvDlkChenhlech = findViewById(R.id.tvDlkChenhlech);
+        tvDlkTime = findViewById(R.id.tvDlkTime);
+        tvTongdonhang     = findViewById(R.id.tvTongdonhang);
+        tvDlkDatetoday = findViewById(R.id.tvDlkDatetoday);
+        tvDlkTimetoday = findViewById(R.id.tvDlkTimetoday);
+        tvDlkMaNV = findViewById(R.id.tvDlkMaNV);
+        tvChinhanhDLK = findViewById(R.id.tvChinhanhDLK);
+        tvChinhanhDLKOrder = findViewById(R.id.tvChinhanhDLKOrder);
+        tvDlkTenNV = findViewById(R.id.tvDlkTenNV);
+        tvDlkGhichuOrder = findViewById(R.id.tvDlkGhichu);
+        tvDlkTenKH = findViewById(R.id.tvDlkTenKH);
+        tvDlkSdtKH = findViewById(R.id.tvDlkSdtKH);
+        lv = findViewById(R.id.lvBHDLK);
+        lv_moi = findViewById(R.id.lvBHDLK_moi);
+        tvDlkGhichuKH = findViewById(R.id.tvDlkGhichuKH);
+        tvDlkTenNVNhan = findViewById(R.id.tvDlkTenNVNhan);
+        tvDlkMaNVNhan = findViewById(R.id.tvDlkMaNVNhan);
+        btnxacnhan = findViewById(R.id.btnBHDLK);
+    }
 
-    private void scanSanpham_gio1doi1() {
+    public void scanSanpham(View view){
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Quét mã code");
@@ -281,15 +304,13 @@ public class Main_Doidungthu extends AppCompatActivity {
                     gio_moi = Keys.getTimeNow();
                     array_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
                     total = total + Integer.parseInt(gia_moi);
+                    tvTongdonhang.setText(Keys.setMoney(total));
                     btnxacnhan.setEnabled(true);
                     btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
                     chenhlech = total-Integer.valueOf(gia);
-                    tvDdtChenhlech.setText(Keys.setMoney(chenhlech));
-                    btnxacnhan.setEnabled(true);
-                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
-                    btnddt.setEnabled(false);
-                    btnddt.setBackgroundColor(getResources().getColor(R.color.aaaaa));
+                    tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                     adapter_moi.notifyDataSetChanged();
+                    scanSanpham(findViewById(android.R.id.content));
                 }   catch (NoSuchElementException nse) {
                     new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
                 }
@@ -297,37 +318,15 @@ public class Main_Doidungthu extends AppCompatActivity {
         }
     }
 
-    private void Anhxa() {
-        ivAvatar2 = findViewById(R.id.ivAvatar2);
-        ivAvatar = findViewById(R.id.ivAvatar);
-        tvDdtChenhlech = findViewById(R.id.tvDlkChenhlech);
-        edphidoiSP = findViewById(R.id.edphidoiSP);
-        btnddt = findViewById(R.id.btn_ddt_scan_now);
-        edlydod1 = findViewById(R.id.edlydoBHD1);
-        tvddtMaOrder = findViewById(R.id.tvddtMaOrder);
-        tvddtDate = findViewById(R.id.tvddtDate);
-        tvddtTime = findViewById(R.id.tvddtTime);
-        tvddtDatetoday = findViewById(R.id.tvddtDatetoday);
-        tvddtTimetoday = findViewById(R.id.tvddtTimetoday);
-        tvddtMaNV = findViewById(R.id.tvddtMaNV);
-        tvddtTenNV = findViewById(R.id.tvddtTenNV);
-        tvddtGhichuOrder = findViewById(R.id.tvddtGhichu);
-        tvddtTenKH = findViewById(R.id.tvddtTenKH);
-        tvddtSdtKH = findViewById(R.id.tvddtSdtKH);
-        tvChinhanh1D1 = findViewById(R.id.tvChinhanh1D1);
-        tvChinhanh1D1Order = findViewById(R.id.tvChinhanh1D1Order);
-        lv = findViewById(R.id.lvBHD1);
-        tvddtGhichuKH = findViewById(R.id.tvddtGhichuKH);
-        tvddtTenNVNhan = findViewById(R.id.tvddtTenNVNhan);
-        tvddtMaNVNhan = findViewById(R.id.tvddtMaNVNhan);
-        btnxacnhan = findViewById(R.id.btnBHD1);
-        lv_moi = findViewById(R.id.lvBH1D1_moi);
+    public void huy(){
+        finish();
     }
 
-    public class SendRequestDDT extends AsyncTask<String, Void, String> {
+    public class SendRequestDLK extends AsyncTask<String, Void, String> {
+
 
         protected void onPreExecute(){
-
+            super.onPreExecute();
             dialog = new ProgressDialog(Main_Doidungthu.this);
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu đang được xử lý");
@@ -336,13 +335,17 @@ public class Main_Doidungthu extends AppCompatActivity {
         }
 
         protected String doInBackground(String... arg0) {
-            putData();
-            addDDTWeb();
+            int j;
+            for (j = 0 ;j < array_moi.size(); j++){
+                putData(j);
+                addDlkWeb(j);
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            super.onPostExecute(result);
             dialog.dismiss();
             new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Gửi dữ liệu thành công.");
             ResetActivity();
@@ -375,8 +378,9 @@ public class Main_Doidungthu extends AppCompatActivity {
         return result.toString();
     }
 
-    public String putData(){
+    public String putData(int j){
         try {
+
             URL url = new URL(Keys.SCRIPT_BH_DDT);
             JSONObject postDataParams = new JSONObject();
             postDataParams.put("maBH", maBH);
@@ -403,19 +407,18 @@ public class Main_Doidungthu extends AppCompatActivity {
             postDataParams.put("tenKH", tenKH);
             postDataParams.put("sdtKH", sdtKH);
             postDataParams.put("ghichuKH", ghichuKH);
-            postDataParams.put("gio_moi", gio_moi);
-            postDataParams.put("ma_moi", ma_moi);
-            postDataParams.put("ten_moi", ten_moi);
-            postDataParams.put("baohanh_moi", baohanh_moi);
-            postDataParams.put("nguon_moi", nguon_moi);
-            postDataParams.put("ngaynhap_moi", ngaynhap_moi);
-            postDataParams.put("von_moi", von_moi);
-            postDataParams.put("gia_moi", gia_moi);
             postDataParams.put("phidoiSP", phidoiSP);
-            postDataParams.put("chenhlech", chenhlech);
+            postDataParams.put("gio_moi", array_moi.get(j).getGio());
+            postDataParams.put("ten_moi", array_moi.get(j).getTen());
+            postDataParams.put("ma_moi", array_moi.get(j).getMa());
+            postDataParams.put("baohanh_moi", array_moi.get(j).getBaohanh());
+            postDataParams.put("nguon_moi", array_moi.get(j).getNguon());
+            postDataParams.put("ngaynhap_moi", array_moi.get(j).getNgaynhap());
+            postDataParams.put("von_moi", array_moi.get(j).getVon());
+            postDataParams.put("gia_moi", array_moi.get(j).getGiaban());
             postDataParams.put("lydo", lydo);
+            postDataParams.put("chenhlech", chenhlech);
 
-            Log.e("params", postDataParams.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
@@ -458,7 +461,7 @@ public class Main_Doidungthu extends AppCompatActivity {
         finish();
     }
 
-    public void addDDTWeb(){
+    public void addDlkWeb(final int j){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
                 new Response.Listener<String>() {
@@ -480,6 +483,7 @@ public class Main_Doidungthu extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_BHDDT_WEB);
+                params.put("id", maBH+array_moi.get(j).getGio());
                 params.put("maBH", maBH);
                 params.put("dateToday", dateToday);
                 params.put("timeToday", timeToday);
@@ -504,20 +508,22 @@ public class Main_Doidungthu extends AppCompatActivity {
                 params.put("tenKH", tenKH);
                 params.put("sdtKH", sdtKH);
                 params.put("ghichuKH", ghichuKH);
-                params.put("gio_moi", gio_moi);
-                params.put("ten_moi", ten_moi);
-                params.put("ma_moi", ma_moi);
-                params.put("baohanh_moi", baohanh_moi);
-                params.put("nguon_moi", nguon_moi);
-                params.put("ngaynhap_moi", ngaynhap_moi);
-                params.put("von_moi", von_moi);
-                params.put("gia_moi", gia_moi);
                 params.put("phidoiSP", phidoiSP+"");
-                params.put("chenhlech", chenhlech+"");
+                params.put("gio_moi", array_moi.get(j).getGio());
+                params.put("ten_moi", array_moi.get(j).getTen());
+                params.put("ma_moi", array_moi.get(j).getMa());
+                params.put("baohanh_moi", array_moi.get(j).getBaohanh());
+                params.put("nguon_moi", array_moi.get(j).getNguon());
+                params.put("ngaynhap_moi", array_moi.get(j).getNgaynhap());
+                params.put("von_moi", array_moi.get(j).getVon());
+                params.put("gia_moi", array_moi.get(j).getGiaban());
                 params.put("lydo", lydo);
+                params.put("chenhlech", chenhlech+"");
                 return params;
             }
         };
         requestQueue.add(stringRequest);
     }
 }
+
+

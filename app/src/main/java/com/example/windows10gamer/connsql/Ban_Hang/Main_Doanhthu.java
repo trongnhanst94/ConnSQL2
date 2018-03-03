@@ -82,9 +82,9 @@ public class Main_Doanhthu extends AppCompatActivity {
         dateBegin = Keys.getDateNow();
         dateEnd = Keys.getDateNow();
         cbCasang.setChecked(true);
-        dateCasang = "Ca sáng";
+        dateCasang = Keys.CA_SANG;
         cbCachieu.setChecked(true);
-        dateCachieu = "Ca chiều";
+        dateCachieu = Keys.CA_CHIEU;
         new GetDT().execute();
         edBengin.setInputType(InputType.TYPE_NULL);
         edBengin.setOnClickListener(new View.OnClickListener() {
@@ -132,9 +132,9 @@ public class Main_Doanhthu extends AppCompatActivity {
                 else {
                     dateBegin = String.valueOf(edBengin.getText());
                     dateEnd = String.valueOf(edEnd.getText());
-                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                    if (cbCasang.isChecked()) dateCasang = Keys.CA_SANG;
                     else dateCasang = "";
-                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                    if (cbCachieu.isChecked()) dateCachieu = Keys.CA_CHIEU;
                     else dateCachieu = "";
                     new GetDT().execute();
                 }

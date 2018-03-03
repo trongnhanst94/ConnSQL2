@@ -43,11 +43,11 @@ import java.util.Collections;
  */
 
 public class Fragment_DDT extends android.support.v4.app.Fragment {
-    ListView lvBHDDT;
-    ArrayList<BHDDT> list, list_intent, listLoc;
-    Adapter_Report_BHDDT adapter_bhddt;
+    ListView lvBHDLK;
+    ArrayList<BHDDT> list, list_intent, bh, listLoc;
+    Adapter_Report_BHDDT adapter_bhdlk;
     FloatingActionButton fab;
-    public String start, end;
+    String start, end;
     int dem = 0;
     TextView tvNoti;
     ProgressDialog dialog;
@@ -60,21 +60,28 @@ public class Fragment_DDT extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_ddt, container, false);
-        lvBHDDT = v.findViewById(R.id.lvBHDDT_Report);
+        lvBHDLK = v.findViewById(R.id.lvBHDDT_Report);
         fab = v.findViewById(R.id.fabBHDDT);
         tvNoti = v.findViewById(R.id.tvNoti);
-        tvNoti.setText("Nhấn vào biểu tượng \"Kính lúp\" để tìm kiếm!");
-        list = new ArrayList<>();listLoc = new ArrayList<>();
-        adapter_bhddt = new Adapter_Report_BHDDT(getActivity(), R.layout.adapter_report_bh, listLoc);
-        lvBHDDT.setAdapter(adapter_bhddt);
-        lvBHDDT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        tvNoti.setText("Nhấn vào biểu tượng \"Kính lúp\" để tìm kiếm! ");
+        listLoc = new ArrayList<>();
+        bh = new ArrayList<>();
+        list = new ArrayList<>();
+        list_intent = new ArrayList<>();
+        adapter_bhdlk = new Adapter_Report_BHDDT(getActivity(), R.layout.adapter_report_bh, listLoc);
+        lvBHDLK.setAdapter(adapter_bhdlk);
+        lvBHDLK.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!Connect_Internet.checkConnection(getActivity()))
                     Connect_Internet.buildDialog(getActivity()).show();
                 else {
-                    list_intent = new ArrayList<>();
-                    list_intent.add(list.get(position));
+                    list_intent.clear();
+                    for (int i = 0; i < list.size(); i++) {
+                        if (listLoc.get(position).getMaBH().equals(list.get(i).getMaBH())) {
+                            list_intent.add(list.get(i));
+                        }
+                    }
                     Intent intent = new Intent(getActivity(), Main_Info_BHDDT.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("listBHDDT", list_intent);
@@ -190,8 +197,9 @@ public class Fragment_DDT extends android.support.v4.app.Fragment {
         protected Void doInBackground(String... params) {
             JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_BH_BHDDT+"?loadBegin="+params[0]+"&loadEnd="+params[1]);
             try {
-                list.clear();
+                bh.clear();
                 listLoc.clear();
+                list.clear();
                 if (jsonObject != null) {
                     if(jsonObject.length() > 0) {
                         JSONArray array = jsonObject.getJSONArray(Keys.BHDDT_SHEET);
@@ -256,22 +264,36 @@ public class Fragment_DDT extends android.support.v4.app.Fragment {
             dialog.dismiss();
             if(list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
-                    listLoc.add(list.get(i));
+                    int resultNV = sosanhBH(listLoc, list.get(i).getMaBH());
+                    if (resultNV == -1){
+                        listLoc.add(list.get(i));
+                    }
                 }
                 Collections.reverse(list);
                 Collections.reverse(listLoc);
-                adapter_bhddt.notifyDataSetChanged();
+                adapter_bhdlk.notifyDataSetChanged();
                 if (listLoc.size() == 0){
-                    lvBHDDT.setVisibility(View.INVISIBLE);
+                    lvBHDLK.setVisibility(View.INVISIBLE);
                     tvNoti.setText("Không tìm thấy");
                 }
             } else {
                 if (listLoc.size() == 0){
                     tvNoti.setText("Không tìm thấy!");
-                    adapter_bhddt.notifyDataSetChanged();
+                    adapter_bhdlk.notifyDataSetChanged();
                 }
             }
         }
     }
 
+    private int sosanhBH(ArrayList<BHDDT> baohanh, String ma) {
+        int result = -1;
+        if (baohanh.size() != 0){
+            for (int i = 0; i < baohanh.size(); i++){
+                if (baohanh.get(i).getMaBH().equals(ma)){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
 }

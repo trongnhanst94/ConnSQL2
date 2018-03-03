@@ -51,7 +51,7 @@ public class Adapter_Order_Plus extends ArrayAdapter<Order_Plus> {
         vh.tvTennvOrder.setText(item.getTenNhanvien());
         vh.tvstt.setText(Keys.sothutu(position+1));
         vh.tvSoluong.setText("Amount: "+Keys.sothutu(item.getSoluong()));
-        vh.tvTimeOrder.setText(" "+item.getCalam()+ " "+item.getNgay());
+        vh.tvTimeOrder.setText("["+item.getGio()+"] "+item.getCalam()+ " "+item.getNgay());
 
         return vh.rootView;
     }

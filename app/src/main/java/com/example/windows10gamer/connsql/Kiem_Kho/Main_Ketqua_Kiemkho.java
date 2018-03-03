@@ -462,6 +462,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
             dialog.setTitle("Hãy chờ...");
             dialog.setMessage("Dữ liệu sản phẩm đang được tải xuống");
             dialog.setCancelable(false);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.show();
         }
 
@@ -561,8 +562,8 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                     khac.add(all.get(i));
                 }
             }
-            dialog(dem, giong, khac, ga, gb);
             dialog.dismiss();
+            dialog(dem, giong, khac, ga, gb);
         }
     }
 

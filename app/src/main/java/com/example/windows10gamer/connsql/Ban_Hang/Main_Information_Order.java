@@ -1,23 +1,35 @@
 package com.example.windows10gamer.connsql.Ban_Hang;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.bumptech.glide.Glide;
@@ -27,6 +39,8 @@ import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.Connect_Internet;
+import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.GiftList;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -36,7 +50,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,6 +96,9 @@ public class Main_Information_Order extends AppCompatActivity {
     FloatingActionButton fab;
     LinearLayout lnAn;
     TextView tvThanhtoan;
+    Button btnDuyet;
+    LinearLayout lnHiddenInfo;
+    private String updateTT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +107,8 @@ public class Main_Information_Order extends AppCompatActivity {
         lnHide = findViewById(R.id.lnHide);
         fab = findViewById(R.id.fab);
         lnAn = findViewById(R.id.lnAn);
+        lnHiddenInfo = findViewById(R.id.lnHiddenInfo);
+        btnDuyet = findViewById(R.id.btnDuyet);
         tvThanhtoan = findViewById(R.id.tvThanhtoan);
         lvKhuyenmai = findViewById(R.id.lvKhuyenmai);
         tvifMaOrder = findViewById(R.id.tvifMaOrder);
@@ -132,6 +164,8 @@ public class Main_Information_Order extends AppCompatActivity {
         new GetData().execute();
         if (item.get(0).getThanhtoan().equals(Keys.TIENMAT)){
             tvThanhtoan.setText(item.get(0).getThanhtoan());
+            btnDuyet.setEnabled(false);
+            btnDuyet.setBackgroundColor(getResources().getColor(R.color.aaaaa));
         } else {
             tvThanhtoan.setText(item.get(0).getThanhtoan()+" - "+item.get(0).getNguoino());
         }
@@ -160,6 +194,238 @@ public class Main_Information_Order extends AppCompatActivity {
         adapter = new Adapter_Info_Order_TD(Main_Information_Order.this, item);
         lvInfoOrder.setAdapter(adapter);
         GetUser(Main_Information_Order.this, item.get(0).getMaNhanvien());
+
+        btnDuyet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(Main_Information_Order.this))
+                    Connect_Internet.buildDialog(Main_Information_Order.this).show();
+                else {
+                    PopupMenu popup = new PopupMenu(Main_Information_Order.this, findViewById(android.R.id.content));
+                    final PopupMenu popmenu = new PopupMenu(Main_Information_Order.this, btnDuyet);
+                    popmenu.getMenuInflater().inflate(R.menu.menu_duyetno, popmenu.getMenu());
+                    insertMenuItemIcons(Main_Information_Order.this, popmenu);
+                    popmenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @SuppressLint("RestrictedApi")
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            if (menuItem.getTitle().toString().trim().equals("Đã thanh toán")) {
+                                updateTT = "Đã thanh toán";
+                                new SendRequest().execute();
+                                tvThanhtoan.setText(updateTT+" - "+item.get(0).getNguoino());
+                            } else if (menuItem.getTitle().toString().trim().equals("Hoàn trả hàng")){
+                                updateTT = "Hoàn trả hàng";
+                                new SendRequest().execute();
+                                tvThanhtoan.setText(updateTT+" - "+item.get(0).getNguoino());
+                            }
+                            return true;
+                        }
+                    });
+                    popmenu.show();
+                }
+            }
+        });
+    }
+
+    public class SendRequest extends AsyncTask<Void, Void, String> {
+
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(Void... arg0) {
+            if(!Connect_Internet.checkConnection(getApplicationContext()))
+                Connect_Internet.buildDialog(Main_Information_Order.this).show();
+            else {
+                int jIndex = 0;
+                UpdateCocWeb();
+                while (jIndex < item.size()){
+                    putData(jIndex);
+                    jIndex++;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Update thành công!!");
+        }
+    }
+
+    public void UpdateCocWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                        } else if (response.trim().equals("success")){
+                            btnDuyet.setEnabled(false);
+                            btnDuyet.setBackgroundColor(getResources().getColor(R.color.aaaaa));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Lỗi "+error);
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.UPDATE_GHI_NO);
+                params.put("thanhtoan", updateTT);
+                params.put("maDonhang", item.get(0).getMaDonhang());
+                Log.e("params", params.toString());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
+    }
+
+    public String putData(final int j){
+        try {
+            // Link Script
+            URL url = new URL(Keys.SCRIPT_UPDATE_NO);
+
+            // Load Json object
+            JSONObject postDataParams = new JSONObject();
+
+            postDataParams.put("salesMadonhang", item.get(0).getMaDonhang());
+            postDataParams.put("salesNgay", item.get(0).getNgay());
+            postDataParams.put("salesCa", item.get(0).getCalam());
+            postDataParams.put("salesGio", item.get(j).getGio());
+            postDataParams.put("salesChinhanh",  item.get(0).getChinhanh());
+            postDataParams.put("SalesTennhanvien", item.get(0).getMaNhanvien());
+            postDataParams.put("salesManhanvien", item.get(0).getTenNhanvien());
+            postDataParams.put("salesMasanpham", item.get(j).getMaSanpham());
+            postDataParams.put("salesTensanpham", item.get(j).getTenSanpham());
+            postDataParams.put("salesBaohanhsanpham", item.get(j).getBaohanhSanpham());
+            postDataParams.put("salesNguonsanpham", item.get(j).getNguonSanpham());
+            postDataParams.put("salesNgaynhap", item.get(j).getNgaynhapSanpham());
+            postDataParams.put("salesVonsanpham", item.get(j).getVonSanpham());
+            postDataParams.put("salesGiasanpham", item.get(j).getGiaSanpham());
+            postDataParams.put("salesGiamgia", item.get(0).getGiamgia());
+            postDataParams.put("salesGhichusanpham", item.get(0).getGhichuSanpham());
+            postDataParams.put("salesTenkhachhang", item.get(0).getTenKhachhang());
+            postDataParams.put("salesSodienthoaikhachhang", item.get(0).getSodienthoaiKhachhang());
+            postDataParams.put("salesGhichukhachhang", item.get(0).getGhichuKhachhang());
+            postDataParams.put("salesTennhanvienbandum", item.get(0).getTenNhanvienbandum());
+            postDataParams.put("salesManhanvienbandum", item.get(0).getMaNhanvienbandum());
+            postDataParams.put("salesThanhtoan", updateTT);
+            postDataParams.put("salesNguoino", item.get(0).getNguoino());
+
+            Log.e("postDataParams", postDataParams.toString());
+
+            // Kết nối HTTP
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+                in.close();
+                return sb.toString();
+            } else {
+                return new String("");
+            }
+        } catch (Exception e) {
+            return new String("");
+        }
+    }
+
+    public static void insertMenuItemIcons(Context context, PopupMenu popupMenu) {
+        Menu menu = popupMenu.getMenu();
+        if (hasIcon(menu)) {
+            for (int i = 0; i < menu.size(); i++) {
+                insertMenuItemIcon(context, menu.getItem(i));
+            }
+        }
+    }
+
+    /**
+     * @return true if the menu has at least one MenuItem with an icon.
+     */
+    private static boolean hasIcon(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getIcon() != null) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Converts the given MenuItem's title into a Spannable containing both its icon and title.
+     */
+    private static void insertMenuItemIcon(Context context, MenuItem menuItem) {
+        Drawable icon = menuItem.getIcon();
+
+        // If there's no icon, we insert a transparent one to keep the title aligned with the items
+        // which do have icons.
+        if (icon == null) icon = new ColorDrawable(Color.TRANSPARENT);
+
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_icon);
+        icon.setBounds(0, 0, iconSize, iconSize);
+        ImageSpan imageSpan = new ImageSpan(icon);
+
+        // Add a space placeholder for the icon, before the title.
+        SpannableStringBuilder ssb = new SpannableStringBuilder("       " + menuItem.getTitle());
+
+        // Replace the space placeholder with the icon.
+        ssb.setSpan(imageSpan, 1, 2, 0);
+        menuItem.setTitle(ssb);
+        // Set the icon to null just in case, on some weird devices, they've customized Android to display
+        // the icon in the menu... we don't want two icons to appear.
+        menuItem.setIcon(null);
     }
 
     private void GetUser(final Context c, final String manhanvien) {

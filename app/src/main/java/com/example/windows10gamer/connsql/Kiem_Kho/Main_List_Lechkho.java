@@ -358,55 +358,54 @@ public class Main_List_Lechkho extends AppCompatActivity {
             } else {
                 new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Không có dữ liệu được tìm thấy");
             }
+            for (int i = 0; i<dem.size(); i++){
+                if (dem.get(i).getNhanvien().equals(snUserA)){
+                    demA.add(dem.get(i));
+                }
+                if (dem.get(i).getNhanvien().equals(snUserB)){
+                    demB.add(dem.get(i));
+                }
+            }
+            final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
+                    all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
+            ga.addAll(demA); gb.addAll(demB);
+            for (int i = 0; i < ga.size(); i++){
+                for (int j = 0; j < gb.size(); j++){
+                    if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
+                        giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
+                    }
+                }
+            }
+
+            all.addAll(ga);all.addAll(gb);
+            for (int i = 0; i < all.size(); i++){
+                int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
+                if (result == -1){
+                    khac.add(all.get(i));
+                }
+            }
+            fullga.addAll(FullList(khac, ga));
+            fullgb.addAll(FullList(khac, gb));
+            fullga2.addAll(iniTen(donhang, fullga));
+            fullgb2.addAll(iniTen(donhang, fullgb));
+            fullgiong.addAll(iniTen(donhang, giong));
+            sortList(fullga2);
+            sortList(fullgb2);
+            init(fullga2, fullgb2);
             dialog.dismiss();
-            setList(dem);
             
         }
     }
 
-    public void setList(ArrayList<CountSanpham> list) {
-        dialog_plus = new ProgressDialog(Main_List_Lechkho.this);
-        dialog_plus.setTitle("Hãy chờ...");
-        dialog_plus.setMessage("Dữ liệu đang được tải xuống");
-        dialog_plus.setCancelable(false);
-        dialog_plus.show();
-        this.dem = list;
-        for (int i = 0; i<dem.size(); i++){
-            if (dem.get(i).getNhanvien().equals(snUserA)){
-                demA.add(dem.get(i));
-            }
-            if (dem.get(i).getNhanvien().equals(snUserB)){
-                demB.add(dem.get(i));
-            }
-        }
-        final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
-                all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
-        ga.addAll(demA); gb.addAll(demB);
-        for (int i = 0; i < ga.size(); i++){
-            for (int j = 0; j < gb.size(); j++){
-                if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
-                    giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
-                }
-            }
-        }
-
-        all.addAll(ga);all.addAll(gb);
-        for (int i = 0; i < all.size(); i++){
-            int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
-            if (result == -1){
-                khac.add(all.get(i));
-            }
-        }
-        fullga.addAll(FullList(khac, ga));
-        fullgb.addAll(FullList(khac, gb));
-        fullga2.addAll(iniTen(donhang, fullga));
-        fullgb2.addAll(iniTen(donhang, fullgb));
-        fullgiong.addAll(iniTen(donhang, giong));
-        sortList(fullga2);
-        sortList(fullgb2);
-        init(fullga2, fullgb2);
-        dialog_plus.dismiss();
-    }
+//    public void setList(ArrayList<CountSanpham> list) {
+//        dialog_plus = new ProgressDialog(Main_List_Lechkho.this);
+//        dialog_plus.setTitle("Hãy chờ...");
+//        dialog_plus.setMessage("Dữ liệu đang được tải xuống");
+//        dialog_plus.setCancelable(false);
+//        dialog_plus.show();
+//        this.dem = list;
+//
+//    }
 
     private int sosanhMA(ArrayList<CountSanpham> dem_h, String masanpham, String nhanvien) {
         int result = -1;

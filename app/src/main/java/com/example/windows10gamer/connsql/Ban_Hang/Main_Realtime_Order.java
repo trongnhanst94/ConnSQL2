@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -95,12 +97,16 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
     private String daynow;
     EditText edrealtime;
     private int totalgia = 0;
+    CheckBox rbsang, rbchieu;
+    String caRealtime = "all";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_realtime_order);
         btnSearchOrder = findViewById(R.id.btnDateOrder);
+        rbsang = findViewById(R.id.rbsang);
+        rbchieu = findViewById(R.id.rbchieu);
         btnBieudo = findViewById(R.id.btnBieudo);
         tvnhanvien = findViewById(R.id.tvnhanvien);
         btnDanhsach = findViewById(R.id.btnDanhsach);
@@ -127,6 +133,13 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
         daynow = Keys.getDateNow();
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
+        if (Keys.getCalam(chinhanh).equals(Keys.CA_SANG)){
+            rbsang.setChecked(true);
+            caRealtime = Keys.CA_SANG;
+        } else {
+            rbchieu.setChecked(true);
+            caRealtime = Keys.CA_CHIEU;
+        }
         edrealtime.setInputType(InputType.TYPE_NULL);
         edrealtime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +158,45 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                     }
                 },year, month, day);
                 datePickerDialog.show();
+            }
+        });
+        rbsang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    if (rbchieu.isChecked()){
+                        caRealtime = "all";
+                    } else {
+                        caRealtime = Keys.CA_SANG;
+                    }
+                } else {
+                    if (rbchieu.isChecked()){
+                        caRealtime = Keys.CA_CHIEU;
+                    } else {
+                        caRealtime = Keys.CA_CHIEU;
+                        rbchieu.setChecked(true);
+                    }
+                }
+            }
+        });
+
+        rbchieu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    if (rbsang.isChecked()){
+                        caRealtime = "all";
+                    } else {
+                        caRealtime = Keys.CA_CHIEU;
+                    }
+                } else {
+                    if (rbsang.isChecked()){
+                        caRealtime = Keys.CA_SANG;
+                    } else {
+                        caRealtime = Keys.CA_SANG;
+                        rbsang.setChecked(true);
+                    }
+                }
             }
         });
         btnrealtime.setOnClickListener(new View.OnClickListener() {
@@ -235,10 +287,19 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
         });
     }
 
+    private void sortPrice(ArrayList<Order> list) {
+        Collections.sort(list, new Comparator<Order>() {
+            @Override
+            public int compare(Order lhs, Order rhs) {
+                return Integer.signum(Integer.valueOf(rhs.getGiaSanpham()) - Integer.valueOf(lhs.getGiaSanpham()));
+            }
+        });
+    }
+
     public void LoadJson(String ngay) {
         if (Connect_Internet.checkConnection(getApplicationContext())) {
             APIService_Sales api = RetrofitClient.getApiService();
-            Call<OrderList> call = api.getDoanhthu(chinhanh, ngay, "all");
+            Call<OrderList> call = api.getDoanhthu(chinhanh, ngay, caRealtime);
             call.enqueue(new Callback<OrderList>() {
                 @Override
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
@@ -297,7 +358,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                                 lvtop5.setAdapter(adapter_top5);
                                 ArrayList<Order> settop = new ArrayList<>();
                                 settop.addAll(temp_plus);
-                                Collections.sort(settop);
+                                sortPrice(settop);
                                 if (settop.size() > 9){
                                     for (int i = 0; i < 9; i++) {
                                         top5.add(new Top5(i+1+"", settop.get(i).getMaDonhang(), settop.get(i).getTenSanpham(), settop.get(i).getTenNhanvien(), settop.get(i).getGiaSanpham()));

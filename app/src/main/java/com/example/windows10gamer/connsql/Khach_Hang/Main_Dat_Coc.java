@@ -59,6 +59,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
     ArrayList<Datcoc> tatca;
     ArrayList<Datcoc> tatca_plus = new ArrayList<>();
     private String ghichu = "";
+    String maMa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                         tenKH = edcoctenkhachhang.getText().toString().trim();
                         sotien = edcocsotien.getText().toString().trim();
                         ghichu = edcocghichu.getText().toString().trim();
+                        maMa = Keys.MaDonhang();
                         if (sdtKH.equals("") && tenKH.equals("") && sotien.equals("") && sotien.equals("0")){
                             new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
                         } else {
@@ -347,7 +349,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_DATCOC_WEB);
-                params.put("maDC", "COC_"+ Keys.MaDonhang());
+                params.put("maDC", "COC_"+ maMa);
                 params.put("ngay", ngay);
                 params.put("ca", ca);
                 params.put("chinhanh", chinhanh);

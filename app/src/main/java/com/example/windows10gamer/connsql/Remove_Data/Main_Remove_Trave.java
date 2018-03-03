@@ -59,7 +59,7 @@ public class Main_Remove_Trave extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_remove_cod);
+        setContentView(R.layout.activity_main_remove_trave);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         edRMngay = findViewById(R.id.edRmngay);

@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -51,13 +51,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp">
+                android:paddingRight="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:paddingBottom="3dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="3dp"
@@ -234,6 +234,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
                     android:text="Khách hàng:"
                     android:textSize="@dimen/muoi" />
 
@@ -303,8 +304,10 @@
                     android:id="@+id/tvifGhichuKH"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
                     android:background="@color/white"
-                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:paddingTop="5dp"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
@@ -314,8 +317,7 @@
                     android:layout_height="1dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginRight="5dp" />
 
                 <TextView
                     android:id="@+id/tvifGhichuOrder"
@@ -384,13 +386,12 @@
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                android:paddingTop="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -398,9 +399,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Tổng tiền:"
-                        android:textStyle="italic"
                         android:textColor="@color/cam"
-                        android:textSize="@dimen/bon" />
+                        android:textSize="@dimen/bon"
+                        android:textStyle="italic" />
 
                     <TextView
                         android:id="@+id/tvifTotalOrder"
@@ -435,9 +436,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Giảm giá:"
-                        android:textStyle="italic"
                         android:textColor="@color/cam"
-                        android:textSize="@dimen/bon" />
+                        android:textSize="@dimen/bon"
+                        android:textStyle="italic" />
 
                     <TextView
                         android:id="@+id/tvifgiamgia"
@@ -447,40 +448,6 @@
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="@dimen/hai"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="11dp"
-                android:orientation="vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textSize="@dimen/bon" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:background="@color/cam"
-                        android:text="120000đ"
-                        android:textAlignment="textEnd"
-                        android:textColor="@android:color/holo_red_light"
-                        android:textSize="@dimen/bon"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -505,16 +472,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Tổng tiền sau giảm giá:"
-                        android:textStyle="italic"
                         android:textColor="@color/cam"
-                        android:textSize="@dimen/bon" />
+                        android:textSize="@dimen/bon"
+                        android:textStyle="italic" />
 
                     <TextView
                         android:id="@+id/tvifsaugiamgia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="120000đ"
+                        android:text=""
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="@dimen/bon"
@@ -525,18 +492,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:weightSum="10"
-                android:layout_height="wrap_content">
+                android:weightSum="10">
+
                 <TextView
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:text="Thanh toán:"
                     android:textColor="@color/cam"
-                    android:textStyle="italic"
                     android:textSize="@dimen/bon"
-                    android:layout_height="wrap_content" />
+                    android:textStyle="italic" />
 
                 <TextView
                     android:id="@+id/tvThanhtoan"
@@ -544,10 +512,60 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/den"
+                    android:textColor="@color/cam"
                     android:textSize="@dimen/bon"
                     android:textStyle="bold|italic" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnHiddenInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Duyệt nợ:"
+                    android:textColor="@color/cam"
+                    android:textSize="@dimen/bon"
+                    android:textStyle="italic" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right">
+
+                    <Button
+                        android:id="@+id/btnDuyet"
+                        android:layout_width="65dp"
+                        android:layout_height="31dp"
+                        android:layout_below="@+id/tv_blog_url"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="0dp"
+                        android:background="@android:color/holo_orange_light"
+                        android:drawableLeft="@drawable/ic_repeat"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:text="Lựa chọn"
+                        android:textColor="#fff"
+                        android:textSize="@dimen/btn" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <com.baoyz.swipemenulistview.SwipeMenuListView

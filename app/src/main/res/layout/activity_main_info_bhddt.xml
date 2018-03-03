@@ -8,12 +8,12 @@
     tools:context="com.example.windows10gamer.connsql.Bao_Hanh.Main_Info_BHDDT">
 
     <TextView
-        android:id="@+id/tvmaBHDDT"
+        android:id="@+id/tvmaBHDLK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cam"
         android:padding="10dp"
-        android:text="Bảo hành - 1 Đổi 1"
+        android:text="Bảo hành - Đổi dùng thử"
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="@dimen/tie" />
@@ -31,9 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,7 +59,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvd1Datetoday"
+                            android:id="@+id/tvDlkDatetoday"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -84,7 +82,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvd1Timetoday"
+                            android:id="@+id/tvDlkTimetoday"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -150,7 +148,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvd1MaNVNhan"
+                                        android:id="@+id/tvDlkMaNVNhan"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="#000"
@@ -166,7 +164,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvd1TenNVNhan"
+                                        android:id="@+id/tvDlkTenNVNhan"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -195,7 +193,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tvChinhanhDDT"
+                                    android:id="@+id/tvChinhanhDLK"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:paddingBottom="5dp"
@@ -219,7 +217,7 @@
                     android:background="@color/cam" />
 
                 <TextView
-                    android:id="@+id/tvd1MaOrder"
+                    android:id="@+id/tvDlkMaOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -227,7 +225,6 @@
                     android:textAllCaps="true"
                     android:textColor="@color/cam"
                     android:textSize="@dimen/hai" />
-
 
 
                 <LinearLayout
@@ -256,7 +253,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvd1Date"
+                            android:id="@+id/tvDlkDate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -279,7 +276,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvd1Time"
+                            android:id="@+id/tvDlkTime"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -346,7 +343,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvd1MaNV"
+                                        android:id="@+id/tvDlkMaNV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="#000"
@@ -362,7 +359,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvd1TenNV"
+                                        android:id="@+id/tvDlkTenNV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -391,7 +388,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tvChinhanhDDTOrder"
+                                    android:id="@+id/tvChinhanhDLKOrder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:paddingBottom="5dp"
@@ -455,7 +452,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvd1TenKH"
+                                android:id="@+id/tvDlkTenKH"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="#000"
@@ -470,7 +467,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvd1SdtKH"
+                                android:id="@+id/tvDlkSdtKH"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -483,13 +480,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvd1GhichuKH"
+                    android:id="@+id/tvDlkGhichuKH"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@color/white"
                     android:padding="5dp"
                     android:paddingTop="5dp"
-                    android:text="k có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
@@ -502,39 +498,86 @@
                     android:layout_marginTop="10dp" />
 
                 <TextView
-                    android:id="@+id/tvd1Ghichu"
+                    android:id="@+id/tvDlkGhichu"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/white"
                     android:padding="5dp"
-                    android:text="không có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
+
                 <ListView
-                    android:id="@+id/lvBHD1"
+                    android:id="@+id/lvBHDLK"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/list_border">
-
-
-                </ListView>
+                    android:background="@drawable/list_border"></ListView>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="Sản phẩm đổi Bảo hành:"
                     android:textColor="@color/cam"
                     android:textSize="@dimen/muoi" />
 
-                <ListView
-                    android:id="@+id/lvBHDDT_moi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/list_border" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/list_border"
+                    android:orientation="vertical">
+
+                    <com.example.windows10gamer.connsql.Other.Mylistview
+                        android:id="@+id/lvBHDLK_moi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tổng giá trị đơn hàng:"
+                            android:textColor="@color/cam"
+                            android:textSize="@dimen/hai" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTongdonhang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="textEnd"
+                            android:textColor="#fa0a0a"
+                            android:textSize="@dimen/tam" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -590,7 +633,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvlydoBHD1"
+                    android:id="@+id/tvlydoBHDLK"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -599,9 +642,8 @@
                     android:padding="5dp"
                     android:textSize="@dimen/sau"
                     android:textStyle="italic" />
+
             </LinearLayout>
-
-
         </LinearLayout>
     </ScrollView>
 

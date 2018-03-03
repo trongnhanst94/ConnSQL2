@@ -156,7 +156,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private String img;
     private String linkAvatar;
     private ArrayList<Version> listVersion = new ArrayList<>();
-    private String nowVersion, getVersion = "";
+    private String NOW_VERSION, getVersion = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         mkhau = shared.getString("mk", "");
         level = shared.getString("level", "");
         img = shared.getString("img", "");
-        nowVersion = shared.getString("version", "");
+        NOW_VERSION = shared.getString("version", "");
         navigationView = findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
         TextView tvshortName = headerView.findViewById(R.id.shortName);
@@ -1178,7 +1178,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void setVerrr(String getVersion) {
-        if (!getVersion.equals(Keys.nowVersion)){
+        if (!getVersion.equals(Keys.NOW_VERSION)){
             AlertDialog.Builder builder = null;
             if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
                 builder = new AlertDialog.Builder(Main.this);

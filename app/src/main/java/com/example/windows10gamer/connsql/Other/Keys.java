@@ -86,9 +86,7 @@ public class Keys {
     public static final String DELE_MAGIAMGIA_WEB  = "DELE_MAGIAMGIA_WEB";
     public static final String DELE_XEM_WEB        = "DELE_XEM_WEB";
     public static final int GIOHETCANVL            = 15;
-    public static final int GIOHETCASOL            = 16;
-    public static final String TENCASANG           = "Ca sáng";
-    public static final String TENCACHIEU          = "Ca chiều";
+    public static final int GIOHETCASOL            = 15;
     public static final long LOAD_REALTIME         = 10000;
     public static final String SCRIPT_BH_CXL       = "https://script.google.com/macros/s/AKfycbwKVYH32Z627O3X1_06anwMsJUXOTsYaLvyQ39TrPFa-tARDw4R/exec";
     public static final String ADD_BHCXL_WEB       = "ADD_BHCXL_WEB";
@@ -105,10 +103,10 @@ public class Keys {
     public static final String MAIN_XUATNHAP       = "http://dealtichtac.com/android/danhsach_xuatnhap.php";
     public static final String XUATNHAP            = "XUATNHAP";
     public static final String UPDATE_XUATHANG_WEB = "UPDATE_XUATHANG_WEB";
-    public static final int MAX_LENGHT             = 16;
+    public static final int MAX_LENGHT             = 22;
     public static final String LINK_WEB_V2         = "http://dealtichtac.com/android/addV2.php";
     public static final String SCRIPT_KHOANCHI     = "https://script.google.com/macros/s/AKfycbwqiwY-EcnnA0qvMowimdWaQJL2dmKllqpuXC5cIjTcCJ1W5v0/exec";
-    public static final String SCRIPT_TIENTRAVE    = "https://script.google.com/macros/s/AKfycbwYqQW-QAhxmtFK36a7zz5bdFslTts7RavaIxG7WUN3LymLzaB5/exec";
+    public static final String SCRIPT_TIENTRAVE    = "https://script.google.com/macros/s/AKfycbxMNVxNxxQegcOq04zRuAqKwSqRls0i_cGZ3ckSMy7vEjUwIw0/exec";
     public static final String KHOANCHI            = "KHOANCHI";
     public static final String ADD_KHOANCHI_WEB    = "ADD_KHOANCHI_WEB";
     public static final String MAIN_KHOANCHI       = "http://dealtichtac.com/android/danhsach_khoanchi.php";
@@ -155,7 +153,7 @@ public class Keys {
     public static final String LINK_AVATAR         = "http://dealtichtac.com/android/avatar/";
     public static final String MAIN_VERSION        = "http://dealtichtac.com/android/danhsach_version.php";
     public static final String VERSION             = "VERSION";
-    public static final String nowVersion          = "Version 6.5";
+    public static final String NOW_VERSION          = "Version 6.7";
     public static final String MAIN_LINKAVATAR     = "http://dealtichtac.com/android/linkavatar.php";
     public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
     public static final String FIREBASE_TOKEN      = "/topics/all";
@@ -164,12 +162,17 @@ public class Keys {
     public static final String TIEN_TRA_VE         = "TIEN_TRA_VE";
     public static final String MAIN_TIENTRAVE      = "http://dealtichtac.com/android/danhsach_tientrave.php";
     public static final String ADD_COD_WEB         = "ADD_COD_WEB";
-    public static final String SCRIPT_PHICOD       = "";
+    public static final String SCRIPT_PHICOD       = "https://script.google.com/macros/s/AKfycbwYqQW-QAhxmtFK36a7zz5bdFslTts7RavaIxG7WUN3LymLzaB5/exec";
     public static final String MAIN_PHICOD         = "http://dealtichtac.com/android/danhsach_phicod.php";
     public static final String PHI_COD             = "PHI_COD";
+    public static final String GHINO               = "Ghi nợ";
     public static final String TIENMAT             = "Tiền mặt";
     public static final String DELE_COD_WEB        = "DELE_COD_WEB";
     public static final String DELE_TIENTRAVE_WEB  = "DELE_TIENTRAVE_WEB";
+    public static final String UPDATE_GHI_NO       = "UPDATE_GHI_NO";
+    public static final String SCRIPT_UPDATE_NO    = "https://script.google.com/macros/s/AKfycbwteCZh8rNyU2-6Hi2dmFSKDkhlXWrZCe97rxoySgNA-diJyeNq/exec";
+    public static final String CA_SANG             = "Ca sáng";
+    public static final String CA_CHIEU            = "Ca chiều";
 
 
     public static final String setMoney(int amount){
@@ -251,32 +254,32 @@ public class Keys {
         if (chinhanh.equals(CN_SOL)){
             gio = GIOHETCASOL;
             if (hours < gio){
-                cas = "Ca sáng";
+                cas = CA_SANG;
             } else {
-                cas = "Ca chiều";
+                cas = CA_CHIEU;
             }
         } else if (chinhanh.equals(CN_NVL)){
             if (hours < 14){
-                cas = "Ca sáng";
+                cas = CA_SANG;
             } else if (hours >= 15){
-                cas = "Ca chiều";
+                cas = CA_CHIEU;
             } else {
                 if (phut < 31){
-                    cas = "Ca sáng";
+                    cas = CA_SANG;
                 } else {
-                    cas = "Ca chiều";
+                    cas = CA_CHIEU;
                 }
             }
         } else if (chinhanh.equals("Chi nhánh Demo")){
             if (hours < 14){
-                cas = "Ca sáng";
+                cas = CA_SANG;
             } else if (hours >= 15){
-                cas = "Ca chiều";
+                cas = CA_CHIEU;
             } else {
                 if (phut < 31){
-                    cas = "Ca sáng";
+                    cas = CA_SANG;
                 } else {
-                    cas = "Ca chiều";
+                    cas = CA_CHIEU;
                 }
             }
         }

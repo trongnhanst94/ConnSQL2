@@ -140,9 +140,9 @@ public class Main_Order extends AppCompatActivity {
                 else {
                     dateBegin = String.valueOf(edBenginOrder.getText());
                     dateEnd = String.valueOf(edEndOrder.getText());
-                    if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                    if (cbCasang.isChecked()) dateCasang = Keys.CA_SANG;
                     else dateCasang = "FALSE";
-                    if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                    if (cbCachieu.isChecked()) dateCachieu = Keys.CA_CHIEU;
                     else dateCachieu = "FALSE";
                     LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu, v);
                 }
@@ -158,9 +158,9 @@ public class Main_Order extends AppCompatActivity {
                     if (contactList.size() > 0){
                         dateBegin = String.valueOf(edBenginOrder.getText());
                         dateEnd = String.valueOf(edEndOrder.getText());
-                        if (cbCasang.isChecked()) dateCasang = "Ca sáng";
+                        if (cbCasang.isChecked()) dateCasang = Keys.CA_SANG;
                         else dateCasang = "FALSE";
-                        if (cbCachieu.isChecked()) dateCachieu = "Ca chiều";
+                        if (cbCachieu.isChecked()) dateCachieu = Keys.CA_CHIEU;
                         else dateCachieu = "FALSE";
                         Intent intent = new Intent(Main_Order.this, Main_Report_Sales.class);
                         Bundle bundle = new Bundle();

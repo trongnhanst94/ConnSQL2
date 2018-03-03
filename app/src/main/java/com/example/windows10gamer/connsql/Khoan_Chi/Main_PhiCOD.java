@@ -38,6 +38,7 @@ import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
+import com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +69,7 @@ public class Main_PhiCOD extends AppCompatActivity {
     ProgressDialog dialog2;
     Adapter_PhiCOD adapter;
     ArrayList<PhiCOD> arraylist;
+    private String maMa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,50 +99,53 @@ public class Main_PhiCOD extends AppCompatActivity {
         btnthemcod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = null;
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_PhiCOD.this);
-                } else {
-                    dialog = new AlertDialog.Builder(Main_PhiCOD.this);
-                }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu chi");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_cod, null);
-                dialog.setCancelable(false);
-                final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
-                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
-                shared = getSharedPreferences("login", MODE_PRIVATE);
-                Glide.with(Main_PhiCOD.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+session_ma);
-                tvchitennv.setText("Tên nhân viên: "+session_username);
-                dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        noidung = edchinoidung.getText().toString().trim();
-                        sotien = edchisotien.getText().toString().trim();
-                        if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
-                            new SendRequest().execute();
-                            putData();
-                            new GetData().execute(chinhanh);
-                        } else {
-                            new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                if(!Connect_Internet.checkConnection(Main_PhiCOD.this))
+                    Connect_Internet.buildDialog(Main_PhiCOD.this).show();
+                else {
+                    AlertDialog.Builder dialog = null;
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        dialog = new AlertDialog.Builder(Main_PhiCOD.this);
+                    } else {
+                        dialog = new AlertDialog.Builder(Main_PhiCOD.this);
+                    }
+                    dialog.setIcon(R.drawable.ic_addchi)
+                            .setTitle("Tạo phiếu chi");
+                    View mView = getLayoutInflater().inflate(R.layout.dialog_cod, null);
+                    dialog.setCancelable(false);
+                    final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
+                    final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                    final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                    final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                    final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                    final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                    shared = getSharedPreferences("login", MODE_PRIVATE);
+                    Glide.with(Main_PhiCOD.this).load(shared.getString("img", "")).override(300, 300).fitCenter().into(ivAvatar);
+                    tvchichinhanh.setText(chinhanh);
+                    tvchimanv.setText("Mã số: " + session_ma);
+                    tvchitennv.setText("Tên nhân viên: " + session_username);
+                    dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            noidung = edchinoidung.getText().toString().trim();
+                            sotien = edchisotien.getText().toString().trim();
+                            maMa = Keys.MaDonhang();
+                            if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")) {
+                                new SendRequest().execute();
+                            } else {
+                                new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                            }
                         }
-                    }
-                });
-                dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(mView);
-                AlertDialog al = dialog.create();
-                al.show();
+                    });
+                    dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.setView(mView);
+                    AlertDialog al = dialog.create();
+                    al.show();
+                }
             }
         });
     }
@@ -233,6 +238,7 @@ public class Main_PhiCOD extends AppCompatActivity {
             if(!Connect_Internet.checkConnection(getApplicationContext()))
                 Connect_Internet.buildDialog(Main_PhiCOD.this).show();
             else {
+                putData();
                 addCodWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
             }
             return null;
@@ -277,7 +283,7 @@ public class Main_PhiCOD extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_COD_WEB);
-                params.put("maCOD", "COD_"+ Keys.MaDonhang());
+                params.put("maCOD", "COD_"+ maMa);
                 params.put("ngay", ngay);
                 params.put("ca", ca);
                 params.put("chinhanh", chinhanh);
@@ -324,7 +330,7 @@ public class Main_PhiCOD extends AppCompatActivity {
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("maCOD", "COD_"+ Keys.MaDonhang());
+            postDataParams.put("maCOD", "COD_"+ maMa);
             postDataParams.put("ngay", ngay);
             postDataParams.put("ca", ca);
             postDataParams.put("chinhanh", chinhanh);
@@ -378,7 +384,7 @@ public class Main_PhiCOD extends AppCompatActivity {
 //
 //            // Load Json object
 //            JSONObject postDataParams = new JSONObject();
-//            postDataParams.put("maCOD", "COD_"+ Keys.MaDonhang());
+//            postDataParams.put("maCOD", "COD_"+ maMa);
 //            postDataParams.put("ngay", ngay);
 //            postDataParams.put("ca", ca);
 //            postDataParams.put("chinhanh", chinhanh);

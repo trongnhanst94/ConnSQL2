@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -65,10 +64,10 @@ public class Main_TienTraVe extends AppCompatActivity {
     ListView lvtientrave;
     String session_username, session_ma, chinhanh, ngay, ca, noidung, sotien;
     SharedPreferences shared;
-    private ProgressDialog dialog2;
+    ProgressDialog dialog;
     Adapter_Tientrave adapter;
     ArrayList<TienTraVe> arraylist;
-
+    private String maMa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,50 +96,53 @@ public class Main_TienTraVe extends AppCompatActivity {
         btnthemtientrave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = null;
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_TienTraVe.this);
-                } else {
-                    dialog = new AlertDialog.Builder(Main_TienTraVe.this);
-                }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu tiền trả về");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_tientrave, null);
-                dialog.setCancelable(false);
-                final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
-                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
-                shared = getSharedPreferences("login", MODE_PRIVATE);
-                Glide.with(Main_TienTraVe.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+session_ma);
-                tvchitennv.setText("Tên nhân viên: "+session_username);
-                dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        noidung = edchinoidung.getText().toString().trim();
-                        sotien = edchisotien.getText().toString().trim();
-                        if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
-                            new SendRequest().execute();
-                            putData();
-                            new GetData().execute(chinhanh);
-                        } else {
-                            new CustomToast().Show_Toast(Main_TienTraVe.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                if(!Connect_Internet.checkConnection(Main_TienTraVe.this))
+                    Connect_Internet.buildDialog(Main_TienTraVe.this).show();
+                else {
+                    AlertDialog.Builder dialog = null;
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        dialog = new AlertDialog.Builder(Main_TienTraVe.this);
+                    } else {
+                        dialog = new AlertDialog.Builder(Main_TienTraVe.this);
+                    }
+                    dialog.setIcon(R.drawable.ic_addchi)
+                            .setTitle("Tạo phiếu tiền trả về");
+                    View mView = getLayoutInflater().inflate(R.layout.dialog_tientrave, null);
+                    dialog.setCancelable(false);
+                    final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
+                    final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                    final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                    final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                    final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                    final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                    shared = getSharedPreferences("login", MODE_PRIVATE);
+                    Glide.with(Main_TienTraVe.this).load(shared.getString("img", "")).override(300, 300).fitCenter().into(ivAvatar);
+                    tvchichinhanh.setText(chinhanh);
+                    tvchimanv.setText("Mã số: " + session_ma);
+                    tvchitennv.setText("Tên nhân viên: " + session_username);
+                    dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            noidung = edchinoidung.getText().toString().trim();
+                            sotien = edchisotien.getText().toString().trim();
+                            maMa = Keys.MaDonhang();
+                            if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")) {
+                                new SendRequest().execute();
+                            } else {
+                                new CustomToast().Show_Toast(Main_TienTraVe.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                            }
                         }
-                    }
-                });
-                dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(mView);
-                AlertDialog al = dialog.create();
-                al.show();
+                    });
+                    dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.setView(mView);
+                    AlertDialog al = dialog.create();
+                    al.show();
+                }
             }
         });
     }
@@ -233,6 +235,7 @@ public class Main_TienTraVe extends AppCompatActivity {
             if(!Connect_Internet.checkConnection(getApplicationContext()))
                 Connect_Internet.buildDialog(Main_TienTraVe.this).show();
             else {
+                putData();
                 addTientraveWeb(ngay, ca, chinhanh, session_ma, session_username, noidung, sotien);
             }
             return null;
@@ -241,6 +244,7 @@ public class Main_TienTraVe extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            ResetActivity();
         }
     }
 
@@ -277,7 +281,7 @@ public class Main_TienTraVe extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_TIENTRAVE_WEB);
-                params.put("maTV", "TV_"+ Keys.MaDonhang());
+                params.put("maTV", "TV_"+ maMa);
                 params.put("ngay", ngay);
                 params.put("ca", ca);
                 params.put("chinhanh", chinhanh);
@@ -314,18 +318,14 @@ public class Main_TienTraVe extends AppCompatActivity {
             result.append(URLEncoder.encode(value.toString(), "UTF-8"));
 
         }
-        Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
         return result.toString();
     }
 
     public String putData(){
         try {
-            // Link Script
             URL url = new URL(Keys.SCRIPT_TIENTRAVE);
-
-            // Load Json object
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("maTV", "TV_"+ Keys.MaDonhang());
+            postDataParams.put("maTV", "TV_"+ maMa);
             postDataParams.put("ngay", ngay);
             postDataParams.put("ca", ca);
             postDataParams.put("chinhanh", chinhanh);
@@ -334,8 +334,7 @@ public class Main_TienTraVe extends AppCompatActivity {
             postDataParams.put("noidung", noidung);
             postDataParams.put("sotien", sotien);
 
-            Log.e("postDataParams", postDataParams.toString());
-
+            // Kết nối HTTP
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -380,11 +379,11 @@ public class Main_TienTraVe extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog2 = new ProgressDialog(Main_TienTraVe.this);
-            dialog2.setTitle("Hãy chờ...");
-            dialog2.setMessage("Dữ liệu đang được tải xuống");
-            dialog2.setCancelable(false);
-            dialog2.show();
+            dialog = new ProgressDialog(Main_TienTraVe.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
         }
 
         @Nullable
@@ -432,7 +431,7 @@ public class Main_TienTraVe extends AppCompatActivity {
             } else {
                 new CustomToast().Show_Toast(Main_TienTraVe.this, findViewById(android.R.id.content), "Không có phiếu trả về nào!!");
             }
-            dialog2.dismiss();
+            dialog.dismiss();
         }
     }
 }

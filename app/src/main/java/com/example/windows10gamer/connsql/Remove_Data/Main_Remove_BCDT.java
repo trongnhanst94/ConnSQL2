@@ -150,7 +150,7 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
         @Nullable
         @Override
         protected Void doInBackground(String... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_DOANHTHU+"?dateBegin="+ngay+"&dateEnd="+ngay+"&dateCasang=Ca sáng&dateCachieu=Ca chiều");
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_DOANHTHU+"?dateBegin="+ngay+"&dateEnd="+ngay+"&dateCasang="+Keys.CA_SANG+"&dateCachieu="+Keys.CA_CHIEU);
             try {
                 if (jsonObject != null) {
                     contactList.clear();

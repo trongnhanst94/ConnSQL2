@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvddtDatetoday"
+                            android:id="@+id/tvDlkDatetoday"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -83,7 +83,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvddtTimetoday"
+                            android:id="@+id/tvDlkTimetoday"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -149,7 +149,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvddtMaNVNhan"
+                                        android:id="@+id/tvDlkMaNVNhan"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="#000"
@@ -165,7 +165,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvddtTenNVNhan"
+                                        android:id="@+id/tvDlkTenNVNhan"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -194,7 +194,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tvChinhanh1D1"
+                                    android:id="@+id/tvChinhanhDLK"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:paddingBottom="5dp"
@@ -218,7 +218,7 @@
                     android:background="@color/cam" />
 
                 <TextView
-                    android:id="@+id/tvddtMaOrder"
+                    android:id="@+id/tvDlkMaOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -226,6 +226,7 @@
                     android:textAllCaps="true"
                     android:textColor="@color/cam"
                     android:textSize="@dimen/hai" />
+
 
 
                 <LinearLayout
@@ -254,7 +255,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvddtDate"
+                            android:id="@+id/tvDlkDate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -277,7 +278,7 @@
                             android:textSize="@dimen/muoi" />
 
                         <TextView
-                            android:id="@+id/tvddtTime"
+                            android:id="@+id/tvDlkTime"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -344,7 +345,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvddtMaNV"
+                                        android:id="@+id/tvDlkMaNV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textColor="#000"
@@ -360,7 +361,7 @@
                                     android:paddingLeft="10dp">
 
                                     <TextView
-                                        android:id="@+id/tvddtTenNV"
+                                        android:id="@+id/tvDlkTenNV"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -389,7 +390,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/tvChinhanh1D1Order"
+                                    android:id="@+id/tvChinhanhDLKOrder"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:paddingBottom="5dp"
@@ -454,7 +455,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvddtTenKH"
+                                android:id="@+id/tvDlkTenKH"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="#000"
@@ -469,7 +470,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/tvddtSdtKH"
+                                android:id="@+id/tvDlkSdtKH"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -482,13 +483,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvddtGhichuKH"
+                    android:id="@+id/tvDlkGhichuKH"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@color/white"
                     android:padding="5dp"
                     android:paddingTop="5dp"
-                    android:text="k có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
@@ -501,22 +501,28 @@
                     android:layout_marginTop="10dp" />
 
                 <TextView
-                    android:id="@+id/tvddtGhichu"
+                    android:id="@+id/tvDlkGhichu"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="5dp"
                     android:background="@color/white"
                     android:padding="5dp"
-                    android:text="không có"
                     android:textSize="@dimen/hai"
                     android:textStyle="italic" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/cam" />
+
 
                 <ListView
-                    android:id="@+id/lvBHD1"
+                    android:id="@+id/lvBHDLK"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/list_border"></ListView>
+                    android:background="@drawable/list_border" />
 
 
                 <LinearLayout
@@ -551,7 +557,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btn_ddt_scan_now"
+                            android:id="@+id/btn_scan_now"
                             android:layout_width="65dp"
                             android:layout_height="30dp"
                             android:layout_below="@+id/tv_blog_url"
@@ -560,6 +566,7 @@
                             android:background="@android:color/holo_orange_light"
                             android:drawableLeft="@drawable/ic_search_black_24dp"
                             android:gravity="center_vertical"
+                            android:onClick="scanSanpham"
                             android:padding="5dp"
                             android:text="Scan"
                             android:textColor="#fff"
@@ -568,12 +575,63 @@
 
                 </LinearLayout>
 
-                <ListView
-                    android:id="@+id/lvBH1D1_moi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/list_border" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/list_border"
+                    android:orientation="vertical">
 
+                    <com.example.windows10gamer.connsql.Other.Mylistview
+                        android:id="@+id/lvBHDLK_moi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tổng giá trị đơn hàng:"
+                            android:textColor="@color/cam"
+                            android:textSize="@dimen/hai" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvTongdonhang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 đ"
+                            android:textAlignment="textEnd"
+                            android:textColor="#fa0a0a"
+                            android:textSize="@dimen/tam" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -630,6 +688,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal"
                     android:weightSum="10">
 
@@ -641,11 +701,9 @@
                         android:textSize="@dimen/muoi" />
 
                     <EditText
-                        android:id="@+id/edlydoBHD1"
+                        android:id="@+id/edlydoBHDLK"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
                         android:layout_weight="7"
                         android:background="@drawable/bg_edittext"
                         android:inputType="text"
@@ -678,7 +736,7 @@
                         android:layout_weight="1" />
 
                     <Button
-                        android:id="@+id/btnBHD1"
+                        android:id="@+id/btnBHDLK"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -62,7 +62,6 @@ import java.util.StringTokenizer;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Main_Doilaykhac extends AppCompatActivity {
-
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
             dateToday, timeToday, tenKH, sdtKH, ghichuOrder, chinhanhOrder, ghichuKH, lydo,ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi;
     ArrayList<Sanpham_gio> sanpham = new ArrayList<>();
@@ -484,6 +483,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_BHDLK_WEB);
+                params.put("id", maBH+array_moi.get(j).getGio());
                 params.put("maBH", maBH);
                 params.put("dateToday", dateToday);
                 params.put("timeToday", timeToday);
