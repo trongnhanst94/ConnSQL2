@@ -7,11 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -152,15 +155,33 @@ public class Main_Choxuly extends AppCompatActivity {
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Choxuly.this, android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        calendar.set(year, month, dayOfMonth);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                        edthoigianhen.setText(simpleDateFormat.format(calendar.getTime()));
+                if (Build.VERSION.SDK_INT == 24) {
+                    final Context contextThemeWrapper =
+                            new ContextThemeWrapper(Main_Choxuly.this, android.R.style.Theme_Holo_Light_Dialog);
+                    try {
+                        DatePickerDialog datePickerDialog = new Keys.FixedHoloDatePickerDialog(contextThemeWrapper, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                calendar.set(year, month, dayOfMonth);
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                edthoigianhen.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }, year, month, day);
+                        datePickerDialog.show();
+                    } catch ( Fragment.InstantiationException e) {
+                        e.printStackTrace();
                     }
-                },year, month, day);
-                datePickerDialog.show();
+                } else {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Choxuly.this, android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            calendar.set(year, month, dayOfMonth);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            edthoigianhen.setText(simpleDateFormat.format(calendar.getTime()));
+                        }
+                    }, year, month, day);
+                    datePickerDialog.show();
+                }
             }
         });
 

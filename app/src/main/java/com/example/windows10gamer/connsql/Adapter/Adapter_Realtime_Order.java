@@ -50,7 +50,6 @@ public class Adapter_Realtime_Order extends ArrayAdapter<Order> {
 
         Order item = getItem(position);
         vh.tvstt.setText(Keys.sothutu(position+1));
-        vh.tvstt.setTextColor(context.getResources().getColor(R.color.holo_xanh));
         vh.tvRLgio.setText(item.getGio());
         vh.tvRLten.setText(Keys.trimText(item.getTenSanpham(), 25));
         vh.tvRLnhanvien.setText(item.getTenNhanvien());

@@ -131,7 +131,7 @@
                                     android:drawableStart="@drawable/ic_doanhthue"
                                     android:gravity="center_vertical"
                                     android:text="Ca làm việc"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 
@@ -164,7 +164,7 @@
                                     android:drawableStart="@drawable/ic_trensp"
                                     android:gravity="center_vertical"
                                     android:text="Tháng làm việc"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 
@@ -196,7 +196,7 @@
                                     android:drawableStart="@drawable/ic_trenkh"
                                     android:gravity="center_vertical"
                                     android:text="Lũy kế lương"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 
@@ -235,7 +235,7 @@
                                     android:drawableStart="@drawable/ic_khachhangs"
                                     android:gravity="center_vertical"
                                     android:text="Doanh thu hiện tại"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 
@@ -267,7 +267,7 @@
                                     android:drawableStart="@drawable/ic_nhv"
                                     android:gravity="center_vertical"
                                     android:text="Khách/tháng"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 
@@ -300,7 +300,7 @@
                                     android:drawableStart="@drawable/ic_sanpham"
                                     android:gravity="center_vertical"
                                     android:text="Sản phẩm/tháng"
-                                    android:textColor="@color/cam"
+                                    android:textColor="@color/colorMain"
                                     android:textSize="@dimen/muoi_nho" />
                             </LinearLayout>
 

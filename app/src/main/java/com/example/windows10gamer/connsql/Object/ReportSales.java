@@ -7,13 +7,14 @@ package com.example.windows10gamer.connsql.Object;
 public class ReportSales {
     String maNhanvien;
     String tenNhanvien;
-    int doanhthu;
-    int soKhachhang;
-    int soSanpham;
-    int dttkh;
-    int dttsp;
+    float doanhthu;
+    float soKhachhang;
+    float soSanpham;
+    float dttkh;
+    float dttsp;
+    float sptkh;
 
-    public ReportSales(String maNhanvien, String tenNhanvien, int doanhthu, int soKhachhang, int soSanpham, int dttkh, int dttsp) {
+    public ReportSales(String maNhanvien, String tenNhanvien, float doanhthu, float soKhachhang, float soSanpham, float sptkh, float dttkh, float dttsp) {
         this.maNhanvien = maNhanvien;
         this.tenNhanvien = tenNhanvien;
         this.doanhthu = doanhthu;
@@ -21,6 +22,7 @@ public class ReportSales {
         this.soSanpham = soSanpham;
         this.dttkh = dttkh;
         this.dttsp = dttsp;
+        this.sptkh = sptkh;
     }
 
     public String getMaNhanvien() {
@@ -39,43 +41,51 @@ public class ReportSales {
         this.tenNhanvien = tenNhanvien;
     }
 
-    public int getDoanhthu() {
+    public float getDoanhthu() {
         return doanhthu;
     }
 
-    public void setDoanhthu(int doanhthu) {
+    public void setDoanhthu(float doanhthu) {
         this.doanhthu = doanhthu;
     }
 
-    public int getSoKhachhang() {
+    public float getSoKhachhang() {
         return soKhachhang;
     }
 
-    public void setSoKhachhang(int soKhachhang) {
+    public void setSoKhachhang(float soKhachhang) {
         this.soKhachhang = soKhachhang;
     }
 
-    public int getSoSanpham() {
+    public float getSoSanpham() {
         return soSanpham;
     }
 
-    public void setSoSanpham(int soSanpham) {
+    public void setSoSanpham(float soSanpham) {
         this.soSanpham = soSanpham;
     }
 
-    public int getDttkh() {
+    public float getDttkh() {
         return dttkh;
     }
 
-    public void setDttkh(int dttkh) {
+    public void setDttkh(float dttkh) {
         this.dttkh = dttkh;
     }
 
-    public int getDttsp() {
+    public float getDttsp() {
         return dttsp;
     }
 
-    public void setDttsp(int dttsp) {
+    public void setDttsp(float dttsp) {
         this.dttsp = dttsp;
+    }
+
+    public float getSptkh() {
+        return sptkh;
+    }
+
+    public void setSptkh(float sptkh) {
+        this.sptkh = sptkh;
     }
 }

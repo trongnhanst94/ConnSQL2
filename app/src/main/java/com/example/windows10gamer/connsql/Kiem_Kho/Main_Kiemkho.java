@@ -46,28 +46,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class Main_Kiemkho extends AppCompatActivity {
@@ -94,6 +84,7 @@ public class Main_Kiemkho extends AppCompatActivity {
     private int soluong;
     private ProgressDialog nPro;
     ImageView ivAvatar;
+    private ProgressDialog nPro2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -339,93 +330,22 @@ public class Main_Kiemkho extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
-            int progress = 1;
             if (Integer.valueOf(arrayList.get(0).getSoluong()) == 1) {
                 addKiemkhoWeb(gio);
             } else {
-                while (progress <= Integer.valueOf(arrayList.get(0).getSoluong())){
-                    addKiemkhoWeb(gio+progress);
-                    publishProgress(progress);
-                    progress++;
-                }
+                addKiemkhoWebPlus(gio, Integer.valueOf(arrayList.get(0).getSoluong()), 1);
             }
             return null;
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            int prog = values[0];
-            if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1) {
-                nPro.setProgress(prog);
-                nPro.setMessage("Đã tải lên " + prog + " trên " + arrayList.get(0).getSoluong() + " sản phẩm...");
-            }
-        }
-
-        @Override
         protected void onPostExecute(String s) {
             if (Integer.valueOf(arrayList.get(0).getSoluong()) > 1){
-                nPro.hide();
+
             } else {
                 StartScan();
             }
 
-        }
-    }
-
-    public String putData(){
-        try {
-            URL url = new URL(Keys.SCRIPT_KIEMKHO);
-            JSONObject postDataParams = new JSONObject();
-            postDataParams.put("key", session_username+gio+ngay);
-            postDataParams.put("salesNgay", ngay);
-            postDataParams.put("salesGio", gio);
-            postDataParams.put("salesVitri", vitri);
-            postDataParams.put("salesKho", kho);
-            postDataParams.put("SalesTennhanvien", session_username);
-            postDataParams.put("salesManhanvien", session_ma);
-            postDataParams.put("salesMasanpham", ma);
-            postDataParams.put("salesTensanpham", ten);
-            postDataParams.put("salesBaohanhsanpham", baohanh);
-            postDataParams.put("salesNguonsanpham", nguon);
-            postDataParams.put("salesNgaynhap", ngaynhap);
-            postDataParams.put("salesVonsanpham", von);
-            postDataParams.put("salesGiasanpham", gia);
-
-            // Kết nối HTTP
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
-
-            writer.flush();
-            writer.close();
-            os.close();
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-
-                    sb.append(line);
-                    break;
-                }
-                in.close();
-                return sb.toString();
-            } else {
-                return new String("");
-            }
-        } catch (Exception e) {
-            return new String("");
         }
     }
 
@@ -461,6 +381,51 @@ public class Main_Kiemkho extends AppCompatActivity {
                 params.put("giaSanpham", gia);
                 params.put("vitri", vitri);
                 params.put("kho", kho);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    public void addKiemkhoWebPlus(final String gios, final int soluong, final int stt){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                            if (stt != soluong){
+                                addKiemkhoWebPlus(gios, soluong, stt+1);
+                                nPro.setMessage("Đã tải lên " + stt + " trên " + arrayList.get(0).getSoluong() + " sản phẩm...");
+                            } else {
+                                nPro.hide();
+                            }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_KIEMKHO_WEB);
+                params.put("ngay", ngay);
+                params.put("id", session_username+gios+stt+ngay);
+                params.put("gio", gios+stt);
+                params.put("maNhanvien", session_ma );
+                params.put("tenNhanvien", session_username);
+                params.put("maSanpham", ma);
+                params.put("tenSanpham", ten);
+                params.put("baohanhSanpham", baohanh);
+                params.put("nguonSanpham", nguon);
+                params.put("ngaynhapSanpham", ngaynhap);
+                params.put("vonSanpham", von);
+                params.put("giaSanpham", gia);
+                params.put("vitri", vitri);
+                params.put("kho", kho);
+                Log.e("qqq", "getParams: "+params.toString());
                 return params;
             }
         };
@@ -602,31 +567,6 @@ public class Main_Kiemkho extends AppCompatActivity {
                 break;
             }
         }
-    }
-
-    public String getPostDataString(JSONObject params) throws Exception {
-
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        Iterator<String> itr = params.keys();
-
-        while(itr.hasNext()){
-
-            String key= itr.next();
-            Object value = params.get(key);
-
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-
-        }
-        return result.toString();
     }
 
     private String getDate() {

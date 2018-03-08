@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Đơn nhập hàng"
         android:textAlignment="center"
@@ -49,7 +49,7 @@
                 android:layout_width="65dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_user2"
-                app:civ_border_color="@color/cam"
+                app:civ_border_color="@color/colorMain"
                 app:civ_border_width="0.5dp" />
         </LinearLayout>
 
@@ -150,7 +150,7 @@
 
         android:text="DANH SÁCH NHẬP HÀNG"
         android:textAlignment="center"
-        android:textColor="@color/cam"
+        android:textColor="@color/colorMain"
         android:textSize="@dimen/bon" />
 
     <ListView

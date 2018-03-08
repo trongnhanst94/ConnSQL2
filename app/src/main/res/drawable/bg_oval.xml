@@ -6,9 +6,9 @@
 
     <gradient
         android:angle="90" />
-    <solid android:color="@color/holo_xanh"/>
+    <solid android:color="@color/colorMainLight"/>
     <stroke
         android:width="2dp"
-        android:color="@color/holo_xanh" />
+        android:color="@color/colorMainLight" />
 
 </shape>

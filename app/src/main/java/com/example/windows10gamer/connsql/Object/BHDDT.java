@@ -10,7 +10,7 @@ import android.os.Parcelable;
 public class BHDDT implements Parcelable {
     String maBH, dateToday, timeToday, gio, chinhanhToday, maNVToday, tenNVToday, maOrder, date, time, chinhanh, tenNV, maNV, ten, ma, baohanh, nguon, ngaynhap, von, gia, ghichuOrder, tenKH, sdtKH, ghichuKH, ten_moi, gio_moi, ma_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi,phidoisp, chenhlech, lydo;
 
-    public BHDDT(String maBH, String dateToday, String timeToday, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ten, String ma, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH, String ten_moi, String gio_moi, String ma_moi, String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String phidoisp, String chenhlech, String lydo) {
+    public BHDDT(String maBH, String dateToday, String timeToday, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String maOrder, String date, String time, String chinhanh, String tenNV, String maNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichuOrder, String tenKH, String sdtKH, String ghichuKH,  String gio_moi,String ma_moi,String ten_moi,  String baohanh_moi, String nguon_moi, String ngaynhap_moi, String von_moi, String gia_moi, String phidoisp, String chenhlech, String lydo) {
         this.maBH = maBH;
         this.dateToday = dateToday;
         this.timeToday = timeToday;

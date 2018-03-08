@@ -1,18 +1,64 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <!--<item name="colorMain">@color/colorMain</item>-->
+        <!--<item name="colorMainLight">@color/colorMainLight</item>-->
+        <!--<item name="colorMainLightPlus">@color/colorMainLightPlus</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/background</item>
     </style>
 
+    <!--<style name="CamTheme" parent="AppTheme">-->
+        <!--<item name="colorMain">@color/CamcolorMain</item>-->
+        <!--<item name="colorMainLight">@color/CamcolorMainLight</item>-->
+        <!--<item name="colorMainLightPlus">@color/CamcolorMainLightPlus</item>-->
+        <!--<item name="colorPrimary">@color/CamcolorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/CamcolorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:windowBackground">@color/background</item>-->
+    <!--</style>-->
+
+    <!--<style name="TimTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<item name="colorMain">#BB58CC</item>-->
+        <!--<item name="colorMainLight">#E96EFF</item>-->
+        <!--<item name="colorMainLightPlus">#F5BBFF</item>-->
+        <!--<item name="colorPrimary">#75377F</item>-->
+        <!--<item name="colorPrimaryDark">#BB58CC</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:windowBackground">@color/background</item>-->
+    <!--</style>-->
+
+    <!--<style name="XanhTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<item name="colorMain">#7ACC6F</item>-->
+        <!--<item name="colorMainLight">#99FF8A</item>-->
+        <!--<item name="colorMainLightPlus">#DCFFD7</item>-->
+        <!--<item name="colorPrimary">#4C7F45</item>-->
+        <!--<item name="colorPrimaryDark">#4C7F45</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:windowBackground">@color/background</item>-->
+    <!--</style>-->
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+    <style name="CamTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="CamTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CamTheme" parent="CamTheme.Base">
+    </style>
+
+    <style name="CamTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!--<item name="colorMain">@color/CamcolorMain</item>-->
+        <!--<item name="colorMainLight">@color/CamcolorMainLight</item>-->
+        <!--<item name="colorMainLightPlus">@color/CamcolorMainLightPlus</item>-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
     </style>
 
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">

@@ -25,7 +25,7 @@
             android:id="@+id/svSearchItemXemA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cam"
+            android:background="@color/colorPrimary"
             android:drawableLeft="@drawable/ic_search_black_24dp"
             android:hint="Tìm kiếm sản phẩm"
             android:paddingBottom="10dp"
@@ -42,7 +42,7 @@
             android:text="Danh sách sản phẩm"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/cam"
+            android:textColor="@color/colorMain"
             android:textSize="@dimen/hai" />
 
         <ListView

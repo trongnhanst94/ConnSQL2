@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="0.5dp"
-        android:color="@color/cam" />
-    <solid android:color="#e2d5f0f4" />
+        android:color="@color/colorMainLight" />
+    <solid android:color="@color/colorMainLightPlus" />
     <margin android:left="7dp" android:top="7dp"
         android:right="7dp" android:bottom="7dp" />
 

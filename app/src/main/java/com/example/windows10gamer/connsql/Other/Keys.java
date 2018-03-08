@@ -1,8 +1,12 @@
 package com.example.windows10gamer.connsql.Other;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.text.TextUtils;
+import android.util.AttributeSet;
+import android.widget.DatePicker;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
@@ -153,7 +159,7 @@ public class Keys {
     public static final String LINK_AVATAR         = "http://dealtichtac.com/android/avatar/";
     public static final String MAIN_VERSION        = "http://dealtichtac.com/android/danhsach_version.php";
     public static final String VERSION             = "VERSION";
-    public static final String NOW_VERSION          = "Version 6.7";
+    public static final String NOW_VERSION          = "Version 6.9";
     public static final String MAIN_LINKAVATAR     = "http://dealtichtac.com/android/linkavatar.php";
     public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
     public static final String FIREBASE_TOKEN      = "/topics/all";
@@ -173,6 +179,7 @@ public class Keys {
     public static final String SCRIPT_UPDATE_NO    = "https://script.google.com/macros/s/AKfycbwteCZh8rNyU2-6Hi2dmFSKDkhlXWrZCe97rxoySgNA-diJyeNq/exec";
     public static final String CA_SANG             = "Ca sáng";
     public static final String CA_CHIEU            = "Ca chiều";
+    public static final String CHECKKHACHHANG      = "http://dealtichtac.com/android/danhsach_checkkhachhang.php";
 
 
     public static final String setMoney(int amount){
@@ -469,7 +476,7 @@ public class Keys {
         Collections.sort(list, new Comparator<ReportSales>() {
             @Override
             public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDoanhthu()).compareTo(lhs.getDoanhthu());
+                return ((Float)rhs.getDoanhthu()).compareTo(lhs.getDoanhthu());
             }
         });
     }
@@ -477,7 +484,7 @@ public class Keys {
         Collections.sort(list, new Comparator<ReportSales>() {
             @Override
             public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoKhachhang()).compareTo(lhs.getSoKhachhang());
+                return ((Float)rhs.getSoKhachhang()).compareTo(lhs.getSoKhachhang());
             }
         });
     }
@@ -485,7 +492,7 @@ public class Keys {
         Collections.sort(list, new Comparator<ReportSales>() {
             @Override
             public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoSanpham()).compareTo(lhs.getSoSanpham());
+                return ((Float)rhs.getSoSanpham()).compareTo(lhs.getSoSanpham());
             }
         });
     }
@@ -493,7 +500,7 @@ public class Keys {
         Collections.sort(list, new Comparator<ReportSales>() {
             @Override
             public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttkh()).compareTo(lhs.getDttkh());
+                return ((Float)rhs.getDttkh()).compareTo(lhs.getDttkh());
             }
         });
     }
@@ -501,7 +508,15 @@ public class Keys {
         Collections.sort(list, new Comparator<ReportSales>() {
             @Override
             public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttsp()).compareTo(lhs.getDttsp());
+                return ((Float)rhs.getDttsp()).compareTo(lhs.getDttsp());
+            }
+        });
+    }
+    public static void sortSptkh(ArrayList<ReportSales> list) {
+        Collections.sort(list, new Comparator<ReportSales>() {
+            @Override
+            public int compare(ReportSales lhs, ReportSales rhs) {
+                return ((Float)rhs.getSptkh()).compareTo(lhs.getSptkh());
             }
         });
     }
@@ -589,5 +604,80 @@ public class Keys {
         return link[0];
     }
 
+    public static final class FixedHoloDatePickerDialog extends DatePickerDialog {
+        public FixedHoloDatePickerDialog(Context context, OnDateSetListener callBack,
+                                          int year, int monthOfYear, int dayOfMonth) {
+            super(context, callBack, year, monthOfYear, dayOfMonth);
+            if (Build.VERSION.SDK_INT == 24) {
+                try {
+                    final Field field = this.findField(
+                            DatePickerDialog.class,
+                            DatePicker.class,
+                            "mDatePicker"
+                    );
+
+                    final DatePicker datePicker = (DatePicker) field.get(this);
+                    final Class<?> delegateClass = Class.forName(
+                            "android.widget.DatePicker$DatePickerDelegate"
+                    );
+                    final Field delegateField = this.findField(
+                            DatePicker.class,
+                            delegateClass,
+                            "mDelegate"
+                    );
+
+                    final Object delegate = delegateField.get(datePicker);
+                    final Class<?> spinnerDelegateClass = Class.forName(
+                            "android.widget.DatePickerSpinnerDelegate"
+                    );
+
+                    if (delegate.getClass() != spinnerDelegateClass) {
+                        delegateField.set(datePicker, null);
+                        datePicker.removeAllViews();
+
+                        final Constructor spinnerDelegateConstructor =
+                                spinnerDelegateClass.getDeclaredConstructor(
+                                        DatePicker.class,
+                                        Context.class,
+                                        AttributeSet.class,
+                                        int.class,
+                                        int.class
+                                );
+                        spinnerDelegateConstructor.setAccessible(true);
+
+                        final Object spinnerDelegate = spinnerDelegateConstructor.newInstance(
+                                datePicker,
+                                context,
+                                null,
+                                android.R.attr.datePickerStyle,
+                                0
+                        );
+                        delegateField.set(datePicker, spinnerDelegate);
+
+                        datePicker.init(year, monthOfYear, dayOfMonth, this);
+                        datePicker.setCalendarViewShown(false);
+                        datePicker.setSpinnersShown(true);
+                    }
+                } catch (Exception e) { /* Do nothing */ }
+            }
+        }
+
+        public Field findField(Class objectClass, Class fieldClass, String expectedName) {
+            try {
+                final Field field = objectClass.getDeclaredField(expectedName);
+                field.setAccessible(true);
+                return field;
+            } catch (NoSuchFieldException e) { /* Ignore */ }
+
+            for (final Field field : objectClass.getDeclaredFields()) {
+                if (field.getType() == fieldClass) {
+                    field.setAccessible(true);
+                    return field;
+                }
+            }
+
+            return null;
+        }
+    }
 
 }

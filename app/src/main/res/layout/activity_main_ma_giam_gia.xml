@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Tạo mã giảm giá"
         android:textAlignment="center"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text="0000"
         android:textAlignment="center"
-        android:textColor="@color/cam"
+        android:textColor="@color/colorMain"
         android:textSize="50dp" />
 
     <Button
@@ -101,7 +101,7 @@
         android:text="DANH SÁCH MÃ GIẢM GIÁ"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="@color/cam"
+        android:textColor="@color/colorMain"
         android:textSize="@dimen/hai" />
 
     <ListView

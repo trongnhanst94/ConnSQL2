@@ -47,10 +47,10 @@ public class Adapter_Report_BH1D1 extends BaseAdapter{
         final ViewHolder holder;
         if (view == null){
             holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
-            holder.maBH        = (TextView) view.findViewById(R.id.adapter_bh_maBH);
-            holder.shortNameNV = (TextView) view.findViewById(R.id.adapter_bh_tennv);
+            holder.maBH        = view.findViewById(R.id.adapter_bh_maBH);
+            holder.shortNameNV = view.findViewById(R.id.adapter_bh_tennv);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -58,7 +58,7 @@ public class Adapter_Report_BH1D1 extends BaseAdapter{
 
         BH1D1 bh = list.get(position);
         holder.maBH.setText(bh.getMaBH());
-        holder.shortNameNV.setText(bh.getTenNVToday());
+        holder.shortNameNV.setText(bh.getTenKH());
         return view;
     }
 

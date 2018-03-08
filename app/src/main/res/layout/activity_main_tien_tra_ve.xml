@@ -10,7 +10,7 @@ tools:context="com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Tiền Trả Về"
         android:textAlignment="center"
@@ -43,7 +43,7 @@ tools:context="com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe">
         android:paddingRight="10dp"
         android:text="Thêm tiền trả về"
         android:textAlignment="center"
-        android:textColor="@color/cam"
+        android:textColor="@color/colorMain"
         android:textSize="@dimen/btn" />
 </LinearLayout>
 

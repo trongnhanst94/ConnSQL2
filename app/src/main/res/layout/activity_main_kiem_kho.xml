@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cam"
+            android:background="@color/colorPrimary"
             android:padding="10dp"
             android:text="Kiểm kho"
             android:textAlignment="center"
@@ -97,7 +97,7 @@
                     android:layout_width="65dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_user2"
-                    app:civ_border_color="@color/cam"
+                    app:civ_border_color="@color/colorMain"
                     app:civ_border_width="0.5dp" />
             </LinearLayout>
 
@@ -194,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="10dp"
-            android:background="@color/cam" />
+            android:background="@color/colorMain" />
 
 
         <LinearLayout
@@ -250,7 +250,7 @@
             android:text="Danh sách sản phẩm"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/cam"
+            android:textColor="@color/colorMain"
             android:textSize="@dimen/hai" />
 
         <ListView

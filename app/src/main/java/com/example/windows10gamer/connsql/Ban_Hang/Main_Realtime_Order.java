@@ -1,14 +1,18 @@
 package com.example.windows10gamer.connsql.Ban_Hang;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +57,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -148,16 +153,34 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                 int day = calendar.get(Calendar.DATE);
                 int month = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Realtime_Order.this, android.R.style.Theme_Holo_Light_Panel , new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        calendar.set(year, month, dayOfMonth);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                        daynow = simpleDateFormat.format(calendar.getTime());
-                        edrealtime.setText("Ngày: "+simpleDateFormat.format(calendar.getTime()));
+                if (Build.VERSION.SDK_INT == 24) {
+                    final Context contextThemeWrapper =
+                            new ContextThemeWrapper(Main_Realtime_Order.this, android.R.style.Theme_Holo_Light_Dialog);
+                    try {
+                        DatePickerDialog datePickerDialog = new Keys.FixedHoloDatePickerDialog(contextThemeWrapper, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                calendar.set(year, month, dayOfMonth);
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                edrealtime.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }, year, month, day);
+                        datePickerDialog.show();
+                    } catch ( Fragment.InstantiationException e) {
+                        e.printStackTrace();
                     }
-                },year, month, day);
-                datePickerDialog.show();
+                } else {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Realtime_Order.this, android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            calendar.set(year, month, dayOfMonth);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            daynow = simpleDateFormat.format(calendar.getTime());
+                            edrealtime.setText("Ngày: " + simpleDateFormat.format(calendar.getTime()));
+                        }
+                    }, year, month, day);
+                    datePickerDialog.show();
+                }
             }
         });
         rbsang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -441,16 +464,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
             soSanpham   = Keys.SoSanpham(temp, nhanVienList.get(i).getMa());
             dttkh       = doanhthu/soKhachhang;
             dttsp       = doanhthu/soSanpham;
-            reportSalesList.add(new ReportSales(
-                            ma,
-                            ten,
-                            doanhthu,
-                            soKhachhang,
-                            soSanpham,
-                            dttkh,
-                            dttsp
-                    )
-            );
+            reportSalesList.add(new ReportSales(ma, ten, doanhthu, soKhachhang, soSanpham,soSanpham/soKhachhang, dttkh, dttsp));
         }
         init(reportSalesList);
     }
@@ -552,6 +566,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
     }
 
     public void init(ArrayList<ReportSales> list) {
+        DecimalFormat df = new DecimalFormat("0.0");
         stk = findViewById(R.id.tbReport);
         TableRow tbrow0 = new TableRow(this);
         TextView tv = new TextView(this);
@@ -585,17 +600,23 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
         tv3.setTextColor(Color.RED);
         tbrow0.addView(tv3);
         TextView tv4 = new TextView(this);
-        tv4.setText(" DT/KH ");
+        tv4.setText(" SP/KH ");
         tv4.setTypeface(tv0.getTypeface(), Typeface.BOLD);
         tv4.setBackgroundResource(R.drawable.cell_shape);
         tv4.setTextColor(Color.RED);
         tbrow0.addView(tv4);
         TextView tv5 = new TextView(this);
-        tv5.setText(" DT/SP ");
+        tv5.setText(" DT/KH ");
         tv5.setTypeface(tv0.getTypeface(), Typeface.BOLD);
         tv5.setBackgroundResource(R.drawable.cell_shape);
         tv5.setTextColor(Color.RED);
         tbrow0.addView(tv5);
+        TextView tv6 = new TextView(this);
+        tv6.setText(" DT/SP ");
+        tv6.setTypeface(tv0.getTypeface(), Typeface.BOLD);
+        tv6.setBackgroundResource(R.drawable.cell_shape);
+        tv6.setTextColor(Color.RED);
+        tbrow0.addView(tv6);
         stk.addView(tbrow0);
         int stt = 1;
         for (int i = 0; i < list.size(); i++) {
@@ -613,7 +634,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
             t1v.setTextColor(Color.DKGRAY);
             tbrow.addView(t1v);
             TextView t2v = new TextView(this);
-            t2v.setText(Keys.setMoney(list.get(i).getDoanhthu()));
+            t2v.setText(Keys.setMoneyFloat(list.get(i).getDoanhthu()));
             t2v.setGravity(Gravity.CENTER);
             t2v.setBackgroundResource(R.drawable.cell_shape);
             t2v.setTextColor(Color.DKGRAY);
@@ -631,17 +652,23 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
             t4v.setTextColor(Color.DKGRAY);
             tbrow.addView(t4v);
             TextView t5v = new TextView(this);
-            t5v.setText(Keys.setMoney(list.get(i).getDttkh()));
+            t5v.setText(df.format(list.get(i).getSoSanpham()/list.get(i).getSoKhachhang())+"");
             t5v.setGravity(Gravity.CENTER);
             t5v.setBackgroundResource(R.drawable.cell_shape);
             t5v.setTextColor(Color.DKGRAY);
             tbrow.addView(t5v);
             TextView t6v = new TextView(this);
-            t6v.setText(Keys.setMoney(list.get(i).getDttsp()));
+            t6v.setText(Keys.setMoneyFloat(list.get(i).getDttkh()));
             t6v.setGravity(Gravity.CENTER);
             t6v.setBackgroundResource(R.drawable.cell_shape);
             t6v.setTextColor(Color.DKGRAY);
             tbrow.addView(t6v);
+            TextView t7v = new TextView(this);
+            t7v.setText(Keys.setMoneyFloat(list.get(i).getDttsp()));
+            t7v.setGravity(Gravity.CENTER);
+            t7v.setBackgroundResource(R.drawable.cell_shape);
+            t7v.setTextColor(Color.DKGRAY);
+            tbrow.addView(t7v);
             stk.addView(tbrow);
             stt++;
         }

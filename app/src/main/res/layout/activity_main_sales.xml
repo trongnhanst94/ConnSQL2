@@ -29,10 +29,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/cam"
+                android:background="@color/colorPrimary"
                 android:padding="10dp"
-                android:textAlignment="center"
                 android:text="Form Bán Hàng"
+                android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="@dimen/tie" />
 
@@ -132,7 +132,7 @@
                         android:layout_width="65dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/ic_user2"
-                        app:civ_border_color="@color/cam"
+                        app:civ_border_color="@color/colorMain"
                         app:civ_border_width="0.5dp" />
                 </LinearLayout>
 
@@ -329,7 +329,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tổng giá trị đơn hàng:"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -381,7 +381,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Ghi chú:"
-                            android:textColor="@color/cam"
+                            android:textColor="@color/colorMain"
                             android:textSize="@dimen/muoi" />
 
                     </LinearLayout>
@@ -398,7 +398,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext"
                             android:inputType="text|textCapSentences"
-                            android:textColorLink="@color/cam"
+                            android:textColorLink="@color/colorMain"
                             android:textSize="@dimen/sau"
                             android:textStyle="italic"
                             android:windowSoftInputMode="stateHidden" />
@@ -413,7 +413,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="10dp"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -429,7 +429,7 @@
                     android:layout_weight="4"
                     android:gravity="center_vertical"
                     android:text="Khuyến mãi:"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/muoi" />
 
                 <CheckBox
@@ -567,7 +567,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Giá trị mã giảm giá:"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -610,7 +610,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Số tiền phải thu:"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -639,7 +639,7 @@
                 android:layout_height="1dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
 
 
             <LinearLayout
@@ -662,7 +662,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/kh_ch_h_ng"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -675,15 +675,28 @@
 
                     <EditText
                         android:id="@+id/edKhachhang"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_edittext"
                         android:hint="Tên khách hàng"
+                        android:layout_weight="8.5"
                         android:inputType="textCapSentences|textPersonName"
                         android:textAllCaps="false"
-                        android:textColorLink="@color/cam"
+                        android:textColorLink="@color/colorMain"
                         android:textSize="@dimen/bon"
                         android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/btncheckname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/bg_edittext_focused"
+                        android:text="+"
+                        android:textAlignment="center"
+                        android:textColor="@color/den"
+                        android:textSize="@dimen/bon"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -708,7 +721,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Điện thoại:"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -717,18 +730,32 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
                     <EditText
                         android:id="@+id/edSodienthoai"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="8.5"
                         android:background="@drawable/bg_edittext"
                         android:hint="Số điện thoại"
                         android:inputType="phone"
-                        android:textColorLink="@color/cam"
+                        android:textColorLink="@color/colorMain"
                         android:textSize="@dimen/bon"
                         android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/btncheckphone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/bg_edittext_focused"
+                        android:text="+"
+                        android:textAlignment="center"
+                        android:textColor="@color/den"
+                        android:textSize="@dimen/bon"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -754,7 +781,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ghi chú:"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/muoi" />
 
                 </LinearLayout>
@@ -771,7 +798,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_edittext"
                         android:inputType="text"
-                        android:textColorLink="@color/cam"
+                        android:textColorLink="@color/colorMain"
                         android:textSize="@dimen/sau"
                         android:textStyle="italic" />
 
@@ -793,7 +820,7 @@
                     android:layout_weight="4"
                     android:gravity="center_vertical"
                     android:text="Thanh toán:"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/muoi" />
 
                 <RadioGroup
@@ -839,7 +866,7 @@
                     android:layout_weight="4"
                     android:gravity="center_vertical"
                     android:text=""
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/muoi" />
 
                 <EditText
@@ -850,7 +877,7 @@
                     android:background="@drawable/bg_edittext"
                     android:hint="Bưu điện, Shopee..."
                     android:inputType="text"
-                    android:textColorLink="@color/cam"
+                    android:textColorLink="@color/colorMain"
                     android:textSize="@dimen/sau"
                     android:textStyle="italic" />
 
@@ -887,7 +914,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/cam"
+                    android:background="@color/colorMain"
                     android:text="Xác nhận"
                     android:textColor="#fff"
                     android:textSize="@dimen/muoi" />

@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cam"
+            android:background="@color/colorPrimary"
             android:padding="10dp"
             android:text="Tạo đơn xuất hàng"
             android:textAlignment="center"
@@ -51,7 +51,7 @@
                     android:layout_width="65dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_user2"
-                    app:civ_border_color="@color/cam"
+                    app:civ_border_color="@color/colorMain"
                     app:civ_border_width="0.5dp" />
             </LinearLayout>
 
@@ -151,7 +151,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:background="@color/cam" />
+            android:background="@color/colorMain" />
 
 
         <TextView
@@ -181,7 +181,7 @@
                     android:layout_width="65dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_user2"
-                    app:civ_border_color="@color/cam"
+                    app:civ_border_color="@color/colorMain"
                     app:civ_border_width="0.5dp" />
             </LinearLayout>
 
@@ -252,7 +252,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:background="@color/cam" />
+            android:background="@color/colorMain" />
 
 
         <LinearLayout

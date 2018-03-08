@@ -11,7 +11,7 @@
         android:id="@+id/tvmaBHDLK"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Bảo hành - Đổi dùng thử"
         android:textAlignment="center"
@@ -116,7 +116,7 @@
                             android:layout_width="65dp"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_user2"
-                            app:civ_border_color="@color/cam"
+                            app:civ_border_color="@color/colorMain"
                             app:civ_border_width="0.5dp" />
                     </LinearLayout>
 
@@ -214,7 +214,7 @@
                     android:layout_height="0.5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/cam" />
+                    android:background="@color/colorMain" />
 
                 <TextView
                     android:id="@+id/tvDlkMaOrder"
@@ -223,7 +223,7 @@
                     android:padding="5dp"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/hai" />
 
 
@@ -311,7 +311,7 @@
                             android:layout_width="65dp"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_user2"
-                            app:civ_border_color="@color/cam"
+                            app:civ_border_color="@color/colorMain"
                             app:civ_border_width="0.5dp" />
                     </LinearLayout>
 
@@ -409,7 +409,7 @@
                     android:layout_height="0.5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/cam" />
+                    android:background="@color/colorMain" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -519,7 +519,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Sản phẩm đổi Bảo hành:"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/muoi" />
 
                 <LinearLayout
@@ -555,7 +555,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Tổng giá trị đơn hàng:"
-                            android:textColor="@color/cam"
+                            android:textColor="@color/colorMain"
                             android:textSize="@dimen/hai" />
 
                     </LinearLayout>

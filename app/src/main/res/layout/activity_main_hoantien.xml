@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Bảo hành - Hoàn tiền"
         android:textAlignment="center"
@@ -117,7 +117,7 @@
                             android:layout_width="65dp"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_user2"
-                            app:civ_border_color="@color/cam"
+                            app:civ_border_color="@color/colorMain"
                             app:civ_border_width="0.5dp" />
                     </LinearLayout>
 
@@ -215,7 +215,7 @@
                     android:layout_height="0.5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/cam" />
+                    android:background="@color/colorMain" />
 
                 <TextView
                     android:id="@+id/tvHtMaOrder"
@@ -224,7 +224,7 @@
                     android:padding="5dp"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/hai" />
 
 
@@ -313,7 +313,7 @@
                             android:layout_width="65dp"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_user2"
-                            app:civ_border_color="@color/cam"
+                            app:civ_border_color="@color/colorMain"
                             app:civ_border_width="0.5dp" />
                     </LinearLayout>
 
@@ -411,7 +411,7 @@
                     android:layout_height="0.5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/cam" />
+                    android:background="@color/colorMain" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -623,7 +623,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/cam"
+                        android:background="@color/colorMain"
                         android:text="Xác nhận"
                         android:textColor="#fff"
                         android:textSize="@dimen/muoi" />

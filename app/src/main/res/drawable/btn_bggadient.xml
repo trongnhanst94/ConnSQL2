@@ -7,8 +7,8 @@
                 android:endColor="@color/yellow2"
                 android:angle="270" />
             <stroke
-                android:width="0.5dp"
-                android:color="@color/grey05" />
+                android:width="1dp"
+                android:color="@color/colorMainLight" />
             <corners
                 android:radius="3dp" />
             <padding
@@ -26,8 +26,8 @@
                 android:startColor="@color/orange5"
                 android:angle="270" />
             <stroke
-                android:width="0.5dp"
-                android:color="@color/grey05" />
+                android:width="1dp"
+                android:color="@color/colorMainLight" />
             <corners
                 android:radius="3dp" />
             <padding
@@ -45,8 +45,8 @@
                 android:startColor="@color/white2"
                 android:angle="270" />
             <stroke
-                android:width="0.5dp"
-                android:color="@color/grey05" />
+                android:width="1dp"
+                android:color="@color/colorMainLight" />
             <corners
                 android:radius="3dp" />
             <padding

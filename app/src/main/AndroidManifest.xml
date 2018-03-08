@@ -209,8 +209,12 @@
         <activity
             android:name=".Khoan_Chi.Main_PhiCOD"
             android:screenOrientation="portrait" />
-        <activity android:name=".Remove_Data.Main_Remove_COD" />
-        <activity android:name=".Remove_Data.Main_Remove_Trave"></activity>
+        <activity
+            android:name=".Remove_Data.Main_Remove_COD"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Remove_Data.Main_Remove_Trave"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

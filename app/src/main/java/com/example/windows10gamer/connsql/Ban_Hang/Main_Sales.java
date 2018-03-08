@@ -5,6 +5,7 @@ package com.example.windows10gamer.connsql.Ban_Hang;
  */
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -41,10 +43,12 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.windows10gamer.connsql.Adapter.Adapter_ListCustomer;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Quatang;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Sales;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Spinner_NV;
 import com.example.windows10gamer.connsql.Object.Chuongtrinh;
+import com.example.windows10gamer.connsql.Object.KhachHang;
 import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham;
 import com.example.windows10gamer.connsql.Object.SanphamAmount;
@@ -134,11 +138,16 @@ public class Main_Sales extends AppCompatActivity {
     private String linkAvatar;
     private CircleImageView ivAvatar;
     String thanhtoan = "Tiền mặt", nguoino = "";
+    TextView btncheckname, btncheckphone;
+    ListView dialog_ListView;
+    Adapter_ListCustomer adapter_listCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_sales);
+        btncheckname      = findViewById(R.id.btncheckname);
+        btncheckphone     = findViewById(R.id.btncheckphone);
         lnThanhtoan       = findViewById(R.id.lnThanhtoan);
         edNguoino         = findViewById(R.id.edNguoino);
         rgThanhtoan       = findViewById(R.id.rgThanhtoan);
@@ -263,7 +272,7 @@ public class Main_Sales extends AppCompatActivity {
                         btnXacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                     } else {
                         btnXacnhan.setEnabled(true);
-                        btnXacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
+                        btnXacnhan.setBackgroundColor(getResources().getColor(R.color.colorMain));
                     }
                 }
             }
@@ -437,6 +446,146 @@ public class Main_Sales extends AppCompatActivity {
                 }
             }
         });
+        btncheckname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    if (edKhachhang.getText().toString().trim().length() == 0){
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không được rỗng!!");
+                    } else {
+                        GetName();
+                    }
+                }
+            }
+        });
+
+        btncheckphone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Sales.this).show();
+                else {
+                    if (edSodienthoai.getText().toString().trim().length() < 4){
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Ít nhất phải 4 chữ số");
+                    } else {
+                        GetPhone();
+                    }
+                }
+            }
+        });
+    }
+
+    // TODO: 3/7/2018 check name
+    private ArrayList<KhachHang> GetName() {
+        final ArrayList<KhachHang> customer = new ArrayList<KhachHang>();
+        final ArrayList<KhachHang> customerplus = new ArrayList<KhachHang>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.CHECKKHACHHANG+"?tenkhachhang="+edKhachhang.getText().toString().trim(), null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                customer.add(new KhachHang(
+                                        object.getString("tenkhachhang"),
+                                        object.getString("sodienthoai")
+                                ));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int i = 0; i < customer.size(); i++) {
+                            int sosanh = sosanhkh(customer.get(i).getPhone(), customerplus);
+                            if (sosanh == -1){
+                                customerplus.add(customer.get(i));
+                            }
+                        }
+                        ShowListCustomer(customerplus);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không kết nối được Server");
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        return customer;
+    }
+
+    private int sosanhkh(String phone, ArrayList<KhachHang> customerplus) {
+        int result = -1;
+        if (customerplus.size() > 0){
+            for (int i = 0; i < customerplus.size(); i++) {
+                if (phone.equals(customerplus.get(i).getPhone())){
+                    result = i;
+                }
+            }
+        }
+        return result;
+    }
+
+    // TODO: 3/7/2018 check phone
+    private ArrayList<KhachHang> GetPhone() {
+        final ArrayList<KhachHang> customer = new ArrayList<KhachHang>();
+        final ArrayList<KhachHang> customerplus = new ArrayList<KhachHang>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.CHECKKHACHHANG+"?sodienthoai="+edSodienthoai.getText().toString().trim(), null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                customer.add(new KhachHang(
+                                        object.getString("tenkhachhang"),
+                                        object.getString("sodienthoai")
+                                ));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        for (int i = 0; i < customer.size(); i++) {
+                            int sosanh = sosanhkh(customer.get(i).getPhone(), customerplus);
+                            if (sosanh == -1){
+                                customerplus.add(customer.get(i));
+                            }
+                        }
+                        ShowListCustomer(customerplus);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không kết nối được Server");
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        return customer;
+    }
+
+
+    private void ShowListCustomer(final ArrayList<KhachHang> customer) {
+        Dialog dialog = null;
+        dialog = new Dialog(Main_Sales.this);
+        dialog.setContentView(R.layout.dialog_listcustomer);
+        dialog_ListView = dialog.findViewById(R.id.lvcustomer);
+        adapter_listCustomer = new Adapter_ListCustomer(this, R.layout.adapter_listcustomer, customer);
+        dialog_ListView.setAdapter(adapter_listCustomer);
+        final Dialog finalDialog = dialog;
+        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                edKhachhang.setText(customer.get(position).getName());
+                edSodienthoai.setText(customer.get(position).getPhone());
+                finalDialog.dismiss();
+            }});
+        dialog.show();
     }
 
     // TODO: 2/27/2018 check Thanh toan

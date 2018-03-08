@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cam"
+            android:background="@color/colorPrimary"
             android:padding="10dp"
             android:text="Bảo hành"
             android:textAlignment="center"
@@ -29,7 +29,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:text="Chọn cách tìm kiếm đơn hàng theo:"
-            android:textSize="@dimen/muoi" />
+            android:textColor="@color/colorMain"
+            android:textSize="@dimen/mainmenu"
+            android:textStyle="italic" />
 
         <RadioGroup
             android:id="@+id/rgBaohanh"
@@ -74,11 +76,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/cam" />
+            android:background="@color/colorMain" />
 
 
         <LinearLayout
@@ -101,13 +103,13 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
         </LinearLayout>
 
         <LinearLayout
@@ -180,12 +182,12 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
         </LinearLayout>
 
         <LinearLayout
@@ -247,12 +249,12 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
         </LinearLayout>
 
 
@@ -296,7 +298,7 @@
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:padding="5dp"
-                    android:textColorLink="@color/cam"
+                    android:textColorLink="@color/colorMain"
                     android:textSize="@dimen/hai"
                     tools:targetApi="lollipop" />
 
@@ -311,7 +313,7 @@
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:padding="5dp"
-                    android:textColorLink="@color/cam"
+                    android:textColorLink="@color/colorMain"
                     android:textSize="@dimen/hai"
                     tools:targetApi="lollipop" />
 
@@ -349,7 +351,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="Không dữ liệu KH"
-                        android:textColorLink="@color/cam"
+                        android:textColorLink="@color/colorMain"
                         android:textSize="@dimen/muoi" />
                 </LinearLayout>
 
@@ -370,7 +372,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="Ca sáng"
-                    android:textColorLink="@color/cam"
                     android:textSize="@dimen/muoi" />
 
                 <CheckBox
@@ -379,7 +380,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="Ca chiều"
-                    android:textColorLink="@color/cam"
                     android:textSize="@dimen/muoi" />
 
                 <LinearLayout
@@ -406,11 +406,11 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@color/cam" />
+                android:background="@color/colorMain" />
         </LinearLayout>
 
         <TextView
@@ -420,7 +420,7 @@
             android:text="Danh sách đơn hàng:"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/cam"
+            android:textColor="@color/colorMain"
             android:textSize="@dimen/hai" />
 
         <ListView

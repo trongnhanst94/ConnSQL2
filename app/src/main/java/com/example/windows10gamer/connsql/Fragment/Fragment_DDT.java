@@ -2,6 +2,7 @@ package com.example.windows10gamer.connsql.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,15 +112,33 @@ public class Fragment_DDT extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                    calendar.set(year, month, dayOfMonth);
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                                    dpStartDate.setText(simpleDateFormat.format(calendar.getTime()));
+                            if (Build.VERSION.SDK_INT == 24) {
+                                final Context contextThemeWrapper =
+                                        new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
+                                try {
+                                    DatePickerDialog datePickerDialog = new Keys.FixedHoloDatePickerDialog(contextThemeWrapper, new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                            calendar.set(year, month, dayOfMonth);
+                                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                            dpStartDate.setText(simpleDateFormat.format(calendar.getTime()));
+                                        }
+                                    }, year, month, day);
+                                    datePickerDialog.show();
+                                } catch ( InstantiationException e) {
+                                    e.printStackTrace();
                                 }
-                            }, year, month, day);
-                            datePickerDialog.show();
+                            } else {
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        calendar.set(year, month, dayOfMonth);
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                        dpStartDate.setText(simpleDateFormat.format(calendar.getTime()));
+                                    }
+                                }, year, month, day);
+                                datePickerDialog.show();
+                            }
                         }
                     });
                     dpEndDate.setInputType(InputType.TYPE_NULL);
@@ -129,15 +149,33 @@ public class Fragment_DDT extends android.support.v4.app.Fragment {
                             int day = calendar.get(Calendar.DATE);
                             int month = calendar.get(Calendar.MONTH);
                             int year = calendar.get(Calendar.YEAR);
-                            DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                    calendar.set(year, month, dayOfMonth);
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                                    dpEndDate.setText(simpleDateFormat.format(calendar.getTime()));
+                            if (Build.VERSION.SDK_INT == 24) {
+                                final Context contextThemeWrapper =
+                                        new ContextThemeWrapper(getActivity(), android.R.style.Theme_Holo_Light_Dialog);
+                                try {
+                                    DatePickerDialog datePickerDialog = new Keys.FixedHoloDatePickerDialog(contextThemeWrapper, new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                            calendar.set(year, month, dayOfMonth);
+                                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                            dpEndDate.setText(simpleDateFormat.format(calendar.getTime()));
+                                        }
+                                    }, year, month, day);
+                                    datePickerDialog.show();
+                                } catch ( InstantiationException e) {
+                                    e.printStackTrace();
                                 }
-                            }, year, month, day);
-                            datePickerDialog.show();
+                            } else {
+                                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
+                                    @Override
+                                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                        calendar.set(year, month, dayOfMonth);
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                        dpEndDate.setText(simpleDateFormat.format(calendar.getTime()));
+                                    }
+                                }, year, month, day);
+                                datePickerDialog.show();
+                            }
                         }
                     });
                     AlertDialog.Builder builder = null;

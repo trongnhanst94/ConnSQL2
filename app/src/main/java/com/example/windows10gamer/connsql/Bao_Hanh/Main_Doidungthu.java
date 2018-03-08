@@ -160,7 +160,7 @@ public class Main_Doidungthu extends AppCompatActivity {
                     if (!edlydoDLK.getText().toString().trim().equals("") && !edphidoiSP.getText().toString().trim().equals("")) {
                         btnxacnhan.setEnabled(false);
                         btnxacnhan.setBackgroundColor(getResources().getColor(R.color.aaaaa));
-                        maBH = "BHDLK_"+ Keys.MaDonhang();
+                        maBH = "BHDDT_"+ Keys.MaDonhang();
                         phidoiSP = Integer.valueOf(edphidoiSP.getText().toString().trim());
                         lydo = edlydoDLK.getText().toString().trim();
                         chenhlech = total - Integer.valueOf(gia) + phidoiSP;
@@ -306,7 +306,7 @@ public class Main_Doidungthu extends AppCompatActivity {
                     total = total + Integer.parseInt(gia_moi);
                     tvTongdonhang.setText(Keys.setMoney(total));
                     btnxacnhan.setEnabled(true);
-                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
+                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.colorMain));
                     chenhlech = total-Integer.valueOf(gia);
                     tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                     adapter_moi.notifyDataSetChanged();

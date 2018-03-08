@@ -306,7 +306,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
                     total = total + Integer.parseInt(gia_moi);
                     tvTongdonhang.setText(Keys.setMoney(total));
                     btnxacnhan.setEnabled(true);
-                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
+                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.colorMain));
                     chenhlech = total-Integer.valueOf(gia);
                     tvDlkChenhlech.setText(Keys.setMoney(chenhlech));
                     adapter_moi.notifyDataSetChanged();

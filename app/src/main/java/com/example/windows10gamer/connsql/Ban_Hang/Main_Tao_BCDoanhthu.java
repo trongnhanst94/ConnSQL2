@@ -61,9 +61,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -160,7 +159,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                     tvlechdoanhthu.setText(Keys.setMoney(0));
                 } else {
                     tienthucte = Integer.valueOf(edtienthucte.getText().toString().trim());
-                    lechcuoica = (tienthucte - tiencuoica);
+                    lechcuoica = ((doanhthubanno + tienthucte) - tiencuoica);
                     tvlechdoanhthu.setText(Keys.setMoney(lechcuoica));
                 }
             }
@@ -294,7 +293,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 publishProgress(progress);
                 progress++;
             }
-            sendFCMPush( "Doanh thu: "+Keys.setMoney(tienthucte)+" - "+ca,"Báo cáo "+chinhanh);
+            sendFCMPush( "Doanh thu: "+Keys.setMoney(doanhthu)+" - "+ca,"Báo cáo "+chinhanh);
             return null;
         }
 
@@ -558,13 +557,14 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             dttkh       = doanhthusing/soKhachhang;
             dttsp       = doanhthusing/soSanpham;
             reportSalesList.add(
-                    new ReportSales(ma, ten, doanhthusing - giamgiasing, soKhachhang, soSanpham, dttkh, dttsp)
+                    new ReportSales(ma, ten, doanhthusing - giamgiasing, soKhachhang, soSanpham, soSanpham/soKhachhang, dttkh, dttsp)
             );
         }
         init(reportSalesList);
     }
 
     public void init(ArrayList<ReportSales> list) {
+        DecimalFormat df = new DecimalFormat("0.0");
         TableLayout stk = findViewById(R.id.tbBCDT);
         TableRow tbrow0 = new TableRow(this);
         TextView tv = new TextView(this);
@@ -598,17 +598,23 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         tv3.setTextColor(Color.RED);
         tbrow0.addView(tv3);
         TextView tv4 = new TextView(this);
-        tv4.setText(" DT/KH ");
+        tv4.setText(" SP/KH ");
         tv4.setTypeface(tv0.getTypeface(), Typeface.BOLD);
         tv4.setBackgroundResource(R.drawable.cell_shape);
         tv4.setTextColor(Color.RED);
         tbrow0.addView(tv4);
         TextView tv5 = new TextView(this);
-        tv5.setText(" DT/SP ");
+        tv5.setText(" DT/KH ");
         tv5.setTypeface(tv0.getTypeface(), Typeface.BOLD);
         tv5.setBackgroundResource(R.drawable.cell_shape);
         tv5.setTextColor(Color.RED);
         tbrow0.addView(tv5);
+        TextView tv6 = new TextView(this);
+        tv6.setText(" DT/SP ");
+        tv6.setTypeface(tv0.getTypeface(), Typeface.BOLD);
+        tv6.setBackgroundResource(R.drawable.cell_shape);
+        tv6.setTextColor(Color.RED);
+        tbrow0.addView(tv6);
         stk.addView(tbrow0);
         int stt = 1;
         for (int i = 0; i < list.size(); i++) {
@@ -626,7 +632,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             t1v.setTextColor(Color.DKGRAY);
             tbrow.addView(t1v);
             TextView t2v = new TextView(this);
-            t2v.setText(Keys.setMoney(list.get(i).getDoanhthu()));
+            t2v.setText(Keys.setMoneyFloat(list.get(i).getDoanhthu()));
             t2v.setGravity(Gravity.CENTER);
             t2v.setBackgroundResource(R.drawable.cell_shape);
             t2v.setTextColor(Color.DKGRAY);
@@ -644,17 +650,23 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             t4v.setTextColor(Color.DKGRAY);
             tbrow.addView(t4v);
             TextView t5v = new TextView(this);
-            t5v.setText(Keys.setMoney(list.get(i).getDttkh()));
+            t5v.setText(df.format(list.get(i).getSoSanpham()/list.get(i).getSoKhachhang())+"");
             t5v.setGravity(Gravity.CENTER);
             t5v.setBackgroundResource(R.drawable.cell_shape);
             t5v.setTextColor(Color.DKGRAY);
             tbrow.addView(t5v);
             TextView t6v = new TextView(this);
-            t6v.setText(Keys.setMoney(list.get(i).getDttsp()));
+            t6v.setText(Keys.setMoneyFloat(list.get(i).getDttkh()));
             t6v.setGravity(Gravity.CENTER);
             t6v.setBackgroundResource(R.drawable.cell_shape);
             t6v.setTextColor(Color.DKGRAY);
             tbrow.addView(t6v);
+            TextView t7v = new TextView(this);
+            t7v.setText(Keys.setMoneyFloat(list.get(i).getDttsp()));
+            t7v.setGravity(Gravity.CENTER);
+            t7v.setBackgroundResource(R.drawable.cell_shape);
+            t7v.setTextColor(Color.DKGRAY);
+            tbrow.addView(t7v);
             stk.addView(tbrow);
             stt++;
         }
@@ -736,46 +748,6 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
         }
         return result;
     }
-    private void sortDoanhthu(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDoanhthu()).compareTo(lhs.getDoanhthu());
-            }
-        });
-    }
-    private void sortSoKH(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoKhachhang()).compareTo(lhs.getSoKhachhang());
-            }
-        });
-    }
-    private void sortSoSP(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getSoSanpham()).compareTo(lhs.getSoSanpham());
-            }
-        });
-    }
-    private void sortDttkh(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttkh()).compareTo(lhs.getDttkh());
-            }
-        });
-    }
-    private void sortDttsp(ArrayList<ReportSales> list) {
-        Collections.sort(list, new Comparator<ReportSales>() {
-            @Override
-            public int compare(ReportSales lhs, ReportSales rhs) {
-                return ((Integer)rhs.getDttsp()).compareTo(lhs.getDttsp());
-            }
-        });
-    }
 
     public class SendRequest extends AsyncTask<Void, Void, String> {
 
@@ -827,15 +799,14 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                         orignal = response.body().getContacts();
                         donhanglist.clear();
                         for (int i = 0; i < orignal.size(); i++) {
-                            if (orignal.get(i).getThanhtoan().equals(Keys.TIENMAT)){
-                                donhanglist.add(orignal.get(i));
-                                doanhthu += Integer.valueOf(orignal.get(i).getGiaSanpham());
-                                int sosanhgiamgia = sosanhgiam(tempgiamgia, orignal.get(i).getMaDonhang());
-                                if (sosanhgiamgia == -1) {
-                                    tempgiamgia.add(orignal.get(i).getMaDonhang());
-                                    giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
-                                }
-                            } else if (orignal.get(i).getThanhtoan().equals(Keys.GHINO)) {
+                            donhanglist.add(orignal.get(i));
+                            doanhthu += Integer.valueOf(orignal.get(i).getGiaSanpham());
+                            int sosanhgiamgia = sosanhgiam(tempgiamgia, orignal.get(i).getMaDonhang());
+                            if (sosanhgiamgia == -1) {
+                                tempgiamgia.add(orignal.get(i).getMaDonhang());
+                                giamgia += Integer.valueOf(orignal.get(i).getGiamgia());
+                            }
+                            if (orignal.get(i).getThanhtoan().equals(Keys.GHINO)) {
                                 doanhthubanno += Integer.valueOf(orignal.get(i).getGiaSanpham());
                             }
                         }
@@ -1614,10 +1585,9 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 params.put("tenNV", tennhanvien);
                 params.put("tiendauca", tiendauca+"");
                 params.put("tientrave", tientrave+"");
-                params.put("doanhthu", tiencuoica+"");
+                params.put("doanhthu", doanhthu+"");
                 params.put("lechcuoica", lechcuoica+"");
                 params.put("tienthucte", tienthucte+"");
-                Log.e("qqq", "getParams: "+params.toString());
                 return params;
             }
         };

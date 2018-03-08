@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Lịch sử bảo hành"
         android:textAlignment="center"
@@ -24,7 +24,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:text="Thông tin sản phẩm:"
-        android:textColor="@color/cam"
+        android:textColor="@color/colorMain"
         android:textSize="@dimen/hai" />
 
     <LinearLayout
@@ -48,7 +48,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:background="@color/cam" />
+        android:background="@color/colorMain" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:text="Lịch sử đã bảo hành:"
-            android:textColor="@color/cam"
+            android:textColor="@color/colorMain"
             android:textSize="@dimen/hai" />
 
         <LinearLayout

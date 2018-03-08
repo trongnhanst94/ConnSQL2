@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/cam"
+                android:background="@color/colorPrimary"
                 android:padding="10dp"
                 android:text="Báo cáo danh thu"
                 android:textAlignment="center"
@@ -54,7 +54,7 @@
                         android:background="@drawable/cell_shape"
                         android:padding="5dp"
                         android:text="Tổng hợp báo cáo Doanh thu"
-                        android:textColor="@color/cam"
+                        android:textColor="@color/colorMain"
                         android:textSize="@dimen/bon"
                         android:textStyle="bold" />
 
@@ -149,31 +149,6 @@
 
                         <TextView
                             android:id="@+id/tvbcdoanhthu"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/cell_shape"
-                            android:textAlignment="textEnd"
-                            android:textColor="@android:color/holo_red_light"
-                            android:textSize="@dimen/muoi" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/cell_shape"
-                            android:text="Doanh thu bán nợ:"
-                            android:textSize="@dimen/muoi" />
-
-                        <TextView
-                            android:id="@+id/tvdoanhthubanno"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -555,7 +530,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/cell_shape"
                             android:text="Tổng tiền cuối ca: "
-                            android:textColor="@color/cam"
+                            android:textColor="@color/colorMain"
                             android:textSize="@dimen/bon" />
 
                         <TextView
@@ -565,9 +540,34 @@
                             android:layout_weight="1"
                             android:background="@drawable/cell_shape"
                             android:textAlignment="textEnd"
-                            android:textColor="@color/cam"
+                            android:textColor="@color/colorMain"
                             android:textSize="@dimen/bon"
                             android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:text="Doanh thu bán nợ:"
+                            android:textSize="@dimen/muoi" />
+
+                        <TextView
+                            android:id="@+id/tvdoanhthubanno"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/cell_shape"
+                            android:textAlignment="textEnd"
+                            android:textColor="@android:color/holo_red_light"
+                            android:textSize="@dimen/muoi" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -672,7 +672,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:text="Nhân viên trong ca:"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/bon"
                     android:textStyle="bold|italic" />
 

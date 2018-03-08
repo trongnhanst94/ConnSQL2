@@ -267,7 +267,7 @@ public class Main_1doi1 extends AppCompatActivity {
                     gio_moi = Keys.getTimeNow();
                     array_moi.add(new Sanpham_gio(gio_moi, ma_moi, ten_moi, baohanh_moi, nguon_moi, ngaynhap_moi, von_moi, gia_moi));
                     btnxacnhan.setEnabled(true);
-                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.cam));
+                    btnxacnhan.setBackgroundColor(getResources().getColor(R.color.colorMain));
                     btn1doi1.setEnabled(false);
                     btn1doi1.setBackgroundColor(getResources().getColor(R.color.aaaaa));
                     adapter_moi.notifyDataSetChanged();

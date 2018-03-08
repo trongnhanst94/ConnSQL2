@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_edittext_focused"
             android:gravity="center_vertical|center"
-            android:text="01"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/muoi" />
 
         <LinearLayout
@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/cam"
+                    android:textColor="@color/colorMain"
                     android:textSize="@dimen/muoi_nho"
                     android:textStyle="bold" />
 

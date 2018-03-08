@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cam"
-        android:textAlignment="center"
+        android:background="@color/colorPrimary"
         android:padding="10dp"
         android:text="Danh sách kiểm kho"
+        android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="@dimen/tie"
         tools:layout_editor_absoluteX="8dp"

@@ -6,11 +6,18 @@
     <color name="âs">#fafafa</color>
     <color name="aaaaa">#bbbaba</color>
     <color name="toast">#e23f3f3f</color>
-    <color name="cam">#125688</color>
+    <color name="colorMain">#125688</color>
+    <color name="colorMainLight">#5c9bd7</color>
+    <color name="colorMainLightPlus">#e2d5f0f4</color>
     <color name="RED">#ff4545</color>
     <color name="background">#FFFFFF </color>
     <color name="colorPrimary">#125688</color>
     <color name="colorPrimaryDark">#125688</color>
+    <color name="TimcolorMain">#BB58CC</color>
+    <color name="TimcolorMainLight">#E96EFF</color>
+    <color name="TimcolorMainLightPlus">#f6defa</color>
+    <color name="TimcolorPrimary">#BB58CC</color>
+    <color name="TimcolorPrimaryDark">#75377F</color>
     <color name="colorAccent">#f96466</color>
     <color name="aaaa">#cb000000</color>
     <color name="aapet">#5b000000</color>
@@ -30,4 +37,10 @@
     <color name="white2">#eaeaea</color>
     <color name="den">#000000</color>
     <color name="text_main">#464646</color>
+    <color name="CamcolorMain">#CC403A</color>
+    <color name="CamcolorMainLight">#FF4F48</color>
+    <color name="CamcolorMainLightPlus">#FF9995</color>
+    <color name="CamcolorPrimary">#7F2824</color>
+    <color name="CamcolorPrimaryDark">#7F2824</color>
+    <color name="CamcolorAccent">@color/colorAccent</color>
 </resources>
