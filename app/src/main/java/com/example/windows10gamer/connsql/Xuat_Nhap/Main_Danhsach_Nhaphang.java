@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,7 +28,6 @@ import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Object.XuatNhap;
 import com.example.windows10gamer.connsql.Object.XuatNhap_SL;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -37,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_Danhsach_Nhaphang extends AppCompatActivity {
 
@@ -261,7 +263,7 @@ public class Main_Danhsach_Nhaphang extends AppCompatActivity {
                     }
                 }
             } else {
-                new CustomToast().Show_Toast(Main_Danhsach_Nhaphang.this, findViewById(android.R.id.content), "Không tìm thấy đơn Xuất hàng!");
+                Toasty.info(Main_Danhsach_Nhaphang.this, "Không tìm thấy đơn Xuất hàng", Toast.LENGTH_LONG, true).show();
             }
             dialog.dismiss();
             adapter.notifyDataSetChanged();

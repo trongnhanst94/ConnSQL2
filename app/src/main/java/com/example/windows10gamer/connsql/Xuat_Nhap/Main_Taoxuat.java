@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,7 +38,6 @@ import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -48,13 +48,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +56,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import javax.net.ssl.HttpsURLConnection;
+import es.dmoral.toasty.Toasty;
 
 public class Main_Taoxuat extends AppCompatActivity {
 
@@ -142,7 +135,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (input.getText().toString().trim().equals("")) {
-                                new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Không được để trống tên trang!");
+                                Toasty.error(Main_Taoxuat.this, "Không được để trống tên trang!", Toast.LENGTH_LONG, true).show();
                             } else {
                                 maXN = "XNHH_"+ Keys.MaDonhang();
                                 tentrang = input.getText().toString().trim();
@@ -346,7 +339,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                     tvChuaco.setVisibility(View.GONE);
                     lvTaoxuat.setVisibility(View.VISIBLE);
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
+                    Toasty.error(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }
@@ -416,7 +409,7 @@ public class Main_Taoxuat extends AppCompatActivity {
         protected String doInBackground(String... arg0) {
             int j;
             for (j = 0 ;j < arrayList.size(); j++){
-                putData(j);
+                //putData(j);
                 addXuathang(j);
             }
             return null;
@@ -425,7 +418,7 @@ public class Main_Taoxuat extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Gửi dữ liệu thành công.");
+            Toasty.success(Main_Taoxuat.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -454,67 +447,67 @@ public class Main_Taoxuat extends AppCompatActivity {
         return result.toString();
     }
 
-    public String putData(int j){
-        try {
-
-            URL url = new URL(Keys.SCRIPT_XUATHANG);
-            JSONObject postDataParams = new JSONObject();
-                postDataParams.put("tentrang", tentrang);
-                postDataParams.put("maXN", maXN);
-                postDataParams.put("ngay", ngay);
-                postDataParams.put("ca", ca);
-                postDataParams.put("gio", arrayList.get(j).getGio());
-                postDataParams.put("chinhanhToday", chinhanhNow);
-                postDataParams.put("maNVToday", session_ma);
-                postDataParams.put("tenNVToday", session_username);
-                postDataParams.put("ma", arrayList.get(j).getMa());
-                postDataParams.put("ten", arrayList.get(j).getTen());
-                postDataParams.put("baohanh", arrayList.get(j).getBaohanh());
-                postDataParams.put("nguon", arrayList.get(j).getNguon());
-                postDataParams.put("ngaynhap", arrayList.get(j).getNgaynhap());
-                postDataParams.put("von", arrayList.get(j).getVon());
-                postDataParams.put("gia", arrayList.get(j).getGiaban());
-                postDataParams.put("ghichu", ghichu);
-                postDataParams.put("chinhanhNhan", chinhanhNhap);
-                postDataParams.put("maNVNhan", maNVnhan);
-                postDataParams.put("tenNVNhan", tenNVnhan);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-
-            OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getPostDataString(postDataParams));
-
-            writer.flush();
-            writer.close();
-            os.close();
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-
-                    sb.append(line);
-                    break;
-                }
-                in.close();
-                return sb.toString();
-            } else {
-                return new String("false : " + responseCode);
-            }
-        } catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
-        }
-    }
+//    public String putData(int j){
+//        try {
+//
+//            URL url = new URL(Keys.getSCRIPT_XUATHANG);
+//            JSONObject postDataParams = new JSONObject();
+//                postDataParams.put("tentrang", tentrang);
+//                postDataParams.put("maXN", maXN);
+//                postDataParams.put("ngay", ngay);
+//                postDataParams.put("ca", ca);
+//                postDataParams.put("gio", arrayList.get(j).getGio());
+//                postDataParams.put("chinhanhToday", chinhanhNow);
+//                postDataParams.put("maNVToday", session_ma);
+//                postDataParams.put("tenNVToday", session_username);
+//                postDataParams.put("ma", arrayList.get(j).getMa());
+//                postDataParams.put("ten", arrayList.get(j).getTen());
+//                postDataParams.put("baohanh", arrayList.get(j).getBaohanh());
+//                postDataParams.put("nguon", arrayList.get(j).getNguon());
+//                postDataParams.put("ngaynhap", arrayList.get(j).getNgaynhap());
+//                postDataParams.put("von", arrayList.get(j).getVon());
+//                postDataParams.put("gia", arrayList.get(j).getGiaban());
+//                postDataParams.put("ghichu", ghichu);
+//                postDataParams.put("chinhanhNhan", chinhanhNhap);
+//                postDataParams.put("maNVNhan", maNVnhan);
+//                postDataParams.put("tenNVNhan", tenNVnhan);
+//
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setReadTimeout(15000);
+//            conn.setConnectTimeout(15000);
+//            conn.setRequestMethod("GET");
+//            conn.setDoInput(true);
+//            conn.setDoOutput(true);
+//
+//            OutputStream os = conn.getOutputStream();
+//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+//            writer.write(getPostDataString(postDataParams));
+//
+//            writer.flush();
+//            writer.close();
+//            os.close();
+//
+//            int responseCode = conn.getResponseCode();
+//            if (responseCode == HttpsURLConnection.HTTP_OK) {
+//
+//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                StringBuffer sb = new StringBuffer("");
+//                String line = "";
+//
+//                while ((line = in.readLine()) != null) {
+//
+//                    sb.append(line);
+//                    break;
+//                }
+//                in.close();
+//                return sb.toString();
+//            } else {
+//                return new String("false : " + responseCode);
+//            }
+//        } catch (Exception e) {
+//            return new String("Exception: " + e.getMessage());
+//        }
+//    }
 
     public void ResetActivity(){
         startActivity(new Intent(Main_Taoxuat.this, Main_XuatNhap.class));
@@ -528,14 +521,14 @@ public class Main_Taoxuat extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_Taoxuat.this, "Lỗi", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Taoxuat.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Taoxuat.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

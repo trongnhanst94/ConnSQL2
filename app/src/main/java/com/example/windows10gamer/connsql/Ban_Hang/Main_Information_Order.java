@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,7 +42,6 @@ import com.example.windows10gamer.connsql.Object.Quatang;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.GiftList;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -66,6 +67,7 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 public class Main_Information_Order extends AppCompatActivity {
     TextView tvifMaOrder;
@@ -99,6 +101,8 @@ public class Main_Information_Order extends AppCompatActivity {
     Button btnDuyet;
     LinearLayout lnHiddenInfo;
     private String updateTT;
+    String chinhanh;
+    private SharedPreferences shared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +130,8 @@ public class Main_Information_Order extends AppCompatActivity {
         tvifsaugiamgia = findViewById(R.id.tvifsaugiamgia);
         lvInfoOrder = findViewById(R.id.lvInfoOrder);
         ivAvatar = findViewById(R.id.ivAvatar);
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("DataOrder");
         position  = bundle.getInt("position");
@@ -249,7 +255,7 @@ public class Main_Information_Order extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Update thành công!!");
+            Toasty.success(Main_Information_Order.this, "Thành công", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -260,7 +266,7 @@ public class Main_Information_Order extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_Information_Order.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
                             btnDuyet.setEnabled(false);
                             btnDuyet.setBackgroundColor(getResources().getColor(R.color.aaaaa));
@@ -270,7 +276,7 @@ public class Main_Information_Order extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Information_Order.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Information_Order.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -315,7 +321,7 @@ public class Main_Information_Order extends AppCompatActivity {
     public String putData(final int j){
         try {
             // Link Script
-            URL url = new URL(Keys.SCRIPT_UPDATE_NO);
+            URL url = new URL(Keys.getSCRIPT_UPDATE_NO(chinhanh));
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();

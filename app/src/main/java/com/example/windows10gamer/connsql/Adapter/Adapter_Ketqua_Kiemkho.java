@@ -53,15 +53,15 @@ public class Adapter_Ketqua_Kiemkho extends BaseAdapter{
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(layout, null);
-            holder.tvKQKKma      = (TextView) view.findViewById(R.id.tvKQKKma);
-            holder.tvKQKKsoluong = (TextView) view.findViewById(R.id.tvKQKKsoluong);
+            holder.tvKQKKma      = view.findViewById(R.id.tvKQKKma);
+            holder.tvKQKKsoluong = view.findViewById(R.id.tvKQKKsoluong);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         CountSanpham countSanpham = arrayList.get(i);
 
-        holder.tvKQKKma.setText("Mã: "+countSanpham.getMasanpham());
+        holder.tvKQKKma.setText("Mã: "+countSanpham.getMa());
         holder.tvKQKKsoluong.setText(countSanpham.getSoluong()+"");
         return view;
     }

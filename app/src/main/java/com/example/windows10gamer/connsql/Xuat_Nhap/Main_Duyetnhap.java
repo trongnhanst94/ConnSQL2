@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,7 +28,6 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Duyetnhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap_ID;
 import com.example.windows10gamer.connsql.Object.User;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -38,6 +38,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -336,11 +338,11 @@ public class Main_Duyetnhap extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Lỗi kết nối");
+                            Toasty.error(Main_Duyetnhap.this, "Lỗi kết nối", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
                             if (j == (str.size()-1)){
                                 dialog.dismiss();
-                                new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Check đơn thành công!!");
+                                Toasty.success(Main_Duyetnhap.this, "Check đơn hàng thành công", Toast.LENGTH_LONG, true).show();
                                 startActivity(new Intent(Main_Duyetnhap.this, Main_Danhsach_Nhaphang.class));
                                 finish();
                             }
@@ -350,7 +352,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Duyetnhap.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main_Duyetnhap.this, "Không kết nối được Server!", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

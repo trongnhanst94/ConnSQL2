@@ -7,18 +7,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Kho;
 import com.example.windows10gamer.connsql.Object.Kho;
 import com.example.windows10gamer.connsql.Other.APIService_Kho;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.KhoList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +52,7 @@ public class Main_Nhaphang extends AppCompatActivity {
         tvmaNV.setText("Mã số: "+tenNV);
         tvtenNV.setText("Tên nhân viên: "+maNV);
         adapter = new Adapter_Kho(Main_Nhaphang.this, orignal);
-        listView.setAdapter(adapter);
+        //listView.setAdapter(adapter);
         LoadJson();
     }
 
@@ -74,8 +75,6 @@ public class Main_Nhaphang extends AppCompatActivity {
                     if(response.isSuccessful()) {
                         orignal = response.body().getContacts_kho();
                         adapter.notifyDataSetChanged();
-                    } else {
-                        new CustomToast().Show_Toast(Main_Nhaphang.this, findViewById(android.R.id.content), "Không có response!");
                     }
                 }
 
@@ -86,7 +85,7 @@ public class Main_Nhaphang extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Nhaphang.this, findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 }

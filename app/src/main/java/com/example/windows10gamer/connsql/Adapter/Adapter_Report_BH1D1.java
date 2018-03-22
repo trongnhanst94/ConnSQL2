@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.windows10gamer.connsql.Object.BH1D1;
+import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class Adapter_Report_BH1D1 extends BaseAdapter{
         }
 
         BH1D1 bh = list.get(position);
-        holder.maBH.setText(bh.getMaBH());
+        holder.maBH.setText(Keys.trimText(bh.getTen(), 30));
         holder.shortNameNV.setText(bh.getTenKH());
         return view;
     }

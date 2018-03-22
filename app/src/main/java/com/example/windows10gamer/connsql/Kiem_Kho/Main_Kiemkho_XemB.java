@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,7 +23,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_XemB;
 import com.example.windows10gamer.connsql.Object.Sanpham_ID;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -31,13 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +38,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
+import es.dmoral.toasty.Toasty;
 
 public class Main_Kiemkho_XemB extends AppCompatActivity {
     ArrayList<Sanpham_ID> sanphams = new ArrayList<>();
@@ -93,7 +86,6 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
         for (int i =  0; i <= sanphams.size(); i++){
             if (sanphams.get(i).getMa() == msp) {
                 sanphams.remove(i);
-                new SendRequestHT().execute(msp);
                 deleteXemB(id);
                 break;
             }
@@ -109,14 +101,14 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Kiemkho_XemB.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_Kiemkho_XemB.this, "Lỗi ", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Kiemkho_XemB.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Kiemkho_XemB.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -131,84 +123,84 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public class SendRequestHT extends AsyncTask<String, Void, String> {
-        protected void onPreExecute(){
-            dialog = new ProgressDialog(Main_Kiemkho_XemB.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được xử lý");
-            dialog.setCancelable(false);
-            dialog.show();
-        }
-
-        protected String doInBackground(String... params) {
-
-            try{
-
-                // Link Script
-                URL url = new URL(Keys.SCRIPT_DE_XEMA);
-
-                // Load Json object
-                JSONObject postDataParams = new JSONObject();
-
-                postDataParams.put("Ma", params[0]);
-                postDataParams.put("chinhanh", chinhanh);
-                postDataParams.put("kho", kho);
-                postDataParams.put("nameUser", nameUser);
-                Log.e("params",postDataParams.toString());
-
-                // Kết nối HTTP
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode=conn.getResponseCode();
-
-                // Nếu kết nối được
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer("");
-                    String line="";
-
-                    while((line = in.readLine()) != null) {
-
-                        sb.append(line);
-                        break;
-                    }
-                    //
-                    in.close();
-                    // Trả dữ liệu cho về để ghi lên Excel
-                    return sb.toString();
-
-                }
-                else {
-                    return new String("false : "+responseCode);
-                }
-            }
-            catch(Exception e){
-                return new String("Exception: " + e.getMessage());
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            dialog.dismiss();
-            new CustomToast().Show_Toast(Main_Kiemkho_XemB.this, findViewById(android.R.id.content), result);
-            //ResetActivity();
-        }
-    }
+//    public class SendRequestHT extends AsyncTask<String, Void, String> {
+//        protected void onPreExecute(){
+//            dialog = new ProgressDialog(Main_Kiemkho_XemB.this);
+//            dialog.setTitle("Hãy chờ...");
+//            dialog.setMessage("Dữ liệu đang được xử lý");
+//            dialog.setCancelable(false);
+//            dialog.show();
+//        }
+//
+//        protected String doInBackground(String... params) {
+//
+//            try{
+//
+//                // Link Script
+//                URL url = new URL(Keys.SCRIPT_DE_XEMA);
+//
+//                // Load Json object
+//                JSONObject postDataParams = new JSONObject();
+//
+//                postDataParams.put("Ma", params[0]);
+//                postDataParams.put("chinhanh", chinhanh);
+//                postDataParams.put("kho", kho);
+//                postDataParams.put("nameUser", nameUser);
+//                Log.e("params",postDataParams.toString());
+//
+//                // Kết nối HTTP
+//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                conn.setReadTimeout(15000 /* milliseconds */);
+//                conn.setConnectTimeout(15000 /* milliseconds */);
+//                conn.setRequestMethod("GET");
+//                conn.setDoInput(true);
+//                conn.setDoOutput(true);
+//
+//                OutputStream os = conn.getOutputStream();
+//                BufferedWriter writer = new BufferedWriter(
+//                        new OutputStreamWriter(os, "UTF-8"));
+//                writer.write(getPostDataString(postDataParams));
+//
+//                writer.flush();
+//                writer.close();
+//                os.close();
+//
+//                int responseCode=conn.getResponseCode();
+//
+//                // Nếu kết nối được
+//                if (responseCode == HttpsURLConnection.HTTP_OK) {
+//
+//                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                    StringBuffer sb = new StringBuffer("");
+//                    String line="";
+//
+//                    while((line = in.readLine()) != null) {
+//
+//                        sb.append(line);
+//                        break;
+//                    }
+//                    //
+//                    in.close();
+//                    // Trả dữ liệu cho về để ghi lên Excel
+//                    return sb.toString();
+//
+//                }
+//                else {
+//                    return new String("false : "+responseCode);
+//                }
+//            }
+//            catch(Exception e){
+//                return new String("Exception: " + e.getMessage());
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            dialog.dismiss();
+//            new CustomToast().Show_Toast(Main_Kiemkho_XemB.this, findViewById(android.R.id.content), result);
+//            //ResetActivity();
+//        }
+//    }
 
 
 
@@ -321,7 +313,7 @@ public class Main_Kiemkho_XemB extends AppCompatActivity {
             if(sanphams.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_Kiemkho_XemB.this, findViewById(android.R.id.content), "Không có dữ liệu!!");
+                Toasty.error(Main_Kiemkho_XemB.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
             }
             dialog.dismiss();
         }

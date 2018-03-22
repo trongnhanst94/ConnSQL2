@@ -263,8 +263,6 @@ public class Main_Doanhthu extends AppCompatActivity {
                             }
                         }
                     }
-                } else {
-                    //new CustomToast().Show_Toast(Main_Doanhthu.this, findViewById(android.R.id.content), "Sai đường dẫn dữ liệu.");
                 }
             } catch (JSONException je) {
                 Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());

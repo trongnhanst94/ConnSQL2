@@ -20,12 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_ScanVon;
 import com.example.windows10gamer.connsql.Object.Sanpham;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
-import com.example.windows10gamer.connsql.Remove_Data.Main_Remove_COD;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -38,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_ScanVon extends AppCompatActivity {
     Button btnscanvon, btntao;
@@ -154,7 +155,7 @@ public class Main_ScanVon extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         } else {
-                            new CustomToast().Show_Toast(Main_ScanVon.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!");
+                            Toasty.warning(Main_ScanVon.this, "Phải nhập tất cả các trường", Toast.LENGTH_LONG, true).show();
                         }
 
                     }
@@ -232,7 +233,7 @@ public class Main_ScanVon extends AppCompatActivity {
                     arrayList.add(new Sanpham(ma, ten, baohanh, nguon, ngaynhap, Keys.setMoney(Integer.valueOf(Keys.giaimagiavon(von))), Keys.setMoney(Integer.parseInt(gia))));
                     adapter.notifyDataSetChanged();
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_ScanVon.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
+                    Toasty.success(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }

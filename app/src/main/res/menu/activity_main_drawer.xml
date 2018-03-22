@@ -9,6 +9,11 @@
             android:id="@+id/nav_giamgia"
             android:icon="@drawable/ic_coupon"
             android:title="Tạo mã giảm giá" />
+
+        <item
+            android:id="@+id/nav_danhmuc"
+            android:icon="@drawable/ic_inbox"
+            android:title="Tạo danh mục" />
     </group>
 
     <item android:title="Tài khoản">

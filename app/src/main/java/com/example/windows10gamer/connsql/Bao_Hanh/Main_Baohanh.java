@@ -23,13 +23,13 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Order;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Information_Order;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
@@ -43,6 +43,7 @@ import java.util.Calendar;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -390,8 +391,6 @@ public class Main_Baohanh extends AppCompatActivity {
                                 listView.setVisibility(View.VISIBLE);
                             }
                         }
-                    } else {
-                        new CustomToast().Show_Toast(Main_Baohanh.this, findViewById(android.R.id.content), "Không có response!");
                     }
                 }
 
@@ -400,9 +399,8 @@ public class Main_Baohanh extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-
         } else {
-            new CustomToast().Show_Toast(Main_Baohanh.this,findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -460,8 +458,6 @@ public class Main_Baohanh extends AppCompatActivity {
                                 listView.setVisibility(View.VISIBLE);
                             }
                         }
-                    } else {
-                        new CustomToast().Show_Toast(Main_Baohanh.this, findViewById(android.R.id.content), "Không có response!");
                     }
                 }
 
@@ -472,7 +468,7 @@ public class Main_Baohanh extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Baohanh.this,findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -528,8 +524,6 @@ public class Main_Baohanh extends AppCompatActivity {
                                 listView.setVisibility(View.VISIBLE);
                             }
                         }
-                    } else {
-                        new CustomToast().Show_Toast(Main_Baohanh.this, findViewById(android.R.id.content), "Không có response!");
                     }
                 }
 
@@ -540,7 +534,7 @@ public class Main_Baohanh extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Baohanh.this,findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -607,7 +601,7 @@ public class Main_Baohanh extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Baohanh.this,findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -640,7 +634,7 @@ public class Main_Baohanh extends AppCompatActivity {
                     String tonghop = ma+ten+baohanh+nguon+ngaynhap+von+gia;
                     LoadJsonScan(tonghop);
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_Baohanh.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
+                    Toasty.error(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }

@@ -33,6 +33,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -55,7 +56,6 @@ import com.example.windows10gamer.connsql.Object.SanphamAmount;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.GiftList;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -91,6 +91,7 @@ import java.util.StringTokenizer;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 public class Main_Sales extends AppCompatActivity {
     EditText edGiamgia;
@@ -201,9 +202,9 @@ public class Main_Sales extends AppCompatActivity {
         shared = getSharedPreferences("login", MODE_PRIVATE);
         linkAvatar = shared.getString("img", "");
         Glide.with(Main_Sales.this).load(linkAvatar).into(ivAvatar);
-        Intent intentput  = getIntent();
-        session_username1  = intentput.getStringExtra("session_username");
-        session_ma1        = intentput.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username1 = shared.getString("shortName", "");
+        session_ma1 = shared.getString("ma", "");
         tvManhanvien.setText("Mã số: " + session_ma1);
         tvTennhanvien.setText("Tên nhân viên: " + session_username1);
         tvChinhanhSales.setText(chinhanh);
@@ -330,7 +331,7 @@ public class Main_Sales extends AppCompatActivity {
                     } else {
                         giatriMagiamgia = "0";
                         maGiamgia = "";
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                        Toasty.warning(Main_Sales.this, "Chưa nhập mã giảm giá", Toast.LENGTH_LONG, true).show();
                     }
                 }
             }
@@ -384,7 +385,7 @@ public class Main_Sales extends AppCompatActivity {
                                     public void onClick(View view) {
                                         madonhang = Keys.MaDonhang();
                                         if (session_ma.equals("Chọn")){
-                                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa chọn nhân viên bán!");
+                                            Toasty.warning(Main_Sales.this, "Chưa chọn nhân viên bán hàng", Toast.LENGTH_LONG, true).show();
                                         } else {
                                             if (arrayList.size() != 0) {
                                                 btnXacnhan.setEnabled(false);
@@ -401,7 +402,7 @@ public class Main_Sales extends AppCompatActivity {
                                                 setSoluong();
                                                 new SendRequest().execute();
                                             } else {
-                                                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa nhập mã giảm giá!");
+                                                Toasty.warning(Main_Sales.this, "Chưa nhập mã giảm giá", Toast.LENGTH_LONG, true).show();
                                             }
                                         }
 
@@ -442,7 +443,7 @@ public class Main_Sales extends AppCompatActivity {
                         setSoluong();
                         new SendRequest().execute();
                     } else
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa quét sản phẩm!");
+                        Toasty.warning(Main_Sales.this, "Chưa quét sản phẩm", Toast.LENGTH_LONG, true).show();
                 }
             }
         });
@@ -453,7 +454,7 @@ public class Main_Sales extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Sales.this).show();
                 else {
                     if (edKhachhang.getText().toString().trim().length() == 0){
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không được rỗng!!");
+                        Toasty.warning(Main_Sales.this, "Không được rỗng", Toast.LENGTH_LONG, true).show();
                     } else {
                         GetName();
                     }
@@ -468,7 +469,7 @@ public class Main_Sales extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Sales.this).show();
                 else {
                     if (edSodienthoai.getText().toString().trim().length() < 4){
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Ít nhất phải 4 chữ số");
+                       Toasty.warning(Main_Sales.this, "Ít nhất có 4 chữ số", Toast.LENGTH_LONG, true).show();
                     } else {
                         GetPhone();
                     }
@@ -509,7 +510,7 @@ public class Main_Sales extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không kết nối được Server");
+                        Toasty.error(Main_Sales.this, "Lỗi "+ error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         );
@@ -561,7 +562,7 @@ public class Main_Sales extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không kết nối được Server");
+                        Toasty.error(Main_Sales.this, "Lỗi "+ error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         );
@@ -740,10 +741,10 @@ public class Main_Sales extends AppCompatActivity {
                         lvKhuyenmai.setAdapter(null);
                         adapter.notifyDataSetChanged();
                     } else {
-                        new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không phải mã của chi nhánh hiện tại!");
+                        Toasty.warning(this, "Không phải mã của chi nhánh hiện tại", Toast.LENGTH_LONG, true).show();
                     }
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Không đúng mã!");
+                    Toasty.warning(this, "Không đúng mã", Toast.LENGTH_LONG, true).show();
                 }
             }
         }
@@ -862,7 +863,7 @@ public class Main_Sales extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             dismissProgressDialog();
         } else {
-            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Yêu cầu tạo đơn hàng mới!");
+            Toasty.warning(this, "Bạn nên tạo đơn hàng mới", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -951,7 +952,7 @@ public class Main_Sales extends AppCompatActivity {
     public String putData(int j){
         try {
             // Link Script
-            URL url = new URL(Keys.getScript_Banhang(chinhanh));
+            URL url = new URL(Keys.getSCRIPT_BANHANG(chinhanh));
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
@@ -1119,7 +1120,7 @@ public class Main_Sales extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(giatriMagiamgia.equals("") || giatriMagiamgia.equals("0")) {
-                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Mã không hợp lệ!");
+                Toasty.warning(Main_Sales.this, "Mã không hợp lệ", Toast.LENGTH_LONG, true).show();
                 edGiamgia.setText("");
                 giatriMagiamgia = "0";
                 maGiamgia = "";
@@ -1260,7 +1261,7 @@ public class Main_Sales extends AppCompatActivity {
                                 dialog.show();
                             } else {
                                 rbTangqua.setChecked(false);
-                                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Chưa quét sản phẩm!!");
+                                Toasty.warning(Main_Sales.this, "Chưa quét sản phẩm", Toast.LENGTH_LONG, true).show();
                             }
                         } else {
                             arrayQuatang.clear();
@@ -1340,11 +1341,10 @@ public class Main_Sales extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
                             if (j == (arrayList.size()-1)) {
-                                //new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
                             }
                         } else if (response.trim().equals("success")){
                             if (j == (arrayList.size()-1)){
-                                new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!!");
+                                Toasty.success(Main_Sales.this, "Tạo thành công", Toast.LENGTH_LONG, true).show();
                                 ResetActivity();
                             }
                         }
@@ -1353,7 +1353,7 @@ public class Main_Sales extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                       new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
+                       Toasty.error(Main_Sales.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -1414,73 +1414,6 @@ public class Main_Sales extends AppCompatActivity {
         super.onDestroy();
     }
 
-    // TODO: 1/28/2018 xóa mã giảm giá 
-    public class DeleteMGG extends AsyncTask<String, Void, String> {
-        protected void onPreExecute(){
-        }
-
-        protected String doInBackground(String... params) {
-            try{
-                // Link Script
-                URL url = new URL(Keys.SCRIPT_DE_MAGIAMGIA);
-
-                // Load Json object
-                JSONObject postDataParams = new JSONObject();
-
-                postDataParams.put("maGiamgia", maGiamgia);
-
-                Log.e("params",postDataParams.toString());
-
-                // Kết nối HTTP
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode=conn.getResponseCode();
-
-                // Nếu kết nối được
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-
-                    BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuffer sb = new StringBuffer("");
-                    String line="";
-
-                    while((line = in.readLine()) != null) {
-
-                        sb.append(line);
-                        break;
-                    }
-                    //
-                    in.close();
-                    // Trả dữ liệu cho về để ghi lên Excel
-                    return sb.toString();
-
-                }
-                else {
-                    return new String("false : "+responseCode);
-                }
-            }
-            catch(Exception e){
-                return new String("Exception: " + e.getMessage());
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
-    }
     public void DeleteMGGWeb(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
@@ -1532,7 +1465,7 @@ public class Main_Sales extends AppCompatActivity {
     public String putDataKM(int j){
         try {
             // Link Script
-            URL url = new URL(Keys.SCRIPT_KHUYENMAI);
+            URL url = new URL(Keys.getSCRIPT_KHUYENMAI(chinhanh));
 
             // Load Json object
             JSONObject postDataParamsKM = new JSONObject();
@@ -1601,14 +1534,14 @@ public class Main_Sales extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_Sales.this, "Lỗi ", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //  new CustomToast().Show_Toast(Main_Sales.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Sales.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -1642,8 +1575,6 @@ public class Main_Sales extends AppCompatActivity {
 
     public void ResetActivity(){
         Intent intentput = new Intent(Main_Sales.this, Main_Sales.class);
-        intentput.putExtra("session_username", session_username1);
-        intentput.putExtra("session_ma", session_ma1);
         startActivity(intentput);
         finish();
     }

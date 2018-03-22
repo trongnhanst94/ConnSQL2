@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Realtime_Order;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Top5;
@@ -38,7 +39,6 @@ import com.example.windows10gamer.connsql.Object.Top5;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
 import com.example.windows10gamer.connsql.Other.OrderList;
@@ -64,6 +64,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -229,7 +230,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                     Connect_Internet.buildDialog(Main_Realtime_Order.this).show();
                 else {
                     if (edrealtime.toString().trim().equals("")){
-                        new CustomToast().Show_Toast(Main_Realtime_Order.this, findViewById(android.R.id.content), "Chưa nhập ngày!");
+                        Toasty.warning(Main_Realtime_Order.this, "Chưa nhập ngày", Toast.LENGTH_LONG, true).show();
                     } else {
                         if (daynow.equals(Keys.getDateNow())){
                             handler.postDelayed(runnable, 1000);
@@ -364,7 +365,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                                 }
                             }
                             if (temp.size() == 0){
-                                new CustomToast().Show_Toast(Main_Realtime_Order.this, findViewById(android.R.id.content), "Không có đơn hàng!");
+                                Toasty.info(Main_Realtime_Order.this, "Không có đơn hàng", Toast.LENGTH_LONG, true).show();
                             }
                             if (totalgia != totalNow) {
                                 top5.clear();
@@ -403,7 +404,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
                                                 intent.putExtra("DataOrder", bundle);
                                                 startActivity(intent);
                                             } else {
-                                                new CustomToast().Show_Toast(Main_Realtime_Order.this, findViewById(android.R.id.content), "Không có dữ liệu!");
+                                                Toasty.info(Main_Realtime_Order.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
                                             }
                                         }
                                     }
@@ -420,7 +421,7 @@ public class Main_Realtime_Order extends AppCompatActivity implements OnChartVal
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Realtime_Order.this,parentView, "Không có Internet!");
+            Toasty.info(Main_Realtime_Order.this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 

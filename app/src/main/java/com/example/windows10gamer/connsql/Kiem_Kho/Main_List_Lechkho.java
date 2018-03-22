@@ -21,13 +21,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Object.CountSanpham;
 import com.example.windows10gamer.connsql.Object.CountSanpham2;
 import com.example.windows10gamer.connsql.Object.Kiemkho;
 import com.example.windows10gamer.connsql.Object.Lechkho;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -50,6 +50,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_List_Lechkho extends AppCompatActivity {
     ArrayList<CountSanpham> giong, khac, ga, gb, fullga, fullgb, showa, showb, all;
@@ -115,7 +117,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (input.getText().toString().trim().equals("")) {
-                                new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Không được để trống tên trang!");
+                                Toasty.warning(Main_List_Lechkho.this, "Không được để trống tên trang", Toast.LENGTH_LONG, true).show();
                             } else {
                                 tentrang = input.getText().toString().trim();
                                 addList(fullga2, fullgb2);
@@ -186,7 +188,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                             }
                             init(tamA, tamB);
                         } else {
-                            new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Không có dữ liệu!");
+                            Toasty.info(Main_List_Lechkho.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 }
@@ -217,9 +219,9 @@ public class Main_List_Lechkho extends AppCompatActivity {
     private ArrayList<CountSanpham2> iniTen(ArrayList<Kiemkho> donhang, ArrayList<CountSanpham> list) {
         ArrayList<CountSanpham2> full = new ArrayList<>();
         for (int i = 0; i<list.size(); i++){
-            int result = sosanh2(donhang, list.get(i).getMasanpham());
+            int result = sosanh2(donhang, list.get(i).getMa());
             if (result != -1){
-                full.add(new CountSanpham2(list.get(i).getMasanpham(), donhang.get(result).getTen(), donhang.get(result).getBaohanh(), donhang.get(result).getNguon(), donhang.get(result).getNgaynhap(), donhang.get(result).getVon(), donhang.get(result).getGia(), list.get(i).getNhanvien(), list.get(i).getSoluong()));
+                full.add(new CountSanpham2(list.get(i).getMa(), donhang.get(result).getTen(), donhang.get(result).getBaohanh(), donhang.get(result).getNguon(), donhang.get(result).getNgaynhap(), donhang.get(result).getVon(), donhang.get(result).getGia(), list.get(i).getNhanvien(), list.get(i).getSoluong()));
             }
         }
         return full;
@@ -238,9 +240,18 @@ public class Main_List_Lechkho extends AppCompatActivity {
         ArrayList<CountSanpham> full = new ArrayList<>();
         full.addAll(ga);
         for (int i = 0; i<khac.size(); i++){
-            int result = sosanh(ga, khac.get(i).getMasanpham(), khac.get(i).getSoluong());
+            int result = sosanh(ga, khac.get(i).getMa(), khac.get(i).getSoluong());
             if (result == -1){
-                full.add(new CountSanpham(ga.get(0).getNhanvien(), khac.get(i).getMasanpham(), 0));
+                full.add(new CountSanpham(
+                        ga.get(0).getNhanvien(),
+                        khac.get(i).getMa(),
+                        khac.get(i).getTen(),
+                        khac.get(i).getBaohanh(),
+                        khac.get(i).getNguon(),
+                        khac.get(i).getNgaynhap(),
+                        khac.get(i).getVon(),
+                        khac.get(i).getGia(),
+                        0));
             }
         }
         return full;
@@ -262,7 +273,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
-                if (dem_h.get(i).getMasanpham().equals(masanpham)){
+                if (dem_h.get(i).getMa().equals(masanpham)){
                     result = i;
                 }
             }
@@ -344,19 +355,45 @@ public class Main_List_Lechkho extends AppCompatActivity {
                     int resultMA = sosanhMA(dem, donhang.get(i).getMa(), donhang.get(i).getMaNhanvien());
                     if (resultNV == -1){
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(donhang.get(i).getMaNhanvien(), donhang.get(i).getMa(), 1));
-                        } else {
+                            dem.add(new CountSanpham(
+                                    donhang.get(i).getMaNhanvien(),
+                                    donhang.get(i).getMa(),
+                                    donhang.get(i).getTen(),
+                                    donhang.get(i).getBaohanh(),
+                                    donhang.get(i).getNguon(),
+                                    donhang.get(i).getNgaynhap(),
+                                    donhang.get(i).getVon(),
+                                    donhang.get(i).getGia(),
+                                    1));
                         }
                     } else {
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(donhang.get(i).getMaNhanvien(), donhang.get(i).getMa(), 1));
+                            dem.add(new CountSanpham(
+                                    donhang.get(i).getMaNhanvien(),
+                                    donhang.get(i).getMa(),
+                                    donhang.get(i).getTen(),
+                                    donhang.get(i).getBaohanh(),
+                                    donhang.get(i).getNguon(),
+                                    donhang.get(i).getNgaynhap(),
+                                    donhang.get(i).getVon(),
+                                    donhang.get(i).getGia(),
+                                    1));
                         } else {
-                            dem.set( resultMA, new CountSanpham(dem.get(resultMA).getNhanvien(), dem.get(resultMA).getMasanpham(),dem.get(resultMA).getSoluong()+1));
+                            dem.set( resultMA, new CountSanpham(
+                                    dem.get(resultMA).getNhanvien(),
+                                    dem.get(resultMA).getMa(),
+                                    dem.get(resultMA).getTen(),
+                                    dem.get(resultMA).getBaohanh(),
+                                    dem.get(resultMA).getNguon(),
+                                    dem.get(resultMA).getNgaynhap(),
+                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(donhang.get(i).getVon()))/2)+""),
+                                    (Integer.valueOf(dem.get(resultMA).getGia()) + Integer.valueOf(donhang.get(i).getGia()))/2+"",
+                                    dem.get(resultMA).getSoluong()+1));
                         }
                     }
                 }
             } else {
-                new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Không có dữ liệu được tìm thấy");
+                Toasty.info(Main_List_Lechkho.this, "Không có dữ liệu được tìm thấy", Toast.LENGTH_LONG, true).show();
             }
             for (int i = 0; i<dem.size(); i++){
                 if (dem.get(i).getNhanvien().equals(snUserA)){
@@ -371,15 +408,23 @@ public class Main_List_Lechkho extends AppCompatActivity {
             ga.addAll(demA); gb.addAll(demB);
             for (int i = 0; i < ga.size(); i++){
                 for (int j = 0; j < gb.size(); j++){
-                    if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
-                        giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
+                    if ((ga.get(i).getMa().equals(gb.get(j).getMa())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
+                        giong.add(new CountSanpham("giong",
+                                ga.get(i).getMa(),
+                                ga.get(i).getTen(),
+                                ga.get(i).getBaohanh(),
+                                ga.get(i).getNguon(),
+                                ga.get(i).getNgaynhap(),
+                                ga.get(i).getVon(),
+                                ga.get(i).getGia(),
+                                ga.get(i).getSoluong()));
                     }
                 }
             }
 
             all.addAll(ga);all.addAll(gb);
             for (int i = 0; i < all.size(); i++){
-                int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
+                int result = sosanh(giong, all.get(i).getMa(), all.get(i).getSoluong());
                 if (result == -1){
                     khac.add(all.get(i));
                 }
@@ -397,21 +442,11 @@ public class Main_List_Lechkho extends AppCompatActivity {
         }
     }
 
-//    public void setList(ArrayList<CountSanpham> list) {
-//        dialog_plus = new ProgressDialog(Main_List_Lechkho.this);
-//        dialog_plus.setTitle("Hãy chờ...");
-//        dialog_plus.setMessage("Dữ liệu đang được tải xuống");
-//        dialog_plus.setCancelable(false);
-//        dialog_plus.show();
-//        this.dem = list;
-//
-//    }
-
     private int sosanhMA(ArrayList<CountSanpham> dem_h, String masanpham, String nhanvien) {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
-                if (dem_h.get(i).getMasanpham().equals(masanpham) && dem_h.get(i).getNhanvien().equals(nhanvien)){
+                if (dem_h.get(i).getMa().equals(masanpham) && dem_h.get(i).getNhanvien().equals(nhanvien)){
                     result = i;
                 }
             }
@@ -571,7 +606,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             nPro.dismiss();
-            new CustomToast().Show_Toast(Main_List_Lechkho.this, findViewById(android.R.id.content), "Thành công!");
+            Toasty.success(Main_List_Lechkho.this, "Thành công", Toast.LENGTH_LONG, true).show();
         }
     }
 
@@ -604,7 +639,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
     public String CreatedTable(){
         try {
             // Link Script
-            URL url = new URL(Keys.SCRIPT_CREATEDTABLE);
+            URL url = new URL(Keys.getSCRIPT_CREATEDTABLE(chinhanh));
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
@@ -652,7 +687,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
     public String putData(int j){
         try {
             // Link Script
-            URL url = new URL(Keys.SCRIPT_BC_KK);
+            URL url = new URL(Keys.getSCRIPT_BC_KK(chinhanh));
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();

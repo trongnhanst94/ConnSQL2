@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,7 +34,6 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -55,6 +55,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_Hoantien extends AppCompatActivity {
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
@@ -86,7 +88,7 @@ public class Main_Hoantien extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
-        Glide.with(Main_Hoantien.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
+        Glide.with(Main_Hoantien.this).load(sp.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder2");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -135,8 +137,8 @@ public class Main_Hoantien extends AppCompatActivity {
         tvHtSdtKH.setText("SĐT KH: "+sdtKH);
         tvChinhanhHT.setText(chinhanh);
         tvChinhanhHTOrder.setText(chinhanhOrder);
-        tvHtTenNVNhan.setText("Mã NV bảo hành: "+session_username);
-        tvHtMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        tvHtMaNVNhan.setText("Mã NV bảo hành: "+session_ma);
+        tvHtTenNVNhan.setText("Tên NV bảo hành: "+session_username);
         GetUser(Main_Hoantien.this, maNV);
         edphitrahang.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -286,7 +288,7 @@ public class Main_Hoantien extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            new CustomToast().Show_Toast(Main_Hoantien.this, findViewById(android.R.id.content), "Gửi dữ liệu thành công.");
+            Toasty.success(Main_Hoantien.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
             ResetActivity();
         }
     }
@@ -319,7 +321,7 @@ public class Main_Hoantien extends AppCompatActivity {
 
     public String putData(){
         try {
-            URL url = new URL(Keys.SCRIPT_BH_HT);
+            URL url = new URL(Keys.getSCRIPT_BH_HT(chinhanh));
             JSONObject postDataParams = new JSONObject();
             postDataParams.put("maBH", maBH);
             postDataParams.put("dateToday", dateToday);
@@ -400,14 +402,14 @@ public class Main_Hoantien extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Hoantien.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_Hoantien.this, "Lỗi", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Hoantien.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Hoantien.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

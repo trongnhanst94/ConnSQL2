@@ -23,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,7 +36,6 @@ import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_KiemKho;
 import com.example.windows10gamer.connsql.Object.SanphamAmount;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -58,6 +58,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class Main_Kiemkho extends AppCompatActivity {
@@ -98,8 +100,9 @@ public class Main_Kiemkho extends AppCompatActivity {
         Intent intent = getIntent();
         ivAvatar = findViewById(R.id.ivAvatar);
         tvchinhanhkiemkho = findViewById(R.id.tvchinhanhkiemkho);
-        session_username  = intent.getStringExtra("session_username");
-        session_ma        = intent.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("shortName", "");
+        session_ma = shared.getString("ma", "");
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
         sp = getSharedPreferences("login", MODE_PRIVATE);
@@ -266,7 +269,7 @@ public class Main_Kiemkho extends AppCompatActivity {
                         }
                     }
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
+                    Toasty.warning(Main_Kiemkho.this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }
@@ -425,7 +428,6 @@ public class Main_Kiemkho extends AppCompatActivity {
                 params.put("giaSanpham", gia);
                 params.put("vitri", vitri);
                 params.put("kho", kho);
-                Log.e("qqq", "getParams: "+params.toString());
                 return params;
             }
         };
@@ -673,7 +675,7 @@ public class Main_Kiemkho extends AppCompatActivity {
             if(totalList.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_Kiemkho.this, findViewById(android.R.id.content), "Không có dữ liệu!!");
+                Toasty.info(Main_Kiemkho.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
             }
             dialog.dismiss();
         }

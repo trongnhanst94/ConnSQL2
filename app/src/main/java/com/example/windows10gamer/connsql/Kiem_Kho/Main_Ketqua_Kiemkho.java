@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,7 +41,6 @@ import com.example.windows10gamer.connsql.Object.CountSanpham;
 import com.example.windows10gamer.connsql.Object.Kiemkho;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -55,6 +55,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class
@@ -104,9 +106,9 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         lnXemchitiet.setVisibility(View.GONE);
         new Getvitri().execute();
         // Intent
-        Intent intent = getIntent();
-        session_username = intent.getStringExtra("session_username");
-        session_ma = intent.getStringExtra("session_ma");
+        SharedPreferences shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("shortName", "");
+        session_ma = shared.getString("ma", "");
 
         //list A & B
         adapter = new Adapter_Ketqua_Kiemkho(Main_Ketqua_Kiemkho.this, R.layout.adapter_ketqua_kiemkho, demA){
@@ -305,10 +307,10 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ga.size() == 0){
-                    new CustomToast().Show_Toast(Main_Ketqua_Kiemkho.this, findViewById(android.R.id.content), "Danh sách của "+nameUserA+" rỗng");
+                    Toasty.warning(Main_Ketqua_Kiemkho.this, "Danh sách của "+nameUserA+" rỗng", Toast.LENGTH_LONG, true).show();
                 } else {
                     if (gb.size() == 0){
-                        new CustomToast().Show_Toast(Main_Ketqua_Kiemkho.this, findViewById(android.R.id.content), "Danh sách của "+nameUserB+" rỗng");
+                        Toasty.warning(Main_Ketqua_Kiemkho.this, "Danh sách của "+nameUserB+" rỗng", Toast.LENGTH_LONG, true).show();
                     } else {
                         if(!Connect_Internet.checkConnection(getApplicationContext()))
                             Connect_Internet.buildDialog(Main_Ketqua_Kiemkho.this).show();
@@ -518,22 +520,59 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                     int resultMA = sosanhMA(dem, arrayList.get(i).getMa(), arrayList.get(i).getMaNhanvien());
                     if (resultNV == -1){
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(arrayList.get(i).getMaNhanvien(), arrayList.get(i).getMa(), 1));
+                            dem.add(new CountSanpham(
+                                    arrayList.get(i).getMaNhanvien(),
+                                    arrayList.get(i).getMa(),
+                                    arrayList.get(i).getTen(),
+                                    arrayList.get(i).getBaohanh(),
+                                    arrayList.get(i).getNguon(),
+                                    arrayList.get(i).getNgaynhap(),
+                                    arrayList.get(i).getVon(),
+                                    arrayList.get(i).getGia(),
+                                    1));
                             adapter.notifyDataSetChanged();
                         } else {
                         }
                     } else {
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(arrayList.get(i).getMaNhanvien(), arrayList.get(i).getMa(), 1));
+                            dem.add(new CountSanpham(
+                                    arrayList.get(i).getMaNhanvien(),
+                                    arrayList.get(i).getMa(),
+                                    arrayList.get(i).getTen(),
+                                    arrayList.get(i).getBaohanh(),
+                                    arrayList.get(i).getNguon(),
+                                    arrayList.get(i).getNgaynhap(),
+                                    arrayList.get(i).getVon(),
+                                    arrayList.get(i).getGia(),
+                                    1));
                             adapter.notifyDataSetChanged();
                         } else {
-                            dem.set( resultMA, new CountSanpham(dem.get(resultMA).getNhanvien(), dem.get(resultMA).getMasanpham(),dem.get(resultMA).getSoluong()+1));
+                            dem.set( resultMA, new CountSanpham(
+                                    dem.get(resultMA).getNhanvien(),
+                                    dem.get(resultMA).getMa(),
+                                    dem.get(resultMA).getTen(),
+                                    dem.get(resultMA).getBaohanh(),
+                                    dem.get(resultMA).getNguon(),
+                                    dem.get(resultMA).getNgaynhap(),
+                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(arrayList.get(i).getVon()))/2)+""),
+                                    (Integer.valueOf(dem.get(resultMA).getGia()) + Integer.valueOf(arrayList.get(i).getGia()))/2+"",
+                                    dem.get(resultMA).getSoluong()+1));
                             adapter.notifyDataSetChanged();
+                            Log.d("qqq", resultMA+"onPostExecute: "+
+                                            dem.get(resultMA).getNhanvien()+" ; "+
+                                    dem.get(resultMA).getMa()+" ; "+
+                                    dem.get(resultMA).getTen()+" ; "+
+                                    dem.get(resultMA).getBaohanh()+" ; "+
+                                    dem.get(resultMA).getNguon()+" ; "+
+                                    dem.get(resultMA).getNgaynhap()+" ; "+
+                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(arrayList.get(i).getVon()))/2)+"")+" ; "+
+                                    (Integer.valueOf(dem.get(resultMA).getGia()) + " = "+Integer.valueOf(arrayList.get(i).getGia()))+""+" ; "+
+                                    dem.get(resultMA).getSoluong()+1);
                         }
                     }
                 }
             } else {
-                new CustomToast().Show_Toast(Main_Ketqua_Kiemkho.this, findViewById(android.R.id.content), "Không có dữ liệu được tìm thấy");
+                Toasty.warning(Main_Ketqua_Kiemkho.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
             linearLayout.setLayoutParams(params);
@@ -550,14 +589,22 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
             ga.addAll(demA); gb.addAll(demB);
             for (int i = 0; i < ga.size(); i++){
                 for (int j = 0; j < gb.size(); j++){
-                    if ((ga.get(i).getMasanpham().equals(gb.get(j).getMasanpham())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
-                        giong.add(new CountSanpham("giong",ga.get(i).getMasanpham(), ga.get(i).getSoluong()));
+                    if ((ga.get(i).getMa().equals(gb.get(j).getMa())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
+                        giong.add(new CountSanpham("giong",
+                                ga.get(i).getMa(),
+                                ga.get(i).getTen(),
+                                ga.get(i).getBaohanh(),
+                                ga.get(i).getNguon(),
+                                ga.get(i).getNgaynhap(),
+                                ga.get(i).getVon(),
+                                ga.get(i).getGia(),
+                                ga.get(i).getSoluong()));
                     }
                 }
             }
             all.addAll(ga);all.addAll(gb);
             for (int i = 0; i < all.size(); i++){
-                int result = sosanh(giong, all.get(i).getMasanpham(), all.get(i).getSoluong());
+                int result = sosanh(giong, all.get(i).getMa(), all.get(i).getSoluong());
                 if (result == -1){
                     khac.add(all.get(i));
                 }
@@ -571,7 +618,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
-                if (dem_h.get(i).getMasanpham().equals(masanpham) && (soluong == dem_h.get(i).getSoluong())){
+                if (dem_h.get(i).getMa().equals(masanpham) && (soluong == dem_h.get(i).getSoluong())){
                     result = i;
                 }
             }
@@ -583,7 +630,7 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
-                if (dem_h.get(i).getMasanpham().equals(masanpham) && dem_h.get(i).getNhanvien().equals(nhanvien)){
+                if (dem_h.get(i).getMa().equals(masanpham) && dem_h.get(i).getNhanvien().equals(nhanvien)){
                     result = i;
                 }
             }

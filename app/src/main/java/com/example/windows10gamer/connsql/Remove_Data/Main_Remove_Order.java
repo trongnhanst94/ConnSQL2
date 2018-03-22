@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +31,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Remove_Order;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -47,6 +47,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class Main_Remove_Order extends AppCompatActivity {
     EditText edRMngay;
     private SharedPreferences shared;
@@ -55,7 +57,7 @@ public class Main_Remove_Order extends AppCompatActivity {
     ArrayList<Order> temp = new ArrayList<>();
     Adapter_Remove_Order adapter;
     ListView listView;
-    String ngay = "";
+    String ngay = Keys.getDateNow();
     Button btnRmOrder;
     private ProgressDialog dialog;
 
@@ -70,6 +72,8 @@ public class Main_Remove_Order extends AppCompatActivity {
         btnRmOrder = findViewById(R.id.btnRmOrder);
         adapter = new Adapter_Remove_Order(Main_Remove_Order.this, contactList);
         listView.setAdapter(adapter);
+        edRMngay.setText("Ngày bán: " + ngay);
+        new SendRequest().execute();
         edRMngay.setInputType(InputType.TYPE_NULL);
         edRMngay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +116,7 @@ public class Main_Remove_Order extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ngay.equals("")){
-                    new CustomToast().Show_Toast(Main_Remove_Order.this,findViewById(android.R.id.content), "Chưa chọn ngày!");
+                    Toasty.warning(Main_Remove_Order.this, "Chưa chọn ngày", Toast.LENGTH_LONG, true).show();
                 } else {
                     new SendRequest().execute();
                 }
@@ -227,7 +231,8 @@ public class Main_Remove_Order extends AppCompatActivity {
             if (contactList.size() > 0){
                 sortList(contactList);
                 adapter.notifyDataSetChanged();
-            } else new CustomToast().Show_Toast(Main_Remove_Order.this, findViewById(android.R.id.content), "Không có đơn hàng!");
+            } else
+            Toasty.info(Main_Remove_Order.this, "Không có đơn hàng nào", Toast.LENGTH_LONG, true).show();
             dialog.dismiss();
         }
     }
@@ -249,14 +254,14 @@ public class Main_Remove_Order extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("success")){
                             new SendRequest().execute();
-                            new CustomToast().Show_Toast(Main_Remove_Order.this, findViewById(android.R.id.content), "Xóa thành công!");
+                            Toasty.success(Main_Remove_Order.this, "Xóa thành công", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Remove_Order.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main_Remove_Order.this, "Không kết nối được Server", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

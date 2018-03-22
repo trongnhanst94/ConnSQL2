@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,10 +29,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Remove_BCDT;
-import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
 import com.example.windows10gamer.connsql.Object.Doanhthu;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -48,6 +47,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class Main_Remove_BCDT  extends AppCompatActivity {
     EditText edRMngay;
     private SharedPreferences shared;
@@ -56,7 +57,7 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
     ArrayList<Doanhthu> temp = new ArrayList<>();
     Adapter_Remove_BCDT adapter;
     ListView listView;
-    String ngay = "";
+    String ngay = Keys.getDateNow();
     Button btnRmOrder;
     private ProgressDialog dialog;
 
@@ -71,6 +72,8 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
         btnRmOrder = findViewById(R.id.btnRmOrder);
         adapter = new Adapter_Remove_BCDT(Main_Remove_BCDT.this, contactList);
         listView.setAdapter(adapter);
+        edRMngay.setText("Ngày bán: " + ngay);
+        new SendRequest().execute();
         edRMngay.setInputType(InputType.TYPE_NULL);
         edRMngay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +116,7 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ngay.equals("")){
-                    new CustomToast().Show_Toast(Main_Remove_BCDT.this,findViewById(android.R.id.content), "Chưa chọn ngày!");
+                    Toasty.warning(Main_Remove_BCDT.this, "Chưa chọn ngày", Toast.LENGTH_LONG, true).show();
                 } else {
                     new SendRequest().execute();
                 }
@@ -215,7 +218,8 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
             if (contactList.size() > 0){
                 sortList(contactList);
                 adapter.notifyDataSetChanged();
-            } else new CustomToast().Show_Toast(Main_Remove_BCDT.this, findViewById(android.R.id.content), "Không có báo cáo!");
+            } else
+            Toasty.info(Main_Remove_BCDT.this, "Không có báo cáo", Toast.LENGTH_LONG, true).show();
             dialog.dismiss();
         }
     }
@@ -236,7 +240,7 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Remove_BCDT.this, findViewById(android.R.id.content), "Xóa thành công!");
+                            Toasty.success(Main_Remove_BCDT.this, "Xóa thành công", Toast.LENGTH_LONG, true).show();
                             new SendRequest().execute();
                         }
                     }
@@ -244,7 +248,7 @@ public class Main_Remove_BCDT  extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Remove_BCDT.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main_Remove_BCDT.this, "Không kết nối được Server", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

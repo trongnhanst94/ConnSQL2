@@ -20,13 +20,13 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Order_Plus;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.Order_Plus;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,16 +71,25 @@ public class Main_Order extends AppCompatActivity {
         fabReportOrder = findViewById(R.id.fabReportOrder);
         cbCasang       = findViewById(R.id.cbCasangOrder);
         cbCachieu      = findViewById(R.id.cbCachieuOrder);
-        cbCasang.setChecked(true);
-        cbCachieu.setChecked(true);
+        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
+        chinhanh = shared.getString("chinhanh", "");
+        if (Keys.getCalam(chinhanh).equals(Keys.CA_SANG)){
+            cbCasang.setChecked(true);
+        }
+        if (Keys.getCalam(chinhanh).equals(Keys.CA_CHIEU)){
+            cbCachieu.setChecked(true);
+        }
         edBenginOrder.setText(Keys.getDateNow());
         edEndOrder.setText(Keys.getDateNow());
         contactList = new ArrayList<>();
         temp = new ArrayList<>();
         fabReportOrder.setVisibility(View.INVISIBLE);
         listView = findViewById(R.id.listView);
-        shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
-        chinhanh = shared.getString("chinhanh", "");
+        if (cbCasang.isChecked()) dateCasang = Keys.CA_SANG;
+        else dateCasang = "FALSE";
+        if (cbCachieu.isChecked()) dateCachieu = Keys.CA_CHIEU;
+        else dateCachieu = "FALSE";
+        LoadJson(Keys.getDateNow(), Keys.getDateNow(), dateCasang, dateCachieu);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -184,7 +194,7 @@ public class Main_Order extends AppCompatActivity {
                     else dateCasang = "FALSE";
                     if (cbCachieu.isChecked()) dateCachieu = Keys.CA_CHIEU;
                     else dateCachieu = "FALSE";
-                    LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu, v);
+                    LoadJson(dateBegin, dateEnd, dateCasang, dateCachieu);
                 }
             }
         });
@@ -212,7 +222,7 @@ public class Main_Order extends AppCompatActivity {
                         intent.putExtra("ReportBundle", bundle);
                         startActivity(intent);
                     } else {
-                        new CustomToast().Show_Toast(Main_Order.this, findViewById(android.R.id.content), "Không có dữ liệu!");
+                        Toasty.info(Main_Order.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
                     }
                 }
             }
@@ -247,7 +257,7 @@ public class Main_Order extends AppCompatActivity {
         this.reportList = List;
     }
 
-    public void LoadJson(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu, final View v) {
+    public void LoadJson(final String loadBegin, final String loadEnd, final String loadCasang, final String loadCachieu) {
         if (Connect_Internet.checkConnection(getApplicationContext())) {
             final ProgressDialog dialog;
             dialog = new ProgressDialog(Main_Order.this);
@@ -338,15 +348,13 @@ public class Main_Order extends AppCompatActivity {
 
                         getList(contactList);
                         if (temp.size() == 0){
-                            new CustomToast().Show_Toast(Main_Order.this, v, "Không có đơn hàng!");
+                            Toasty.info(Main_Order.this, "Không có đơn hàng", Toast.LENGTH_LONG, true).show();
                         }
                         sortList(temp);
                         adapter = new Adapter_Order_Plus(Main_Order.this, temp);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         fabReportOrder.setVisibility(View.VISIBLE);
-                    } else {
-                        new CustomToast().Show_Toast(Main_Order.this, v, "Không có response!");
                     }
                 }
 
@@ -357,7 +365,7 @@ public class Main_Order extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Order.this,parentView, "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,6 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/bg125"
         android:gravity="right"
         android:orientation="horizontal"
@@ -63,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/holo_cam"
+                android:background="@color/tgh"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -93,12 +95,14 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="7dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/lnHide"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/bg_ln"
                 android:orientation="vertical">
 
@@ -345,7 +349,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2.5"
-                                    android:background="@color/holo_cam"
+                                    android:background="@color/tgh"
                                     android:padding="3dp"
                                     android:text="Hạng mục"
                                     android:textAlignment="center"
@@ -357,7 +361,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
-                                    android:background="@color/holo_cam"
+                                    android:background="@color/tgh"
                                     android:padding="3dp"
                                     android:text="Kết quả/Chỉ tiêu"
                                     android:textAlignment="center"
@@ -369,7 +373,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1.5"
-                                    android:background="@color/holo_cam"
+                                    android:background="@color/tgh"
                                     android:padding="3dp"
                                     android:text="%"
                                     android:textAlignment="center"
@@ -399,7 +403,6 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
 
                                 <TextView
@@ -435,7 +438,6 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
 
                                 <TextView
@@ -469,7 +471,6 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
 
                                 <TextView
@@ -505,7 +506,6 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
 
                                 <TextView
@@ -541,7 +541,6 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/body_row"
                                     android:textAlignment="center"
-                                    android:textColor="@color/RED"
                                     android:textSize="@dimen/muoi" />
 
                                 <TextView
@@ -560,14 +559,10 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -838,19 +833,26 @@
 
             </TableLayout>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"></android.support.v7.widget.RecyclerView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:gravity="end"
-                android:paddingTop="45dp">
+                android:gravity="end">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="20dp"
                     android:text="iDeal is a project by Dealtichtac \n © 2017. Design by EV"
                     android:textAlignment="center"
                     android:textSize="@dimen/btn" />
@@ -859,6 +861,5 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 </LinearLayout>

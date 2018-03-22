@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Object.Customer;
 import com.example.windows10gamer.connsql.Object.Order;
@@ -21,7 +22,6 @@ import com.example.windows10gamer.connsql.Object.ReportSales;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
@@ -30,6 +30,7 @@ import com.example.windows10gamer.connsql.R;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -241,7 +242,7 @@ public class Main_Report_Sales extends AppCompatActivity {
             });
 
         } else {
-            new CustomToast().Show_Toast(Main_Report_Sales.this, findViewById(android.R.id.content), "Không có Internet!");
+            Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
         }
     }
 

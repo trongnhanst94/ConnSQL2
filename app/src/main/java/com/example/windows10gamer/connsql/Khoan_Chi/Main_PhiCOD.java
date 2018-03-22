@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,11 +35,9 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_PhiCOD;
 import com.example.windows10gamer.connsql.Object.PhiCOD;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
-import com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +57,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_PhiCOD extends AppCompatActivity {
 
@@ -80,9 +81,9 @@ public class Main_PhiCOD extends AppCompatActivity {
         tvcodtoday = findViewById(R.id.tvcodtoday);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
-        Intent intent = getIntent();
-        session_username  = intent.getStringExtra("session_username");
-        session_ma        = intent.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("shortName", "");
+        session_ma = shared.getString("ma", "");
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
         tvcodtoday.setText("Ngày: "+ca+" "+ngay);
@@ -132,7 +133,7 @@ public class Main_PhiCOD extends AppCompatActivity {
                             if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")) {
                                 new SendRequest().execute();
                             } else {
-                                new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                                Toasty.warning(Main_PhiCOD.this, "Phải nhập tất cả các trường", Toast.LENGTH_LONG, true).show();
                             }
                         }
                     });
@@ -265,9 +266,9 @@ public class Main_PhiCOD extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_PhiCOD.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
+                            Toasty.success(Main_PhiCOD.this, "Tạo phiếu chi thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -275,7 +276,7 @@ public class Main_PhiCOD extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_PhiCOD.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -326,7 +327,7 @@ public class Main_PhiCOD extends AppCompatActivity {
     public String putData(){
         try {
             // Link Script
-            URL url = new URL(Keys.SCRIPT_PHICOD);
+            URL url = new URL(Keys.getSCRIPT_PHICOD(chinhanh));
 
             // Load Json object
             JSONObject postDataParams = new JSONObject();
@@ -375,62 +376,6 @@ public class Main_PhiCOD extends AppCompatActivity {
             return new String("");
         }
     }
-
-//
-//    public String putData(){
-//        try {
-//            // Link Script
-//            URL url = new URL(Keys.SCRIPT_PHICOD);
-//
-//            // Load Json object
-//            JSONObject postDataParams = new JSONObject();
-//            postDataParams.put("maCOD", "COD_"+ maMa);
-//            postDataParams.put("ngay", ngay);
-//            postDataParams.put("ca", ca);
-//            postDataParams.put("chinhanh", chinhanh);
-//            postDataParams.put("maNV", session_ma);
-//            postDataParams.put("tenNV", session_username);
-//            postDataParams.put("noidung", noidung);
-//            postDataParams.put("sotien", sotien);
-//
-//            Log.e("postDataParams", postDataParams.toString());
-//
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setReadTimeout(15000 /* milliseconds */);
-//            conn.setConnectTimeout(15000 /* milliseconds */);
-//            conn.setRequestMethod("GET");
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//
-//            OutputStream os = conn.getOutputStream();
-//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-//            writer.write(getPostDataString(postDataParams));
-//
-//            writer.flush();
-//            writer.close();
-//            os.close();
-//
-//            int responseCode = conn.getResponseCode();
-//            if (responseCode == HttpsURLConnection.HTTP_OK) {
-//
-//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                StringBuffer sb = new StringBuffer("");
-//                String line = "";
-//
-//                while ((line = in.readLine()) != null) {
-//
-//                    sb.append(line);
-//                    break;
-//                }
-//                in.close();
-//                return sb.toString();
-//            } else {
-//                return new String("");
-//            }
-//        } catch (Exception e) {
-//            return new String("");
-//        }
-//    }
 
     class GetData extends AsyncTask<String, Void, Void> {
 
@@ -489,7 +434,7 @@ public class Main_PhiCOD extends AppCompatActivity {
             if(arraylist.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_PhiCOD.this, findViewById(android.R.id.content), "Không có phiếu chi nào!!");
+                Toasty.info(Main_PhiCOD.this, "Không có phiếu chi nào", Toast.LENGTH_LONG, true).show();
             }
             dialog2.dismiss();
         }

@@ -193,6 +193,29 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Loại khoản chi:"
+                android:textSize="@dimen/muoi" />
+
+            <Spinner
+                android:id="@+id/snchi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:background="@drawable/bg_sn"
+                android:padding="5dp" />
+        </LinearLayout>
+
         <EditText
             android:id="@+id/edchinoidung"
             android:layout_width="match_parent"

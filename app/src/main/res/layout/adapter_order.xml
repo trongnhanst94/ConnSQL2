@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_edittext_focused"
             android:gravity="center_vertical|center"
+            android:text="o"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/muoi" />
 

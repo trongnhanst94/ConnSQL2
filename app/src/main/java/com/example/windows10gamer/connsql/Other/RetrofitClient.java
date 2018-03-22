@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String RETROFIT_ORDER_URL = Keys.RETROFIT_ORDER;
+    private static final String RETROFIT_ORDER_URL = Keys.LINK_SERVER;
 
     private static Retrofit getRetrofitInstance() {
         return new Retrofit.Builder()

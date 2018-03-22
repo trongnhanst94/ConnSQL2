@@ -3,6 +3,7 @@ package com.example.windows10gamer.connsql;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -18,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,7 +29,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 
 import org.json.JSONArray;
@@ -35,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -75,7 +78,7 @@ public class Main_Login extends AppCompatActivity {
             if (Connect_Internet.checkConnection(getApplicationContext())) {
                 GetUser();
             } else {
-                new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không có Internet");
+                Toasty.error(this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
                 login_layout.startAnimation(animation);
             }
         } else {
@@ -94,7 +97,7 @@ public class Main_Login extends AppCompatActivity {
                     Pass = edPass.getText().toString().trim();
                     GetUser();
                 } else {
-                    new CustomToast().Show_Toast(Main_Login.this, v, "Không có Internet");
+                    Toasty.error(Main_Login.this, "Không có mạng Internet", Toast.LENGTH_LONG, true).show();
                     login_layout.startAnimation(animation);
                 }
             }
@@ -176,18 +179,21 @@ public class Main_Login extends AppCompatActivity {
                                 editor.commit();
                             }
                             progress.dismiss();
-                            new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Xin chào " + shortName);
+                            Toasty.Config.getInstance()
+                                    .setErrorColor(Color.parseColor("#d82828"))
+                                    .setInfoColor(Color.parseColor("#6699ff"))
+                                    .setSuccessColor(Color.parseColor("#6ebf4b"))
+                                    .setWarningColor(Color.parseColor("#fdaf17"))
+                                    .apply();
+                            Toasty.success(Main_Login.this, "Xin chào " + shortName, Toast.LENGTH_LONG, true).show();
                             Intent intent = new Intent(Main_Login.this, Main.class);
-                            intent.putExtra("session_username", shortName);
-                            intent.putExtra("session_ma", ma_user);
-                            intent.putExtra("shortName", shortName);
                             startActivity(intent);
                             finish();
                         } else {
                             if (progress != null){
                                 progress.dismiss();
                             }
-                            new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không đúng tài khoản.");
+                            Toasty.warning(Main_Login.this, "Không đúng tài khoản", Toast.LENGTH_LONG, true).show();
                             login_layout.startAnimation(animation);
                         }
 
@@ -196,7 +202,7 @@ public class Main_Login extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Login.this, findViewById(android.R.id.content), "Không kết nối được Server");
+                        Toasty.error(Main_Login.this, "Không kết nối được Server", Toast.LENGTH_LONG, true).show();
                     }
                 }
         );

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -36,8 +36,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class Main_Remove_Data extends AppCompatActivity {
-    TextView tvRmOrder, tvRmkiemkho, tvRmBCDT, tvRmDatcoc, tvRmKhoanchi, tvRmCOD, tvRmTientrave;
+    TextView tvRmOrder, tvRmkiemkho, tvRmBCDT, tvRmDatcoc, tvRmKhoanchi, tvRmCOD, tvRmTientrave, tvRmBaohanh;
     String chinhanh;
     ArrayList<String> position = new ArrayList<>();
 
@@ -53,6 +55,17 @@ public class Main_Remove_Data extends AppCompatActivity {
                     Connect_Internet.buildDialog(Main_Remove_Data.this).show();
                 else {
                     startActivity(new Intent(Main_Remove_Data.this, Main_Remove_Order.class));
+                }
+            }
+        });
+        tvRmBaohanh = findViewById(R.id.tvRmBaohanh);
+        tvRmBaohanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Remove_Data.this).show();
+                else {
+                    startActivity(new Intent(Main_Remove_Data.this, Main_Remove_Baohanh.class));
                 }
             }
         });
@@ -227,14 +240,14 @@ public class Main_Remove_Data extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Remove_Data.this, findViewById(android.R.id.content), "Clear thành công!");
+                            Toasty.success(Main_Remove_Data.this, "Clear kho thành công", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Remove_Data.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main_Remove_Data.this, "Không kết nối được Server", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

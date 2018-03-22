@@ -14,12 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,7 +37,6 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Khoanchi;
 import com.example.windows10gamer.connsql.Object.Khoanchi;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -58,6 +60,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import es.dmoral.toasty.Toasty;
+
 public class Main_Khoan_Chi extends AppCompatActivity {
 
     TextView tvchitoday;
@@ -69,6 +73,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
     Adapter_Khoanchi adapter;
     ArrayList<Khoanchi> arraylist;
     private String maMa;
+    String loai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +84,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         tvchitoday = findViewById(R.id.tvchitoday);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
-        Intent intent = getIntent();
-        session_username  = intent.getStringExtra("session_username");
-        session_ma        = intent.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("shortName", "");
+        session_ma = shared.getString("ma", "");
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
         tvchitoday.setText("Ngày: "+ca+" "+ngay);
@@ -98,51 +103,125 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         btnthemchi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = null;
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
-                } else {
-                    dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
-                }
-                dialog.setIcon(R.drawable.ic_addchi)
-                        .setTitle("Tạo phiếu chi");
-                View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
-                dialog.setCancelable(false);
-                final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
-                final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
-                final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
-                final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
-                final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
-                final EditText edchisotien = mView.findViewById(R.id.edchisotien);
-                shared = getSharedPreferences("login", MODE_PRIVATE);
-                Glide.with(Main_Khoan_Chi.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
-                tvchichinhanh.setText(chinhanh);
-                tvchimanv.setText("Mã số: "+session_ma);
-                tvchitennv.setText("Tên nhân viên: "+session_username);
-                dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        maMa = Keys.MaDonhang();
-                        noidung = edchinoidung.getText().toString().trim();
-                        sotien = edchisotien.getText().toString().trim();
-                        if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")){
-                            new SendRequest().execute();
-                        } else {
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main_Khoan_Chi.this).show();
+                else {
+                    GetDanhmuc(new VolleyCallback() {
+                        @Override
+                        public void onSuccess(final ArrayList<String> danhmucList) {
+                            AlertDialog.Builder dialog = null;
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                                dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                            } else {
+                                dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
+                            }
+                            dialog.setIcon(R.drawable.ic_addchi)
+                                    .setTitle("Tạo phiếu chi");
+                            View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
+                            dialog.setCancelable(false);
+                            final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
+                            final TextView tvchimanv = mView.findViewById(R.id.tvchimanv);
+                            final TextView tvchitennv = mView.findViewById(R.id.tvchitennv);
+                            final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
+                            final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
+                            final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                            final Spinner snchi = mView.findViewById(R.id.snchi);
+                            ArrayAdapter mAdapter;
+                            mAdapter = new ArrayAdapter<>(Main_Khoan_Chi.this, android.R.layout.simple_spinner_item, danhmucList);
+                            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            snchi.setAdapter(mAdapter);
+                            selectValue(snchi, chinhanh);
+                            snchi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                   loai = snchi.getSelectedItem().toString();
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            shared = getSharedPreferences("login", MODE_PRIVATE);
+                            Glide.with(Main_Khoan_Chi.this).load(shared.getString("img", "")).override(300, 300).fitCenter().into(ivAvatar);
+                            tvchichinhanh.setText(chinhanh);
+                            tvchimanv.setText("Mã số: " + session_ma);
+                            tvchitennv.setText("Tên nhân viên: " + session_username);
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (loai.equals("Chọn")){
+                                        Toasty.warning(Main_Khoan_Chi.this, "Bạn chưa chọn Loại chi", Toast.LENGTH_LONG, true).show();
+                                        dialog.dismiss();
+                                    } else {
+                                        maMa = Keys.MaDonhang();
+                                        noidung = edchinoidung.getText().toString().trim();
+                                        sotien = edchisotien.getText().toString().trim();
+                                        if (!noidung.equals("") && !sotien.equals("") && !sotien.equals("0")) {
+                                            new SendRequest().execute();
+                                        } else {
+                                            Toasty.warning(Main_Khoan_Chi.this, "Phải nhập tất cả các trường", Toast.LENGTH_LONG, true).show();
+                                        }
+                                    }
+
+                                }
+                            });
+                            dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.setView(mView);
+                            AlertDialog al = dialog.create();
+                            al.show();
                         }
-                    }
-                });
-                dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(mView);
-                AlertDialog al = dialog.create();
-                al.show();
+                    });
+                }
             }
         });
+    }
+
+    public ArrayList<String> GetDanhmuc(final VolleyCallback callback) {
+        final ArrayList<String> danhmuc = new ArrayList<String>();
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Keys.MAIN_DANHMUC+"?loai="+Keys.KHOANCHI, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        danhmuc.add("Chọn");
+                        for (int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                danhmuc.add(object.getString("ten"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        callback.onSuccess(danhmuc);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onSuccess(danhmuc);
+                    }
+                }
+        );
+        requestQueue.add(jsonArrayRequest);
+        return danhmuc;
+    }
+
+    public interface VolleyCallback{
+        void onSuccess(ArrayList<String> result);
+    }
+
+    private void selectValue(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
     }
 
     private void GetUser(final int position, final Context c, final String manhanvien) {
@@ -159,7 +238,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                             dialog = new AlertDialog.Builder(Main_Khoan_Chi.this);
                         }
                         dialog.setIcon(R.drawable.ic_addchi)
-                                .setTitle("Tạo phiếu chi");
+                                .setTitle("Chi tiết phiếu chi");
                         View mView = getLayoutInflater().inflate(R.layout.dialog_khoanchi, null);
                         dialog.setCancelable(false);
                         final ImageView ivAvatar = mView.findViewById(R.id.ivAvatar);
@@ -171,6 +250,15 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                         final TextView tvchichinhanh = mView.findViewById(R.id.tvchichinhanh);
                         final EditText edchinoidung = mView.findViewById(R.id.edchinoidung);
                         final EditText edchisotien = mView.findViewById(R.id.edchisotien);
+                        final Spinner snchi = mView.findViewById(R.id.snchi);
+                        ArrayAdapter mAdapter;
+                        ArrayList<String> string = new ArrayList<>();
+                        string.add(arraylist.get(position).getLoai());
+                        mAdapter = new ArrayAdapter<>(Main_Khoan_Chi.this, android.R.layout.simple_spinner_item, string);
+                        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        snchi.setAdapter(mAdapter);
+                        selectValue(snchi, chinhanh);
+                        snchi.setEnabled(false);
                         lnHidden.setVisibility(View.VISIBLE);
                         tvchingay.setText(arraylist.get(position).getNgay());
                         tvchica.setText(arraylist.get(position).getCa());
@@ -227,6 +315,11 @@ public class Main_Khoan_Chi extends AppCompatActivity {
 
         protected void onPreExecute(){
             super.onPreExecute();
+            dialog2 = new ProgressDialog(Main_Khoan_Chi.this);
+            dialog2.setTitle("Hãy chờ...");
+            dialog2.setMessage("Dữ liệu đang được tải lên");
+            dialog2.setCancelable(false);
+            dialog2.show();
         }
 
         protected String doInBackground(Void... arg0) {
@@ -242,6 +335,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            dialog2.dismiss();
             new GetData().execute(chinhanh);
         }
     }
@@ -261,9 +355,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_Khoan_Chi.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Tạo phiếu chi thành công!!");
+                            Toasty.success(Main_Khoan_Chi.this, "Tạo phiếu chi thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -271,7 +365,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Khoan_Chi.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -285,6 +379,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                 params.put("chinhanh", chinhanh);
                 params.put("maNV", session_ma);
                 params.put("tenNV", session_username);
+                params.put("loai", loai);
                 params.put("noidung", noidung);
                 params.put("sotien", sotien);
                 Log.e("params", params.toString());
@@ -321,10 +416,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
 
     public String putData(){
         try {
-            // Link Script
-            URL url = new URL(Keys.SCRIPT_KHOANCHI);
-
-            // Load Json object
+            URL url = new URL(Keys.getSCRIPT_KHOANCHI(chinhanh));
             JSONObject postDataParams = new JSONObject();
             postDataParams.put("maKC", "CHI_"+ maMa);
             postDataParams.put("ngay", ngay);
@@ -332,11 +424,9 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             postDataParams.put("chinhanh", chinhanh);
             postDataParams.put("maNV", session_ma);
             postDataParams.put("tenNV", session_username);
+            postDataParams.put("loai", loai);
             postDataParams.put("noidung", noidung);
             postDataParams.put("sotien", sotien);
-
-            Log.e("postDataParams", postDataParams.toString());
-            // Kết nối HTTP
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -407,6 +497,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
                                             object.getString("chinhanh"),
                                             object.getString("maNV"),
                                             object.getString("tenNV"),
+                                            object.getString("loai"),
                                             object.getString("noidung"),
                                             object.getString("sotien")
                                     ));
@@ -429,7 +520,7 @@ public class Main_Khoan_Chi extends AppCompatActivity {
             if(arraylist.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_Khoan_Chi.this, findViewById(android.R.id.content), "Không có phiếu chi nào!!");
+                Toasty.info(Main_Khoan_Chi.this, "Không có phiếu chi nào", Toast.LENGTH_LONG, true).show();
             }
             dialog2.dismiss();
         }

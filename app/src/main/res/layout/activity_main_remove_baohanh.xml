@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Baohanh">
+
+    <TextView
+        android:id="@+id/tvmaBH1D1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="10dp"
+        android:text="Remove Bảo hành"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="@dimen/tie" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Lưu ý: những dữ liệu sau khi xóa sẽ không phục hồi được"
+        android:textAlignment="center"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvht"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa BH hoàn tiền"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tv1d1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa BH 1 đổi 1"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvdlk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa Bh đổi lấy khác"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvcxl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa BH Chờ xử lý"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+    <TextView
+        android:id="@+id/tvddt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg125"
+        android:drawableStart="@drawable/ic_deletedata"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="5dp"
+        android:text="Xóa BH đổi dùng thử"
+        android:textAllCaps="true"
+        android:textSize="@dimen/muoi" />
+
+</LinearLayout>

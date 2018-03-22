@@ -5,15 +5,16 @@ package com.example.windows10gamer.connsql.Object;
  */
 
 public class TienTraVe {
-    private String maTV, ngay, ca, chinhanh, maNV, tenNV,  noidung, sotien;
+    private String maTV, ngay, ca, chinhanh, maNV, tenNV, loai, noidung, sotien;
 
-    public TienTraVe(String maTV, String ngay, String ca, String chinhanh, String maNV, String tenNV, String noidung, String sotien) {
+    public TienTraVe(String maTV, String ngay, String ca, String chinhanh, String maNV, String tenNV, String loai, String noidung, String sotien) {
         this.maTV = maTV;
         this.ngay = ngay;
         this.ca = ca;
         this.chinhanh = chinhanh;
         this.maNV = maNV;
         this.tenNV = tenNV;
+        this.loai = loai;
         this.noidung = noidung;
         this.sotien = sotien;
     }
@@ -64,6 +65,14 @@ public class TienTraVe {
 
     public void setTenNV(String tenNV) {
         this.tenNV = tenNV;
+    }
+
+    public String getLoai() {
+        return loai;
+    }
+
+    public void setLoai(String loai) {
+        this.loai = loai;
     }
 
     public String getNoidung() {

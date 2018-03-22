@@ -27,7 +27,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
-        android:text="Mã này chỉ sử dụng được 1 lần!!!"
+        android:text="Mã này chỉ sử dụng được 1 lần!"
         android:textAlignment="center"
         android:textSize="@dimen/muoi" />
 

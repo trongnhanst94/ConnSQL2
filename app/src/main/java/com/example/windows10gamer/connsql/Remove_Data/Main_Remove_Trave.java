@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +31,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Remove_Tientrave;
 import com.example.windows10gamer.connsql.Object.TienTraVe;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -47,6 +47,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class Main_Remove_Trave extends AppCompatActivity {
     EditText edRMngay;
     private SharedPreferences shared;
@@ -55,7 +57,7 @@ public class Main_Remove_Trave extends AppCompatActivity {
     ArrayList<TienTraVe> temp = new ArrayList<>();
     Adapter_Remove_Tientrave adapter;
     ListView listView;
-    String ngay = "";
+    String ngay = Keys.getDateNow();
     Button btnRmOrder;
     private ProgressDialog dialog;
 
@@ -70,6 +72,8 @@ public class Main_Remove_Trave extends AppCompatActivity {
         btnRmOrder = findViewById(R.id.btnRmOrder);
         adapter = new Adapter_Remove_Tientrave(Main_Remove_Trave.this, contactList);
         listView.setAdapter(adapter);
+        edRMngay.setText("Ngày bán: " + ngay);
+        new SendRequest().execute();
         edRMngay.setInputType(InputType.TYPE_NULL);
         edRMngay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +116,7 @@ public class Main_Remove_Trave extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ngay.equals("")){
-                    new CustomToast().Show_Toast(Main_Remove_Trave.this,findViewById(android.R.id.content), "Chưa chọn ngày!");
+                    Toasty.warning(Main_Remove_Trave.this, "Chưa chọn ngày", Toast.LENGTH_LONG, true).show();
                 } else {
                     new SendRequest().execute();
                 }
@@ -171,15 +175,15 @@ public class Main_Remove_Trave extends AppCompatActivity {
         @Nullable
         @Override
         protected Void doInBackground(String... params) {
-            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_TIENTRAVE+"?ngay="+ngay+"&tacvu=delete");
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_TIENTRAVE + "?ngay=" + ngay + "&tacvu=delete");
             try {
                 if (jsonObject != null) {
                     contactList.clear();
-                    if(jsonObject.length() > 0) {
+                    if (jsonObject.length() > 0) {
                         JSONArray array = jsonObject.getJSONArray(Keys.TIEN_TRA_VE);
                         int lenArray = array.length();
-                        if(lenArray > 0) {
-                            for( ; jIndex < lenArray; jIndex++) {
+                        if (lenArray > 0) {
+                            for (; jIndex < lenArray; jIndex++) {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     contactList.add(new TienTraVe(
@@ -189,6 +193,7 @@ public class Main_Remove_Trave extends AppCompatActivity {
                                             object.getString("chinhanh"),
                                             object.getString("maNV"),
                                             object.getString("tenNV"),
+                                            object.getString("loai"),
                                             object.getString("noidung"),
                                             object.getString("sotien")
                                     ));
@@ -208,50 +213,50 @@ public class Main_Remove_Trave extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (contactList.size() > 0){
+            if (contactList.size() > 0) {
                 sortList(contactList);
                 adapter.notifyDataSetChanged();
-            } else new CustomToast().Show_Toast(Main_Remove_Trave.this, findViewById(android.R.id.content), "Không có đơn hàng!");
-            dialog.dismiss();
-        }
-    }
-
-    private void sortList(ArrayList<TienTraVe> list) {
-        Collections.sort(list, new Comparator<TienTraVe>() {
-            @Override
-            public int compare(TienTraVe lhs, TienTraVe rhs) {
-                return rhs.getMaTV().compareTo(lhs.getMaTV());
+            } else Toasty.info(Main_Remove_Trave.this, "Không có đơn trả về nào", Toast.LENGTH_LONG, true).show();
+                dialog.dismiss();
             }
-        });
-    }
+        }
 
-    public void Delete(final String id){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Remove_Trave.this, findViewById(android.R.id.content), "Xóa thành công!");
-                            new SendRequest().execute();
+        private void sortList(ArrayList<TienTraVe> list) {
+            Collections.sort(list, new Comparator<TienTraVe>() {
+                @Override
+                public int compare(TienTraVe lhs, TienTraVe rhs) {
+                    return rhs.getMaTV().compareTo(lhs.getMaTV());
+                }
+            });
+        }
+
+        public void Delete(final String id) {
+            RequestQueue requestQueue = Volley.newRequestQueue(Main_Remove_Trave.this);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.trim().equals("success")) {
+                                Toasty.success(Main_Remove_Trave.this, "Xóa thành công", Toast.LENGTH_LONG, true).show();
+                                new SendRequest().execute();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toasty.error(Main_Remove_Trave.this, "Không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Remove_Trave.this, findViewById(android.R.id.content), "Không kết nối được Server!");
-                    }
+            ) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("tacvu", Keys.DELE_TIENTRAVE_WEB);
+                    params.put("maTV", id);
+                    return params;
                 }
-        ){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("tacvu", Keys.DELE_TIENTRAVE_WEB);
-                params.put("maTV", id);
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
+            };
+            requestQueue.add(stringRequest);
     }
 }

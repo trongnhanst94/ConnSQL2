@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +31,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Magiamgia;
 import com.example.windows10gamer.connsql.Object.Magiamgia;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 
@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_MaGiamGia extends AppCompatActivity {
 
@@ -139,7 +141,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
                         btnSudungma.setEnabled(true);
                     } else {
                         btnSudungma.setVisibility(View.INVISIBLE);
-                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Chưa nhập số tiền giảm giá!!");
+                        Toasty.warning(Main_MaGiamGia.this, "Chưa nhập số tiền giảm giá", Toast.LENGTH_LONG, true).show();
                     }
                 }
             }
@@ -192,7 +194,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Xóa thành công!");
+                            Toasty.success(Main_MaGiamGia.this, "Xóa thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -200,7 +202,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main_MaGiamGia.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -289,9 +291,9 @@ public class Main_MaGiamGia extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_MaGiamGia.this, "Lỗi ", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Tạo mã thành công!");
+                            Toasty.success(Main_MaGiamGia.this, "Tạo mã thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -299,7 +301,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_MaGiamGia.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -388,9 +390,11 @@ public class Main_MaGiamGia extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (contactList.size() > 0){
+            if (contactList.size() > 0) {
                 adapter.notifyDataSetChanged();
-            } else new CustomToast().Show_Toast(Main_MaGiamGia.this, findViewById(android.R.id.content), "Không có mã giảm giá!");
+            } else {
+                Toasty.warning(Main_MaGiamGia.this, "Không có mã giảm giá", Toast.LENGTH_LONG, true).show();
+            }
             dialog.dismiss();
         }
     }

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,7 +35,6 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Datcoc;
 import com.example.windows10gamer.connsql.Object.Datcoc;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
@@ -46,6 +46,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_Dat_Coc extends AppCompatActivity {
 
@@ -73,9 +75,9 @@ public class Main_Dat_Coc extends AppCompatActivity {
         tvdahoancoc = findViewById(R.id.tvdahoancoc);
         shared = getSharedPreferences("chinhanh", MODE_PRIVATE);
         chinhanh = shared.getString("chinhanh", "");
-        Intent intent = getIntent();
-        session_username  = intent.getStringExtra("session_username");
-        session_ma        = intent.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("shortName", "");
+        session_ma = shared.getString("ma", "");
         ngay = Keys.getDateNow();
         ca = Keys.getCalam(chinhanh);
         tvchitoday.setText("Ngày: "+ca+" "+ngay);
@@ -104,7 +106,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                     }
                 }
                 if(tatca_plus.size() == 0) {
-                    new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có đơn Đặt cọc nào!!");
+                    Toasty.info(Main_Dat_Coc.this, "Không có đơn Đặt cọc nào", Toast.LENGTH_LONG, true).show();
                 }
                 adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
                 lvdatcoc.setAdapter(adapter);
@@ -120,7 +122,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                     }
                 }
                 if(tatca_plus.size() == 0) {
-                    new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có đơn Hoàn đặt cọc nào!!");
+                    Toasty.info(Main_Dat_Coc.this, "Không có đơn Hoàn cọc nào", Toast.LENGTH_LONG, true).show();
                 }
                 adapter = new Adapter_Datcoc(Main_Dat_Coc.this, tatca_plus);
                 lvdatcoc.setAdapter(adapter);
@@ -166,7 +168,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                         ghichu = edcocghichu.getText().toString().trim();
                         maMa = Keys.MaDonhang();
                         if (sdtKH.equals("") && tenKH.equals("") && sotien.equals("") && sotien.equals("0")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Phải nhập tất cả các trường!!");
+                            Toasty.warning(Main_Dat_Coc.this, "Phải nhập tất cả các trường", Toast.LENGTH_LONG, true).show();
                         } else {
                             new SendRequest().execute();
                         }
@@ -331,9 +333,9 @@ public class Main_Dat_Coc extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_Dat_Coc.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Tạo đặt cọc thành công!!");
+                            Toasty.success(Main_Dat_Coc.this, "Tạo đặt cọc thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -341,7 +343,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Dat_Coc.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -373,9 +375,9 @@ public class Main_Dat_Coc extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_Dat_Coc.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Hoàn cọc thành công!!");
+                            Toasty.success(Main_Dat_Coc.this, "Hoàn cọc thành công", Toast.LENGTH_LONG, true).show();
                             ResetActivity();
                         }
                     }
@@ -383,7 +385,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Dat_Coc.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -472,7 +474,7 @@ public class Main_Dat_Coc extends AppCompatActivity {
                 }
                 adapter.notifyDataSetChanged();
             } else {
-                new CustomToast().Show_Toast(Main_Dat_Coc.this, findViewById(android.R.id.content), "Không có Đặt cọc nào!!");
+                Toasty.info(Main_Dat_Coc.this, "Không có đặt cọc nào", Toast.LENGTH_LONG, true).show();
             }
             dialog2.dismiss();
         }

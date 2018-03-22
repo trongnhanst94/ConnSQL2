@@ -15,6 +15,7 @@ android {
                 includeCompileClasspath false
             }
         }
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -30,6 +31,8 @@ repositories {
 }
 
 dependencies {
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-vector-drawable:27.1.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -48,9 +51,10 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
     compile 'com.android.support:support-annotations:27.0.2'
     compile 'com.google.firebase:firebase-messaging:10.2.1'
     compile 'com.google.firebase:firebase-core:10.2.1'
@@ -63,6 +67,19 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile 'com.github.GrenderG:Toasty:1.2.8'
+}
+
+configurations.all {
+    // Fix failed resolution of: Landroid/support/v4/animation/AnimatorCompatHelper;
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '27.0.2'
+            }
+        }
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'

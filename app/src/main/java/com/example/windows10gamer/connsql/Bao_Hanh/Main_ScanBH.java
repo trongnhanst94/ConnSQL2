@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Report_BH1D1;
@@ -26,7 +27,6 @@ import com.example.windows10gamer.connsql.Object.BHDLK;
 import com.example.windows10gamer.connsql.Object.BHHT;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
@@ -41,6 +41,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_ScanBH extends AppCompatActivity {
 
@@ -222,7 +224,7 @@ public class Main_ScanBH extends AppCompatActivity {
                     new GetBHDDT().execute();
                     new GetBHCXL().execute();
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_ScanBH.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
+                    Toasty.error(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }
@@ -300,8 +302,6 @@ public class Main_ScanBH extends AppCompatActivity {
                             }
                         }
                     }
-                } else {
-                    new CustomToast().Show_Toast(Main_ScanBH.this, findViewById(android.R.id.content), "Sai đường dẫn dữ liệu.");
                 }
             } catch (JSONException je) {
                 Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());

@@ -25,10 +25,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.windows10gamer.connsql.Adapter.Adapter_Icon;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Order;
 import com.example.windows10gamer.connsql.Ban_Hang.Main_Realtime_Order;
@@ -62,16 +64,17 @@ import com.example.windows10gamer.connsql.Khoan_Chi.Main_PhiCOD;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Chitieu_Nhanvien;
+import com.example.windows10gamer.connsql.Object.Icon;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Object.Version;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Data;
+import com.example.windows10gamer.connsql.Settings.Main_Danhmuc;
 import com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe;
 import com.example.windows10gamer.connsql.Xuat_Nhap.Main_XuatNhap;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -82,31 +85,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 
 import static java.lang.Boolean.FALSE;
 
-public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Adapter_Icon.OnCallBack {
     Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
             btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien, btnBcdt, btnremove, btnnhaphang, btnscanvon, btnphicod, btntientrave;
     public static String session_username, shortName, session_ma, chinhanh, level, mkhau;
@@ -157,6 +149,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private String linkAvatar;
     private ArrayList<Version> listVersion = new ArrayList<>();
     private String NOW_VERSION, getVersion = "";
+    private ArrayList<String> listsoluong = new ArrayList<>();
+    private RecyclerView rvMain;
+    ArrayList<Icon> iconArrayAdapter = new ArrayList<Icon>();
+    Adapter_Icon adapterIcon;
+    private ArrayList<Icon> listMaster = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,11 +174,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         mkhau = shared.getString("mk", "");
         level = shared.getString("level", "");
         img = shared.getString("img", "");
-        NOW_VERSION = shared.getString("version", "");
         navigationView = findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
         TextView tvshortName = headerView.findViewById(R.id.shortName);
         TextView tvsession_ma = headerView.findViewById(R.id.session_ma);
+        TextView tvVersion = headerView.findViewById(R.id.tvVersion);
         ImageView ivAvatar = navigationView.getHeaderView(0).findViewById(R.id.anhdaidien);
         Glide.with(Main.this).load(img).override(300,300).fitCenter().into(ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
@@ -195,10 +192,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         dialogbe.setMessage("Dữ liệu đang được tải xuống");
         dialogbe.setCancelable(false);
         dialogbe.show();
+        new GetListSoluong().execute();
         new SendRequest().execute();
         new Getversion().execute();
         tvshortName.setText(shortName);
         tvsession_ma.setText(session_ma);
+        tvVersion.setText("Phiên bản hiện tại: "+Keys.NOW_VERSION);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -215,18 +214,18 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         position = new ArrayList<>();
         Intent intentget = getIntent();
         shortName = intentget.getStringExtra("shortName");
+        rvMain.setHasFixedSize(true);
+        rvMain.setLayoutManager(new GridLayoutManager(this, 3));
+        adapterIcon = new Adapter_Icon(Main.this,this, iconArrayAdapter);
+        rvMain.setAdapter(adapterIcon);
+
         btnReportBaohanh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
                 else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Report_BH.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
+                    startActivity(new Intent(Main.this, Main_Report_BH.class));
                 }
             }
         });
@@ -236,15 +235,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_PhiCOD.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_PhiCOD.class));
             }
         });
 
@@ -253,14 +244,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Nhaphang.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Nhaphang.class));
             }
         });
         final int[] hide = {1};
@@ -285,10 +269,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 if (Integer.valueOf(level) <= Keys.LEVEL_KHO){
                     if(!Connect_Internet.checkConnection(getApplicationContext()))
                         Connect_Internet.buildDialog(Main.this).show();
-                    else {
-                        Intent intentput = new Intent(Main.this, Main_ScanVon.class);
-                        startActivity(intentput);
-                    }
+                    else startActivity(new Intent(Main.this, Main_ScanVon.class));
                 } else {
                     AlertDialog.Builder builder = null;
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -315,14 +296,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Realtime_Order.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Realtime_Order.class));
             }
         });
 
@@ -332,14 +306,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 if (Integer.valueOf(level) <= Keys.LEVEL_QL){
                     if(!Connect_Internet.checkConnection(getApplicationContext()))
                         Connect_Internet.buildDialog(Main.this).show();
-                    else {
-                        Intent intentget = getIntent();
-                        session_username = intentget.getStringExtra("session_username");
-                        session_ma = intentget.getStringExtra("session_ma");
-                        Intent intentput = new Intent(Main.this, Main_Remove_Data.class);
-                        intentput.putExtra("session_username", session_username);
-                        startActivity(intentput);
-                    }
+                    else startActivity(new Intent(Main.this, Main_Remove_Data.class));
                 } else {
                     AlertDialog.Builder builder = null;
                     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -367,14 +334,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                    Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Baohanh.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Baohanh.class));
             }
         });
 
@@ -383,13 +343,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    Intent intentput = new Intent(Main.this, Main_Doanhthu.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Doanhthu.class));
             }
         });
 
@@ -398,13 +352,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    Intent intentput = new Intent(Main.this, Main_Order.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Order.class));
             }
         });
 
@@ -413,15 +361,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Kiemkho.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Kiemkho.class));
             }
         });
 
@@ -430,15 +370,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Ketqua_Kiemkho.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Ketqua_Kiemkho.class));
             }
         });
 
@@ -447,15 +379,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Sales.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Sales.class));
             }
         });
 
@@ -464,14 +388,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Website.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Website.class));
             }
         });
 
@@ -480,14 +397,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_XuatNhap.class);
-                    intentput.putExtra("session_username", session_username);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_XuatNhap.class));
             }
         });
 
@@ -496,15 +406,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Khoan_Chi.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_Khoan_Chi.class));
             }
         });
 
@@ -513,15 +415,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_TienTraVe.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
-                }
+                else startActivity(new Intent(Main.this, Main_TienTraVe.class));
             }
         });
 
@@ -531,13 +425,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
                 else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_Dat_Coc.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
+                    startActivity(new Intent(Main.this, Main_Dat_Coc.class));
                 }
             }
         });
@@ -548,6 +436,60 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 new Getvitri().execute();
             }
         });
+    }
+
+    @Override
+    public void ItemClicked(int positon) {
+        if(!Connect_Internet.checkConnection(getApplicationContext()))
+            Connect_Internet.buildDialog(Main.this).show();
+        else {
+            try {
+                startActivity(new Intent(Main.this, Class.forName(getPackageName()+iconArrayAdapter.get(positon).getContext())));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetListSoluong extends AsyncTask<Void, Integer, String> {
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Nullable
+        @Override
+        protected String doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_LISTSOLUONG);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.LISTSOLUONG);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    listsoluong.add(object.getString("masanpham"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                publishProgress(jIndex);
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+        }
     }
 
     private void firebase() {
@@ -581,8 +523,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void anhxa() {
+        rvMain             = findViewById(R.id.rvMain);
         btntientrave       = findViewById(R.id.btntientrave);
-        btnphicod       = findViewById(R.id.btnphicod);
+        btnphicod          = findViewById(R.id.btnphicod);
         ptdica             = findViewById(R.id.ptdica);
         tvthang            = findViewById(R.id.tvthang);
         tvdica             = findViewById(R.id.tvdica);
@@ -628,14 +571,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 Connect_Internet.buildDialog(Main.this).show();
             else {
                 GetDonhang();
-                GetDonhang();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            //dialog.dismiss();
             super.onPostExecute(result);
         }
     }
@@ -654,12 +595,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                         totalDoanhthu = 0;
                         orignal = response.body().getContacts();
                         for (int i = 0; i < orignal.size(); i++) {
+                            int ss = checklist(orignal.get(i).getMaSanpham(), listsoluong);
                             if (session_ma.equals(orignal.get(i).getMaNhanvien())){
-                                myListAll.add(orignal.get(i));
-                                totalDoanhthu += (Integer.valueOf(orignal.get(i).getGiaSanpham()) - Integer.valueOf(orignal.get(i).getGiamgia()));
-                                int sosanhgiamgia = sosanhgiam(mySing, orignal.get(i).getMaDonhang());
-                                if (sosanhgiamgia == -1) {
-                                    mySing.add(orignal.get(i));
+                                if (ss == -1){
+                                    myListAll.add(orignal.get(i));
+                                    totalDoanhthu += (Integer.valueOf(orignal.get(i).getGiaSanpham()) - Integer.valueOf(orignal.get(i).getGiamgia()));
+                                    int sosanhgiamgia = sosanhgiam(mySing, orignal.get(i).getMaDonhang());
+                                    if (sosanhgiamgia == -1) {
+                                        mySing.add(orignal.get(i));
+                                    }
                                 }
                             }
                         }
@@ -681,6 +625,18 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             });
         }
+    }
+
+    private int checklist(String maSanpham, ArrayList<String> list) {
+        int result = -1;
+        if (list.size() > 0){
+            for (int i = 0; i < list.size(); i++) {
+                if (maSanpham.equals(list.get(i))){
+                    result = i;
+                }
+            }
+        }
+        return result;
     }
 
     private int sosanhgiam(ArrayList<Order> tempgiamgia, String maDonhang) {
@@ -719,14 +675,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -740,21 +688,38 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_giamgia) {
             if (Integer.valueOf(level) <= Keys.LEVEL_QL){
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
                 else {
-                    Intent intentget = getIntent();
-                    session_username = intentget.getStringExtra("session_username");
-                    session_ma = intentget.getStringExtra("session_ma");
-                    Intent intentput = new Intent(Main.this, Main_MaGiamGia.class);
-                    intentput.putExtra("session_username", session_username);
-                    intentput.putExtra("session_ma", session_ma);
-                    startActivity(intentput);
+                    startActivity(new Intent(Main.this, Main_MaGiamGia.class));
+                }
+            } else {
+                AlertDialog.Builder builder = null;
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                    builder = new AlertDialog.Builder(Main.this);
+                } else {
+                    builder = new AlertDialog.Builder(Main.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                }
+                builder.setTitle("Cảnh báo");
+                builder.setIcon(R.drawable.ic_warning);
+                builder.setMessage("Bạn không có quyền truy cập. Nhấn Xác nhận để thoát!");
+                builder.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        } else if (id == R.id.nav_danhmuc) {
+            if (Integer.valueOf(level) <= Keys.LEVEL_QL){
+                if(!Connect_Internet.checkConnection(getApplicationContext()))
+                    Connect_Internet.buildDialog(Main.this).show();
+                else {
+                    startActivity(new Intent(Main.this, Main_Danhmuc.class));
                 }
             } else {
                 AlertDialog.Builder builder = null;
@@ -863,7 +828,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void afterTextChanged(Editable s) {
                 if (edpass2.getText().toString().trim().equals(edpass1.getText().toString().trim())){
                     if (edpass2.getText().toString().trim().length() < 5 || edpass2.getText().toString().trim().length() > 20){
-                        tvpass.setText("Mật khẩu quá ngắn!!");
+                        tvpass.setText("Mật khẩu quá ngắn");
                         btnpass.setVisibility(View.GONE);
                     } else {
                         btnpass.setVisibility(View.VISIBLE);
@@ -895,7 +860,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main.this, findViewById(android.R.id.content), "Đổi mật khẩu thành công!");
+                            Toasty.success(Main.this, "Đổi mật khẩu thành công", Toast.LENGTH_LONG, true).show();
                             progress.dismiss();
                             logout();
                         }
@@ -904,7 +869,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main.this, findViewById(android.R.id.content), "Không kết nối được Server!");
+                        Toasty.error(Main.this, "Không kết nối được Server!!", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -965,97 +930,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
         }
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-    }
-
-    public class ImageProcessClass{
-
-        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            try {
-
-                URL url;
-                HttpURLConnection httpURLConnectionObject ;
-                OutputStream OutPutStream;
-                BufferedWriter bufferedWriterObject ;
-                BufferedReader bufferedReaderObject ;
-                int RC ;
-
-                url = new URL(requestURL);
-
-                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
-
-                httpURLConnectionObject.setReadTimeout(19000);
-
-                httpURLConnectionObject.setConnectTimeout(19000);
-
-                httpURLConnectionObject.setRequestMethod("POST");
-
-                httpURLConnectionObject.setDoInput(true);
-
-                httpURLConnectionObject.setDoOutput(true);
-
-                OutPutStream = httpURLConnectionObject.getOutputStream();
-
-                bufferedWriterObject = new BufferedWriter(
-
-                        new OutputStreamWriter(OutPutStream, "UTF-8"));
-
-                bufferedWriterObject.write(bufferedWriterDataFN(PData));
-
-                bufferedWriterObject.flush();
-
-                bufferedWriterObject.close();
-
-                OutPutStream.close();
-
-                RC = httpURLConnectionObject.getResponseCode();
-
-                if (RC == HttpsURLConnection.HTTP_OK) {
-
-                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
-
-                    stringBuilder = new StringBuilder();
-
-                    String RC2;
-
-                    while ((RC2 = bufferedReaderObject.readLine()) != null){
-
-                        stringBuilder.append(RC2);
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return stringBuilder.toString();
-        }
-
-        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
-
-            StringBuilder stringBuilderObject;
-
-            stringBuilderObject = new StringBuilder();
-
-            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
-
-                if (check)
-
-                    check = false;
-                else
-                    stringBuilderObject.append("&");
-
-                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
-
-                stringBuilderObject.append("=");
-
-                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
-            }
-
-            return stringBuilderObject.toString();
-        }
-
     }
 
     class Getvitri extends AsyncTask<Void, Void, Void> {
@@ -1177,6 +1051,61 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    class GetMaster extends AsyncTask<Void, Void, Void> {
+        int jIndex;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_MASTER);
+            try {
+                if (jsonObject != null) {
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.MASTER);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            iconArrayAdapter.clear();
+                            for(jIndex = 0 ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    if (object.getInt("level") >=  Integer.valueOf(level)){
+                                        iconArrayAdapter.add(new Icon(
+                                                        object.getString("name"),
+                                                        Keys.getDrawable(Main.this, object.getString("link")),
+                                                        Keys.getDrawable(Main.this, object.getString("color")),
+                                                        object.getString("context"),
+                                                        object.getInt("level")
+                                                )
+                                        );
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapterIcon.notifyDataSetChanged();
+        }
+    }
+
     private void setVerrr(String getVersion) {
         if (!getVersion.equals(Keys.NOW_VERSION)){
             AlertDialog.Builder builder = null;
@@ -1187,7 +1116,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
             builder.setIcon(R.drawable.ic_warning);
             builder.setTitle("Cảnh báo");
-            builder.setMessage("Yêu cầu cập nhật phiên bản mới nhất trước khi sử dụng!");
+            builder.setCancelable(false);
+            builder.setMessage("Yêu cầu người dùng cập nhật phiên bản mới nhất trước khi sử dụng!");
             builder.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
 
                 @Override
@@ -1357,6 +1287,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
             dialogbe.dismiss();
+            new GetMaster().execute();
         }
     }
 

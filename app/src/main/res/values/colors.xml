@@ -43,4 +43,29 @@
     <color name="CamcolorPrimary">#7F2824</color>
     <color name="CamcolorPrimaryDark">#7F2824</color>
     <color name="CamcolorAccent">@color/colorAccent</color>
+
+    <!--<color name="cl1">#006DF0</color>-->
+    <!--<color name="cl2">#097B3B</color>-->
+    <!--<color name="cl3">#FF0051</color>-->
+    <!--<color name="cl4">#00D6FF</color>-->
+    <!--<color name="cl5">#ff6600</color>-->
+    <!--<color name="cl6">#FFAE45</color>-->
+    <!--<color name="cl7">#933EC5</color>-->
+    <!--<color name="iblue">#79a1d1</color>-->
+    <!--<color name="igreen">#63ca7b</color>-->
+    <!--<color name="ired">#f16a6f</color>-->
+    <!--<color name="icyan">#9fdbe7</color>-->
+    <!--<color name="iorange">#efb085</color>-->
+    <!--<color name="ipink">#f1b1e9</color>-->
+    <!--<color name="ipuple">#d2a3ed</color>-->
+
+    <color name="iblue">#66a9f9</color>
+    <color name="igreen">#4ddca3</color>
+    <color name="ired">#f56775</color>
+    <color name="icyan">#00D6FF</color>
+    <color name="iorange">#f9ae6e</color>
+    <color name="ipink">#f98eec</color>
+    <color name="ipuple">#be6bef</color>
+
+    <color name="tgh">#84bcf2</color>
 </resources>

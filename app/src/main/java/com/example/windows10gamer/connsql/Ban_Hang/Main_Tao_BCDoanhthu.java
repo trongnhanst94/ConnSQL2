@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -50,7 +51,6 @@ import com.example.windows10gamer.connsql.Object.TienTraVe;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -172,10 +173,10 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edtienthucte.getText().toString().trim().equals("")){
-                    new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Chưa nhập tiền thực tế!");
+                    Toasty.warning(Main_Tao_BCDoanhthu.this, "Chưa nhập tiền thực tế", Toast.LENGTH_LONG, true).show();
                 } else  {
                     if (arrayDica.size() == 0){
-                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Chưa chọn nhân viên đi ca!");
+                        Toasty.warning(Main_Tao_BCDoanhthu.this, "Chưa chọn nhân viên đi ca", Toast.LENGTH_LONG, true).show();
                     } else {
                         AlertDialog.Builder dialog = null;
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -495,7 +496,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
                             if (j == (arrayDica.size()-1)) {
-                                new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                                Toasty.error(Main_Tao_BCDoanhthu.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                             }
                         }
                     }
@@ -503,7 +504,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Tao_BCDoanhthu.this, "Lỗi", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -866,6 +867,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                             object.getString("chinhanh"),
                                             object.getString("maNV"),
                                             object.getString("tenNV"),
+                                            object.getString("loai"),
                                             object.getString("noidung"),
                                             object.getString("sotien")
                                     ));
@@ -982,6 +984,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                                             object.getString("chinhanh"),
                                             object.getString("maNV"),
                                             object.getString("tenNV"),
+                                            object.getString("loai"),
                                             object.getString("noidung"),
                                             object.getString("sotien")
                                     ));
@@ -1558,9 +1561,9 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Thất bại, không kết nối được Server!!");
+                            Toasty.error(Main_Tao_BCDoanhthu.this, "Thất bại, không kết nối được Server", Toast.LENGTH_LONG, true).show();
                         } else if (response.trim().equals("success")){
-                            new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Tạo đơn hàng thành công!!");
+                            Toasty.success(Main_Tao_BCDoanhthu.this, "Tạo đơn hàng thành công", Toast.LENGTH_LONG, true).show();
                         }
                         startActivity(new Intent(Main_Tao_BCDoanhthu.this, Main_Doanhthu.class));
                         finish();
@@ -1569,7 +1572,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Tao_BCDoanhthu.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Tao_BCDoanhthu.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){

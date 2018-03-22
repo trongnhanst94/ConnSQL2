@@ -8,15 +8,16 @@ import android.os.Parcelable;
  */
 
 public class Khoanchi implements Parcelable {
-    String maKC, ngay, ca, chinhanh, maNV, tenNV,  noidung, sotien;
+    private String maKC, ngay, ca, chinhanh, maNV, tenNV, loai,  noidung, sotien;
 
-    public Khoanchi(String maKC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String noidung, String sotien) {
+    public Khoanchi(String maKC, String ngay, String ca, String chinhanh, String maNV, String tenNV, String loai, String noidung, String sotien) {
         this.maKC = maKC;
         this.ngay = ngay;
         this.ca = ca;
         this.chinhanh = chinhanh;
         this.maNV = maNV;
         this.tenNV = tenNV;
+        this.loai = loai;
         this.noidung = noidung;
         this.sotien = sotien;
     }
@@ -28,6 +29,7 @@ public class Khoanchi implements Parcelable {
         chinhanh = in.readString();
         maNV = in.readString();
         tenNV = in.readString();
+        loai = in.readString();
         noidung = in.readString();
         sotien = in.readString();
     }
@@ -92,6 +94,14 @@ public class Khoanchi implements Parcelable {
         this.tenNV = tenNV;
     }
 
+    public String getLoai() {
+        return loai;
+    }
+
+    public void setLoai(String loai) {
+        this.loai = loai;
+    }
+
     public String getNoidung() {
         return noidung;
     }
@@ -121,6 +131,7 @@ public class Khoanchi implements Parcelable {
         dest.writeString(chinhanh);
         dest.writeString(maNV);
         dest.writeString(tenNV);
+        dest.writeString(loai);
         dest.writeString(noidung);
         dest.writeString(sotien);
     }

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,7 +34,6 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Info_Order;
 import com.example.windows10gamer.connsql.Object.Sanpham_gio;
 import com.example.windows10gamer.connsql.Object.User;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
-import com.example.windows10gamer.connsql.Other.CustomToast;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.Mylistview;
 import com.example.windows10gamer.connsql.R;
@@ -60,6 +60,8 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import es.dmoral.toasty.Toasty;
 
 public class Main_Doidungthu extends AppCompatActivity {
     String maOrder, date, time, tenNV, maNV, ten, ma, baohanh, nguon, gia, ngaynhap, von,maBH,
@@ -94,7 +96,7 @@ public class Main_Doidungthu extends AppCompatActivity {
         sp = getSharedPreferences("login", MODE_PRIVATE);
         session_username = sp.getString("shortName", "");
         session_ma = sp.getString("ma", "");
-        Glide.with(Main_Doidungthu.this).load(shared.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
+        Glide.with(Main_Doidungthu.this).load(sp.getString("img", "")).override(300,300).fitCenter().into(ivAvatar);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("InfoOrder6");
         sanpham     = bundle.getParcelableArrayList("sanphamOrder");
@@ -148,8 +150,8 @@ public class Main_Doidungthu extends AppCompatActivity {
         tvDlkSdtKH.setText("SĐT KH: "+sdtKH);
         tvChinhanhDLK.setText(chinhanh);
         tvChinhanhDLKOrder.setText(chinhanhOrder);
-        tvDlkTenNVNhan.setText("Mã NV bảo hành: "+session_username);
-        tvDlkMaNVNhan.setText("Tên NV bảo hành: "+session_ma);
+        tvDlkMaNVNhan.setText("Mã NV bảo hành: "+session_ma);
+        tvDlkTenNVNhan.setText("Tên NV bảo hành: "+session_username);
         GetUser(Main_Doidungthu.this, maNV);
         btnxacnhan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,8 +314,7 @@ public class Main_Doidungthu extends AppCompatActivity {
                     adapter_moi.notifyDataSetChanged();
                     scanSanpham(findViewById(android.R.id.content));
                 }   catch (NoSuchElementException nse) {
-                    new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Lỗi định dạng nhãn");
-                }
+                    Toasty.error(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();                }
             }
         }
     }
@@ -347,7 +348,7 @@ public class Main_Doidungthu extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             dialog.dismiss();
-            new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Gửi dữ liệu thành công.");
+            Toasty.success(Main_Doidungthu.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
             ResetActivity();
         }
     }
@@ -381,7 +382,7 @@ public class Main_Doidungthu extends AppCompatActivity {
     public String putData(int j){
         try {
 
-            URL url = new URL(Keys.SCRIPT_BH_DDT);
+            URL url = new URL(Keys.getSCRIPT_BH_DDT(chinhanh));
             JSONObject postDataParams = new JSONObject();
             postDataParams.put("maBH", maBH);
             postDataParams.put("dateToday", dateToday);
@@ -468,14 +469,14 @@ public class Main_Doidungthu extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
-                            new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Lỗi ");
+                            Toasty.error(Main_Doidungthu.this, "Lỗi", Toast.LENGTH_LONG, true).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new CustomToast().Show_Toast(Main_Doidungthu.this, findViewById(android.R.id.content), "Lỗi "+error);
+                        Toasty.error(Main_Doidungthu.this, "Lỗi "+error, Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
