@@ -208,7 +208,6 @@ public class Main_Remove_BHDLK extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
             JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_BH_BHDLK+"?delengay="+ngay);
-            Log.d("qqq", "doInBackground: "+Keys.MAIN_BH_BHDLK+"?delengay="+ngay);
             try {
                 if (jsonObject != null) {
                     contactList.clear();

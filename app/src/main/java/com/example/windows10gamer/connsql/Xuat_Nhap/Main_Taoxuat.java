@@ -48,6 +48,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +62,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import es.dmoral.toasty.Toasty;
 
@@ -130,7 +139,7 @@ public class Main_Taoxuat extends AppCompatActivity {
                     View mView = getLayoutInflater().inflate(R.layout.spinner_lk, null);
                     final EditText input = mView.findViewById(R.id.input);
                     dialog.setView(input);
-                    input.setText(ngay + "_" + chinhanhNow);
+                    input.setText("Xuất kho "+ngay + "_" + chinhanhNow);
                     dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -394,25 +403,36 @@ public class Main_Taoxuat extends AppCompatActivity {
         void onSuccess(ArrayList<User> result);
     }
 
-    public class SendRequestXuatHang extends AsyncTask<String, Void, String> {
+    public class SendRequestXuatHang extends AsyncTask<Void, Integer, String> {
 
 
         protected void onPreExecute(){
 
             dialog = new ProgressDialog(Main_Taoxuat.this);
-            dialog.setTitle("Hãy chờ...");
-            dialog.setMessage("Dữ liệu đang được xử lý");
+            dialog.setTitle("Đang tải lên!");
+            dialog.setMax(arrayList.size());
             dialog.setCancelable(false);
+            dialog.setProgress(0);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             dialog.show();
         }
 
-        protected String doInBackground(String... arg0) {
+        protected String doInBackground(Void... params) {
             int j;
+            CreatedTable();
+            putDataTitle();
             for (j = 0 ;j < arrayList.size(); j++){
-                //putData(j);
+                putData(j);
                 addXuathang(j);
+                publishProgress(j);
             }
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int prog = values[0];
+            dialog.setMessage("Đang tải xuống "+prog+" sản phẩm...");
         }
 
         @Override
@@ -421,6 +441,55 @@ public class Main_Taoxuat extends AppCompatActivity {
             Toasty.success(Main_Taoxuat.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
         }
     }
+
+    public String CreatedTable(){
+        try {
+            // Link Script
+            URL url = new URL(Keys.getSCRIPT_CREATEDTABLE(chinhanhNow));
+
+            // Load Json object
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("nameSheet", tentrang);
+            Log.e("params", postDataParams.toString());
+
+            // Kết nối HTTP
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+                in.close();
+                return sb.toString();
+            } else {
+                return new String("false : " + responseCode);
+            }
+        } catch (Exception e) {
+            return new String("Exception: " + e.getMessage());
+        }
+    }
+
 
     public String getPostDataString(JSONObject params) throws Exception {
 
@@ -447,67 +516,129 @@ public class Main_Taoxuat extends AppCompatActivity {
         return result.toString();
     }
 
-//    public String putData(int j){
-//        try {
-//
-//            URL url = new URL(Keys.getSCRIPT_XUATHANG);
-//            JSONObject postDataParams = new JSONObject();
-//                postDataParams.put("tentrang", tentrang);
-//                postDataParams.put("maXN", maXN);
-//                postDataParams.put("ngay", ngay);
-//                postDataParams.put("ca", ca);
-//                postDataParams.put("gio", arrayList.get(j).getGio());
-//                postDataParams.put("chinhanhToday", chinhanhNow);
-//                postDataParams.put("maNVToday", session_ma);
-//                postDataParams.put("tenNVToday", session_username);
-//                postDataParams.put("ma", arrayList.get(j).getMa());
-//                postDataParams.put("ten", arrayList.get(j).getTen());
-//                postDataParams.put("baohanh", arrayList.get(j).getBaohanh());
-//                postDataParams.put("nguon", arrayList.get(j).getNguon());
-//                postDataParams.put("ngaynhap", arrayList.get(j).getNgaynhap());
-//                postDataParams.put("von", arrayList.get(j).getVon());
-//                postDataParams.put("gia", arrayList.get(j).getGiaban());
-//                postDataParams.put("ghichu", ghichu);
-//                postDataParams.put("chinhanhNhan", chinhanhNhap);
-//                postDataParams.put("maNVNhan", maNVnhan);
-//                postDataParams.put("tenNVNhan", tenNVnhan);
-//
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setReadTimeout(15000);
-//            conn.setConnectTimeout(15000);
-//            conn.setRequestMethod("GET");
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//
-//            OutputStream os = conn.getOutputStream();
-//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-//            writer.write(getPostDataString(postDataParams));
-//
-//            writer.flush();
-//            writer.close();
-//            os.close();
-//
-//            int responseCode = conn.getResponseCode();
-//            if (responseCode == HttpsURLConnection.HTTP_OK) {
-//
-//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                StringBuffer sb = new StringBuffer("");
-//                String line = "";
-//
-//                while ((line = in.readLine()) != null) {
-//
-//                    sb.append(line);
-//                    break;
-//                }
-//                in.close();
-//                return sb.toString();
-//            } else {
-//                return new String("false : " + responseCode);
-//            }
-//        } catch (Exception e) {
-//            return new String("Exception: " + e.getMessage());
-//        }
-//    }
+    public String putDataTitle(){
+        try {
+
+            URL url = new URL(Keys.getSCRIPT_XUATHANG(chinhanhNow));
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("nameSheet", tentrang);
+            postDataParams.put("maXN", "Mã xuất nhập");
+            postDataParams.put("ngay", "Ngày");
+            postDataParams.put("ca", "Ca làm");
+            postDataParams.put("gio", "Giờ quét");
+            postDataParams.put("chinhanhToday", "Chi nhánh Xuất");
+            postDataParams.put("maNVToday", "Mã nhân viên xuất");
+            postDataParams.put("tenNVToday", "Tên nhân viên xuất");
+            postDataParams.put("ma", "Mã");
+            postDataParams.put("ten", "Tên");
+            postDataParams.put("baohanh", "Bảo hành");
+            postDataParams.put("nguon", "Nguồn");
+            postDataParams.put("ngaynhap", "Ngày nhập");
+            postDataParams.put("von", "Vốn");
+            postDataParams.put("gia", "Giá");
+            postDataParams.put("ghichu", "Ghi chú");
+            postDataParams.put("chinhanhNhan", "Chi nhánh nhận");
+            postDataParams.put("maNVNhan", "Mã nhân viên nhận");
+            postDataParams.put("tenNVNhan", "Tên nhân viên nhận");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+                in.close();
+                return sb.toString();
+            } else {
+                return new String("false : " + responseCode);
+            }
+        } catch (Exception e) {
+            return new String("Exception: " + e.getMessage());
+        }
+    }
+
+    public String putData(int j){
+        try {
+
+            URL url = new URL(Keys.getSCRIPT_XUATHANG(chinhanhNow));
+            JSONObject postDataParams = new JSONObject();
+            postDataParams.put("nameSheet", tentrang);
+            postDataParams.put("maXN", maXN);
+            postDataParams.put("ngay", ngay);
+            postDataParams.put("ca", ca);
+            postDataParams.put("gio", arrayList.get(j).getGio());
+            postDataParams.put("chinhanhToday", chinhanhNow);
+            postDataParams.put("maNVToday", session_ma);
+            postDataParams.put("tenNVToday", session_username);
+            postDataParams.put("ma", arrayList.get(j).getMa());
+            postDataParams.put("ten", arrayList.get(j).getTen());
+            postDataParams.put("baohanh", arrayList.get(j).getBaohanh());
+            postDataParams.put("nguon", arrayList.get(j).getNguon());
+            postDataParams.put("ngaynhap", arrayList.get(j).getNgaynhap());
+            postDataParams.put("von", arrayList.get(j).getVon());
+            postDataParams.put("gia", arrayList.get(j).getGiaban());
+            postDataParams.put("ghichu", ghichu);
+            postDataParams.put("chinhanhNhan", chinhanhNhap);
+            postDataParams.put("maNVNhan", maNVnhan);
+            postDataParams.put("tenNVNhan", tenNVnhan);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
+
+            writer.flush();
+            writer.close();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+
+                    sb.append(line);
+                    break;
+                }
+                in.close();
+                return sb.toString();
+            } else {
+                return new String("false : " + responseCode);
+            }
+        } catch (Exception e) {
+            return new String("Exception: " + e.getMessage());
+        }
+    }
 
     public void ResetActivity(){
         startActivity(new Intent(Main_Taoxuat.this, Main_XuatNhap.class));

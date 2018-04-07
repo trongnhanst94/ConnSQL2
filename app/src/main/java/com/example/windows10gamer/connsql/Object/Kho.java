@@ -14,9 +14,6 @@ public class Kho implements Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("maNH")
-    @Expose
-    private String maNH;
     @SerializedName("chinhanh")
     @Expose
     private String chinhanh;
@@ -51,9 +48,8 @@ public class Kho implements Parcelable {
     @Expose
     private String gia;
 
-    public Kho(String id, String maNH, String chinhanh, String kho, String maNV, String tenNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia) {
+    public Kho(String id, String chinhanh, String kho, String maNV, String tenNV, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia) {
         this.id = id;
-        this.maNH = maNH;
         this.chinhanh = chinhanh;
         this.kho = kho;
         this.maNV = maNV;
@@ -69,7 +65,6 @@ public class Kho implements Parcelable {
 
     protected Kho(Parcel in) {
         id = in.readString();
-        maNH = in.readString();
         chinhanh = in.readString();
         kho = in.readString();
         maNV = in.readString();
@@ -101,14 +96,6 @@ public class Kho implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getMaNH() {
-        return maNH;
-    }
-
-    public void setMaNH(String maNH) {
-        this.maNH = maNH;
     }
 
     public String getChinhanh() {
@@ -207,7 +194,6 @@ public class Kho implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(maNH);
         dest.writeString(chinhanh);
         dest.writeString(kho);
         dest.writeString(maNV);

@@ -58,7 +58,7 @@ import com.example.windows10gamer.connsql.Ban_Hang.Main_Sales;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
 import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
 import com.example.windows10gamer.connsql.Khach_Hang.Main_Dat_Coc;
-import com.example.windows10gamer.connsql.Kho.Main_Nhaphang;
+import com.example.windows10gamer.connsql.Kho.Main_KhoOnline;
 import com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi;
 import com.example.windows10gamer.connsql.Khoan_Chi.Main_PhiCOD;
 import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
@@ -158,6 +158,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("lifecycle","onCreate 1");
         setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_main);
         requestStoragePermission();
@@ -244,7 +245,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View v) {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Nhaphang.class));
+                else startActivity(new Intent(Main.this, Main_KhoOnline.class));
             }
         });
         final int[] hide = {1};
@@ -1331,5 +1332,39 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             AlertDialog al = dialog.create();
             al.show();
         }
+    }
+
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("lifecycle","onStart 1");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("lifecycle","onResume 1");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("lifecycle","onPause 1");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("lifecycle","onStop 1");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("lifecycle","onRestart 1");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("lifecycle","onDestroy 1");
     }
 }

@@ -5,11 +5,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,12 +33,17 @@ import com.example.windows10gamer.connsql.Ban_Hang.Main_Information_Order;
 import com.example.windows10gamer.connsql.Object.Order;
 import com.example.windows10gamer.connsql.Other.APIService_Sales;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
+import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
 import com.example.windows10gamer.connsql.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,7 +78,7 @@ public class Main_Baohanh extends AppCompatActivity {
     LinearLayout lnDateBaohanh, lnSdtBaohanh, lnScanBaohanh, lnTenvaMa;
     String dateBegin, dateEnd, dateCasang, dateCachieu, tenKhachhang, maSanpham;
     String ten, ma, nguon, ngaynhap, baohanh, gia, ngay, gio, von, chinhanh, checkdo, editdo;
-
+    private String tonghop = "";
 
 
     @Override
@@ -191,7 +199,7 @@ public class Main_Baohanh extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(Main_Baohanh.this, android.R.style.Theme_Holo_Light_Panel, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                             calendar.set(year, month, dayOfMonth);
@@ -538,6 +546,119 @@ public class Main_Baohanh extends AppCompatActivity {
         }
     }
 
+
+    class GetJsonScan extends AsyncTask<String, Void, Void> {
+
+        int jIndex;
+        ArrayList<Order> orignal = new ArrayList<Order>();
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(Main_Baohanh.this);
+            dialog.setTitle("Hãy chờ...");
+            dialog.setMessage("Dữ liệu đang được tải xuống");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.LINK_SERVER+Keys.USER_SALES_KEY+"?tonghop="+params[0]);
+            try {
+                if (jsonObject != null) {
+                    orignal.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.SALE);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    orignal.add(new Order(
+                                            "0",
+                                            object.getString("maDonhang"),
+                                            object.getString("ngay"),
+                                            object.getString("calam"),
+                                            object.getString("gio"),
+                                            object.getString("chinhanh"),
+                                            object.getString("maNhanvien"),
+                                            object.getString("tenNhanvien"),
+                                            object.getString("maSanpham"),
+                                            object.getString("tenSanpham"),
+                                            object.getString("baohanhSanpham"),
+                                            object.getString("nguonSanpham"),
+                                            object.getString("ngaynhapSanpham"),
+                                            object.getString("vonSanpham"),
+                                            object.getString("giaSanpham"),
+                                            object.getString("giamgia"),
+                                            object.getString("ghichuSanpham"),
+                                            object.getString("tenKhachhang"),
+                                            object.getString("sodienthoaiKhachhang"),
+                                            object.getString("ghichuKhachhang"),
+                                            object.getString("maNhanvienbandum"),
+                                            object.getString("tenNhanvienbandum"),
+                                            object.getString("thanhtoan"),
+                                            object.getString("nguoino")
+                                    ));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(orignal.size() > 0) {
+                contactList.clear();
+                temp.clear();
+                for (int i = 0; i < orignal.size(); i++) {
+                    contactList.add(orignal.get(i));
+                }
+                for (int j = 0; j < contactList.size(); j++) {
+                    if (sosanhBaohanh(temp, contactList.get(j).getMaDonhang()) == -1){
+                        temp.add(contactList.get(j));
+                    }
+                }
+                getList(contactList);
+                if (temp.size() == 0){
+                    tvNoti.setText("Không tìm thấy!");
+                }
+                if (temp.size() == 1){
+                    Intent intent = new Intent(Main_Baohanh.this, Main_Information_Order.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", 0);
+                    bundle.putString("keyMaOrder", temp.get(0).getMaDonhang());
+                    bundle.putParcelableArrayList("arrayOrder", contactList);
+                    intent.putExtra("DataOrder", bundle);
+                    startActivity(intent);
+                } else {
+                    adapter = new Adapter_Order(Main_Baohanh.this, temp);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    if (temp.size() > 1){
+                        listView.setVisibility(View.VISIBLE);
+                    }
+                }
+            } else {
+                Toasty.info(Main_Baohanh.this, "Không có phiếu chi nào", Toast.LENGTH_LONG, true).show();
+            }
+            dialog.dismiss();
+        }
+    }
+
+
+
     public void LoadJsonScan(final String tonghop) {
         if (Connect_Internet.checkConnection(getApplicationContext())) {
             final ProgressDialog dialog;
@@ -548,8 +669,8 @@ public class Main_Baohanh extends AppCompatActivity {
             dialog.show();
 
             APIService_Sales api = RetrofitClient.getApiService();
+            Call<OrderList> call = api.getLoadJsonScan(tonghop);
 
-            Call<OrderList> call = api.getAllProduct();
             call.enqueue(new Callback<OrderList>() {
                 @Override
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
@@ -560,9 +681,7 @@ public class Main_Baohanh extends AppCompatActivity {
                         contactList.clear();
                         temp.clear();
                         for (int i = 0; i < orignal.size(); i++) {
-                            if(tonghop.equals(orignal.get(i).getMaSanpham()+orignal.get(i).getTenSanpham()+orignal.get(i).getBaohanhSanpham()+orignal.get(i).getNguonSanpham()+orignal.get(i).getNgaynhapSanpham()+orignal.get(i).getVonSanpham()+orignal.get(i).getGiaSanpham()+"")) {
-                                contactList.add(orignal.get(i));
-                            }
+                            contactList.add(orignal.get(i));
                         }
                         for (int j = 0; j < contactList.size(); j++) {
                             if (contactList.get(j).getChinhanh().equals(chinhanh)){
@@ -624,15 +743,15 @@ public class Main_Baohanh extends AppCompatActivity {
             if (scannedData != null) {
                 try{
                     StringTokenizer st = new StringTokenizer(scannedData, ";");
-                    ma = st.nextToken();
-                    ten = st.nextToken();
-                    baohanh = st.nextToken();
-                    nguon = st.nextToken();
-                    ngaynhap = st.nextToken();
-                    von = st.nextToken();
-                    gia = st.nextToken();
-                    String tonghop = ma+ten+baohanh+nguon+ngaynhap+von+gia;
-                    LoadJsonScan(tonghop);
+                    ma = st.nextToken().trim();
+                    ten = st.nextToken().trim();
+                    baohanh = st.nextToken().trim();
+                    nguon = st.nextToken().trim();
+                    ngaynhap = st.nextToken().trim();
+                    von = st.nextToken().trim();
+                    gia = st.nextToken().trim();
+                    String tonghop = ma+ten+baohanh+nguon+ngaynhap;
+                    new GetJsonScan().execute(tonghop);
                 }   catch (NoSuchElementException nse) {
                     Toasty.error(this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }

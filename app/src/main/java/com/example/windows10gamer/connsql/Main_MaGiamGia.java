@@ -3,6 +3,7 @@ package com.example.windows10gamer.connsql;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -60,6 +61,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
     ArrayList<Magiamgia> contactList = new ArrayList<>();
     Adapter_Magiamgia adapter;
     ListView lvmagiamgia;
+    private SharedPreferences shared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +74,9 @@ public class Main_MaGiamGia extends AppCompatActivity {
         fab = findViewById(R.id.fabmgg);
         lvmagiamgia = findViewById(R.id.lvmagiamgia);
         btnSudungma.setVisibility(View.INVISIBLE);
-        intentget = getIntent();
-        session_username = intentget.getStringExtra("session_username");
-        session_ma = intentget.getStringExtra("session_ma");
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        session_username = shared.getString("ten", "");
+        session_ma = shared.getString("ma", "");
         adapter = new Adapter_Magiamgia(Main_MaGiamGia.this, contactList);
         lvmagiamgia.setAdapter(adapter);
         new SendRequest().execute();
@@ -393,7 +395,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
             if (contactList.size() > 0) {
                 adapter.notifyDataSetChanged();
             } else {
-                Toasty.warning(Main_MaGiamGia.this, "Không có mã giảm giá", Toast.LENGTH_LONG, true).show();
+                Toasty.info(Main_MaGiamGia.this, "Không có mã giảm giá", Toast.LENGTH_LONG, true).show();
             }
             dialog.dismiss();
         }

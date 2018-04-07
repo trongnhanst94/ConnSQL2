@@ -31,4 +31,7 @@ public interface APIService_Sales {
 
     @PUT(Keys.USER_SALES_KEY+"?")
     Call<OrderList> getBaohanhCo(@Query("loadBegin")  String loadBegin,  @Query("loadEnd") String loadEnd, @Query("masanpham")  String masanpham, @Query("tacvu")  String tacvu);
+
+    @PUT(Keys.USER_SALES_KEY+"?")
+    Call<OrderList> getLoadJsonScan(@Query("tonghop")  String tonghop);
 }

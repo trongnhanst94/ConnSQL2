@@ -903,10 +903,9 @@ public class Main_Sales extends AppCompatActivity {
                 publishProgress(progress);
                 progress++;
             }
-//            if (!maGiamgia.equals("")){
-//                new DeleteMGG().execute();
-//                DeleteMGGWeb();
-//            }
+            if (!edGiamgia.getText().toString().equals("")){
+                DeleteMGGWeb();
+            }
             return null;
         }
 
@@ -1385,7 +1384,6 @@ public class Main_Sales extends AppCompatActivity {
                 params.put("tenNhanvienbandum", session_username);
                 params.put("thanhtoan", thanhtoan);
                 params.put("nguoino", nguoino);
-                Log.e("qqq", "params: "+params.toString());
                 return params;
             }
         };

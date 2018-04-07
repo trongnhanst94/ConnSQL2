@@ -84,6 +84,8 @@ public class Keys {
     public static final String MAIN_DANHMUC        = LINK_SERVER + "danhsach_danhmuc.php";
     public static final String MAIN_DANHMUC_V2     = LINK_SERVER + "danhsach_danhmucv2.php";
     public static final String MAIN_MASTER         = LINK_SERVER + "danhsach_master.php";
+    public static final String MAIN_KHO            = LINK_SERVER + "danhsach_kho.php";
+    public static final String MAIN_MINSTOCK       = LINK_SERVER + "danhsach_minstock.php";
 
     public static final int LEVEL_BH               = 2;
     public static final int LEVEL_QL               = 0;
@@ -95,15 +97,15 @@ public class Keys {
     public static final Random RANDOM             = new Random();
     public static final String[] HELLOS            = {"1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","K","L","M","N","O","P","Q","S","T","U","V"};
     public static final String[] RAND              = {"1","2","3","4","5","6","7","8","9","0"};
-    public static final String DANHSACHSANPHAM     = "Danh sách sản phẩm";
     public static final String DANHSACHKIEMKHO2    = "Kiem kho";
     public static final String TABLE               = "1KrIkqcjjqcoHbovhsQ5BbWNVDPOL3yxd9X37WuhziuQ";
     public static final String SALE                = "banhang";
     public static final String USER_SALES_KEY      = "main_sales.php";
     public static final String USER_KHO_KEY        = "danhsach_kho.php";
     public static final String CN_SOL              = "Chi nhánh SOL";
+    public static final String CN_32               = "Chi nhánh 3/2";
     public static final String CN_NVL              = "Chi nhánh Nguyễn Văn Linh";
-    public static final String NOW_VERSION         = "Version 7.2";
+    public static final String NOW_VERSION         = "Version 7.6";
     public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
     public static final String FIREBASE_TOKEN      = "/topics/all";
     public static final String FIREBASE_SERVER_KEY = "AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n";
@@ -174,6 +176,11 @@ public class Keys {
     public static final String DELE_BHDDT_WEB      = "DELE_BHDDT_WEB";
     public static final String DELE_BHCXL_WEB      = "DELE_BHCXL_WEB";
     public static final String MASTER              = "MASTER";
+    public static final String ADD_KHOONLINE_WEB   = "ADD_KHOONLINE_WEB";
+    public static final String ADD_MINSTOCK_WEB    = "ADD_MINSTOCK_WEB";
+    public static final String MINSTOCK            = "MINSTOCK";
+    public static final String DELE_MINSTOCK_WEB   = "DELE_MINSTOCK_WEB";
+    public static final String UPDATE_MINSTOCK_WEB = "UPDATE_MINSTOCK_WEB";
 
     // link Google Script
     public static final String LINK_SCRIPT         = "https://script.google.com/macros/s/";
@@ -182,12 +189,12 @@ public class Keys {
     public static final String SCRIPT_KHOANCHI_NVL     = LINK_SCRIPT + "AKfycbwqiwY-EcnnA0qvMowimdWaQJL2dmKllqpuXC5cIjTcCJ1W5v0/exec";
     public static final String SCRIPT_PHICOD_NVL       = LINK_SCRIPT + "AKfycbwYqQW-QAhxmtFK36a7zz5bdFslTts7RavaIxG7WUN3LymLzaB5/exec";
     public static final String SCRIPT_TIENTRAVE_NVL    = LINK_SCRIPT + "AKfycbxMNVxNxxQegcOq04zRuAqKwSqRls0i_cGZ3ckSMy7vEjUwIw0/exec";
-    //public static final String SCRIPT_XUATHANG_NVL     = LINK_SCRIPT + "AKfycbxvWoPMt1SdiuIXzSZEM8j4aaHoH9lLGUc0M64vBSrNK60O-wM/exec";
-    public static final String SCRIPT_KIEMKHO_NVL      = LINK_SCRIPT + "AKfycbzDXojfyStMUnCM4kqG7XOWzgWEgN0k0D3rXLwaQbXber7CtUs/exec";
+    public static final String SCRIPT_XUATHANG_NVL     = LINK_SCRIPT + "AKfycbyCn-3tXoIN96NZc2gXZJPeotpIwAWJyhI1ncFm2WeROFM4R1SL/exec";
+//    public static final String SCRIPT_KIEMKHO_NVL      = LINK_SCRIPT + "AKfycbzDXojfyStMUnCM4kqG7XOWzgWEgN0k0D3rXLwaQbXber7CtUs/exec";
     public static final String SCRIPT_KHUYENMAI_NVL    = LINK_SCRIPT + "AKfycbx-SLcIVuQixDZ-n5pmFGIrjFZux9iIl9hunwGdqna_rMZ9lFI/exec";
     public static final String SCRIPT_BANHANG_NVL      = LINK_SCRIPT + "AKfycbycEFBmH7gNRt70F6K9u5nycej_Tt4s4BJHDqQ0lmHCI9IbdBkm/exec";
     public static final String SCRIPT_BC_KK_NVL        = LINK_SCRIPT + "AKfycbzJhrsk7bRmzusNOCt9FPC0HtGpngjl1TLcIr1vsjMAkYvZfOaH/exec";
-    public static final String SCRIPT_CREATEDTABLE_NVL = LINK_SCRIPT + "AKfycbzg_j3uTnZ35KqVm1gjUrgJAXwnvpkGlDsKEZSq332tW9kt_xg/exec";
+    public static final String SCRIPT_CREATEDTABLE_NVL = LINK_SCRIPT + "AKfycbzWNOZCGwUedD2P7WwkeCa52VzIA-9IOsrUH_mihIxqZuUThYhs/exec";
     public static final String SCRIPT_BH_DDT_NVL       = LINK_SCRIPT + "AKfycbzCaKmPPe41LQmz5WxCokyc6otAjLKIxmLRngMz3NtMTYre5Nle/exec";
     public static final String SCRIPT_BH_CXL_NVL       = LINK_SCRIPT + "AKfycbwKVYH32Z627O3X1_06anwMsJUXOTsYaLvyQ39TrPFa-tARDw4R/exec";
     public static final String SCRIPT_BH_HT_NVL        = LINK_SCRIPT + "AKfycbwGtxm48MgPYzsagGOWjS0HliSCAEr_ODi0hNzhecjk2mvc98I/exec";
@@ -202,15 +209,45 @@ public class Keys {
     public static final String SCRIPT_KHUYENMAI_SOL    = LINK_SCRIPT + "AKfycbyMJHml5Ni-ojwd_sdVSk0gzhCjPnqBuN6aBOziHy59nupHbzU/exec";
     public static final String SCRIPT_BANHANG_SOL      = LINK_SCRIPT + "AKfycbwWCTvKS4Ywje_jMiD5qtLBpMOcehMkfeoWuSqG9PqUdYryI50/exec";
     public static final String SCRIPT_BC_KK_SOL        = LINK_SCRIPT + "AKfycbxErQQNYo5FbDVSXyWcysvmSochHSccZ_OUoB2EHgSZTISX-ss/exec";
-    public static final String SCRIPT_CREATEDTABLE_SOL = LINK_SCRIPT + "AKfycbzg_j3uTnZ35KqVm1gjUrgJAXwnvpkGlDsKEZSq332tW9kt_xg/exec";
+    public static final String SCRIPT_CREATEDTABLE_SOL = LINK_SCRIPT + "AKfycbytwz075ECAw53gDR9ernTLzv22Fz47o_tzQHAp5_KVPBVzkPDL/exec";
     public static final String SCRIPT_BH_DDT_SOL       = LINK_SCRIPT + "AKfycbwDB-Uu9_WENiHx9sZRBc_-t6cTMzQFWW8fyi4cm8zDvaO7SyK5/exec";
     public static final String SCRIPT_BH_CXL_SOL       = LINK_SCRIPT + "AKfycby4S3zm0OOXlOJEzv7H7WJT2zaAkXiWSQ9LKjJFKJ7LYaaR2K8/exec";
     public static final String SCRIPT_BH_HT_SOL        = LINK_SCRIPT + "AKfycbwVa7VR2NaHMfYVn5bUmtCeHY14R7Ya35T7kml4UjNyR01F2bA/exec";
     public static final String SCRIPT_BH_1DOI1_SOL     = LINK_SCRIPT + "AKfycbzrdDSV8Lt52MGD2m70kZPTujLjOTql5PW-1FAqrfaIpUEP9tY/exec";
     public static final String SCRIPT_BH_DLK_SOL       = LINK_SCRIPT + "AKfycbz5O8TlY5hPpshMuEx3Kr1OIIhuMNii69TyULp2Cuu_xRLp2Dnc/exec";
+    public static final String SCRIPT_XUATHANG_SOL     = LINK_SCRIPT + "AKfycbwjaiaUzZ0WEFo4DQ6oYNqH4u_WBfET81_BJKAW3GlEa-GnUoJ5/exec";
+
+
+    //link 32
+    public static final String SCRIPT_UPDATE_NO_32    = LINK_SCRIPT + "AKfycbzqEzj8CZBb3KPBPo2cJ27hlXZ5bBpGNolRFwE4ymuwiajl4SuH/exec";
+    public static final String SCRIPT_KHOANCHI_32     = LINK_SCRIPT + "AKfycbym2erT7T56-tDMYPOESEd4_To2FUHzwhFruTd3D_b0dSlZ0po/exec";
+    public static final String SCRIPT_PHICOD_32       = LINK_SCRIPT + "AKfycbzi1M1hZm-zMMYkQQzxzVef5I1YdzGD1XJLjITR_sIr9rK18fM/exec";
+    public static final String SCRIPT_TIENTRAVE_32    = LINK_SCRIPT + "AKfycbwvO8i6zx7PXaKirFK8BDOnxk-h7FGE9ur-pgTjSGP27nGBcDiN/exec";
+    public static final String SCRIPT_KHUYENMAI_32    = LINK_SCRIPT + "AKfycbwRwQF-sJBJrU6Ih0ebA-D0HcpkW-_LipmqDH20KwGhuIM9DZA/exec";
+    public static final String SCRIPT_BANHANG_32      = LINK_SCRIPT + "AKfycbyNy69ZMOS0xGTPngg3kvmQcyzC6x5S2e-xuZ5F7EY5mA-U4uye/exec";
+    public static final String SCRIPT_BC_KK_32        = LINK_SCRIPT + "AKfycbzns5T0pTsYGoXlvfoq_0LGV2Tb8jCPv_otdOK3STpedU1Fczw/exec";
+    public static final String SCRIPT_CREATEDTABLE_32 = LINK_SCRIPT + "AKfycbx47KAr55_uIXDhWlJbwLmtmn4h-7xAUmFSWsVAXnwfwgAzp9A/exec";
+    public static final String SCRIPT_BH_DDT_32       = LINK_SCRIPT + "AKfycbzLp1VUYabV5X_OpjfMvw00ZBMCckurnpoPm3D_cyRRFMQ_Pek/exec";
+    public static final String SCRIPT_BH_CXL_32       = LINK_SCRIPT + "AKfycbzblEWpYL4hO5zBvTWKGyIp0GEYZ2EowyKQhQ469zqWdbuDDXEI/exec";
+    public static final String SCRIPT_BH_HT_32        = LINK_SCRIPT + "AKfycbxe-AgTDtMrx-TXqn1QZUPtGKefJIP_cqGPyyypzSw6jFwfSHxf/exec";
+    public static final String SCRIPT_BH_1DOI1_32     = LINK_SCRIPT + "AKfycbwZi6EkU8686RV4EJ9TwwBH_yLwxZrLqwHQtW9C2cG9_srfpx2v/exec";
+    public static final String SCRIPT_BH_DLK_32       = LINK_SCRIPT + "AKfycbwuwrAfFa-JpdXDyFDvx_9mlemxecqsB5hegNvlAl6X44fj-YM/exec";
+    public static final String SCRIPT_XUATHANG_32     = LINK_SCRIPT + "AKfycby7lR7GL6_HMAShk2j7KJhrc-rGDmDCMAdTLy77WCPajzX4bkc/exec";
 
     public static int getDrawable(Context pContext, String pString){
         return pContext.getResources().getIdentifier(pString, "drawable", pContext.getPackageName());
+    }
+
+    public static String getSCRIPT_XUATHANG(String chinhanh) {
+        String cipt = "";
+        if (chinhanh.equals(CN_NVL)){
+            cipt = SCRIPT_XUATHANG_NVL;
+        } else if (chinhanh.equals(CN_SOL)){
+            cipt = SCRIPT_XUATHANG_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_XUATHANG_32;
+        }
+        return cipt;
     }
 
     public static String getSCRIPT_BH_DLK(String chinhanh) {
@@ -219,6 +256,8 @@ public class Keys {
             cipt = SCRIPT_BH_DLK_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BH_DLK_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BH_DLK_32;
         }
         return cipt;
     }
@@ -229,6 +268,8 @@ public class Keys {
             cipt = SCRIPT_BH_1DOI1_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BH_1DOI1_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BH_1DOI1_32;
         }
         return cipt;
     }
@@ -239,6 +280,8 @@ public class Keys {
             cipt = SCRIPT_BH_HT_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BH_HT_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BH_HT_32;
         }
         return cipt;
     }
@@ -249,6 +292,8 @@ public class Keys {
             cipt = SCRIPT_BH_CXL_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BH_CXL_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BH_CXL_32;
         }
         return cipt;
     }
@@ -259,6 +304,8 @@ public class Keys {
             cipt = SCRIPT_BH_DDT_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BH_DDT_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BH_DDT_32;
         }
         return cipt;
     }
@@ -269,6 +316,8 @@ public class Keys {
             cipt = SCRIPT_CREATEDTABLE_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_CREATEDTABLE_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_CREATEDTABLE_32;
         }
         return cipt;
     }
@@ -279,6 +328,8 @@ public class Keys {
             cipt = SCRIPT_BC_KK_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BC_KK_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BC_KK_32;
         }
         return cipt;
     }
@@ -289,6 +340,8 @@ public class Keys {
             cipt = SCRIPT_BANHANG_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_BANHANG_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_BANHANG_32;
         }
         return cipt;
     }
@@ -299,6 +352,8 @@ public class Keys {
             cipt = SCRIPT_KHUYENMAI_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_KHUYENMAI_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_KHUYENMAI_32;
         }
         return cipt;
     }
@@ -309,6 +364,8 @@ public class Keys {
             cipt = SCRIPT_TIENTRAVE_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_TIENTRAVE_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_TIENTRAVE_32;
         }
         return cipt;
     }
@@ -318,6 +375,8 @@ public class Keys {
             cipt = SCRIPT_PHICOD_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_PHICOD_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_PHICOD_32;
         }
         return cipt;
     }
@@ -328,6 +387,8 @@ public class Keys {
             cipt = SCRIPT_KHOANCHI_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_KHOANCHI_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_KHOANCHI_32;
         }
         return cipt;
     }
@@ -338,6 +399,8 @@ public class Keys {
             cipt = SCRIPT_UPDATE_NO_NVL;
         } else if (chinhanh.equals(CN_SOL)){
             cipt = SCRIPT_UPDATE_NO_SOL;
+        } else if (chinhanh.equals(CN_32)){
+            cipt = SCRIPT_UPDATE_NO_32;
         }
         return cipt;
     }
@@ -427,7 +490,7 @@ public class Keys {
                     cas = CA_CHIEU;
                 }
             }
-        } else if (chinhanh.equals("Chi nhánh Demo")){
+        } else if (chinhanh.equals(CN_32)){
             if (hours < 14){
                 cas = CA_SANG;
             } else if (hours >= 15){
@@ -493,7 +556,7 @@ public class Keys {
         if(!TextUtils.isEmpty(s)){
             s = s.replaceAll( "`", 1+"");
             s = s.replaceAll( "&", 2+"");
-            s = s.replaceAll( "/$", 3+"");
+            s = s.replaceAll( "[$]", 3+"");
             s = s.replaceAll( "!", 4+"");
             s = s.replaceAll( "@", 5+"");
             s = s.replaceAll( "%", 6+"");
@@ -704,8 +767,9 @@ public class Keys {
         boolean result = false;
         if (chinhanh.equals(CN_SOL) && ma.length() == 8){
             result = true;
-        }
-        if (chinhanh.equals(CN_NVL) && ma.length() < 7){
+        } else if (chinhanh.equals(CN_NVL) && ma.length() < 7){
+            result = true;
+        } else if (chinhanh.equals(CN_32) && ma.length() < 7){
             result = true;
         }
         return result;

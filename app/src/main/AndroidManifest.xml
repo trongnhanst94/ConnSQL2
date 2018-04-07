@@ -180,10 +180,10 @@
             android:name=".Remove_Data.Main_Remove_Order"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Kho.Main_Nhaphang"
+            android:name=".Kho.Main_KhoOnline"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Kho.Main_Taonhap"
+            android:name=".Kho.Main_AddKho"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Remove_Data.Main_Remove_BCDT"
@@ -226,7 +226,9 @@
         <activity android:name=".Remove_Data.Main_Remove_BHDLK" />
         <activity android:name=".Remove_Data.Main_Remove_BH1D1" />
         <activity android:name=".Remove_Data.Main_Remove_BHDDT" />
-        <activity android:name=".Remove_Data.Main_Remove_BHCXL"></activity>
+        <activity android:name=".Remove_Data.Main_Remove_BHCXL" />
+        <activity android:name=".Kho.Main_Minstock" />
+        <activity android:name=".Kho.Main_Nhapkho"></activity>
     </application>
 
 </manifest>

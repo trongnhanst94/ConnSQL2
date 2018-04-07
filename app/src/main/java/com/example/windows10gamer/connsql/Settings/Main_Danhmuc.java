@@ -371,7 +371,6 @@ public class Main_Danhmuc extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                            Log.d("qqq", "doInBackground: "+arraylist.size());
                         }
                     }
                 }

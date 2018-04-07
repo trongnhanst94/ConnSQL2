@@ -554,25 +554,15 @@ Main_Ketqua_Kiemkho extends AppCompatActivity {
                                     dem.get(resultMA).getBaohanh(),
                                     dem.get(resultMA).getNguon(),
                                     dem.get(resultMA).getNgaynhap(),
-                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(arrayList.get(i).getVon()))/2)+""),
-                                    (Integer.valueOf(dem.get(resultMA).getGia()) + Integer.valueOf(arrayList.get(i).getGia()))/2+"",
+                                    dem.get(resultMA).getVon(),
+                                    dem.get(resultMA).getGia(),
                                     dem.get(resultMA).getSoluong()+1));
                             adapter.notifyDataSetChanged();
-                            Log.d("qqq", resultMA+"onPostExecute: "+
-                                            dem.get(resultMA).getNhanvien()+" ; "+
-                                    dem.get(resultMA).getMa()+" ; "+
-                                    dem.get(resultMA).getTen()+" ; "+
-                                    dem.get(resultMA).getBaohanh()+" ; "+
-                                    dem.get(resultMA).getNguon()+" ; "+
-                                    dem.get(resultMA).getNgaynhap()+" ; "+
-                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(arrayList.get(i).getVon()))/2)+"")+" ; "+
-                                    (Integer.valueOf(dem.get(resultMA).getGia()) + " = "+Integer.valueOf(arrayList.get(i).getGia()))+""+" ; "+
-                                    dem.get(resultMA).getSoluong()+1);
                         }
                     }
                 }
             } else {
-                Toasty.warning(Main_Ketqua_Kiemkho.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
+                Toasty.info(Main_Ketqua_Kiemkho.this, "Không có dữ liệu", Toast.LENGTH_LONG, true).show();
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
             linearLayout.setLayoutParams(params);

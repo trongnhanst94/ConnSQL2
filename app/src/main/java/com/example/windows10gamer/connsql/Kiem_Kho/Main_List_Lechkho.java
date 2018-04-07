@@ -23,10 +23,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.windows10gamer.connsql.Object.CountSanpham;
-import com.example.windows10gamer.connsql.Object.CountSanpham2;
-import com.example.windows10gamer.connsql.Object.Kiemkho;
-import com.example.windows10gamer.connsql.Object.Lechkho;
+import com.example.windows10gamer.connsql.Object.CountSanpham2_Von;
+import com.example.windows10gamer.connsql.Object.CountSanpham_Von;
+import com.example.windows10gamer.connsql.Object.Kiemkho_Von;
+import com.example.windows10gamer.connsql.Object.Lechkho_Von;
 import com.example.windows10gamer.connsql.Other.Connect_Internet;
 import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
@@ -54,15 +54,15 @@ import javax.net.ssl.HttpsURLConnection;
 import es.dmoral.toasty.Toasty;
 
 public class Main_List_Lechkho extends AppCompatActivity {
-    ArrayList<CountSanpham> giong, khac, ga, gb, fullga, fullgb, showa, showb, all;
-    ArrayList<CountSanpham2> fullga2, fullgb2, fullgiong;
-    ArrayList<CountSanpham> dem, demA, demB;
+    ArrayList<CountSanpham_Von> giong, khac, ga, gb, fullga, fullgb, showa, showb, all;
+    ArrayList<CountSanpham2_Von> fullga2, fullgb2, fullgiong;
+    ArrayList<CountSanpham_Von> dem, demA, demB;
     String nameUserA, nameUserB, chinhanh, kho, tentrang = "", snUserA, snUserB;
     TableLayout stk;
     CheckBox cbGiong, cbKhac;
     Button btnLoc;
-    ArrayList<Kiemkho> donhang;
-    ArrayList<Lechkho> lechkhoArrayList = new ArrayList<>();
+    ArrayList<Kiemkho_Von> donhang;
+    ArrayList<Lechkho_Von> lechkhoArrayList = new ArrayList<>();
     ProgressDialog dialog, dialog2;
     FloatingActionButton fabBCKK;
     private ProgressDialog nPro;
@@ -173,7 +173,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                         if (cbKhac.isChecked()) {
                             sortList(fullga2);
                             sortList(fullgb2);
-                            ArrayList<CountSanpham2> tamA, tamB;
+                            ArrayList<CountSanpham2_Von> tamA, tamB;
                             tamA = new ArrayList<>();
                             tamB = new ArrayList<>();
                             tamA.addAll(fullga2);
@@ -197,52 +197,52 @@ public class Main_List_Lechkho extends AppCompatActivity {
     }
 
 
-    private void addList(ArrayList<CountSanpham2> fullga2, ArrayList<CountSanpham2> fullgb2) {
+    private void addList(ArrayList<CountSanpham2_Von> fullga2, ArrayList<CountSanpham2_Von> fullgb2) {
         lechkhoArrayList.clear();
-        lechkhoArrayList.add(new Lechkho("STT", "Mã SP", "Tên sản phẩm", "Bảo hành", "Nguồn", "Ngày nhập", "Vốn", "Giá", nameUserA, nameUserB));
+        lechkhoArrayList.add(new Lechkho_Von("STT", "Mã SP", "Tên sản phẩm", "Bảo hành", "Nguồn", "Ngày nhập", "Vốn", "Tổng giá vốn", nameUserA, nameUserB));
         int dem = 1;
         for (int i = 0; i < fullga.size(); i++) {
             if (fullga.get(i).getSoluong() == fullgb.get(i).getSoluong()){
-            lechkhoArrayList.add(new Lechkho(1+"", fullga2.get(i).getMa(), fullga2.get(i).getTenSanpham(), fullga2.get(i).getBaohanh(), fullga2.get(i).getNguon(), fullga2.get(i).getNgaynhap(), fullga2.get(i).getVon(), fullga2.get(i).getGia(),fullga2.get(i).getSoluong()+"", fullgb2.get(i).getSoluong()+""));
-            dem++;
+                lechkhoArrayList.add(new Lechkho_Von(1+"", fullga2.get(i).getMa(), fullga2.get(i).getTenSanpham(), fullga2.get(i).getBaohanh(), fullga2.get(i).getNguon(), fullga2.get(i).getNgaynhap(), fullga2.get(i).getVon(), fullga2.get(i).getTotalvon(),fullga2.get(i).getSoluong()+"", fullgb2.get(i).getSoluong()+""));
+                dem++;
             }
         }
         for (int i = 0; i < fullgb.size(); i++) {
             if (fullga.get(i).getSoluong() != fullgb.get(i).getSoluong()){
-                lechkhoArrayList.add(new Lechkho(1+"", fullgb2.get(i).getMa(), fullgb2.get(i).getTenSanpham(), fullgb2.get(i).getBaohanh(), fullgb2.get(i).getNguon(), fullgb2.get(i).getNgaynhap(), fullgb2.get(i).getVon(), fullgb2.get(i).getGia(),fullga2.get(i).getSoluong()+"", fullgb2.get(i).getSoluong()+""));
+                lechkhoArrayList.add(new Lechkho_Von(1+"", fullgb2.get(i).getMa(), fullgb2.get(i).getTenSanpham(), fullgb2.get(i).getBaohanh(), fullgb2.get(i).getNguon(), fullgb2.get(i).getNgaynhap(), fullgb2.get(i).getVon(), fullgb2.get(i).getTotalvon(),fullga2.get(i).getSoluong()+"", fullgb2.get(i).getSoluong()+""));
                 dem++;
             }
         }
         new SendRequest().execute();
     }
 
-    private ArrayList<CountSanpham2> iniTen(ArrayList<Kiemkho> donhang, ArrayList<CountSanpham> list) {
-        ArrayList<CountSanpham2> full = new ArrayList<>();
+    private ArrayList<CountSanpham2_Von> iniTen(ArrayList<Kiemkho_Von> donhang, ArrayList<CountSanpham_Von> list) {
+        ArrayList<CountSanpham2_Von> full = new ArrayList<>();
         for (int i = 0; i<list.size(); i++){
             int result = sosanh2(donhang, list.get(i).getMa());
             if (result != -1){
-                full.add(new CountSanpham2(list.get(i).getMa(), donhang.get(result).getTen(), donhang.get(result).getBaohanh(), donhang.get(result).getNguon(), donhang.get(result).getNgaynhap(), donhang.get(result).getVon(), donhang.get(result).getGia(), list.get(i).getNhanvien(), list.get(i).getSoluong()));
+                full.add(new CountSanpham2_Von(list.get(i).getMa(), donhang.get(result).getTen(), donhang.get(result).getBaohanh(), donhang.get(result).getNguon(), donhang.get(result).getNgaynhap(), donhang.get(result).getVon(), list.get(i).getTotalvon()+"", list.get(i).getNhanvien(), list.get(i).getSoluong()));
             }
         }
         return full;
     }
 
-    private void sortList(ArrayList<CountSanpham2> list) {
-        Collections.sort(list, new Comparator<CountSanpham2>() {
+    private void sortList(ArrayList<CountSanpham2_Von> list) {
+        Collections.sort(list, new Comparator<CountSanpham2_Von>() {
             @Override
-            public int compare(CountSanpham2 lhs, CountSanpham2 rhs) {
+            public int compare(CountSanpham2_Von lhs, CountSanpham2_Von rhs) {
                 return lhs.getMa().compareTo(rhs.getMa());
             }
         });
     }
 
-    private ArrayList<CountSanpham> FullList(ArrayList<CountSanpham> khac, ArrayList<CountSanpham> ga) {
-        ArrayList<CountSanpham> full = new ArrayList<>();
+    private ArrayList<CountSanpham_Von> FullList(ArrayList<CountSanpham_Von> khac, ArrayList<CountSanpham_Von> ga) {
+        ArrayList<CountSanpham_Von> full = new ArrayList<>();
         full.addAll(ga);
         for (int i = 0; i<khac.size(); i++){
             int result = sosanh(ga, khac.get(i).getMa(), khac.get(i).getSoluong());
             if (result == -1){
-                full.add(new CountSanpham(
+                full.add(new CountSanpham_Von(
                         ga.get(0).getNhanvien(),
                         khac.get(i).getMa(),
                         khac.get(i).getTen(),
@@ -250,14 +250,14 @@ public class Main_List_Lechkho extends AppCompatActivity {
                         khac.get(i).getNguon(),
                         khac.get(i).getNgaynhap(),
                         khac.get(i).getVon(),
-                        khac.get(i).getGia(),
+                        khac.get(i).getTotalvon(),
                         0));
             }
         }
         return full;
     }
 
-    private int sosanh2(ArrayList<Kiemkho> dem_h, String masanpham) {
+    private int sosanh2(ArrayList<Kiemkho_Von> dem_h, String masanpham) {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
@@ -269,7 +269,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         return result;
     }
 
-    private int sosanh(ArrayList<CountSanpham> dem_h, String masanpham, int soluong) {
+    private int sosanh(ArrayList<CountSanpham_Von> dem_h, String masanpham, int soluong) {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
@@ -317,7 +317,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                                 try {
                                     JSONObject object = array.getJSONObject(jIndex);
                                     if (chinhanh.equals(object.getString("vitri")) && (object.getString("kho").equals(kho))){
-                                        donhang.add(0, new Kiemkho(
+                                        donhang.add(0, new Kiemkho_Von(
                                                 object.getString("ngay"),
                                                 object.getString("gio"),
                                                 object.getString("maNhanvien"),
@@ -327,8 +327,8 @@ public class Main_List_Lechkho extends AppCompatActivity {
                                                 object.getString("baohanhSanpham"),
                                                 object.getString("nguonSanpham"),
                                                 object.getString("ngaynhapSanpham"),
-                                                object.getString("vonSanpham"),
-                                                object.getString("giaSanpham")
+                                                Keys.giaimagiavon(object.getString("vonSanpham")),
+                                                Keys.giaimagiavon(object.getString("vonSanpham"))
                                         ));
                                     }
                                 } catch (JSONException e) {
@@ -355,7 +355,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                     int resultMA = sosanhMA(dem, donhang.get(i).getMa(), donhang.get(i).getMaNhanvien());
                     if (resultNV == -1){
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(
+                            dem.add(new CountSanpham_Von(
                                     donhang.get(i).getMaNhanvien(),
                                     donhang.get(i).getMa(),
                                     donhang.get(i).getTen(),
@@ -363,12 +363,12 @@ public class Main_List_Lechkho extends AppCompatActivity {
                                     donhang.get(i).getNguon(),
                                     donhang.get(i).getNgaynhap(),
                                     donhang.get(i).getVon(),
-                                    donhang.get(i).getGia(),
+                                    Integer.valueOf(donhang.get(i).getTotalvon()),
                                     1));
                         }
                     } else {
                         if (resultMA == -1){
-                            dem.add(new CountSanpham(
+                            dem.add(new CountSanpham_Von(
                                     donhang.get(i).getMaNhanvien(),
                                     donhang.get(i).getMa(),
                                     donhang.get(i).getTen(),
@@ -376,18 +376,18 @@ public class Main_List_Lechkho extends AppCompatActivity {
                                     donhang.get(i).getNguon(),
                                     donhang.get(i).getNgaynhap(),
                                     donhang.get(i).getVon(),
-                                    donhang.get(i).getGia(),
+                                    Integer.valueOf(donhang.get(i).getTotalvon()),
                                     1));
                         } else {
-                            dem.set( resultMA, new CountSanpham(
+                            dem.set( resultMA, new CountSanpham_Von(
                                     dem.get(resultMA).getNhanvien(),
                                     dem.get(resultMA).getMa(),
                                     dem.get(resultMA).getTen(),
                                     dem.get(resultMA).getBaohanh(),
                                     dem.get(resultMA).getNguon(),
                                     dem.get(resultMA).getNgaynhap(),
-                                    Keys.mahoagiavon((Integer.valueOf(Keys.giaimagiavon(dem.get(resultMA).getVon())) + Integer.valueOf(Keys.giaimagiavon(donhang.get(i).getVon()))/2)+""),
-                                    (Integer.valueOf(dem.get(resultMA).getGia()) + Integer.valueOf(donhang.get(i).getGia()))/2+"",
+                                    dem.get(resultMA).getVon(),
+                                    dem.get(resultMA).getTotalvon() + Integer.valueOf(donhang.get(i).getTotalvon()),
                                     dem.get(resultMA).getSoluong()+1));
                         }
                     }
@@ -403,20 +403,20 @@ public class Main_List_Lechkho extends AppCompatActivity {
                     demB.add(dem.get(i));
                 }
             }
-            final ArrayList<CountSanpham> giong = new ArrayList<>(), khac = new ArrayList<>(),
+            final ArrayList<CountSanpham_Von> giong = new ArrayList<>(), khac = new ArrayList<>(),
                     all = new ArrayList<>(), ga = new ArrayList<>(), gb = new ArrayList<>();
             ga.addAll(demA); gb.addAll(demB);
             for (int i = 0; i < ga.size(); i++){
                 for (int j = 0; j < gb.size(); j++){
                     if ((ga.get(i).getMa().equals(gb.get(j).getMa())) && (ga.get(i).getSoluong() == (gb.get(j).getSoluong()))){
-                        giong.add(new CountSanpham("giong",
+                        giong.add(new CountSanpham_Von("giong",
                                 ga.get(i).getMa(),
                                 ga.get(i).getTen(),
                                 ga.get(i).getBaohanh(),
                                 ga.get(i).getNguon(),
                                 ga.get(i).getNgaynhap(),
                                 ga.get(i).getVon(),
-                                ga.get(i).getGia(),
+                                ga.get(i).getTotalvon(),
                                 ga.get(i).getSoluong()));
                     }
                 }
@@ -442,7 +442,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         }
     }
 
-    private int sosanhMA(ArrayList<CountSanpham> dem_h, String masanpham, String nhanvien) {
+    private int sosanhMA(ArrayList<CountSanpham_Von> dem_h, String masanpham, String nhanvien) {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
@@ -454,7 +454,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         return result;
     }
 
-    private int sosanhNV(ArrayList<CountSanpham> dem_h, String nhanvien) {
+    private int sosanhNV(ArrayList<CountSanpham_Von> dem_h, String nhanvien) {
         int result = -1;
         if (dem_h.size() != 0){
             for (int i = 0; i < dem_h.size(); i++){
@@ -466,7 +466,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
         return result;
     }
 
-    public void init(ArrayList<CountSanpham2> fullga, ArrayList<CountSanpham2> fullgb) {
+    public void init(ArrayList<CountSanpham2_Von> fullga, ArrayList<CountSanpham2_Von> fullgb) {
         TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         stk = findViewById(R.id.tbLechkho);
         TableRow tbrow0 = new TableRow(this);
@@ -702,7 +702,7 @@ public class Main_List_Lechkho extends AppCompatActivity {
                 postDataParams.put("kkNguonSP", lechkhoArrayList.get(j).getNguonsp());
                 postDataParams.put("kkNgaynhapSP", lechkhoArrayList.get(j).getNgaynhapsp());
                 postDataParams.put("kkVonSP", lechkhoArrayList.get(j).getVonsp());
-                postDataParams.put("kkGiaSP", lechkhoArrayList.get(j).getGiasp());
+                postDataParams.put("kkGiaSP", lechkhoArrayList.get(j).getTotalvonsp());
                 postDataParams.put("kkNhanvienA", lechkhoArrayList.get(j).getNvA());
                 postDataParams.put("kkNhanvienB", lechkhoArrayList.get(j).getNvB());
             } else {
@@ -716,11 +716,10 @@ public class Main_List_Lechkho extends AppCompatActivity {
                 postDataParams.put("kkNguonSP", lechkhoArrayList.get(j).getNguonsp());
                 postDataParams.put("kkNgaynhapSP", lechkhoArrayList.get(j).getNgaynhapsp());
                 postDataParams.put("kkVonSP", lechkhoArrayList.get(j).getVonsp());
-                postDataParams.put("kkGiaSP", lechkhoArrayList.get(j).getGiasp());
+                postDataParams.put("kkGiaSP", lechkhoArrayList.get(j).getTotalvonsp());
                 postDataParams.put("kkNhanvienA", lechkhoArrayList.get(j).getNvA());
                 postDataParams.put("kkNhanvienB", lechkhoArrayList.get(j).getNvB());
             }
-            Log.e("params", postDataParams.toString());
 
             // Kết nối HTTP
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
