@@ -90,11 +90,11 @@ public class Keys {
     public static final int LEVEL_BH               = 2;
     public static final int LEVEL_QL               = 0;
     public static final int LEVEL_KHO              = 1;
-    public static final int SOMA_GIAMGIA           = 5;
+    public static final int SOMA_GIAMGIA           = 4;
     public static final int GIOHETCASOL            = 15;
     public static final int MAX_LENGHT             = 22;
     public static final int[] MY_COLORS            = {Color.parseColor("#FF4444"), Color.parseColor("#FFBB33"), Color.parseColor("#AA66CC"), Color.parseColor("#33B5E5"), Color.parseColor("#99CC00")};
-    public static final Random RANDOM             = new Random();
+    public static final Random RANDOM              = new Random();
     public static final String[] HELLOS            = {"1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","K","L","M","N","O","P","Q","S","T","U","V"};
     public static final String[] RAND              = {"1","2","3","4","5","6","7","8","9","0"};
     public static final String DANHSACHKIEMKHO2    = "Kiem kho";
@@ -105,7 +105,7 @@ public class Keys {
     public static final String CN_SOL              = "Chi nhánh SOL";
     public static final String CN_32               = "Chi nhánh 3/2";
     public static final String CN_NVL              = "Chi nhánh Nguyễn Văn Linh";
-    public static final String NOW_VERSION         = "Version 7.6";
+    public static final String NOW_VERSION         = "Version 7.9";
     public static final String FIREBASE_API_LINK   = "https://fcm.googleapis.com/fcm/send";
     public static final String FIREBASE_TOKEN      = "/topics/all";
     public static final String FIREBASE_SERVER_KEY = "AAAAvlkWcQA:APA91bEqA621By39e_NeaScI3cuBiQe9ZPaxCqzQiY0cq5Ysvot9vEZIJ-HeI9n-a9JjO-gR8q9QDVYQzV9xE6d-6iB6k9E6po2dZiYl46rKIEXBNfk72wupRulJdCrCTaAphnWh_B2n";
@@ -115,6 +115,7 @@ public class Keys {
     public static final String CA_CHIEU            = "Ca chiều";
     public static final long LOAD_REALTIME         = 10000;
     public static final List<String> DANHMUCLIST   = Arrays.asList("KHOANCHI", "TIENTRAVE");
+    public static final List<String> KHOLIST       = Arrays.asList("- Chọn loại nhập -", "Mua hàng mới", "NCC trả bảo hành", "Kho lỗi sang kho mới");
 
     // Key Json for Server
     public static final String MAGIAMGIA           = "MAGIAMGIA";
@@ -181,6 +182,7 @@ public class Keys {
     public static final String MINSTOCK            = "MINSTOCK";
     public static final String DELE_MINSTOCK_WEB   = "DELE_MINSTOCK_WEB";
     public static final String UPDATE_MINSTOCK_WEB = "UPDATE_MINSTOCK_WEB";
+    public static final String DELE_KHOONLINE_WEB  = "DELE_KHOONLINE_WEB";
 
     // link Google Script
     public static final String LINK_SCRIPT         = "https://script.google.com/macros/s/";
@@ -233,6 +235,7 @@ public class Keys {
     public static final String SCRIPT_BH_1DOI1_32     = LINK_SCRIPT + "AKfycbwZi6EkU8686RV4EJ9TwwBH_yLwxZrLqwHQtW9C2cG9_srfpx2v/exec";
     public static final String SCRIPT_BH_DLK_32       = LINK_SCRIPT + "AKfycbwuwrAfFa-JpdXDyFDvx_9mlemxecqsB5hegNvlAl6X44fj-YM/exec";
     public static final String SCRIPT_XUATHANG_32     = LINK_SCRIPT + "AKfycby7lR7GL6_HMAShk2j7KJhrc-rGDmDCMAdTLy77WCPajzX4bkc/exec";
+    public static final String UPDATE_KHOONLINE_WEB   = "UPDATE_KHOONLINE_WEB";
 
     public static int getDrawable(Context pContext, String pString){
         return pContext.getResources().getIdentifier(pString, "drawable", pContext.getPackageName());

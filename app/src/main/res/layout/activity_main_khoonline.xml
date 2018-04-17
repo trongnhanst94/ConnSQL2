@@ -27,127 +27,6 @@
             android:textColor="#fff"
             android:textColorHint="#fff" />
 
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingBottom="3dp"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:paddingRight="10dp"-->
-            <!--android:paddingTop="5dp"-->
-            <!--android:text="Nhân viên:"-->
-            <!--android:textSize="@dimen/muoi" />-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:weightSum="10">-->
-
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="3"-->
-                <!--android:gravity="center_horizontal">-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="40dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--app:srcCompat="@drawable/ic_userxuat"-->
-                    <!--tools:ignore="VectorDrawableCompat" />-->
-            <!--</LinearLayout>-->
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="7"-->
-                <!--android:background="@drawable/bg125"-->
-                <!--android:gravity="center"-->
-                <!--android:orientation="vertical"-->
-                <!--android:paddingLeft="10dp">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvmaNV"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textColor="#000"-->
-                        <!--android:textSize="@dimen/muoi"-->
-                        <!--android:textStyle="italic" />-->
-
-                <!--</LinearLayout>-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/tvtenNV"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:textColor="#000"-->
-                        <!--android:textSize="@dimen/muoi"-->
-                        <!--android:textStyle="italic" />-->
-                <!--</LinearLayout>-->
-
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:weightSum="10">-->
-
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="3"-->
-                <!--android:gravity="center_horizontal|center">-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Chi nhánh:"-->
-                    <!--android:textSize="@dimen/muoi" />-->
-            <!--</LinearLayout>-->
-
-
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="7"-->
-                <!--android:background="@drawable/bg125"-->
-                <!--android:gravity="center_vertical|center_horizontal"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/tvchinhanh"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:paddingBottom="5dp"-->
-                    <!--android:paddingLeft="10dp"-->
-                    <!--android:paddingTop="5dp"-->
-                    <!--android:textAlignment="inherit"-->
-                    <!--android:textColor="#000"-->
-                    <!--android:textSize="@dimen/muoi" />-->
-
-            <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,6 +45,26 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/list_border"></ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ "
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvtotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_edittext_focused"
+            android:textAlignment="center"
+            android:textColor="@color/RED"
+            android:textSize="@dimen/bon"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

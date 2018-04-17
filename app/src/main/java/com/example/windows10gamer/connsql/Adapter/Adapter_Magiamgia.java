@@ -85,11 +85,11 @@ public class Adapter_Magiamgia  extends ArrayAdapter<Magiamgia> {
         return vh.rootView;
     }
 
-    private void xacNhanXoa(final String id) {
+    private void xacNhanXoa(final String ten) {
         if(!Connect_Internet.checkConnection(context))
             Connect_Internet.buildDialog(context).show();
         else {
-            context.Delete(id);
+            context.Delete(ten);
         }
     }
 

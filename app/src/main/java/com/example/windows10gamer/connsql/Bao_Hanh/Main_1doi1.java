@@ -320,6 +320,7 @@ public class Main_1doi1 extends AppCompatActivity {
         protected String doInBackground(String... arg0) {
             putData();
             add1Doi1Web();
+            DeleteKho();
             return null;
         }
 
@@ -329,6 +330,58 @@ public class Main_1doi1 extends AppCompatActivity {
             Toasty.success(Main_1doi1.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
             ResetActivity();
         }
+    }
+
+    // TODO: 4/8/2018 trừ kho
+
+    public void DeleteKho(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_1doi1.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_1doi1.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_KHOONLINE_WEB);
+                params.put("chinhanh", chinhanh);
+                params.put("ngaynhap", ngaynhap_moi);
+                params.put("ma", ma_moi);
+                params.put("nguon", nguon_moi);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
 

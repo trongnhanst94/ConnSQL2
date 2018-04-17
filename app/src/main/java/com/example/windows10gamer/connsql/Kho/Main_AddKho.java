@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,14 +61,11 @@ public class Main_AddKho extends AppCompatActivity {
     ArrayList<SanphamAmount> totalList = new ArrayList<>();
     ArrayList<SanphamAmount> arrayList;
     ArrayList<String> position = new ArrayList<>();
-    ArrayAdapter<String> mAdapter;
+    ArrayAdapter<String> mAdapter, mAdapterKho;
     Adapter_AddKho adapter;
     String session_username, session_ma, ngay, gio;
     private String ma, ten, nguon, baohanh, gia, ngaynhap, von, vitri;
     TextView tvScanManhanvien, tvScanTennhanvien, tvchinhanhkiemkho;
-    RadioGroup rgkho;
-    RadioButton rbkhomoi;
-    RadioButton rbkholoi;
     String kho = "Kho mới";
     ProgressDialog dialog;
     private SharedPreferences shared, sp;
@@ -80,7 +75,6 @@ public class Main_AddKho extends AppCompatActivity {
     private int soluong;
     private ProgressDialog nPro;
     ImageView ivAvatar;
-    private ProgressDialog nPro2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +98,6 @@ public class Main_AddKho extends AppCompatActivity {
         tvchinhanhkiemkho.setText(chinhanh);
         tvScanManhanvien  = findViewById(R.id.tvScanManhanvien);
         tvScanTennhanvien = findViewById(R.id.tvScanTennhanvien);
-        rgkho             = findViewById(R.id.rgkho);
-        rbkhomoi          = findViewById(R.id.rbkhomoi);
-        rbkholoi          = findViewById(R.id.rbkholoi);
-        rbkhomoi.setChecked(true);
         tvScanManhanvien.setText("Mã số: " + session_ma);
         tvScanTennhanvien.setText("Tên nhân viên: " + session_username);
         ngay = getDate();
@@ -122,7 +112,11 @@ public class Main_AddKho extends AppCompatActivity {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_AddKho.this).show();
                 else {
-                    StartScan();
+                    if (!kho.equals("- Chọn loại nhập -")){
+                        StartScan();
+                    } else {
+                        Toasty.warning(Main_AddKho.this, "Chưa chọn loại nhập", Toast.LENGTH_LONG, true).show();
+                    }
                 }
             }
         });
@@ -208,80 +202,56 @@ public class Main_AddKho extends AppCompatActivity {
                     von = st.nextToken();
                     gia = st.nextToken();
                     soluong = 1;
-                    int checksoluong = check(ma, listsoluong);
-                    if (checksoluong != -1){
-                        android.app.AlertDialog.Builder dialog = null;
-                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                            dialog = new android.app.AlertDialog.Builder(Main_AddKho.this);
-                        } else {
-                            dialog = new android.app.AlertDialog.Builder(Main_AddKho.this);
-                        }
-                        dialog.setIcon(R.drawable.ic_settings).setTitle("Nhập số lượng");
-                        View mView = Main_AddKho.this.getLayoutInflater().inflate(R.layout.dialog_soluongsales, null);
-                        final EditText edsoluong = mView.findViewById(R.id.edsoluong);
-                        final ImageView ivtru = mView.findViewById(R.id.ivtru);
-                        final ImageView ivcong = mView.findViewById(R.id.ivcong);
-                        edsoluong.setText(soluong+"");
-                        ivtru.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (Integer.valueOf(edsoluong.getText().toString()) > 1)
-                                    soluong = Integer.valueOf(edsoluong.getText().toString()) - 1;
-                                edsoluong.setText(soluong+"");
-                            }
-                        });
-                        ivcong.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                soluong = Integer.valueOf(edsoluong.getText().toString()) + 1;
-                                edsoluong.setText(soluong+"");
-                            }
-                        });
-                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                soluong = Integer.parseInt(edsoluong.getText().toString().trim());
-                                totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
-                                arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
-                                adapter.notifyDataSetChanged();
-                                if (!Connect_Internet.checkConnection(getApplicationContext()))
-                                    Connect_Internet.buildDialog(Main_AddKho.this).show();
-                                else {
-                                    new SendRequest().execute();
-                                }
-                            }
-                        });
-                        dialog.setView(mView);
-                        android.app.AlertDialog al = dialog.create();
-                        al.show();
+                    android.app.AlertDialog.Builder dialog = null;
+                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                        dialog = new android.app.AlertDialog.Builder(Main_AddKho.this);
                     } else {
-                        totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
-                        arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, 1 + ""));
-                        if (!Connect_Internet.checkConnection(getApplicationContext()))
-                            Connect_Internet.buildDialog(Main_AddKho.this).show();
-                        else {
-                            new SendRequest().execute();
-                        }
-                        if (arrayList.size() > 0) {
-                            adapter.notifyDataSetChanged();
-                        }
+                        dialog = new android.app.AlertDialog.Builder(Main_AddKho.this);
                     }
+                    dialog.setIcon(R.drawable.ic_settings).setTitle("Nhập số lượng");
+                    View mView = Main_AddKho.this.getLayoutInflater().inflate(R.layout.dialog_soluongsales, null);
+                    final EditText edsoluong = mView.findViewById(R.id.edsoluong);
+                    final ImageView ivtru = mView.findViewById(R.id.ivtru);
+                    final ImageView ivcong = mView.findViewById(R.id.ivcong);
+                    edsoluong.setText(soluong+"");
+                    ivtru.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (Integer.valueOf(edsoluong.getText().toString()) > 1)
+                                soluong = Integer.valueOf(edsoluong.getText().toString()) - 1;
+                            edsoluong.setText(soluong+"");
+                        }
+                    });
+                    ivcong.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            soluong = Integer.valueOf(edsoluong.getText().toString()) + 1;
+                            edsoluong.setText(soluong+"");
+                        }
+                    });
+                    dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            soluong = Integer.parseInt(edsoluong.getText().toString().trim());
+                            totalList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
+                            arrayList.add(0, new SanphamAmount(gio, ma, ten, baohanh, nguon, ngaynhap, von, gia, soluong+""));
+                            adapter.notifyDataSetChanged();
+                            if (!Connect_Internet.checkConnection(getApplicationContext()))
+                                Connect_Internet.buildDialog(Main_AddKho.this).show();
+                            else {
+                                new SendRequest().execute();
+                            }
+                        }
+                    });
+                    dialog.setView(mView);
+                    android.app.AlertDialog al = dialog.create();
+                    al.show();
                 }   catch (NoSuchElementException nse) {
                     Toasty.warning(Main_AddKho.this, "Lỗi định dạng mã vạch", Toast.LENGTH_LONG, true).show();
                 }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private int check(String ma, ArrayList<String> listsoluong) {
-        int dem = -1;
-        for (int i = 0; i < listsoluong.size(); i++) {
-            if (ma.equals(listsoluong.get(i))){
-                dem = i;
-            }
-        }
-        return dem;
     }
 
     public class SendRequest extends AsyncTask<Void, Integer, String> {
@@ -464,6 +434,22 @@ public class Main_AddKho extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 vitri = spinnerKiemkho.getSelectedItem().toString();
                 tvchinhanhkiemkho.setText(vitri);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        final Spinner spinnerkho = findViewById(R.id.spinnerkho);
+        mAdapterKho = new ArrayAdapter<>(Main_AddKho.this, android.R.layout.simple_spinner_item, Keys.KHOLIST);
+        mAdapterKho.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerkho.setAdapter(mAdapterKho);
+        selectValue(spinnerkho, kho);
+        spinnerkho.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                kho = spinnerkho.getSelectedItem().toString();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

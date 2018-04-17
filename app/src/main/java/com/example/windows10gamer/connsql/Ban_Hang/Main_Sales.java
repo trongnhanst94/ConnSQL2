@@ -898,6 +898,7 @@ public class Main_Sales extends AppCompatActivity {
                 }
             }
             while (progress <= arrayList.size()){
+                DeleteKho(progress-1);
                 putData(progress-1);
                 addOrderWeb(progress-1);
                 publishProgress(progress);
@@ -1270,6 +1271,59 @@ public class Main_Sales extends AppCompatActivity {
                 });
     }
 
+    // TODO: 4/8/2018 trừ kho
+
+    public void DeleteKho(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Sales.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Sales.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_KHOONLINE_WEB);
+                params.put("chinhanh", chinhanh);
+                params.put("ngaynhap", arrayList.get(j).getNgaynhap());
+                params.put("ma", arrayList.get(j).getMa());
+                params.put("nguon", arrayList.get(j).getNguon());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+
     // TODO: 2/2/2018 get chương trình
     class GetDataChuongtrinh extends AsyncTask<Void, Void, Void> {
         int jIndex;
@@ -1412,6 +1466,7 @@ public class Main_Sales extends AppCompatActivity {
         super.onDestroy();
     }
 
+    // TODO: 4/8/2018 delete MGG
     public void DeleteMGGWeb(){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,

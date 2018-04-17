@@ -1,15 +1,16 @@
 package com.example.windows10gamer.connsql.Xuat_Nhap;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -86,13 +87,14 @@ public class Main_Taoxuat extends AppCompatActivity {
     String maXN;
     EditText edTaoxuatghichu;
     TextView tvchinhanh;
-    String ghichu, tentrang;
+    String ghichu = "", tentrang;
     ImageView ivAvatar, ivAvatar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_taoxuat);
+        maXN = "XN_"+Keys.MaDonhang();
         tvchinhanh = findViewById(R.id.tvchinhanh);
         ivAvatar2 = findViewById(R.id.ivAvatar2);
         ivAvatar = findViewById(R.id.ivAvatar);
@@ -134,34 +136,32 @@ public class Main_Taoxuat extends AppCompatActivity {
                 if(!Connect_Internet.checkConnection(getApplicationContext()))
                     Connect_Internet.buildDialog(Main_Taoxuat.this).show();
                 else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Taoxuat.this);
-                    dialog.setMessage("Bạn có chắc muốn báo cáo?");
-                    View mView = getLayoutInflater().inflate(R.layout.spinner_lk, null);
-                    final EditText input = mView.findViewById(R.id.input);
-                    dialog.setView(input);
-                    input.setText("Xuất kho "+ngay + "_" + chinhanhNow);
-                    dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (input.getText().toString().trim().equals("")) {
-                                Toasty.error(Main_Taoxuat.this, "Không được để trống tên trang!", Toast.LENGTH_LONG, true).show();
-                            } else {
-                                maXN = "XNHH_"+ Keys.MaDonhang();
-                                tentrang = input.getText().toString().trim();
-                                ghichu = edTaoxuatghichu.getText().toString().trim();
+                    if (arrayList.size() != 0){
+                        AlertDialog.Builder builder = null;
+                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            builder = new AlertDialog.Builder(Main_Taoxuat.this);
+                        } else {
+                            builder = new AlertDialog.Builder(Main_Taoxuat.this, android.R.style.Theme_Holo_Light_Dialog);
+                        }
+                        builder.setIcon(R.drawable.ic_settings);
+                        builder.setMessage("Bạn muốn tạo đơn xuất??");
+                        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 new SendRequestXuatHang().execute();
                             }
-                        }
-                    });
-                    dialog.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setView(mView);
-                    AlertDialog al = dialog.create();
-                    al.show();
+                        });
+                        builder.show();
+                    } else {
+                        Toasty.warning(Main_Taoxuat.this, "Bạn chưa quét sản phẩm", Toast.LENGTH_LONG, true).show();
+                    }
+
                 }
             }
         });
@@ -365,7 +365,6 @@ public class Main_Taoxuat extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++){
                             try {
                                 JSONObject object = response.getJSONObject(i);
-                                if (object.getInt("level") == Keys.LEVEL_BH){
                                     usernames2.add(new User(
                                             object.getInt("id"),
                                             object.getString("ma_user"),
@@ -380,7 +379,6 @@ public class Main_Taoxuat extends AppCompatActivity {
                                             object.getString("updated"),
                                             object.getString("img")
                                     ));
-                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -419,11 +417,10 @@ public class Main_Taoxuat extends AppCompatActivity {
 
         protected String doInBackground(Void... params) {
             int j;
-            CreatedTable();
-            putDataTitle();
             for (j = 0 ;j < arrayList.size(); j++){
                 putData(j);
                 addXuathang(j);
+                UpdateKho(j);
                 publishProgress(j);
             }
             return null;
@@ -432,14 +429,68 @@ public class Main_Taoxuat extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Integer... values) {
             int prog = values[0];
-            dialog.setMessage("Đang tải xuống "+prog+" sản phẩm...");
+            dialog.setMessage("Đang tải lên "+prog+" trên "+ arrayList.size()+" sản phẩm...");
         }
 
         @Override
         protected void onPostExecute(String result) {
             dialog.dismiss();
             Toasty.success(Main_Taoxuat.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
+            startActivity(new Intent(Main_Taoxuat.this, Main_XuatNhap.class));
+            finish();
         }
+    }
+
+
+    public void UpdateKho(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Taoxuat.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(Main_Taoxuat.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.UPDATE_KHOONLINE_WEB);
+                params.put("chinhanhNhan", chinhanhNhap);
+                params.put("chinhanh", chinhanhNow);
+                params.put("ngaynhap", arrayList.get(j).getNgaynhap());
+                params.put("ma", arrayList.get(j).getMa());
+                params.put("nguon", arrayList.get(j).getNguon());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
     public String CreatedTable(){
@@ -521,7 +572,7 @@ public class Main_Taoxuat extends AppCompatActivity {
 
             URL url = new URL(Keys.getSCRIPT_XUATHANG(chinhanhNow));
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("nameSheet", tentrang);
+            postDataParams.put("nameSheet", "Xuất kho");
             postDataParams.put("maXN", "Mã xuất nhập");
             postDataParams.put("ngay", "Ngày");
             postDataParams.put("ca", "Ca làm");
@@ -583,7 +634,7 @@ public class Main_Taoxuat extends AppCompatActivity {
 
             URL url = new URL(Keys.getSCRIPT_XUATHANG(chinhanhNow));
             JSONObject postDataParams = new JSONObject();
-            postDataParams.put("nameSheet", tentrang);
+            postDataParams.put("nameSheet", "Xuất kho");
             postDataParams.put("maXN", maXN);
             postDataParams.put("ngay", ngay);
             postDataParams.put("ca", ca);
@@ -667,6 +718,7 @@ public class Main_Taoxuat extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.ADD_XUATHANG_WEB);
+                params.put("id", maXN+arrayList.get(j).getGio());
                 params.put("maXN", maXN);
                 params.put("ngay", ngay);
                 params.put("ca", ca);

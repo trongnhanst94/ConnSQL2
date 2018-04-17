@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:text="Chọn chi nhánh đang Kiểm kho:"
+                android:text="Chọn chi nhánh:"
                 android:textSize="@dimen/muoi" />
 
             <Spinner
@@ -51,32 +51,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <RadioGroup
-                android:id="@+id/rgkho"
+            <Spinner
+                android:id="@+id/spinnerkho"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rbkhomoi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Kho mới"
-                    android:textSize="@dimen/hai" />
-
-                <RadioButton
-                    android:id="@+id/rbkholoi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Kho lỗi"
-                    android:textSize="@dimen/hai" />
-            </RadioGroup>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_sn"
+                android:padding="5dp" />
         </LinearLayout>
 
         <LinearLayout

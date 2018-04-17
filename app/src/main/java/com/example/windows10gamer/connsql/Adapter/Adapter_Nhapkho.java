@@ -67,7 +67,7 @@ public class Adapter_Nhapkho extends BaseAdapter implements Serializable, Filter
                 //get specific items
                 for(int i=0;i<filterList.size();i++)
                 {
-                    if(filterList.get(i).getTen().toUpperCase().contains(constraint) || filterList.get(i).getMa().toUpperCase().contains(constraint))
+                    if(String.valueOf(filterList.get(i).getSoluong()).toUpperCase().contains(constraint) || filterList.get(i).getTen().toUpperCase().contains(constraint) || filterList.get(i).getMa().toUpperCase().contains(constraint))
                     {
                         Nhapkho p= filterList.get(i);
                         filters.add(p);

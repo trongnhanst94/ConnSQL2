@@ -6,8 +6,9 @@ package com.example.windows10gamer.connsql.Object;
 
 public class DuyetNhap {
     String id, maXN, ngay, ca, gio, chinhanhToday, maNVToday, tenNVToday, ma, ten, baohanh, nguon, ngaynhap, von, gia, ghichu, chinhanhNhan, maNVNhan, tenNVNhan, trangthai;
+    boolean checked;
 
-    public DuyetNhap(String id, String maXN, String ngay, String ca, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichu, String chinhanhNhan, String maNVNhan, String tenNVNhan, String trangthai) {
+    public DuyetNhap(String id, String maXN, String ngay, String ca, String gio, String chinhanhToday, String maNVToday, String tenNVToday, String ma, String ten, String baohanh, String nguon, String ngaynhap, String von, String gia, String ghichu, String chinhanhNhan, String maNVNhan, String tenNVNhan, String trangthai, boolean checked) {
         this.id = id;
         this.maXN = maXN;
         this.ngay = ngay;
@@ -28,6 +29,7 @@ public class DuyetNhap {
         this.maNVNhan = maNVNhan;
         this.tenNVNhan = tenNVNhan;
         this.trangthai = trangthai;
+        this.checked = checked;
     }
 
     public String getId() {
@@ -188,5 +190,13 @@ public class DuyetNhap {
 
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

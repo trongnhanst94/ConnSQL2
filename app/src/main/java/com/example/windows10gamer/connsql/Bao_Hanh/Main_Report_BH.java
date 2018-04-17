@@ -50,10 +50,10 @@ public class Main_Report_BH extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new Fragment_HT(), "Hoàn tiền");
-        adapter.addFragment(new Fragment_DLK(), "Đổi bảo hành");
+        adapter.addFragment(new Fragment_DLK(), "Bảo hành");
         adapter.addFragment(new Fragment_1D1(), "1 đổi 1");
         adapter.addFragment(new Fragment_CXL(), "Chờ xử lý");
-        adapter.addFragment(new Fragment_DDT(), "Đổi dùng thử");
+        adapter.addFragment(new Fragment_DDT(), "Dùng thử");
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(adapter);
     }

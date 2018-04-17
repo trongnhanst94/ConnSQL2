@@ -189,9 +189,9 @@ public class Main_MaGiamGia extends AppCompatActivity {
         });
     }
 
-    public void Delete(final String id) {
+    public void Delete(final String ten) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -212,7 +212,7 @@ public class Main_MaGiamGia extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("tacvu", Keys.DELE_MAGIAMGIA_WEB);
-                params.put("maGiamgia", maGiamgia);
+                params.put("maGiamgia", ten);
                 return params;
             }
         };

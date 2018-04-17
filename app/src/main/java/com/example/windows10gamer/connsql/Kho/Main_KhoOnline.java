@@ -1,6 +1,7 @@
 package com.example.windows10gamer.connsql.Kho;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.windows10gamer.connsql.Adapter.Adapter_Kho;
@@ -39,14 +43,23 @@ public class Main_KhoOnline extends AppCompatActivity {
     ArrayList<Kho> orinal = new ArrayList<>();
     ArrayList<Kho_Dialog> kho_dialog = new ArrayList<>();
     ArrayList<Kho_Dialog> kho_item = new ArrayList<>();
+    private SharedPreferences shared;
+    private int level;
+    int total = 0;
+    TextView tvtotal;
+    LinearLayout lnHiden;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_khoonline);
         listView = findViewById(R.id.listview);
+        tvtotal = findViewById(R.id.tvtotal);
+        lnHiden = findViewById(R.id.lnHiden);
         new GetKho().execute();
-        adapter = new Adapter_Kho(Main_KhoOnline.this, R.layout.adapter_kho, khoList, orinal);
+        shared = getSharedPreferences("login", MODE_PRIVATE);
+        level = Integer.valueOf(shared.getString("level", ""));
+        adapter = new Adapter_Kho(Main_KhoOnline.this, R.layout.adapter_kho, khoList, orinal, level);
         listView.setAdapter(adapter);
         searchView = findViewById(R.id.svSearchItem);
         searchView.addTextChangedListener(new TextWatcher() {
@@ -95,20 +108,23 @@ public class Main_KhoOnline extends AppCompatActivity {
                                 for( ; jIndex < lenArray; jIndex++) {
                                     try {
                                         JSONObject object = array.getJSONObject(jIndex);
-                                        orinal.add(new Kho(
-                                                object.getString("id"),
-                                                object.getString("chinhanh"),
-                                                object.getString("kho"),
-                                                object.getString("maNV"),
-                                                object.getString("tenNV"),
-                                                object.getString("ma"),
-                                                object.getString("ten"),
-                                                object.getString("baohanh"),
-                                                object.getString("nguon"),
-                                                object.getString("ngaynhap"),
-                                                object.getString("von"),
-                                                object.getString("gia")
-                                        ));
+                                            if (object.getString("kho").equals("Mua hàng mới") || object.getString("kho").equals("NCC trả bảo hành") || object.getString("kho").equals("Kho lỗi sang kho mới")){
+                                                orinal.add(new Kho(
+                                                        object.getString("id"),
+                                                        object.getString("chinhanh"),
+                                                        object.getString("kho"),
+                                                        object.getString("maNV"),
+                                                        object.getString("tenNV"),
+                                                        object.getString("ma"),
+                                                        object.getString("ten"),
+                                                        object.getString("baohanh"),
+                                                        object.getString("nguon"),
+                                                        object.getString("ngaynhap"),
+                                                        object.getString("von"),
+                                                        object.getString("gia")
+                                                ));
+                                                total += Integer.valueOf(Keys.giaimagiavon(object.getString("von")));
+                                            }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -134,6 +150,12 @@ public class Main_KhoOnline extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (orinal.size() > 0) {
+                if (level <= Keys.LEVEL_KHO){
+                    lnHiden.setVisibility(View.VISIBLE);
+                    tvtotal.setText("Tổng giá trị tồn kho: "+Keys.setMoney(total));
+                } else {
+                    lnHiden.setVisibility(View.GONE);
+                }
                 for (int i = 0; i < orinal.size(); i++) {
                     int sosanh = iniSosanh(khoList, orinal.get(i).getMa());
                     if (sosanh == -1){

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +22,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ import com.example.windows10gamer.connsql.Adapter.Adapter_Duyetnhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap;
 import com.example.windows10gamer.connsql.Object.DuyetNhap_ID;
 import com.example.windows10gamer.connsql.Object.User;
+import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.R;
 
@@ -51,6 +53,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
     ListView lv;
     int soluong, phantram;
     ArrayList<DuyetNhap> list = new ArrayList<>();
+    ArrayList<String> sublist = new ArrayList<>();
     Adapter_Duyetnhap adapter;
     ProgressDialog dialog;
     FloatingActionButton fabSubmit;
@@ -62,7 +65,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
     private boolean[] thumbnailsselection;
     ArrayList<DuyetNhap_ID> str = new ArrayList<>();
     ImageView ivAvatar, ivAvatar2;
-
+    ArrayList<Integer> bre = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +108,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
         ghichu =bundle.getString("ghichu");
         soluong =bundle.getInt("soluong");
         phantram =bundle.getInt("phantram");
-        tvmaXN.setText("Mã đơn xuất: "+maXN);
+        tvmaXN.setText("Mã: "+maXN);
         tvngay.setText(gio+" "+ngay);
         tvca.setText(ca);
         tvchinhanhToday.setText(chinhanhToday);
@@ -122,25 +125,26 @@ public class Main_Duyetnhap extends AppCompatActivity {
         tvphantram.setText("Tổng: "+phantram+"/"+soluong);
         count = list.size();
         thumbnailsselection = new boolean[count];
-        GetDT(new VolleyCallback(){
+        adapter = new Adapter_Duyetnhap(Main_Duyetnhap.this, R.layout.adapter_duyetnhap, list);
+        lv.setAdapter(adapter);
+        new GetData().execute();
+        fabSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(final ArrayList<DuyetNhap> result) {
-                adapter = new Adapter_Duyetnhap(Main_Duyetnhap.this, R.layout.adapter_duyetnhap, result);
-                lv.setAdapter(adapter);
-                fabSubmit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        str.clear();
-                        for (int i=0; i<list.size(); i++) {
-                            if (list.get(i).getTrangthai().equals("1")) {
-                                str.add(new DuyetNhap_ID(list.get(i).getId(), 1));
-                            } else {
-                                str.add(new DuyetNhap_ID(list.get(i).getId(), 0));
-                            }
-                        }
-                        new SendRequest().execute();
+            public void onClick(View v) {
+                str.clear();
+                for (int i=0; i<list.size(); i++) {
+                    if (list.get(i).getTrangthai().equals("1")) {
+                        str.add(new DuyetNhap_ID(list.get(i).getId(), 1));
+                    } else {
+                        str.add(new DuyetNhap_ID(list.get(i).getId(), 0));
                     }
-                });
+                }
+                for (int i = 0; i < str.size(); i++) {
+                    if (!String.valueOf(str.get(i).getTrangthai()).equals(sublist.get(i))){
+                        bre.add(i);
+                    }
+                }
+                new SendRequest().execute();
             }
         });
         fabAn.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +248,6 @@ public class Main_Duyetnhap extends AppCompatActivity {
     }
     public class SendRequest extends AsyncTask<String, Void, String> {
 
-
         protected void onPreExecute(){
             super.onPreExecute();
             dialog = new ProgressDialog(Main_Duyetnhap.this);
@@ -252,12 +255,13 @@ public class Main_Duyetnhap extends AppCompatActivity {
             dialog.setMessage("Dữ liệu đang được xử lý.");
             dialog.setIndeterminate(false);
             dialog.setCancelable(false);
+            dialog.show();
         }
 
         protected String doInBackground(String... arg0) {
             int j = 0;
-            while (j < str.size()){
-                UpdateXuathangWeb(j);
+            while (j < bre.size()){
+                UpdateXuathangWeb(bre.get(j), j);
                 j++;
             }
             return null;
@@ -269,69 +273,106 @@ public class Main_Duyetnhap extends AppCompatActivity {
        }
     }
 
-    public ArrayList<DuyetNhap> GetDT(final VolleyCallback callback) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, Keys.MAIN_XUATNHAP+"?maXN="+maXN, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray ja = response.getJSONArray(Keys.XUATNHAP);
-                            for(int i=0; i < ja.length(); i++){
-                                JSONObject object = ja.getJSONObject(i);
-                                list.add(new DuyetNhap(
-                                        object.getString("id"),
-                                        object.getString("maXN"),
-                                        object.getString("ngay"),
-                                        object.getString("ca"),
-                                        object.getString("gio"),
-                                        object.getString("chinhanhToday"),
-                                        object.getString("maNVToday"),
-                                        object.getString("tenNVToday"),
-                                        object.getString("ma"),
-                                        object.getString("ten"),
-                                        object.getString("baohanh"),
-                                        object.getString("nguon"),
-                                        object.getString("ngaynhap"),
-                                        object.getString("von"),
-                                        object.getString("gia"),
-                                        object.getString("ghichu"),
-                                        object.getString("chinhanhNhan"),
-                                        object.getString("maNVNhan"),
-                                        object.getString("tenNVNhan"),
-                                        object.getString("trangthai")
-                                ));
+    class GetData extends AsyncTask<String, Void, Void> {
+
+        int jIndex;
+        private ProgressDialog dialog2;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog2 = new ProgressDialog(Main_Duyetnhap.this);
+            dialog2.setTitle("Hãy chờ...");
+            dialog2.setMessage("Dữ liệu đang được xử lý.");
+            dialog2.setIndeterminate(false);
+            dialog2.setCancelable(false);
+            dialog2.show();
+        }
+
+        @Nullable
+        @Override
+        protected Void doInBackground(String... params) {
+            JSONObject jsonObject = JSONParser.getDataFromWeb(Keys.MAIN_XUATNHAP+"?maXN="+maXN);
+            try {
+                if (jsonObject != null) {
+                    list.clear();
+                    if(jsonObject.length() > 0) {
+                        JSONArray array = jsonObject.getJSONArray(Keys.XUATNHAP);
+                        int lenArray = array.length();
+                        if(lenArray > 0) {
+                            for( ; jIndex < lenArray; jIndex++) {
+                                try {
+                                    JSONObject object = array.getJSONObject(jIndex);
+                                    list.add(new DuyetNhap(
+                                            object.getString("id"),
+                                            object.getString("maXN"),
+                                            object.getString("ngay"),
+                                            object.getString("ca"),
+                                            object.getString("gio"),
+                                            object.getString("chinhanhToday"),
+                                            object.getString("maNVToday"),
+                                            object.getString("tenNVToday"),
+                                            object.getString("ma"),
+                                            object.getString("ten"),
+                                            object.getString("baohanh"),
+                                            object.getString("nguon"),
+                                            object.getString("ngaynhap"),
+                                            object.getString("von"),
+                                            object.getString("gia"),
+                                            object.getString("ghichu"),
+                                            object.getString("chinhanhNhan"),
+                                            object.getString("maNVNhan"),
+                                            object.getString("tenNVNhan"),
+                                            object.getString("trangthai"),
+                                            Getcheck(object.getString("trangthai"))
+                                    ));
+                                    sublist.add(object.getString("trangthai"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (JSONException e) { e.printStackTrace();}
-                        callback.onSuccess(list);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onSuccess(list);
+                        }
                     }
                 }
-        );
-        requestQueue.add(jor);
-        return list;
+            } catch (JSONException je) {
+                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (list.size() > 0) {
+                adapter.notifyDataSetChanged();
+            } else {
+                Toasty.info(Main_Duyetnhap.this, "Không Sản phẩm", Toast.LENGTH_LONG, true).show();
+            }
+            dialog2.dismiss();
+        }
     }
 
+    public boolean Getcheck(String trangthai){
+        if (trangthai.equals("1")){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    
     public void check(int position) {
         list.get(position).setTrangthai("1");
-        adapter.notifyDataSetChanged();
     }
 
     public void uncheck(int position) {
         list.get(position).setTrangthai("0");
-        adapter.notifyDataSetChanged();
     }
 
     public interface VolleyCallback{
         void onSuccess(ArrayList<DuyetNhap> result);
     }
 
-    public void UpdateXuathangWeb(final int j){
+    public void UpdateXuathangWeb(final int j, final int count){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_XUATNHAP,
                 new Response.Listener<String>() {
@@ -339,12 +380,11 @@ public class Main_Duyetnhap extends AppCompatActivity {
                     public void onResponse(String response) {
                         if (response.trim().equals("error")){
                             Toasty.error(Main_Duyetnhap.this, "Lỗi kết nối", Toast.LENGTH_LONG, true).show();
-                        } else if (response.trim().equals("success")){
-                            if (j == (str.size()-1)){
+                        } else {
+                            if (count == (bre.size()-1)){
                                 dialog.dismiss();
-                                Toasty.success(Main_Duyetnhap.this, "Check đơn hàng thành công", Toast.LENGTH_LONG, true).show();
-                                startActivity(new Intent(Main_Duyetnhap.this, Main_Danhsach_Nhaphang.class));
-                                finish();
+                                Toasty.success(Main_Duyetnhap.this, "Cập nhật thành công", Toast.LENGTH_LONG, true).show();
+                                startActivity(new Intent(Main_Duyetnhap.this, Main_XuatNhap.class));
                             }
                         }
                     }
@@ -352,7 +392,6 @@ public class Main_Duyetnhap extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toasty.error(Main_Duyetnhap.this, "Không kết nối được Server!", Toast.LENGTH_LONG, true).show();
                     }
                 }
         ){
@@ -362,6 +401,7 @@ public class Main_Duyetnhap extends AppCompatActivity {
                 params.put("tacvu", Keys.UPDATE_XUATHANG_WEB);
                 params.put("id", str.get(j).getMa());
                 params.put("trangthai", str.get(j).getTrangthai()+"");
+                Log.d("qqq", "getParams: "+params.toString());
                 return params;
             }
         };

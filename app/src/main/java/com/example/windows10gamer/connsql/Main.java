@@ -1,5 +1,6 @@
 package com.example.windows10gamer.connsql;
 
+import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -33,6 +35,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,18 +55,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.windows10gamer.connsql.Adapter.Adapter_Icon;
-import com.example.windows10gamer.connsql.Ban_Hang.Main_Doanhthu;
-import com.example.windows10gamer.connsql.Ban_Hang.Main_Order;
-import com.example.windows10gamer.connsql.Ban_Hang.Main_Realtime_Order;
-import com.example.windows10gamer.connsql.Ban_Hang.Main_Sales;
-import com.example.windows10gamer.connsql.Bao_Hanh.Main_Baohanh;
-import com.example.windows10gamer.connsql.Bao_Hanh.Main_Report_BH;
-import com.example.windows10gamer.connsql.Khach_Hang.Main_Dat_Coc;
-import com.example.windows10gamer.connsql.Kho.Main_KhoOnline;
-import com.example.windows10gamer.connsql.Khoan_Chi.Main_Khoan_Chi;
-import com.example.windows10gamer.connsql.Khoan_Chi.Main_PhiCOD;
-import com.example.windows10gamer.connsql.Kiem_Kho.Main_Ketqua_Kiemkho;
-import com.example.windows10gamer.connsql.Kiem_Kho.Main_Kiemkho;
 import com.example.windows10gamer.connsql.Object.Chitieu_Nhanvien;
 import com.example.windows10gamer.connsql.Object.Icon;
 import com.example.windows10gamer.connsql.Object.Order;
@@ -73,10 +65,7 @@ import com.example.windows10gamer.connsql.Other.JSONParser;
 import com.example.windows10gamer.connsql.Other.Keys;
 import com.example.windows10gamer.connsql.Other.OrderList;
 import com.example.windows10gamer.connsql.Other.RetrofitClient;
-import com.example.windows10gamer.connsql.Remove_Data.Main_Remove_Data;
 import com.example.windows10gamer.connsql.Settings.Main_Danhmuc;
-import com.example.windows10gamer.connsql.Tra_Ve.Main_TienTraVe;
-import com.example.windows10gamer.connsql.Xuat_Nhap.Main_XuatNhap;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
@@ -99,8 +88,6 @@ import retrofit2.Callback;
 import static java.lang.Boolean.FALSE;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Adapter_Icon.OnCallBack {
-    Button btnWeb, btnScan, btnSales, btnDanhsachkiemkho, btnListOrder, btnXuatnhap,btnBaohanh,
-            btnChi,btnReportBaohanh,btnRealtime, btndatcoc, btnnhanvien, btnBcdt, btnremove, btnnhaphang, btnscanvon, btnphicod, btntientrave;
     public static String session_username, shortName, session_ma, chinhanh, level, mkhau;
     SharedPreferences shared;
     ArrayList<String> position;
@@ -122,7 +109,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     Double intsanphamtrenkhach;
     Integer intchitieu = 1;
     Integer intdoanhthu = 1;
-    Integer inttotalsoca = 1;
     Integer kqdoanhthu = 1;
     Integer kqsp = 1;
     Integer kqkh = 1;
@@ -141,7 +127,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     View headerView;
     NavigationView navigationView;
     ImageView test;
-    private ProgressDialog progressDialog;
     boolean check = true;
     private Uri filePath;
     private static final int STORAGE_PERMISSION_CODE = 123;
@@ -154,7 +139,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     ArrayList<Icon> iconArrayAdapter = new ArrayList<Icon>();
     Adapter_Icon adapterIcon;
     private ArrayList<Icon> listMaster = new ArrayList<>();
+    int hide = 0;
 
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,217 +207,36 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         rvMain.setLayoutManager(new GridLayoutManager(this, 3));
         adapterIcon = new Adapter_Icon(Main.this,this, iconArrayAdapter);
         rvMain.setAdapter(adapterIcon);
-
-        btnReportBaohanh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    startActivity(new Intent(Main.this, Main_Report_BH.class));
-                }
-            }
-        });
-
-        btnphicod.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_PhiCOD.class));
-            }
-        });
-
-        btnnhaphang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_KhoOnline.class));
-            }
-        });
-        final int[] hide = {1};
+        lnHide.setVisibility(View.GONE);
+        ivHide.setImageResource(R.drawable.ic_down_arrow);
         btnHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hide[0] == 1){
-                    lnHide.setVisibility(View.GONE);
-                    hide[0] = 0;
-                    ivHide.setImageResource(R.drawable.ic_down_arrow);
-                } else {
+                if (hide == 0){
                     lnHide.setVisibility(View.VISIBLE);
-                    hide[0] = 1;
+                    hide = 1;
+                    Log.d("qqq", "onClick: Hiện");
                     ivHide.setImageResource(R.drawable.ic_up_arrow);
-                }
-            }
-        });
-
-        btnscanvon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Integer.valueOf(level) <= Keys.LEVEL_KHO){
-                    if(!Connect_Internet.checkConnection(getApplicationContext()))
-                        Connect_Internet.buildDialog(Main.this).show();
-                    else startActivity(new Intent(Main.this, Main_ScanVon.class));
                 } else {
-                    AlertDialog.Builder builder = null;
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        builder = new AlertDialog.Builder(Main.this);
-                    } else {
-                        builder = new AlertDialog.Builder(Main.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
-                    }
-                    builder.setTitle("Cảnh báo");
-                    builder.setIcon(R.drawable.ic_warning);
-                    builder.setMessage("Bạn không có quyền truy cập. Nhấn Xác nhận để thoát!");
-                    builder.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
+                    lnHide.setVisibility(View.GONE);
+                    hide = 0;
+                    Log.d("qqq", "onClick: Ẩn");
+                    ivHide.setImageResource(R.drawable.ic_down_arrow);
                 }
             }
         });
 
-        btnRealtime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Realtime_Order.class));
-            }
-        });
-
-        btnremove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Integer.valueOf(level) <= Keys.LEVEL_QL){
-                    if(!Connect_Internet.checkConnection(getApplicationContext()))
-                        Connect_Internet.buildDialog(Main.this).show();
-                    else startActivity(new Intent(Main.this, Main_Remove_Data.class));
-                } else {
-                    AlertDialog.Builder builder = null;
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        builder = new AlertDialog.Builder(Main.this);
-                    } else {
-                        builder = new AlertDialog.Builder(Main.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
-                    }
-                    builder.setTitle("Cảnh báo");
-                    builder.setIcon(R.drawable.ic_warning);
-                    builder.setMessage("Bạn không có quyền truy cập. Nhấn Xác nhận để thoát!");
-                    builder.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
-                }
-
-            }
-        });
-
-        btnBaohanh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                   Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Baohanh.class));
-            }
-        });
-
-        btnBcdt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Doanhthu.class));
-            }
-        });
-
-        btnListOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Order.class));
-            }
-        });
-
-        btnScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Kiemkho.class));
-            }
-        });
-
-        btnDanhsachkiemkho.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Ketqua_Kiemkho.class));
-            }
-        });
-
-        btnSales.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Sales.class));
-            }
-        });
-
-        btnWeb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Website.class));
-            }
-        });
-
-        btnXuatnhap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_XuatNhap.class));
-            }
-        });
-
-        btnChi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_Khoan_Chi.class));
-            }
-        });
-
-        btntientrave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else startActivity(new Intent(Main.this, Main_TienTraVe.class));
-            }
-        });
-
-        btndatcoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!Connect_Internet.checkConnection(getApplicationContext()))
-                    Connect_Internet.buildDialog(Main.this).show();
-                else {
-                    startActivity(new Intent(Main.this, Main_Dat_Coc.class));
-                }
-            }
-        });
+//        rvMain.addOnScrollListener(new HidingScrollListener() {
+//            @Override
+//            public void onHide() {
+//                hideViews();
+//            }
+//
+//            @Override
+//            public void onShow() {
+//                showViews();
+//            }
+//        });
 
         tvchinhanh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,6 +244,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 new Getvitri().execute();
             }
         });
+    }
+
+    private void hideViews() {
+        lnHide.animate().translationY(-lnHide.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
+        lnHide.setVisibility(View.GONE);
+    }
+
+    private void showViews() {
+        lnHide.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
     }
 
     @Override
@@ -525,8 +341,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void anhxa() {
         rvMain             = findViewById(R.id.rvMain);
-        btntientrave       = findViewById(R.id.btntientrave);
-        btnphicod          = findViewById(R.id.btnphicod);
         ptdica             = findViewById(R.id.ptdica);
         tvthang            = findViewById(R.id.tvthang);
         tvdica             = findViewById(R.id.tvdica);
@@ -539,22 +353,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         tvdt               = findViewById(R.id.tvdt);
         tvdtkh             = findViewById(R.id.tvdtkh);
         tvspkh             = findViewById(R.id.tvspkh);
-        btnnhaphang        = findViewById(R.id.btnnhaphang);
-        btnremove          = findViewById(R.id.btnremove);
-        btnscanvon         = findViewById(R.id.btnscanvon);
-        btnBcdt            = findViewById(R.id.btnBcdt);
-        btnWeb             = findViewById(R.id.btnWeb);
-        btnnhanvien        = findViewById(R.id.btnnhanvien);
-        btndatcoc          = findViewById(R.id.btndatcoc);
-        btnXuatnhap        = findViewById(R.id.btnXuatnhap);
-        btnScan            = findViewById(R.id.btnScanQR);
-        btnRealtime        = findViewById(R.id.btnRealtime);
-        btnSales           = findViewById(R.id.btnSales);
-        btnListOrder       = findViewById(R.id.btnListOrder);
-        btnDanhsachkiemkho = findViewById(R.id.btnDanhsachkiemkho);
-        btnBaohanh         = findViewById(R.id.btnBaohanh);
-        btnReportBaohanh   = findViewById(R.id.btnReportBaohanh);
-        btnChi             = findViewById(R.id.btnChi);
         tvchinhanh         = findViewById(R.id.tvchinhanh);
         ptdt               = findViewById(R.id.ptdt);
         ptdtkh             = findViewById(R.id.ptdtkh);
@@ -1238,7 +1036,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (listChitieu.size() > 0){
-                lnHide.setVisibility(View.VISIBLE);
                 btnHide.setVisibility(View.VISIBLE);
                 tvthang.setText(listChitieu.get(0).getThang()+"");
                 tvluykeluong.setText(Keys.setMoney(Integer.valueOf(listChitieu.get(0).getLuykeluong())));
@@ -1334,37 +1131,4 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("lifecycle","onStart 1");
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("lifecycle","onResume 1");
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("lifecycle","onPause 1");
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("lifecycle","onStop 1");
-    }
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("lifecycle","onRestart 1");
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("lifecycle","onDestroy 1");
-    }
 }

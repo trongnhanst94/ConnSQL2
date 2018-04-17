@@ -50,7 +50,7 @@
                     android:id="@+id/ivAvatar"
                     android:layout_width="65dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_user2"
+                    app:srcCompat="@drawable/ic_user2"
                     app:civ_border_color="@color/colorMain"
                     app:civ_border_width="0.5dp" />
             </LinearLayout>
@@ -180,7 +180,7 @@
                     android:id="@+id/ivAvatar2"
                     android:layout_width="65dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_user2"
+                    app:srcCompat="@drawable/ic_user2"
                     app:civ_border_color="@color/colorMain"
                     app:civ_border_width="0.5dp" />
             </LinearLayout>
@@ -285,6 +285,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="7"
                 android:gravity="center_vertical"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
                 <EditText

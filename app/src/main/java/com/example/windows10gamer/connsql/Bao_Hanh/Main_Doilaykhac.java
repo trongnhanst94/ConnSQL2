@@ -341,6 +341,7 @@ public class Main_Doilaykhac extends AppCompatActivity {
             for (j = 0 ;j < array_moi.size(); j++){
                 putData(j);
                 addDlkWeb(j);
+                DeleteKho(j);
             }
             return null;
         }
@@ -352,6 +353,58 @@ public class Main_Doilaykhac extends AppCompatActivity {
             Toasty.success(Main_Doilaykhac.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
             ResetActivity();
         }
+    }
+
+    // TODO: 4/8/2018 trừ kho
+
+    public void DeleteKho(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_Doilaykhac.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_Doilaykhac.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_KHOONLINE_WEB);
+                params.put("chinhanh", chinhanh);
+                params.put("ngaynhap", array_moi.get(j).getNgaynhap());
+                params.put("ma", array_moi.get(j).getMa());
+                params.put("nguon", array_moi.get(j).getNguon());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
 

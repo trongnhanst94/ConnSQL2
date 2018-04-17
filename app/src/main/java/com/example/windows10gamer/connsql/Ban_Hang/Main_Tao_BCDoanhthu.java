@@ -88,7 +88,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
     ArrayList<BHDDT> BHDDT = new ArrayList<>();
     SharedPreferences shared;
     String chinhanh;
-    int tiencuoica= 0, doanhthu = 0, giamgia = 0, tongchi = 0, doanhthubanno = 0, giamgiasing = 0, datcoc = 0, hoancoc = 0, tamungcod = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
+    int tiencuoica= 0, doanhthu = 0, giamgia = 0, giamgiabanno = 0, tongchi = 0, doanhthubanno = 0, giamgiasing = 0, datcoc = 0, hoancoc = 0, tamungcod = 0, dttsp = 0, dtddt = 0, pddt = 0, nddt = 0, dtdlk = 0, pdlk = 0, ndlk = 0, tht = 0, dt1d1 = 0, p1d1 = 0;
     int tiendauca, tientrave;
     private ProgressDialog dialog;
     private String ma, ten;
@@ -796,6 +796,7 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
                     ArrayList<Order> orignal = new ArrayList<Order>();
                     ArrayList<String> tempgiamgia = new ArrayList<>();
+                    ArrayList<String> tempgiamgiabanno = new ArrayList<>();
                     if(response.isSuccessful()) {
                         orignal = response.body().getContacts();
                         donhanglist.clear();
@@ -809,8 +810,14 @@ public class Main_Tao_BCDoanhthu extends AppCompatActivity {
                             }
                             if (orignal.get(i).getThanhtoan().equals(Keys.GHINO)) {
                                 doanhthubanno += Integer.valueOf(orignal.get(i).getGiaSanpham());
+                                int sosanhgiamgiabanno = sosanhgiam(tempgiamgiabanno, orignal.get(i).getMaDonhang());
+                                if (sosanhgiamgiabanno == -1) {
+                                    tempgiamgiabanno.add(orignal.get(i).getMaDonhang());
+                                    giamgiabanno += Integer.valueOf(orignal.get(i).getGiamgia());
+                                }
                             }
                         }
+                        doanhthubanno = doanhthubanno - giamgiabanno;
                         tvdoanhthubanno.setText(Keys.setMoney(doanhthubanno));
                         tvdoanhthu.setText(Keys.setMoney(doanhthu));
                         tvgiamgia.setText(Keys.setMoney(giamgia));

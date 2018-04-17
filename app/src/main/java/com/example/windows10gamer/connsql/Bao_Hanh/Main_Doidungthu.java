@@ -337,7 +337,9 @@ public class Main_Doidungthu extends AppCompatActivity {
 
         protected String doInBackground(String... arg0) {
             int j;
+            addKhoOnlineWeb();
             for (j = 0 ;j < array_moi.size(); j++){
+                DeleteKho(j);
                 putData(j);
                 addDlkWeb(j);
             }
@@ -351,6 +353,94 @@ public class Main_Doidungthu extends AppCompatActivity {
             Toasty.success(Main_Doidungthu.this, "Gửi dữ liệu thành công", Toast.LENGTH_LONG, true).show();
             ResetActivity();
         }
+    }
+
+    // TODO: 4/8/2018 trừ kho
+
+    public void DeleteKho(final int j){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (response.trim().equals("error")){
+                            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_Doidungthu.this);
+                            dialog.setTitle("Thông báo");
+                            dialog.setMessage("Không kết nối được với Server!");
+                            dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(Main_Doidungthu.this);
+                        dialog.setTitle("Thông báo");
+                        dialog.setMessage("Không kết nối được với Server! \n Mã lỗi: "+error);
+                        dialog.setPositiveButton("Xác nhận", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.DELE_KHOONLINE_WEB);
+                params.put("chinhanh", chinhanh);
+                params.put("ngaynhap", array_moi.get(j).getNgaynhap());
+                params.put("ma", array_moi.get(j).getMa());
+                params.put("nguon", array_moi.get(j).getNguon());
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    public void addKhoOnlineWeb(){
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Keys.LINK_WEB_V2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tacvu", Keys.ADD_KHOONLINE_WEB);
+                params.put("id", session_username+gio_moi+dateToday);
+                params.put("chinhanh", chinhanh);
+                params.put("kho", "Kho mới");
+                params.put("maNV", session_ma);
+                params.put("tenNV", session_username);
+                params.put("ma", ma);
+                params.put("ten", ten);
+                params.put("baohanh", baohanh);
+                params.put("nguon", nguon);
+                params.put("ngaynhap", ngaynhap);
+                params.put("von", von);
+                params.put("gia", gia);
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
     }
 
 
