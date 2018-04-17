@@ -45,7 +45,7 @@ import java.util.Random;
  * Created by EVRESTnhan on 9/29/2017.
  */
 
-public class Keys {
+public class Keys { 
 
     // Link server
     public static final String LINK_SERVER         = "http://dealtichtac.com/android/";
